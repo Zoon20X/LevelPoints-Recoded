@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="LPSAPI">
+    <CLASSES>
+      <root url="jar://D:/Plugins/API/EXPORTS/LPSAPI.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

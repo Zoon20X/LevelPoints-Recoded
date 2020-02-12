@@ -1,0 +1,89 @@
+#############################
+#       Pvp Levels          #
+# Set Minimum Level for pvp #
+#############################
+PvpLeveluse: false
+PvpLevel: 5
+
+#############################
+#      Starting EXP         #
+#############################
+Exp: 0
+
+
+#EXP needed for each rank up +
+#Example
+# level 1 = 50exp
+#level 2 = 100exp
+#default 50
+LevelingEXP: 50
+
+#############################
+#      Starting Level       #
+#############################
+Level: 1
+
+#############################
+#        Max Level          #
+#############################
+MaxLevel: 100
+
+#############################
+#   If you want prestige    #
+#############################
+Prestige: true
+
+
+#############################
+#     Custom Leveling       #
+#############################
+CustomLeveling: false
+Level-1: 100
+Level-2: 200
+Level-3: 250
+Level-4: 500
+Level-5: 1000
+Level-6: 2000
+Level-7: 3000
+Level-8: 5000
+Level-9: 10000
+Level-10: 50000
+
+#############################################
+#   Prestige Custom Leveling                #
+# This is a setting if you want             #
+# custom exp for levels after each prestige #
+#############################################
+PrestigeLeveling: false
+
+#############################################
+# Exact same as Custom Leveling, Except     #
+# it is changeable for different Prestiges  #
+# if you use this, do not use CustomLeveling#
+#############################################
+
+Prestige-0:
+  Level-1: 100
+  Level-2: 200
+  Level-3: 250
+  Level-4: 500
+  Level-5: 1000
+  Level-6: 2000
+  Level-7: 3000
+  Level-8: 5000
+  Level-9: 10000
+  Level-10: 50000
+
+
+Prestige-1:
+  Level-1: 100
+  Level-2: 200
+  Level-3: 250
+  Level-4: 500
+  Level-5: 1000
+  Level-6: 2000
+  Level-7: 3000
+  Level-8: 5000
+  Level-9: 10000
+  Level-10: 50000
+

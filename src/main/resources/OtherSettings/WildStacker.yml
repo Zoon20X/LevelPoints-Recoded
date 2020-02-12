@@ -1,0 +1,28 @@
+#########################
+#WildStacker Connection#
+#########################
+
+#Specify what level player needs to be to place spawner
+
+###################################################
+# this setting will help you figure out the name  #
+# of the spawner so you can place in config       #
+# Warning this will send to any player that places#
+#              a spawner                          #
+###################################################
+DebugName: false
+
+
+##################################################################
+# Example:                                                       #
+#                                                                #
+# Pig: 5                                                         #
+# this means that the spawner pig you need to be level 5 to place#
+##################################################################
+
+
+########################
+# To add more spawners #
+# just type the name   #
+########################
+Pig: 1

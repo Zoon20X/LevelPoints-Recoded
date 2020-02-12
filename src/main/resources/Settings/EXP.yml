@@ -1,0 +1,158 @@
+  #####################################
+  #   takes exp from players when     #
+  #            they place ores        #
+  #####################################
+  Anti-EXP-Dupe: false
+
+  #this option is if you do not want players getting exp for silk touch on their items
+  Anti-Silk-EXP: true
+
+
+  #####################################
+  #   Earn EXP When Killing Players   #
+  #####################################
+  Exp-Kill-players: false
+
+  #####################################
+  #   Amount of EXP for player Kill   #
+  #####################################
+  Kill-Player-Amount: 10
+
+  #####################################
+  #      Lose EXP on Player Death     #
+  #####################################
+  EXP-Lost-On-Death-Player: false
+
+  #####################################
+  #       Amount of EXP on Death      #
+  #####################################
+  EXP-Lost-Amount: 0
+
+
+  #####################################
+  #  Earn EXP on Hostile Mobs kill    #
+  #####################################
+  Exp-Kill-Mob: false
+
+
+
+
+  #####################################
+  #            Random EXP             #
+  #####################################
+  # Set this to true for exp to be    #
+  #             random                #
+  # Warning the max is whatever number#
+  # is set as the EXP amount E.G      #
+  # Zombie: 50 == would give a random #
+  # between 0-50 exp                  #
+  #####################################
+  RandomEXP: false
+  #this works for all types of exp as long as they are active
+
+
+  #####################################
+  #    Amount of EXP for Mob Kill     #
+  #####################################
+  ZOMBIE: 0
+  SKELETON: 0
+  SPIDER: 0
+  CREEPER: 0
+  ENDERMAN: 0
+
+  #####################################
+  #  Earn EXP on Passive Mobs Kill    #
+  #####################################
+  Passive-Mobs: false
+
+  #####################################
+  #     Amount of EXP for Mobs Kill   #
+  #####################################
+  COW: 0
+  PIG: 0
+  CHICKEN: 0
+  RABBIT: 0
+  SHEEP: 0
+
+
+  #####################################
+  #     Earn EXP on Boss Mob Kill     #
+  #####################################
+  Use-Boss-Mobs: false
+
+  #####################################
+  #    Amount of EXP for Boss Kill    #
+  #####################################
+  Enderdragon: 0
+  Wither: 0
+
+  #####################################
+  #        Earn EXP From ORES         #
+  #####################################
+  Resources: true
+
+
+  #####################################
+  #        Earn EXP From Farming      #
+  #####################################
+  #For 1.8-1.13.2 ONLY
+  FarmEXP: true
+
+  Farming:
+      WHEAT: 1
+      CARROT: 1
+  #####################################
+  #        Earn EXP From Fishing      #
+  #####################################
+  FishingEXP: true
+  Fishing:
+    RandomEXP: true
+    EXP: 25
+    CatchChance: 20 #This is the percentage so this is 20% you can do to 1 decimal point though
+
+
+
+  #####################################
+  #      Amount of EXP for ORES       #
+  #####################################
+  COAL_ORE: 0
+  IRON_ORE: 0
+  GOLD_ORE: 0
+  LAPIS_ORE: 0
+  REDSTONE_ORE: 0
+  DIAMOND_ORE: 0
+  EMERALD_ORE: 0
+  QUARTZ_ORE: 0
+
+  #####################################
+  #           EXP PER WORLD           #
+  #####################################
+  PerWorld: false
+  Worlds:
+    - world
+  WorldGuard:
+    RestrictRegions: false
+    regionsToRestrict:
+      - spawn
+      - lobby
+
+  #####################################
+  #     Ore Required Level to MINE    #
+  #####################################
+  oSTONE: 0
+  oCOAL_ORE: 0
+  oIRON_ORE: 0
+  oGOLD_ORE: 0
+  oDIAMOND_ORE: 0
+  oEMERALD_ORE: 0
+  oQUARTZ_ORE: 0
+  Use-Booster: false
+
+  #####################################
+  #Timed EXP (Give EXP every X Seconds)#
+  #####################################
+  TimedEXP: false #Make Sure to /restart your server every time you change this, if not it may not work correctly, be warned before asking for support
+
+  GiveEXP: 60 #Will give all players a certain amount of exp every minute by default (Must Be in seconds, the plugin will auto format the time for you)
+  GiveAmount: 1 #will give 1 exp to all players in given time above
+

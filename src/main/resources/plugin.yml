@@ -1,0 +1,31 @@
+name: LevelPoints
+version: 1.2.0.0
+main: levelpoints.levelpoints.LevelPoints
+authors: [Zoon20X]
+description: This Plugin is a custom leveling plugin designed for multiple uses
+
+softdepend: [PlaceholderAPI]  # This can use placeholder api for some placeholders
+
+commands:
+  levelpoints:
+    usage: /<command>
+    aliases: [lps, levels, lpoints]
+permissions:
+  lp.*:
+    description: Gives players all Commands
+    default: op
+    children:
+      lp.admin.*:
+        default: op
+        lp.admin.give:
+          default: op
+        lp.admin.remove:
+          default: op
+        lp.admin.reload:
+          default: op
+      lp.player:
+        default: not op
+      lp.booster:
+        default: not op
+      lp.lps:
+        default: not op

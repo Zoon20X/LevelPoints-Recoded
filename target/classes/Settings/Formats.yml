@@ -1,0 +1,32 @@
+#this is the format config this is where you can create a custom chat config within the plugin to work with levels and placeholders
+# some special tags used by the plugin are as follows
+# {level} - will show you what level the player is
+# {symbol} - will show you what symbol you placed in config.yml
+# {prestige} - will show you what prestige level you are
+# {name} - will output the players name
+# {message} - will show you the message the player has typed in chat the plugin will also format color codes using &<color id>
+# {format} - will show you the format of the chat you were using ONLY USE WITH ESSENTIALS CHAT will not work with other chat plugins
+#
+# this plugin also uses placeholderapi so you can use your favorite placeholders as shown below
+#
+
+Level1-10:
+  #this is the format it self it is what lets you choose what the format will look like
+  Format: '&3{level} %vault_rankprefix% &b{name}&8> &f{message}'
+  #this is where you can specify what level you are wanting
+  Levels:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+
+
+
+
+

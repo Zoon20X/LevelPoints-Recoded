@@ -1,0 +1,9 @@
+RewardsType:
+  - ExampleReward
+
+Rewards:
+  ExampleReward:
+    - say hey
+    - say my
+    - say name
+    - say jeff

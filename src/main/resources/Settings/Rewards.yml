@@ -1,0 +1,54 @@
+#Rewards method is basically the messaging method, please specify the method of which the player will receive a message of them getting a level reward
+#Methods:
+#   'TITLE'
+#   'MESSAGE'
+#   'NONE'
+#  More to come
+RewardsMethod: 'NONE'
+
+#Custom Rewards make sure permissionsex is false or it will not work
+
+#Rewards type is if you want a special setting for the rewards
+#Types:
+#   'ONE' this reward type is whether you want to just have 1 reward instead of setting a bunch
+#   'CHANCE' this you will set as many different rewards and it will only pick one
+#   'REGULAR' this is just the basic command type reward
+#  More to come
+
+Type: 'REGULAR'
+
+#example ONE
+# Type: 'ONE'
+# CMD:
+#   - <command you want>
+
+#example CHANCE
+# Type: 'CHANCE'
+# Amount: 3
+# 1:
+#   - <commands>
+# 2:
+#   - <commands>
+# 3:
+#   - <commands>
+
+#example REGULAR
+# Type: 'REGULAR'
+# for this you would just do the - below each level
+
+#example FILEChance
+# CAUTION When changing to this reward type server MUST BE RESTARTED or it will throw errors you MUST restart
+# Type: FILECHANCE'
+# LevelChance:
+#       - 1
+#       - 5
+#       - 10
+#
+#
+#
+Rewards:
+  #Example
+  # - give %player% diamond 1
+  # Make sure when adding ranks to set it out exactly like this: Level-* (* = what level you want)
+  Level-1:
+    - say %player% diamond 1
