@@ -63,8 +63,8 @@ public class MainEvents implements Listener {
         Player player = event.getPlayer();
         File userdata = new File(lp.userFolder, player.getUniqueId() + ".yml");
         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
-        int level = UsersConfig.getInt(player.getName() + ".level");
-        int prestige = UsersConfig.getInt(player.getName() + ".Prestige");
+        int level = uc.getCurrentLevel(player);
+        int prestige = UsersConfig.getInt("Prestige");
         String chat = event.getFormat();
         String message = event.getMessage();
         String levels = String.valueOf(level);
@@ -171,6 +171,7 @@ public class MainEvents implements Listener {
             uc.GainEXP(player, Overamount);
             uc.TopListConfig.set(player.getUniqueId() + ".Name", player.getName());
             uc.TopListConfig.set(player.getUniqueId() + ".Level", Level);
+
             try {
                 uc.TopListConfig.save(uc.TopListFile);
             } catch (IOException e) {
@@ -190,6 +191,17 @@ public class MainEvents implements Listener {
                     e.printStackTrace();
                 }
                 uc.RunSQLUpdate(player);
+            }else{
+                int Overamount = event.getOverlapAmount();
+                uc.GainEXP(player, Overamount);
+                uc.TopListConfig.set(player.getUniqueId() + ".Name", player.getName());
+                uc.TopListConfig.set(player.getUniqueId() + ".Level", Level);
+
+                try {
+                    uc.TopListConfig.save(uc.TopListFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

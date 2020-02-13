@@ -263,8 +263,8 @@ public class MainCommand implements CommandExecutor {
                         }
                     }
 
-                    if(args[0].equalsIgnoreCase("setlevel")){
-                        if(player.hasPermission("lp.admin")) {
+                    if (args[0].equalsIgnoreCase("setlevel")) {
+                        if (player.hasPermission("lp.admin")) {
                             if (args.length == 1) {
                                 sender.sendMessage(ChatColor.RED + "You Must Pick a Player");
                                 return true;
@@ -276,10 +276,11 @@ public class MainCommand implements CommandExecutor {
                             Player target = Bukkit.getPlayer(args[1]);
                             File targetData = new File(lp.userFolder, target.getUniqueId() + ".yml");
                             FileConfiguration TargetConfig = YamlConfiguration.loadConfiguration(targetData);
-                            if(target != null){
+                            if (target != null) {
                                 int level = Integer.parseInt(args[2]);
                                 TargetConfig.set("Level", level);
-                                uc.TopListConfig.set(target.getName() + ".level", level);
+                                uc.TopListConfig.set(target.getUniqueId() + ".Name", target.getName());
+                                uc.TopListConfig.set(target.getUniqueId() + ".Level", level);
 
                                 try {
                                     TargetConfig.save(targetData);
@@ -288,8 +289,40 @@ public class MainCommand implements CommandExecutor {
                                     e.printStackTrace();
                                 }
                             }
-                        }else{
+                        } else {
                             player.sendMessage(ChatColor.RED + "You Have Insufficient Permission");
+                        }
+                    }
+                    if (args[0].equalsIgnoreCase("addlevel")) {
+                        if (player.hasPermission("lp.admin")) {
+                            if (args.length == 1) {
+                                sender.sendMessage(ChatColor.RED + "You Must Pick a Player");
+                                return true;
+                            }
+                            if (args.length == 2) {
+                                sender.sendMessage(ChatColor.RED + "You Must Pick a Level to add");
+                                return true;
+                            }
+
+                            Player target = Bukkit.getPlayer(args[1]);
+                            File targetData = new File(lp.userFolder, target.getUniqueId() + ".yml");
+                            FileConfiguration TargetConfig = YamlConfiguration.loadConfiguration(targetData);
+                            int CurrentLevel = uc.getCurrentLevel(target);
+                            TargetConfig.set("Level", CurrentLevel + Integer.parseInt(args[2]));
+                            uc.TopListConfig.set(target.getUniqueId() + ".Name", target.getName());
+                            uc.TopListConfig.set(target.getUniqueId() + ".Level", CurrentLevel + Integer.parseInt(args[2]));
+                            try {
+                                uc.TopListConfig.save(uc.TopListFile);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                TargetConfig.save(targetData);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+
                         }
                     }
                 }
@@ -388,7 +421,7 @@ public class MainCommand implements CommandExecutor {
                 }
             }
         }else{
-            sender.sendMessage(API.format(uc.LangConfig.getString("LPSErrorPermission")));
+            sender.sendMessage(API.format(uc.LangConfig.getString("LPSErrorPermission").replace("{PLAYER}", sender.getName())));
         }
         return true;
     }

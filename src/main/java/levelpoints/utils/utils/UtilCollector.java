@@ -469,8 +469,6 @@ public class UtilCollector implements Utils {
     @Override
     public void Rewards(Player player, int Level) {
 
-
-        player.sendMessage(String.valueOf(Level));
         if (RewardsConfig.getString("Type").equalsIgnoreCase("REGULAR")) {
             List<String> cmds = RewardsConfig.getStringList(API.format("Rewards.Level-" + Level));
             for (String command : cmds) {
