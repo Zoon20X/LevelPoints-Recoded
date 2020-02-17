@@ -88,15 +88,32 @@ public class MainEvents implements Listener {
                     chat = chat.replace("%1$s", player.getName()).replace("%2$s", message);
 
                     String Format = uc.FormatsConfig.getString(key + ".Format");
-                    String FormatTags = Format.replace("{level}", levels).replace("{symbol}", symbol).replace("{prestige}", prestigess).replace("{name}", player.getName()).replace("{message}", message).replace("{format}", chat);
+
+                    String FormatTags = null;
+                    String FormatColor = null;
+
+                    FormatTags = Format.replace("{level}", levels).replace("{symbol}", symbol).replace("{prestige}", prestigess).replace("{name}", player.getName()).replace("{message}", message).replace("{format}", chat);
+
                     String Text = PlaceholderAPI.setPlaceholders(player, FormatTags);
 
 
 
 
                     event.setCancelled(true);
-                    for(Player p : Bukkit.getOnlinePlayers()){
-                        p.sendMessage(Text);
+                    for(Player p : Bukkit.getOnlinePlayers()) {
+                        if(player.hasPermission("lp.admin.color")){
+                            p.sendMessage(Text);
+                        }else{
+                            if(Text.contains(API.format(message))) {
+
+                                String messageStrip = ChatColor.stripColor(message);
+
+                                String Texts = Text.replace(API.format(message), ChatColor.stripColor(messageStrip));
+
+                                p.sendMessage(Texts);
+                            }
+                        }
+
                     }
                 }
             }

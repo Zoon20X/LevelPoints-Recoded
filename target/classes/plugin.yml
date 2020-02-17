@@ -1,5 +1,5 @@
 name: LevelPoints
-version: 1.2.0.0
+version: 1.2.0.2
 main: levelpoints.levelpoints.LevelPoints
 authors: [Zoon20X]
 description: This Plugin is a custom leveling plugin designed for multiple uses
@@ -22,6 +22,8 @@ permissions:
         lp.admin.remove:
           default: op
         lp.admin.reload:
+          default: op
+        lp.admin.color:
           default: op
       lp.player:
         default: not op

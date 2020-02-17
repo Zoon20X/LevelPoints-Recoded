@@ -339,13 +339,7 @@ public class UtilCollector implements Utils {
         try {
 
 
-            SaveLoadFiles(TopListFile, TopListConfig, "TopList.yml", "TopList.yml", "TopList");
-            SaveLoadFiles(EXPFile, EXPConfig, "/Settings/EXP.yml", "Settings/EXP.yml", "EXP");
-            SaveLoadFiles(LevelFile, LevelConfig, "/Settings/Levels.yml", "Settings/Levels.yml", "Levels");
-            SaveLoadFiles(RewardsFile, RewardsConfig, "/Settings/Rewards.yml", "Settings/Rewards.yml", "Rewards");
-            SaveLoadFiles(WSFile, WSConfig, "/OtherSettings/WildStacker.yml", "OtherSettings/WildStacker.yml", "WildStacker");
 
-            SaveLoadFiles(LangFile, LangConfig, "Lang.yml", "Lang.yml", "Lang");
             LangFile = new File(LPS.getDataFolder(), "Lang.yml");
 
             TopListFile = new File(LPS.getDataFolder(), "TopList.yml");
@@ -370,7 +364,7 @@ public class UtilCollector implements Utils {
         LPS.getServer().getConsoleSender().sendMessage(API.format("&3Running Extra File Check...."));
         if (RewardsConfig.getString("Type").equals("FILECHANCE")) {
 
-            SaveLoadFiles(FileChanceFile, FileChanceConfig, "/Settings/FileChance.yml", "Settings/FileChance.yml", "FileChance");
+
             FileChanceFile = new File(LPS.getDataFolder(), "/Settings/FileChance.yml");
             FileChanceConfig = YamlConfiguration.loadConfiguration(FileChanceFile);
         } else {
@@ -378,7 +372,7 @@ public class UtilCollector implements Utils {
         }
         if (LPS.getConfig().getBoolean("LPSFormat")) {
 
-            SaveLoadFiles(FormatsFile, FormatsConfig, "Settings/Formats.yml", "Settings/Formats.yml", "FileChance");
+
             FormatsFile = new File(LPS.getDataFolder(), "/Settings/Formats.yml");
             FormatsConfig = YamlConfiguration.loadConfiguration(FormatsFile);
         } else {
@@ -400,6 +394,30 @@ public class UtilCollector implements Utils {
 
 
         LPS.getServer().getConsoleSender().sendMessage(API.format("&3Running Files Check...."));
+
+        SaveLoadFiles(TopListFile, TopListConfig, "TopList.yml", "TopList.yml", "TopList");
+        SaveLoadFiles(EXPFile, EXPConfig, "/Settings/EXP.yml", "Settings/EXP.yml", "EXP");
+        SaveLoadFiles(LevelFile, LevelConfig, "/Settings/Levels.yml", "Settings/Levels.yml", "Levels");
+        SaveLoadFiles(RewardsFile, RewardsConfig, "/Settings/Rewards.yml", "Settings/Rewards.yml", "Rewards");
+        SaveLoadFiles(WSFile, WSConfig, "/OtherSettings/WildStacker.yml", "OtherSettings/WildStacker.yml", "WildStacker");
+
+        SaveLoadFiles(LangFile, LangConfig, "Lang.yml", "Lang.yml", "Lang");
+
+
+        if (RewardsConfig.getString("Type").equals("FILECHANCE")) {
+
+            SaveLoadFiles(FileChanceFile, FileChanceConfig, "/Settings/FileChance.yml", "Settings/FileChance.yml", "FileChance");
+
+        } else {
+            LPS.getServer().getConsoleSender().sendMessage(API.format("&3Not running FileChance Rewards"));
+        }
+        if (LPS.getConfig().getBoolean("LPSFormat")) {
+
+            SaveLoadFiles(FormatsFile, FormatsConfig, "Settings/Formats.yml", "Settings/Formats.yml", "FileChance");
+
+        } else {
+            LPS.getServer().getConsoleSender().sendMessage(API.format("&3Not running LevelPoints built in Chat system"));
+        }
         RunFiles();
 
         LPS.getServer().getConsoleSender().sendMessage(API.format("&3Running VersionChecker Module...."));
@@ -782,9 +800,10 @@ public class UtilCollector implements Utils {
                             }
 
 
+                            if (EXPConfig.getBoolean("EXPMessage")) {
+                                p.sendMessage(API.format(LangConfig.getString("lpTimedReward").replace("{EXP_Timed_Amount}", Integer.toString(EXPConfig.getInt("GiveAmount"))).replace("{EXP_Timed_Delay}", TimeMessage)));
 
-                            p.sendMessage(API.format(LangConfig.getString("lpTimedReward").replace("{EXP_Timed_Amount}", Integer.toString(EXPConfig.getInt("GiveAmount"))).replace("{EXP_Timed_Delay}", TimeMessage)));
-
+                            }
                         }
                     }
                 }
