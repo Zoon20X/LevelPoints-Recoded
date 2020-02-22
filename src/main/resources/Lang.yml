@@ -12,6 +12,7 @@ lp:
   - '&b/lps expremove <player> <amount> &fRemove experience from a player'
   - '&b/lps top &fShows top 10 players'
   - '&b/lps setlevel <player> <level> &fSets a players level'
+  - '&b/lps setPrestige <player> <Prestige> &fSets a players Prestige'
   - '&b/lps addlevel <player> <level> &fadds a level to a player instead of setting it'
   - '&b/lps toggle &f Toggles The LevelPoints Actionbar, (Per Player Setting)'
   - '&8------------------'
@@ -66,8 +67,12 @@ lpPerLevelOre: '&cYou Need To Be {lp_required_level} to mine this block'
 lpTimedReward: '&2You Just Received &6{EXP_Timed_Amount} &2next amount will be in &6{EXP_Timed_Delay} so stay online'
 
 lpEXPGive: '&2You Just Received &6{EXP_Amount} &2EXP from &6{LP_USER}' #Warning if you are using the EXP give command through the console DO NOT place THE, as (LP_USER) will auto correct to lpServerName anyway
+lpSetLevel: '&2Your new Level: &6{LEVEL} &2was set by &6{LP_USER}' #Warning if you are using the setlevel command through the console DO NOT place THE, as (LP_USER) will auto correct to lpServerName anyway
+lpSetPrestige: '&2Your new Prestige: &6{PRESTIGE} &2was set by &6{LP_USER}' #Warning if you are using the setPrestige command through the console DO NOT place THE, as (LP_USER) will auto correct to lpServerName anyway
 lpServerName: 'SERVER' #use this for when you are sending EXPGIVE command through console: DO NOT USE COLOR CODES THEY WILL NOT SHOW
 lpAdminEXPGive: '&2You Just Gave &6{LP_TARGET} &2EXP: &6{EXP_AMOUNT}' #This Will Send the The User that Uses The EXPGIVE Command
+lpAdminSetLevel: '&2You Just set &6{LP_TARGET} &2Level: &6{LEVEL}' #This Will Send the The User that Uses The setlevel Command
+lpAdminSetPrestige: '&2You Just set &6{LP_TARGET} &2Prestige: &6{PRESTIGE}' #This Will Send the The User that Uses The setPrestige Command
 
 lpEXPRemove: '&cYou Must lost &4{EXP_AMOUNT} &cEXP from &4{LP_USER}' #Warning if you are using the EXP remove command through the console DO NOT place THE, as (LP_USER) will auto correct to lpServerName anyway
 lpAdminEXPRemove: '&cYou Just Took &4{LP_TARGET} &cEXP: &4{EXP_AMOUNT}' #This Will Send the The User that Uses The EXPREMOVE Command

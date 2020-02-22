@@ -1,6 +1,7 @@
 package levelpoints.utils.utils;
 
 
+import com.sk89q.worldedit.util.YAMLConfiguration;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -47,28 +48,18 @@ public class UtilCollector implements Utils {
 
     private LevelPoints LPS = LevelPoints.getPlugin(LevelPoints.class);
 
-    public File LangFile = new File(LPS.getDataFolder(), "Lang.yml");
     public File TopListFile = new File(LPS.getDataFolder(), "TopList.yml");
-    public File EXPFile = new File(LPS.getDataFolder(), "/Settings/EXP.yml");
-    public File LevelFile = new File(LPS.getDataFolder(), "/Settings/Levels.yml");
-    public File RewardsFile = new File(LPS.getDataFolder(), "/Settings/Rewards.yml");
+
     public File WSFile = new File(LPS.getDataFolder(), "/OtherSettings/WildStacker.yml");
     public File FileChanceFile = new File(LPS.getDataFolder(), "/Settings/FileChance.yml");
-    public File FormatsFile = new File(LPS.getDataFolder(), "/Settings/Formats.yml");
-    public FileConfiguration LangConfig = YamlConfiguration.loadConfiguration(LangFile);
+
     public FileConfiguration FileChanceConfig = YamlConfiguration.loadConfiguration(FileChanceFile);
-    public FileConfiguration FormatsConfig = YamlConfiguration.loadConfiguration(FormatsFile);
+
     public FileConfiguration TopListConfig = YamlConfiguration.loadConfiguration(TopListFile);
+    public FileConfiguration WSConfig = YamlConfiguration.loadConfiguration(WSFile);
 
 
-    public File WSfile = new File(LPS.getDataFolder(), "/OtherSettings/WildStacker.yml");
-    public FileConfiguration WSConfig = YamlConfiguration.loadConfiguration(WSfile);
-    public File EXPfile = new File(LPS.getDataFolder(), "/Settings/EXP.yml");
-    public FileConfiguration EXPConfig = YamlConfiguration.loadConfiguration(EXPfile);
-    public File Levelfile = new File(LPS.getDataFolder(), "/Settings/Levels.yml");
-    public FileConfiguration LevelConfig = YamlConfiguration.loadConfiguration(Levelfile);
-    public File Rewardsfile = new File(LPS.getDataFolder(), "/Settings/Rewards.yml");
-    public FileConfiguration RewardsConfig = YamlConfiguration.loadConfiguration(Rewardsfile);
+
     private HashMap<UUID, YamlConfiguration> usersConfig = new HashMap<>();
     private long daytime = (1000 * 60 * 60);
     private SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
@@ -113,16 +104,16 @@ public class UtilCollector implements Utils {
         String PlayerFolder = LPS.getDataFolder() + "/Players/";
 
         File userFile = new File(LPS.userFolder, uuid + ".yml");
-        if (!userFile.exists()) {
-            try {
-                userFile.createNewFile();
-                LPS.getServer().getConsoleSender().sendMessage(API.format("&bCreated File: &3" + uuid));
-            } catch (IOException ex) {
-                LPS.getLogger().log(Level.SEVERE, ChatColor.DARK_RED + "Can't create " + Name + " user file");
+            if (!userFile.exists()) {
+                try {
+                    userFile.createNewFile();
+                    LPS.getServer().getConsoleSender().sendMessage(API.format("&bCreated File: &3" + uuid));
+                } catch (IOException ex) {
+                    LPS.getLogger().log(Level.SEVERE, ChatColor.DARK_RED + "Can't create " + Name + " user file");
+                }
             }
+            usersConfig.put(uuid, YamlConfiguration.loadConfiguration(userFile));
         }
-        usersConfig.put(uuid, YamlConfiguration.loadConfiguration(userFile));
-    }
 
     @Override
     public void PlayerDataLoad(Player player) throws IOException {
@@ -134,13 +125,71 @@ public class UtilCollector implements Utils {
         File userdata = new File(LPS.userFolder, UUID + ".yml");
         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
 
-        if (!UsersConfig.contains("Name")) {
+        if (LPS.getConfig().getBoolean("ImportOldData")) {
+            String OldFolder = "plugins/LP/Players/";
+            File OldFile = new File(OldFolder, player.getUniqueId() + ".yml");
+            if(OldFile.exists()){
+                LPS.getServer().getConsoleSender().sendMessage(API.format("&bFound Player File"));
+                if(!UsersConfig.contains("Name")) {
+                    LPS.getServer().getConsoleSender().sendMessage(API.format("&3ImportOldData>> &bLoading Old data"));
+                    FileConfiguration OldData = YamlConfiguration.loadConfiguration(OldFile);
+                    int Level = OldData.getInt(player.getName() + ".level");
+                    int EXP = OldData.getInt(player.getName() + ".EXP.Amount");
+                    int Prestige = OldData.getInt(player.getName() + ".Prestige");
+
+                    LPS.getServer().getConsoleSender().sendMessage(API.format("&3Importing Old Data within file"));
+
+                    UsersConfig.set("Name", player.getName());
+
+                    UsersConfig.set("Level", Level);
+                    UsersConfig.set("EXP.Amount", EXP);
+                    UsersConfig.set("Prestige", Prestige);
+                    UsersConfig.set("ActionBar", true);
+                    UsersConfig.set("ActiveBooster", 1);
+                    UsersConfig.set("BoosterOff", cDateS);
+                    UsersConfig.save(userdata);
+                }else {
+                    LPS.getServer().getConsoleSender().sendMessage(API.format("&3Loading Player Data"));
+                    if (!UsersConfig.getString("Name").equals(player.getName())) {
+                        LPS.getServer().getConsoleSender().sendMessage(API.format("&4Found a new username"));
+                        UsersConfig.set("Name", player.getName());
+
+                        UsersConfig.save(userdata);
+
+                    }
+
+                }
+            }else if(!UsersConfig.contains("Name")) {
+
+                LPS.getServer().getConsoleSender().sendMessage(API.format("&3Creating Player Data within file"));
+                UsersConfig.set("Name", player.getName());
+
+                UsersConfig.set("Level", getLevelsConfig().getInt("Level"));
+                UsersConfig.set("EXP.Amount", getLevelsConfig().getInt("Exp"));
+                UsersConfig.set("Prestige", 0);
+                UsersConfig.set("ActionBar", true);
+                UsersConfig.set("ActiveBooster", 1);
+                UsersConfig.set("BoosterOff", cDateS);
+                UsersConfig.save(userdata);
+
+            } else {
+                LPS.getServer().getConsoleSender().sendMessage(API.format("&3Loading Player Data"));
+                if (!UsersConfig.getString("Name").equals(player.getName())) {
+                    LPS.getServer().getConsoleSender().sendMessage(API.format("&4Found a new username"));
+                    UsersConfig.set("Name", player.getName());
+
+                    UsersConfig.save(userdata);
+
+                }
+
+            }
+        } else if (!UsersConfig.contains("Name")) {
 
             LPS.getServer().getConsoleSender().sendMessage(API.format("&3Creating Player Data within file"));
             UsersConfig.set("Name", player.getName());
 
-            UsersConfig.set("Level", LevelConfig.getInt("Level"));
-            UsersConfig.set("EXP.Amount", LevelConfig.getInt("Exp"));
+            UsersConfig.set("Level", getLevelsConfig().getInt("Level"));
+            UsersConfig.set("EXP.Amount", getLevelsConfig().getInt("Exp"));
             UsersConfig.set("Prestige", 0);
             UsersConfig.set("ActionBar", true);
             UsersConfig.set("ActiveBooster", 1);
@@ -149,10 +198,6 @@ public class UtilCollector implements Utils {
 
         } else {
             LPS.getServer().getConsoleSender().sendMessage(API.format("&3Loading Player Data"));
-
-            if (LPS.getConfig().getBoolean("UseSQL")) {
-
-            }
             if (!UsersConfig.getString("Name").equals(player.getName())) {
                 LPS.getServer().getConsoleSender().sendMessage(API.format("&4Found a new username"));
                 UsersConfig.set("Name", player.getName());
@@ -206,6 +251,7 @@ public class UtilCollector implements Utils {
     public void RunSQLUpdate(Player player) {
         File userdata = new File(LPS.userFolder, player.getUniqueId() + ".yml");
         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
+
         Bukkit.getScheduler().runTaskAsynchronously(LPS, new Runnable() {
             @Override
             public void run() {
@@ -246,13 +292,16 @@ public class UtilCollector implements Utils {
                     e.printStackTrace();
                 }
             }
+
         });
+
     }
 
     @Override
     public void RunSQLDownload(Player player) {
         File userdata = new File(LPS.userFolder, player.getUniqueId() + ".yml");
         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
+
         Bukkit.getScheduler().runTaskAsynchronously(LPS, new Runnable() {
             @Override
             public void run() {
@@ -318,6 +367,7 @@ public class UtilCollector implements Utils {
             }
 
         });
+
     }
 
 
@@ -338,51 +388,48 @@ public class UtilCollector implements Utils {
     public void RunFiles() {
         try {
 
+            File TopListFile = new File(LPS.getDataFolder(), "TopList.yml");
+            File WSFile = new File(LPS.getDataFolder(), "/OtherSettings/WildStacker.yml");
+            getLevelsConfig();
+            getRewardsConfig();
+            getEXPConfig();
 
+            TopListConfig = YamlConfiguration.loadConfiguration(TopListFile);
 
-            LangFile = new File(LPS.getDataFolder(), "Lang.yml");
-
-            TopListFile = new File(LPS.getDataFolder(), "TopList.yml");
-            EXPFile = new File(LPS.getDataFolder(), "/Settings/EXP.yml");
-            WSFile = new File(LPS.getDataFolder(), "/OtherSettings/WildStacker.yml");
-            RewardsFile = new File(LPS.getDataFolder(), "/Settings/Rewards.yml");
-            LevelFile = new File(LPS.getDataFolder(), "/Settings/Levels.yml");
-
-            FormatsConfig = YamlConfiguration.loadConfiguration(FormatsFile);
-            FileChanceConfig = YamlConfiguration.loadConfiguration(FileChanceFile);
-
-            LangConfig = YamlConfiguration.loadConfiguration(LangFile);
-            EXPConfig = YamlConfiguration.loadConfiguration(EXPFile);
-            LevelConfig = YamlConfiguration.loadConfiguration(LevelFile);
-            RewardsConfig = YamlConfiguration.loadConfiguration(RewardsFile);
             WSConfig = YamlConfiguration.loadConfiguration(WSFile);
+
+
+            LPS.getServer().getConsoleSender().sendMessage(API.format("&3Loaded Modules>> &bAll Files Loaded"));
+
+            LPS.getServer().getConsoleSender().sendMessage(API.format("&3Running Extra File Check...."));
+            if (getRewardsConfig().getString("Type").equals("FILECHANCE")) {
+
+
+                File FileChanceFile = new File(LPS.getDataFolder(), "/Settings/FileChance.yml");
+                FileChanceConfig = YamlConfiguration.loadConfiguration(FileChanceFile);
+            } else {
+                LPS.getServer().getConsoleSender().sendMessage(API.format("&3Not running FileChance Rewards"));
+            }
+            if (LPS.getConfig().getBoolean("LPSFormat")) {
+                getFormatsConfig();
+            } else {
+                LPS.getServer().getConsoleSender().sendMessage(API.format("&3Not running LevelPoints built in Chat system"));
+            }
         } catch (Exception e) {
             LPS.getServer().getConsoleSender().sendMessage(API.format("&4All & or some files failed to load, please consult the developer: &cZoon20X"));
-        }
-        LPS.getServer().getConsoleSender().sendMessage(API.format("&3Loaded Modules>> &bAll Files Loaded"));
-
-        LPS.getServer().getConsoleSender().sendMessage(API.format("&3Running Extra File Check...."));
-        if (RewardsConfig.getString("Type").equals("FILECHANCE")) {
-
-
-            FileChanceFile = new File(LPS.getDataFolder(), "/Settings/FileChance.yml");
-            FileChanceConfig = YamlConfiguration.loadConfiguration(FileChanceFile);
-        } else {
-            LPS.getServer().getConsoleSender().sendMessage(API.format("&3Not running FileChance Rewards"));
-        }
-        if (LPS.getConfig().getBoolean("LPSFormat")) {
-
-
-            FormatsFile = new File(LPS.getDataFolder(), "/Settings/Formats.yml");
-            FormatsConfig = YamlConfiguration.loadConfiguration(FormatsFile);
-        } else {
-            LPS.getServer().getConsoleSender().sendMessage(API.format("&3Not running LevelPoints built in Chat system"));
         }
     }
 
     @Override
     public void RunModuels() {
-
+        File EXPFile = new File(LPS.getDataFolder(), "/Settings/EXP.yml");
+        FileConfiguration EXPConfig = YamlConfiguration.loadConfiguration(EXPFile);
+        File LevelFile = new File(LPS.getDataFolder(), "/Settings/Levels.yml");
+        FileConfiguration LevelConfig = YamlConfiguration.loadConfiguration(LevelFile);
+        File RewardsFile = new File(LPS.getDataFolder(), "/Settings/Rewards.yml");
+        FileConfiguration RewardsConfig = YamlConfiguration.loadConfiguration(RewardsFile);
+        File LangFile = new File(LPS.getDataFolder(), "/Lang.yml");
+        FileConfiguration LangConfig = YamlConfiguration.loadConfiguration(LangFile);
 
         usersConfig.clear();
         LPS.saveDefaultConfig();
@@ -403,8 +450,7 @@ public class UtilCollector implements Utils {
 
         SaveLoadFiles(LangFile, LangConfig, "Lang.yml", "Lang.yml", "Lang");
 
-
-        if (RewardsConfig.getString("Type").equals("FILECHANCE")) {
+        if (getRewardsConfig().getString("Type").equals("FILECHANCE")) {
 
             SaveLoadFiles(FileChanceFile, FileChanceConfig, "/Settings/FileChance.yml", "Settings/FileChance.yml", "FileChance");
 
@@ -412,12 +458,14 @@ public class UtilCollector implements Utils {
             LPS.getServer().getConsoleSender().sendMessage(API.format("&3Not running FileChance Rewards"));
         }
         if (LPS.getConfig().getBoolean("LPSFormat")) {
-
-            SaveLoadFiles(FormatsFile, FormatsConfig, "Settings/Formats.yml", "Settings/Formats.yml", "FileChance");
+            File FormatsFile = new File(LPS.getDataFolder(), "/Settings/Formats.yml");
+            FileConfiguration FormatsConfig = YamlConfiguration.loadConfiguration(FormatsFile);
+            SaveLoadFiles(FormatsFile, FormatsConfig, "/Settings/Formats.yml", "Settings/Formats.yml", "Formats");
 
         } else {
             LPS.getServer().getConsoleSender().sendMessage(API.format("&3Not running LevelPoints built in Chat system"));
         }
+
         RunFiles();
 
         LPS.getServer().getConsoleSender().sendMessage(API.format("&3Running VersionChecker Module...."));
@@ -446,6 +494,15 @@ public class UtilCollector implements Utils {
         }
     }
 
+
+    @Override
+    public void wait(int seconds, Player player) {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(LPS, new Runnable() {
+            public void run() {
+                RunSQLDownload(player);
+            }
+        }, (seconds * 10));
+    }
 
     @Override
     public void versionChecker() {
@@ -485,33 +542,33 @@ public class UtilCollector implements Utils {
     }
 
     @Override
-    public void Rewards(Player player, int Level) {
+    public void Rewards(Player player, int Level, int Prestige) {
 
-        if (RewardsConfig.getString("Type").equalsIgnoreCase("REGULAR")) {
-            List<String> cmds = RewardsConfig.getStringList(API.format("Rewards.Level-" + Level));
+        if (getRewardsConfig().getString("Type").equalsIgnoreCase("REGULAR")) {
+            List<String> cmds = getRewardsConfig().getStringList(API.format("Rewards.Prestige-" + Prestige + ".Level-" + Level));
             for (String command : cmds) {
                 getRewards(command, player);
             }
         }
-        if (RewardsConfig.getString("Type").equalsIgnoreCase("ONE")) {
-            List<String> cmds = RewardsConfig.getStringList("Rewards." + "CMD");
+        if (getRewardsConfig().getString("Type").equalsIgnoreCase("ONE")) {
+            List<String> cmds = getRewardsConfig().getStringList("Rewards." + "CMD");
             for (String command : cmds) {
                 getRewards(command, player);
             }
         }
-        if (RewardsConfig.getString("Type").equals("CHANCE")) {
-            int max = RewardsConfig.getInt("Amount");
+        if (getRewardsConfig().getString("Type").equals("CHANCE")) {
+            int max = getRewardsConfig().getInt("Amount");
             int min = 1;
 
             Random r = new Random();
             int re = r.nextInt((max - min) + 1) + min;
-            List<String> cmds = RewardsConfig.getStringList("Rewards.Level-" + (Level + 1) + "." + String.valueOf(re));
+            List<String> cmds = getRewardsConfig().getStringList("Rewards.Prestige-" + Prestige + ".Level-" + (Level) + "." + String.valueOf(re));
             for (String command : cmds) {
                 getRewards(command, player);
             }
         }
-        if (RewardsConfig.getString("Type").equals("FILECHANCE")) {
-            List<String> levelrequired = RewardsConfig.getStringList("Rewards.LevelChance");
+        if (getRewardsConfig().getString("Type").equals("FILECHANCE")) {
+            List<String> levelrequired = getRewardsConfig().getStringList("Rewards.LevelChance");
             for (String levelss : levelrequired) {
 
                 if (levelss.equals(String.valueOf(Level))) {
@@ -535,13 +592,13 @@ public class UtilCollector implements Utils {
     @Override
     public void getRewards(String cmd, Player player) {
 
-        if (RewardsConfig.getString("RewardsMethod").equals("NONE")) {
+        if (getRewardsConfig().getString("RewardsMethod").equals("NONE")) {
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("%player%", player.getName()));
-        } else if (RewardsConfig.getString("RewardsMethod").equals("MESSAGE")) {
-            player.sendMessage(API.format(LangConfig.getString("lpRewardMessage")));
+        } else if (getRewardsConfig().getString("RewardsMethod").equals("MESSAGE")) {
+            player.sendMessage(API.format(getLangConfig().getString("lpRewardMessage")));
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("%player%", player.getName()));
-        } else if (RewardsConfig.getString("RewardsMethod").equals("TITLE")) {
-            Title(player, API.format(LangConfig.getString(API.format("lpRewardTitleTop"))), API.format(LangConfig.getString(API.format("lpRewardTitleBottom")).replace("{lp_level}", String.valueOf(getCurrentLevel(player)))));
+        } else if (getRewardsConfig().getString("RewardsMethod").equals("TITLE")) {
+            Title(player, API.format(getLangConfig().getString(API.format("lpRewardTitleTop"))), API.format(getLangConfig().getString(API.format("lpRewardTitleBottom")).replace("{lp_level}", String.valueOf(getCurrentLevel(player)))));
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("%player%", player.getName()));
         }
     }
@@ -615,8 +672,8 @@ public class UtilCollector implements Utils {
                 double progress_percentage = current_progress / required_progress;
                 StringBuilder sb = new StringBuilder();
                 int bar_length = 30;
-                String completed = API.format(LangConfig.getString("lpBarDesignCompleted"));
-                String need = API.format(LangConfig.getString("lpBarDesignRequired"));
+                String completed = API.format(getLangConfig().getString("lpBarDesignCompleted"));
+                String need = API.format(getLangConfig().getString("lpBarDesignRequired"));
                 for (int i = 0; i < bar_length; i++) {
                     if (i < bar_length * progress_percentage) {
                         sb.append(completed); //what to append if percentage is covered (e.g. GREEN '|'s)
@@ -626,11 +683,40 @@ public class UtilCollector implements Utils {
                 }
                 if (UsersConfig.getBoolean("ActionBar")) {
                     if (LPS.getConfig().getBoolean("Actionbar")) {
-                        ActionBar(player, API.format(LangConfig.getString("lpActionBar").replace("{PLAYER_LEVEL}", String.valueOf(CurrentLevel)).replace("{BAR}", sb.toString()).replace("{EXP_CURRENT}", String.valueOf(newEXP)).replace("{EXP_REQUIRED}", String.valueOf(EXPRequired))));
+                        ActionBar(player, API.format(getLangConfig().getString("lpActionBar").replace("{PLAYER_LEVEL}", String.valueOf(CurrentLevel)).replace("{BAR}", sb.toString()).replace("{EXP_CURRENT}", String.valueOf(newEXP)).replace("{EXP_REQUIRED}", String.valueOf(EXPRequired))));
                     }
                 }
             } else {
-                return;
+                if (newEXP > EXPRequired) {
+                    return;
+                }else{
+                    UsersConfig.set("EXP.Amount", EXPCurrent + amount);
+                    try {
+                        UsersConfig.save(userdata);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    double required_progress = EXPRequired;
+                    double current_progress = newEXP;
+                    double progress_percentage = current_progress / required_progress;
+                    StringBuilder sb = new StringBuilder();
+                    int bar_length = 30;
+                    String completed = API.format(getLangConfig().getString("lpBarDesignCompleted"));
+                    String need = API.format(getLangConfig().getString("lpBarDesignRequired"));
+                    for (int i = 0; i < bar_length; i++) {
+                        if (i < bar_length * progress_percentage) {
+                            sb.append(completed); //what to append if percentage is covered (e.g. GREEN '|'s)
+                        } else {
+                            sb.append(need); //what to append if percentage is not covered (e.g. GRAY '|'s)
+                        }
+                    }
+                    if (UsersConfig.getBoolean("ActionBar")) {
+                        if (LPS.getConfig().getBoolean("Actionbar")) {
+                            ActionBar(player, API.format(getLangConfig().getString("lpActionBar").replace("{PLAYER_LEVEL}", String.valueOf(CurrentLevel)).replace("{BAR}", sb.toString()).replace("{EXP_CURRENT}", String.valueOf(newEXP)).replace("{EXP_REQUIRED}", String.valueOf(EXPRequired))));
+                        }
+                    }
+                }
+
             }
         }
 
@@ -659,8 +745,8 @@ public class UtilCollector implements Utils {
             long diffMinutes = diff / (60 * 1000) % 60;
             long diffHours = diff / (60 * 60 * 1000) % 24;
             long diffDays = diff / (daytime);
-            String timeleft = API.format(LangConfig.getString("lpsTimeFormat").replace("{DAYS}", String.valueOf(diffDays)).replace("{HOURS}", String.valueOf(diffHours)).replace("{MINUTES}", String.valueOf(diffMinutes)).replace("{SECONDS}", String.valueOf(diffSeconds)));
-            player.sendMessage(API.format(LangConfig.getString("lpsBoosterCooldown").replace("{TIME_FORMAT}", timeleft)));
+            String timeleft = API.format(getLangConfig().getString("lpsTimeFormat").replace("{DAYS}", String.valueOf(diffDays)).replace("{HOURS}", String.valueOf(diffHours)).replace("{MINUTES}", String.valueOf(diffMinutes)).replace("{SECONDS}", String.valueOf(diffSeconds)));
+            player.sendMessage(API.format(getLangConfig().getString("lpsBoosterCooldown").replace("{TIME_FORMAT}", timeleft)));
         } else {
 
             if (UsersConfig.getInt("Boosters." + multiplier) >= 1) {
@@ -696,16 +782,16 @@ public class UtilCollector implements Utils {
         int needep;
         int MaxLevel = getMaxLevel();
         int CurrentLevel = getCurrentLevel(player);
-        int EXPR = LevelConfig.getInt("LevelingEXP");
+        int EXPR = getLevelsConfig().getInt("LevelingEXP");
 
         File userdata = new File(LPS.userFolder, player.getUniqueId() + ".yml");
         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
 
 
-        if (LevelConfig.getBoolean("PrestigeLeveling")) {
-            needep = LevelConfig.getInt("Prestige-" + UsersConfig.getInt("Prestige") + ".Level-" + CurrentLevel);
-        } else if (LevelConfig.getBoolean("CustomLeveling")) {
-            needep = LevelConfig.getInt("Level-" + CurrentLevel);
+        if (getLevelsConfig().getBoolean("PrestigeLeveling")) {
+            needep = getLevelsConfig().getInt("Prestige-" + UsersConfig.getInt("Prestige") + ".Level-" + CurrentLevel);
+        } else if (getLevelsConfig().getBoolean("CustomLeveling")) {
+            needep = getLevelsConfig().getInt("Level-" + CurrentLevel);
         } else {
             needep = CurrentLevel * EXPR;
         }
@@ -733,7 +819,7 @@ public class UtilCollector implements Utils {
 
     @Override
     public int getMaxLevel() {
-        int Max = LevelConfig.getInt("MaxLevel");
+        int Max = getLevelsConfig().getInt("MaxLevel");
 
         return Max;
     }
@@ -741,23 +827,63 @@ public class UtilCollector implements Utils {
     @Override
     public int getMaxLevelEXP(Player player) {
 
+
         int MaxEXP;
         int CurrentLevel = getCurrentLevel(player);
-        int EXPR = LevelConfig.getInt("LevelingEXP");
+        int EXPR = getLevelsConfig().getInt("LevelingEXP");
         int MaxLevel = getMaxLevel();
         File userdata = new File(LPS.userFolder, player.getUniqueId() + ".yml");
         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
 
-        if (LevelConfig.getBoolean("PrestigeLeveling")) {
-            MaxEXP = LevelConfig.getInt("Prestige-" + UsersConfig.getInt("Prestige") + ".Level-" + MaxLevel);
-        } else if (LevelConfig.getBoolean("CustomLeveling")) {
-            MaxEXP = LevelConfig.getInt("Level-" + MaxLevel);
+        if (getLevelsConfig().getBoolean("PrestigeLeveling")) {
+            MaxEXP = getLevelsConfig().getInt("Prestige-" + UsersConfig.getInt("Prestige") + ".Level-" + MaxLevel);
+        } else if (getLevelsConfig().getBoolean("CustomLeveling")) {
+            MaxEXP = getLevelsConfig().getInt("Level-" + MaxLevel);
         } else {
             MaxEXP = MaxLevel * EXPR;
         }
 
 
         return MaxEXP;
+    }
+
+    @Override
+    public FileConfiguration getLevelsConfig() {
+        File LevelFile = new File(LPS.getDataFolder(), "/Settings/Levels.yml");
+        FileConfiguration LevelConfig = YamlConfiguration.loadConfiguration(LevelFile);
+        return LevelConfig;
+    }
+
+    @Override
+    public FileConfiguration getEXPConfig() {
+
+        File EXPFile = new File(LPS.getDataFolder(), "/Settings/EXP.yml");
+        FileConfiguration EXPConfig = YamlConfiguration.loadConfiguration(EXPFile);
+
+        return EXPConfig;
+    }
+
+    @Override
+    public FileConfiguration getRewardsConfig() {
+
+        File RewardsFile = new File(LPS.getDataFolder(), "/Settings/Rewards.yml");
+        FileConfiguration RewardsConfig = YamlConfiguration.loadConfiguration(RewardsFile);
+
+        return RewardsConfig;
+    }
+
+    @Override
+    public FileConfiguration getFormatsConfig() {
+        File FormatsFile = new File(LPS.getDataFolder(), "/Settings/Formats.yml");
+        FileConfiguration FormatsConfig = YamlConfiguration.loadConfiguration(FormatsFile);
+        return FormatsConfig;
+    }
+
+    @Override
+    public FileConfiguration getLangConfig() {
+        File LangFile = new File(LPS.getDataFolder(), "/Lang.yml");
+        FileConfiguration LangConfig = YamlConfiguration.loadConfiguration(LangFile);
+        return LangConfig;
     }
 
     @Override
@@ -768,18 +894,25 @@ public class UtilCollector implements Utils {
 
         return CL;
     }
+    @Override
+    public int getCurrentPrestige(Player player) {
+        File userdata = new File(LPS.userFolder, player.getUniqueId() + ".yml");
+        FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
+        int CL = UsersConfig.getInt("Prestige");
 
+        return CL;
+    }
     @Override
     public void TimedEXP() {
 
-        if (EXPConfig.getBoolean("TimedEXP")) {
+        if (getEXPConfig().getBoolean("TimedEXP")) {
 
             Bukkit.getScheduler().scheduleSyncRepeatingTask(LPS, new Runnable() {
                 public void run() {
                     if (Bukkit.getServer().getOnlinePlayers().size() >= 1) {
                         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                            GainEXP(p, EXPConfig.getInt("GiveAmount"));
-                            double seconds = EXPConfig.getInt("GiveEXP");
+                            GainEXP(p, getEXPConfig().getInt("GiveAmount"));
+                            double seconds = getEXPConfig().getInt("GiveEXP");
                             double minutes = 0;
                             double hours = 0;
                             if (seconds >= 60) {
@@ -800,14 +933,14 @@ public class UtilCollector implements Utils {
                             }
 
 
-                            if (EXPConfig.getBoolean("EXPMessage")) {
-                                p.sendMessage(API.format(LangConfig.getString("lpTimedReward").replace("{EXP_Timed_Amount}", Integer.toString(EXPConfig.getInt("GiveAmount"))).replace("{EXP_Timed_Delay}", TimeMessage)));
+                            if (getEXPConfig().getBoolean("EXPMessage")) {
+                                p.sendMessage(API.format(getLangConfig().getString("lpTimedReward").replace("{EXP_Timed_Amount}", Integer.toString(getEXPConfig().getInt("GiveAmount"))).replace("{EXP_Timed_Delay}", TimeMessage)));
 
                             }
                         }
                     }
                 }
-            }, 0L, EXPConfig.getInt("GiveEXP") * 20L);
+            }, 0L, getEXPConfig().getInt("GiveEXP") * 20L);
         }
     }
 }

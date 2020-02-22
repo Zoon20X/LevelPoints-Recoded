@@ -19,7 +19,7 @@ public interface Utils {
 
     void PlayerAdd(UUID uuid, String Name);
     void PlayerDataLoad(Player player) throws IOException;
-
+    void wait(int seconds, Player player);
 
     void RunSQLUpdate(Player player);
     void RunSQLDownload(Player player);
@@ -32,19 +32,25 @@ public interface Utils {
     void MySQL();
     void versionChecker();
 
-    void Rewards(Player player, int Level);
+    void Rewards(Player player, int Level, int Prestige);
     void getRewards(String cmd, Player player);
     void Title(Player player, String Title, String Subtitle);
     void GainEXP(Player player, int amount);
     int getRequiredEXP(Player player);
     int getMaxLevel();
     int getCurrentLevel(Player player);
+    int getCurrentPrestige(Player player);
     int getCurrentEXP(Player player);
     int getCurrentBoosters(Player player, int Multipler);
     void boosteruseclick(Player player, int multiplier) throws IOException;
     void RunFiles();
     void TimedEXP();
     int getMaxLevelEXP(Player player);
+    FileConfiguration getLevelsConfig();
+    FileConfiguration getEXPConfig();
+    FileConfiguration getRewardsConfig();
+    FileConfiguration getFormatsConfig();
+    FileConfiguration getLangConfig();
 
 
 

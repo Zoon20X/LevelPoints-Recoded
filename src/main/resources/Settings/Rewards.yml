@@ -48,7 +48,11 @@ Type: 'REGULAR'
 #
 Rewards:
   #Example
+  #Prestige-0 means when the player is prestige 0
+  #When making more add prestige-<number> based on what prestige they are
+  #This option is needed even when ot using prestige
   # - give %player% diamond 1
   # Make sure when adding ranks to set it out exactly like this: Level-* (* = what level you want)
-  Level-1:
-    - say %player% diamond 1
+  Prestige-0:
+    Level-1:
+      - say %player% diamond 1
