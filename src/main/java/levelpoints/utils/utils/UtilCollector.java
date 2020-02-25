@@ -1,11 +1,7 @@
 package levelpoints.utils.utils;
 
 
-import com.sk89q.worldedit.util.YAMLConfiguration;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.managers.RegionManager;
-import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
+
 import levelpoints.Events.MainEvents;
 import levelpoints.LevelPointsEvents.FarmEvent;
 import levelpoints.LevelPointsEvents.LevelUpEvent;
@@ -393,6 +389,7 @@ public class UtilCollector implements Utils {
             getLevelsConfig();
             getRewardsConfig();
             getEXPConfig();
+            getLangConfig();
 
             TopListConfig = YamlConfiguration.loadConfiguration(TopListFile);
 

@@ -198,8 +198,6 @@ public class MainEvents implements Listener {
         Boolean hasOverlap = event.getOverlap();
         int Level = event.getLevel();
         int Prestige = uc.getCurrentPrestige(player);
-        player.sendMessage(String.valueOf(Level));
-        player.sendMessage(String.valueOf(Prestige));
         uc.Rewards(player, Level, Prestige);
 
         if (hasOverlap) {
@@ -226,19 +224,16 @@ public class MainEvents implements Listener {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                player.sendMessage("Sent Data");
-                uc.RunSQLUpdate(player);
-            }else{
-                int Overamount = event.getOverlapAmount();
-                uc.GainEXP(player, Overamount);
-                uc.TopListConfig.set(player.getUniqueId() + ".Name", player.getName());
-                uc.TopListConfig.set(player.getUniqueId() + ".Level", Level);
 
-                try {
-                    uc.TopListConfig.save(uc.TopListFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                uc.RunSQLUpdate(player);
+            }
+            uc.TopListConfig.set(player.getUniqueId() + ".Name", player.getName());
+            uc.TopListConfig.set(player.getUniqueId() + ".Level", Level);
+
+            try {
+                uc.TopListConfig.save(uc.TopListFile);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
@@ -253,84 +248,84 @@ public class MainEvents implements Listener {
         ItemMeta itemm = item.getItemMeta();
         File userdata = new File(lp.userFolder, player.getUniqueId() + ".yml");
         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
-         if (uc.getEXPConfig().getBoolean("Resources")) {
+        if (uc.getEXPConfig().getBoolean("Resources")) {
 
             if (uc.getEXPConfig().getBoolean("Debug")) {
                 player.sendMessage(block.getType().toString());
             }
 
-            if(uc.getEXPConfig().getBoolean("WorldGuard.RestrictRegions")){
-                    LocalPlayer LocalP = lp.worldGuardPlugin.wrapPlayer(player);
-                    Location playerVector = block.getLocation();
-                    RegionManager rm = lp.worldGuardPlugin.getRegionManager(block.getWorld());
-                    ApplicableRegionSet appregion = rm.getApplicableRegions(playerVector);
+            if (uc.getEXPConfig().getBoolean("WorldGuard.RestrictRegions")) {
+                LocalPlayer LocalP = lp.worldGuardPlugin.wrapPlayer(player);
+                Location playerVector = block.getLocation();
+                RegionManager rm = lp.worldGuardPlugin.getRegionManager(block.getWorld());
+                ApplicableRegionSet appregion = rm.getApplicableRegions(playerVector);
 
-                    if(!appregion.getRegions().isEmpty()) {
-                        for (ProtectedRegion regions : appregion) {
+                if (!appregion.getRegions().isEmpty()) {
+                    for (ProtectedRegion regions : appregion) {
 
-                            if (uc.getEXPConfig().getStringList("WorldGuard.regionsToRestrict").contains(regions.getId())) {
-                                return;
-                            } else {
-                                if (UsersConfig.getInt("Level") < uc.getEXPConfig().getInt("o" + block.getType().toString())) {
-                                    int level = uc.getEXPConfig().getInt("o" + block.getType().toString());
-                                    player.sendMessage(API.format(uc.getLangConfig().getString("ucPerLevelOre").replace("{uc_required_level}", String.valueOf(level))));
-                                    event.setCancelled(true);
-                                } else if (uc.getEXPConfig().getBoolean("RandomEXP")) {
+                        if (uc.getEXPConfig().getStringList("WorldGuard.regionsToRestrict").contains(regions.getId())) {
+                            return;
+                        } else {
+                            if (UsersConfig.getInt("Level") < uc.getEXPConfig().getInt("o" + block.getType().toString())) {
+                                int level = uc.getEXPConfig().getInt("o" + block.getType().toString());
+                                player.sendMessage(API.format(uc.getLangConfig().getString("ucPerLevelOre").replace("{uc_required_level}", String.valueOf(level))));
+                                event.setCancelled(true);
+                            } else if (uc.getEXPConfig().getBoolean("RandomEXP")) {
 
-                                    int max = uc.getEXPConfig().getInt(block.getType().toString());
-                                    int min = 0;
+                                int max = uc.getEXPConfig().getInt(block.getType().toString());
+                                int min = 0;
 
-                                    Random r = new Random();
-                                    int re = r.nextInt((max - min) + 1) + min;
-                                    if (uc.getEXPConfig().getBoolean("Anti-Silk-EXP")) {
-                                        if (!item.getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
-                                            uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
-                                        }
-                                    } else {
+                                Random r = new Random();
+                                int re = r.nextInt((max - min) + 1) + min;
+                                if (uc.getEXPConfig().getBoolean("Anti-Silk-EXP")) {
+                                    if (!item.getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
                                         uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
                                     }
                                 } else {
-                                    if (uc.getEXPConfig().getBoolean("Anti-Silk-EXP")) {
-                                        if (!item.getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
-                                            uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
-                                        }
-                                    } else {
+                                    uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
+                                }
+                            } else {
+                                if (uc.getEXPConfig().getBoolean("Anti-Silk-EXP")) {
+                                    if (!item.getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
                                         uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
                                     }
-                                }
-                            }
-                        }
-                    }else {
-                        if (UsersConfig.getInt("Level") < uc.getEXPConfig().getInt("o" + block.getType().toString())) {
-                            int level = uc.getEXPConfig().getInt("o" + block.getType().toString());
-                            player.sendMessage(API.format(uc.getLangConfig().getString("ucPerLevelOre").replace("{uc_required_level}", String.valueOf(level))));
-                            event.setCancelled(true);
-                        } else if (uc.getEXPConfig().getBoolean("RandomEXP")) {
-
-                            int max = uc.getEXPConfig().getInt(block.getType().toString());
-                            int min = 0;
-
-                            Random r = new Random();
-                            int re = r.nextInt((max - min) + 1) + min;
-                            if (uc.getEXPConfig().getBoolean("Anti-Silk-EXP")) {
-                                if (!item.getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
+                                } else {
                                     uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
                                 }
-                            } else {
-                                uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
-                            }
-                        } else {
-                            if (uc.getEXPConfig().getBoolean("Anti-Silk-EXP")) {
-                                if (!item.getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
-                                    uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
-                                }
-                            } else {
-                                uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
                             }
                         }
                     }
+                } else {
+                    if (UsersConfig.getInt("Level") < uc.getEXPConfig().getInt("o" + block.getType().toString())) {
+                        int level = uc.getEXPConfig().getInt("o" + block.getType().toString());
+                        player.sendMessage(API.format(uc.getLangConfig().getString("ucPerLevelOre").replace("{uc_required_level}", String.valueOf(level))));
+                        event.setCancelled(true);
+                    } else if (uc.getEXPConfig().getBoolean("RandomEXP")) {
 
-            }else if (uc.getEXPConfig().getBoolean("PerWorld")) {
+                        int max = uc.getEXPConfig().getInt(block.getType().toString());
+                        int min = 0;
+
+                        Random r = new Random();
+                        int re = r.nextInt((max - min) + 1) + min;
+                        if (uc.getEXPConfig().getBoolean("Anti-Silk-EXP")) {
+                            if (!item.getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
+                                uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
+                            }
+                        } else {
+                            uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
+                        }
+                    } else {
+                        if (uc.getEXPConfig().getBoolean("Anti-Silk-EXP")) {
+                            if (!item.getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
+                                uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
+                            }
+                        } else {
+                            uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
+                        }
+                    }
+                }
+
+            } else if (uc.getEXPConfig().getBoolean("PerWorld")) {
 
                 List<String> worlds = uc.getEXPConfig().getStringList("Worlds");
                 for (String world : worlds) {
@@ -395,26 +390,60 @@ public class MainEvents implements Listener {
                 }
             }
         }
-        if(uc.getEXPConfig().getBoolean("FarmEXP")){
+        if (uc.getEXPConfig().getBoolean("FarmEXP")) {
+            ConfigurationSection HouseNums = uc.getEXPConfig().getConfigurationSection("Farming");
 
-            if(block.getType() == Material.CROPS || block.getType() == Material.CARROT || block.getType() == Material.POTATO || block.getType() == Material.BEETROOT_BLOCK || block.getType() == Material.NETHER_WARTS) {
-                MaterialData FarmData = block.getState().getData();
+            if (uc.getEXPConfig().getBoolean("1.8-1.13.2")) {
 
-                Crops crop = new Crops();
-                crop.setData(FarmData.getData());
+                if (block.getType() == Material.CROPS) {
 
-                if (crop.getData() == (byte) 7 || block.getType() == Material.BEETROOT_BLOCK && crop.getData() == (byte) 3) {
+                    MaterialData FarmData = block.getState().getData();
 
-                    ConfigurationSection FarmBlocks = uc.getEXPConfig().getConfigurationSection("Farming.");
+                    Crops crop = new Crops();
+                    crop.setData(FarmData.getData());
+                    player.sendMessage(String.valueOf(FarmData.getData()));
+                    if (crop.getData() == (byte) 7) {
 
-                    for (ItemStack x : block.getDrops()) {
+
+                        ConfigurationSection FarmBlocks = uc.getEXPConfig().getConfigurationSection("Farming.");
+
+                        for (ItemStack x : block.getDrops()) {
 
 
-                        if (FarmBlocks.contains(x.getType().toString().replace("_ITEM", ""))) {
+                            if (FarmBlocks.contains(x.getType().toString().replace("_ITEM", ""))) {
 
-                            int amount = uc.getEXPConfig().getInt("Farming." + x.getType().toString().replace("_ITEM", ""));
+                                int amount = uc.getEXPConfig().getInt("Farming." + x.getType().toString().replace("_ITEM", ""));
 
-                            uc.FarmEventTrigger(player, x.getType().toString().replace("_ITEM", ""), amount, "Farming");
+                                uc.FarmEventTrigger(player, x.getType().toString().replace("_ITEM", ""), amount, "Farming");
+                            }
+                        }
+                    }
+                } else {
+
+                    for (String id : HouseNums.getKeys(false)) {
+                        if (block.getType() == Material.getMaterial("CROPS") || block.getType() == Material.getMaterial(id)) {
+
+
+                            MaterialData FarmData = block.getState().getData();
+
+                            Crops crop = new Crops();
+                            crop.setData(FarmData.getData());
+
+                            if (crop.getData() == (byte) 7) {
+                                ConfigurationSection FarmBlocks = uc.getEXPConfig().getConfigurationSection("Farming.");
+                                int amount = 0;
+                                for (ItemStack x : block.getDrops()) {
+
+                                    if (x.getType().toString().equals("CROPS")) {
+                                        amount = uc.getEXPConfig().getInt("Farming.WHEAT");
+                                        uc.FarmEventTrigger(player, "WHEAT", amount, "Farming");
+                                    } else if (FarmBlocks.contains(x.getType().toString().replace("_ITEM", ""))) {
+                                        amount = uc.getEXPConfig().getInt("Farming." + x.getType().toString().replace("_ITEM", ""));
+
+                                        uc.FarmEventTrigger(player, x.getType().toString().replace("_ITEM", ""), amount, "Farming");
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -532,13 +561,12 @@ public class MainEvents implements Listener {
                         event.setCancelled(true);
                         uc.Title(player,  ChatColor.DARK_RED + "You Must BE", ChatColor.RED + "Level 5 to PVP");
                         Attacker.sendMessage(ChatColor.RED + player.getName() + " Must to Level 5 to allow pvp");
-                        Attacker.playSound(Attacker.getLocation(), Sound.ENTITY_ENDERDRAGON_GROWL, 10F, 15);
+
                     }
                     if ((AttackerConfig.getInt("Level") < levelpvp)) {
                         event.setCancelled(true);
                         uc.Title(Attacker,ChatColor.DARK_RED + "You Must BE", ChatColor.RED + "Level 5 to PVP");
-                        //player.sendMessage(ChatColor.RED + Attacker.getName() + " Must to Level 5 to allow pvp");
-                        player.playSound(player.getLocation(), Sound.ENTITY_ENDERDRAGON_GROWL, 10F, 15);
+
                     }
                 } else {
                     return;
@@ -559,7 +587,7 @@ public class MainEvents implements Listener {
                     event.setCancelled(true);
                     uc.Title(player,  ChatColor.DARK_RED + "You Must BE", ChatColor.RED + "Level 5 to PVP");
                     Attacker.sendMessage(ChatColor.RED + player.getName() + " Must to Level 5 to allow pvp");
-                    Attacker.playSound(Attacker.getLocation(), Sound.ENTITY_ENDERDRAGON_GROWL, 10F, 15);
+
                 }
             }
         }

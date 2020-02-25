@@ -1,7 +1,7 @@
 package levelpoints.commands;
 
 
-import com.sk89q.worldedit.internal.expression.runtime.For;
+
 import levelpoints.levelpoints.LevelPoints;
 
 import levelpoints.utils.utils.API;
@@ -69,9 +69,6 @@ public class MainCommand implements CommandExecutor {
                         lp.reloadConfig();
                         uc.RunFiles();
 
-
-                        sender.sendMessage(API.format(uc.getFormatsConfig().getString("Level1-10.Format")));
-
                         sender.sendMessage(API.format(uc.getLangConfig().getString("lpreload")));
                     }
 
@@ -134,9 +131,6 @@ public class MainCommand implements CommandExecutor {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                        }
-                        if (lp.getConfig().getBoolean("UseSQL")) {
-                            uc.RunSQLUpdate(target);
                         }
 
 
