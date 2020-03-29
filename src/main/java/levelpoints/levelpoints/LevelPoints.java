@@ -1,13 +1,12 @@
 package levelpoints.levelpoints;
 
+
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import levelpoints.utils.utils.API;
 import levelpoints.utils.utils.UtilCollector;
 import lpsapi.lpsapi.LPSAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,7 +18,6 @@ import java.sql.Statement;
 
 public final class LevelPoints extends JavaPlugin {
     private LPSAPI lpapi = (LPSAPI) Bukkit.getPluginManager().getPlugin("LPSAPI");
-
     public UtilCollector uc;
     public File userFolder;
 
@@ -52,21 +50,25 @@ public final class LevelPoints extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "LevelPoints Plugin");
         getServer().getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "Developer: Zoon20X");
         getServer().getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "Version: " + this.getDescription().getVersion());
-        getServer().getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "MC-Compatible: 1.8-1.13.2");
+        getServer().getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "MC-Compatible: 1.8-1.15.2");
         getServer().getConsoleSender().sendMessage(ChatColor.AQUA + "Enabled");
         getServer().getConsoleSender().sendMessage(ChatColor.AQUA + "=============================");
 
 
         if (getConfig().getBoolean("UseSQL")) {
-            getServer().getConsoleSender().sendMessage(API.format("&3Loaded Modules>>> &bMySql"));
             MySQL();
+            getServer().getConsoleSender().sendMessage(API.format("&3Loaded Modules>>> &bMySql"));
             getServer().getPluginManager().registerEvents(new mySQL(this), this);
-
+            try {
+                this.connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
         }
-    }
 
-    
+
+    }
     public void MySQL() {
         host = getConfig().getString("host");
         port = getConfig().getInt("port");
@@ -90,6 +92,8 @@ public final class LevelPoints extends JavaPlugin {
                 statment = connection.createStatement();
                 statment.executeUpdate("CREATE TABLE IF NOT EXISTS `playerData` (`UUID` varchar(200), `NAME` varchar(200), `LEVEL` INT(10), EXP INT(10), PRESTIGE INT(10))");
                 getServer().getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "MySQL Connected");
+                connection.close();
+                getServer().getConsoleSender().sendMessage(String.valueOf(connection.isClosed()));
                 getServer().getConsoleSender().sendMessage(connection.toString());
 
             }
@@ -98,11 +102,12 @@ public final class LevelPoints extends JavaPlugin {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
     }
     public WorldGuardPlugin getWorldGuard(){
      Plugin plugin = this.getServer().getPluginManager().getPlugin("WorldGuard");
      if(plugin == null || !(plugin instanceof WorldGuardPlugin)){
-         getServer().getConsoleSender().sendMessage(API.format("&4Not Running worldguard"));
+         getServer().getConsoleSender().sendMessage(API.format("&3Not running Worldguard"));
          return null;
      }
      return (WorldGuardPlugin) plugin;
@@ -112,6 +117,5 @@ public final class LevelPoints extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
     }
-
 
 }

@@ -1,15 +1,10 @@
 package levelpoints.utils.utils;
 
-import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 public interface Utils {
@@ -23,6 +18,8 @@ public interface Utils {
 
     void RunSQLUpdate(Player player);
     void RunSQLDownload(Player player);
+    void SQLReconnect();
+    void SQLDisconnect(int seconds);
     void LevelUpEventTrigger(Player player, int level, boolean EXPOverlap, int EXPOverlapAmount);
 
     void FarmEventTrigger(Player player, String FarmedItem, int expAmount, String Task);
@@ -45,12 +42,13 @@ public interface Utils {
     void boosteruseclick(Player player, int multiplier) throws IOException;
     void RunFiles();
     void TimedEXP();
-    int getMaxLevelEXP(Player player);
+    double getMaxLevelEXP(Player player);
     FileConfiguration getLevelsConfig();
     FileConfiguration getEXPConfig();
     FileConfiguration getRewardsConfig();
     FileConfiguration getFormatsConfig();
     FileConfiguration getLangConfig();
+    FileConfiguration getTopListConfig();
 
 
 

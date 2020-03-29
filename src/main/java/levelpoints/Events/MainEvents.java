@@ -17,6 +17,9 @@ import levelpoints.utils.utils.API;
 import levelpoints.utils.utils.UtilCollector;
 import lpsapi.lpsapi.LPSAPI;
 import me.clip.placeholderapi.PlaceholderAPI;
+import me.ryanhamshire.GriefPrevention.Claim;
+import me.ryanhamshire.GriefPrevention.DataStore;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -60,8 +63,11 @@ public class MainEvents implements Listener {
     private Plugin plugin = LevelPoints.getPlugin(LevelPoints.class);
     private LevelPoints lp = LevelPoints.getPlugin(LevelPoints.class);
 
+
     private LPSAPI lpapi = (LPSAPI) Bukkit.getPluginManager().getPlugin("LPSAPI");
     UtilCollector uc = new UtilCollector();
+
+
 
     public MainEvents(LevelPoints levelPoints) {
     }
@@ -134,6 +140,7 @@ public class MainEvents implements Listener {
     public void PreJoin(AsyncPlayerPreLoginEvent event) {
 
         uc.PlayerAdd(event.getUniqueId(), event.getName());
+
         wait(2, event.getUniqueId(), event.getName());
 
     }
@@ -143,18 +150,12 @@ public class MainEvents implements Listener {
             public void run() {
                 if (lp.getConfig().getBoolean("UseSQL")) {
                     try {
-                        lp.setConnection(DriverManager.getConnection("jdbc:mysql://" + lp.host + ":" + lp.port + "/" + lp.database, lp.username, lp.password));
+                        if(lp.connection.isClosed()){
+                            uc.SQLReconnect();
+                        }
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-                    try {
-                        lp.statment = lp.connection.createStatement();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-
-
-
                     mySQL sql = new mySQL();
                     sql.createPlayer(uuid, name);
                 }
@@ -167,6 +168,8 @@ public class MainEvents implements Listener {
 
         uc.PlayerDataLoad(event.getPlayer());
         if (lp.getConfig().getBoolean("UseSQL")) {
+
+
             uc.wait(3, event.getPlayer());
             //uc.RunSQLDownload(event.getPlayer());
         }
@@ -175,17 +178,7 @@ public class MainEvents implements Listener {
     @EventHandler
     public void Leave(PlayerQuitEvent event) {
         if (lp.getConfig().getBoolean("UseSQL")) {
-            try {
-                lp.setConnection(DriverManager.getConnection("jdbc:mysql://" + lp.host + ":" + lp.port + "/" + lp.database, lp.username, lp.password));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            try {
-                lp.statment = lp.connection.createStatement();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            Bukkit.getServer().getConsoleSender().sendMessage(event.getPlayer().getName());
+
             uc.RunSQLUpdate(event.getPlayer());
         }
     }
@@ -199,39 +192,29 @@ public class MainEvents implements Listener {
         int Level = event.getLevel();
         int Prestige = uc.getCurrentPrestige(player);
         uc.Rewards(player, Level, Prestige);
-
+        File file = new File(lp.getDataFolder(), "TopList.yml");
+        FileConfiguration config = uc.getTopListConfig();
         if (hasOverlap) {
             int Overamount = event.getOverlapAmount();
             uc.GainEXP(player, Overamount);
-            uc.TopListConfig.set(player.getUniqueId() + ".Name", player.getName());
-            uc.TopListConfig.set(player.getUniqueId() + ".Level", Level);
+            config.set(player.getUniqueId() + ".Name", player.getName());
+            config.set(player.getUniqueId() + ".Level", Level);
 
             try {
-                uc.TopListConfig.save(uc.TopListFile);
+                config.save(file);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
 
             if (lp.getConfig().getBoolean("UseSQL")) {
-                try {
-                    lp.setConnection(DriverManager.getConnection("jdbc:mysql://" + lp.host + ":" + lp.port + "/" + lp.database, lp.username, lp.password));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    lp.statment = lp.connection.createStatement();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
                 uc.RunSQLUpdate(player);
             }
-            uc.TopListConfig.set(player.getUniqueId() + ".Name", player.getName());
-            uc.TopListConfig.set(player.getUniqueId() + ".Level", Level);
+            config.set(player.getUniqueId() + ".Name", player.getName());
+            config.set(player.getUniqueId() + ".Level", Level);
 
             try {
-                uc.TopListConfig.save(uc.TopListFile);
+                config.save(file);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -240,14 +223,41 @@ public class MainEvents implements Listener {
 
     }
 
+    private boolean Check(Player player){
+
+        DataStore dataStore = GriefPrevention.instance.dataStore;
+        Claim claim = dataStore.getClaimAt(player.getLocation(), true, null);
+        player.sendMessage(String.valueOf(claim));
+        if(claim != null){
+            if(player.getName().equalsIgnoreCase(claim.getOwnerName())){
+
+                return true;
+            }else{
+
+                return false;
+            }
+        }else{
+            return true;
+        }
+    }
+
     @EventHandler
     public void BlockBreak(BlockBreakEvent event) {
+
         Block block = event.getBlock();
         Player player = event.getPlayer();
         ItemStack item = player.getItemInHand();
         ItemMeta itemm = item.getItemMeta();
         File userdata = new File(lp.userFolder, player.getUniqueId() + ".yml");
         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
+
+        if(lp.getConfig().getBoolean("GriefPrevention")){
+            if(!Check(player)){
+
+                return;
+            }
+        }
+
         if (uc.getEXPConfig().getBoolean("Resources")) {
 
             if (uc.getEXPConfig().getBoolean("Debug")) {
@@ -279,10 +289,10 @@ public class MainEvents implements Listener {
                                 int re = r.nextInt((max - min) + 1) + min;
                                 if (uc.getEXPConfig().getBoolean("Anti-Silk-EXP")) {
                                     if (!item.getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
-                                        uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
+                                        uc.GainEXP(player, re);
                                     }
                                 } else {
-                                    uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
+                                    uc.GainEXP(player, re);
                                 }
                             } else {
                                 if (uc.getEXPConfig().getBoolean("Anti-Silk-EXP")) {
@@ -309,10 +319,10 @@ public class MainEvents implements Listener {
                         int re = r.nextInt((max - min) + 1) + min;
                         if (uc.getEXPConfig().getBoolean("Anti-Silk-EXP")) {
                             if (!item.getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
-                                uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
+                                uc.GainEXP(player, re);
                             }
                         } else {
-                            uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
+                            uc.GainEXP(player, re);
                         }
                     } else {
                         if (uc.getEXPConfig().getBoolean("Anti-Silk-EXP")) {
@@ -343,10 +353,10 @@ public class MainEvents implements Listener {
                             int re = r.nextInt((max - min) + 1) + min;
                             if (uc.getEXPConfig().getBoolean("Anti-Silk-EXP")) {
                                 if (!item.getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
-                                    uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
+                                    uc.GainEXP(player, re);
                                 }
                             } else {
-                                uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
+                                uc.GainEXP(player, re);
                             }
                         } else {
                             if (uc.getEXPConfig().getBoolean("Anti-Silk-EXP")) {
@@ -374,10 +384,10 @@ public class MainEvents implements Listener {
                     int re = r.nextInt((max - min) + 1) + min;
                     if (uc.getEXPConfig().getBoolean("Anti-Silk-EXP")) {
                         if (!item.getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
-                            uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
+                            uc.GainEXP(player, re);
                         }
                     } else {
-                        uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
+                        uc.GainEXP(player, re);
                     }
                 } else {
                     if (uc.getEXPConfig().getBoolean("Anti-Silk-EXP")) {
@@ -528,10 +538,10 @@ public class MainEvents implements Listener {
         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
         if (uc.getEXPConfig().getBoolean("Anti-EXP-Dupe")) {
 
-            int expp = uc.getCurrentEXP(player);
+            double expp = uc.getCurrentEXP(player);
             int t = uc.getEXPConfig().getInt(block.getType().toString());
             if (t <= expp) {
-                int tep = expp - t;
+                double tep = expp - t;
                 UsersConfig.set("EXP.Amount", tep);
                 UsersConfig.save(userdata);
             }
@@ -612,10 +622,10 @@ public class MainEvents implements Listener {
                         if (uc.getEXPConfig().getBoolean("Exp-Kill-players")) {
                             uc.GainEXP(Killer, uc.getEXPConfig().getInt("Kill-Player-Amount"));
                             if (uc.getEXPConfig().getBoolean("EXP-Lost-On-Death-Player")) {
-                                int expp = uc.getCurrentEXP(player);
+                                double expp = uc.getCurrentEXP(player);
                                 int t = uc.getEXPConfig().getInt("EXP-Lost-Amount");
                                 if (t <= expp) {
-                                    int tep = expp - t;
+                                    double tep = expp - t;
                                     UsersConfig.set("EXP.Amount", tep);
                                     UsersConfig.save(userdata);
                                 }
@@ -631,10 +641,10 @@ public class MainEvents implements Listener {
                 if (uc.getEXPConfig().getBoolean("Exp-Kill-players")) {
                     uc.GainEXP(Killer, uc.getEXPConfig().getInt("Kill-Player-Amount"));
                     if (uc.getEXPConfig().getBoolean("EXP-Lost-On-Death-Player")) {
-                        int expp = uc.getCurrentEXP(player);
+                        double expp = uc.getCurrentEXP(player);
                         int t = uc.getEXPConfig().getInt("EXP-Lost-Amount");
                         if (t <= expp) {
-                            int tep = expp - t;
+                            double tep = expp - t;
                             UsersConfig.set("EXP.Amount", tep);
                             UsersConfig.save(userdata);
                         }

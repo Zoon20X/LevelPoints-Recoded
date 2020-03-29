@@ -8,7 +8,6 @@ import levelpoints.LevelPointsEvents.LevelUpEvent;
 import levelpoints.commands.MainCommand;
 import levelpoints.levelpoints.LevelPoints;
 import levelpoints.levelpoints.WildStacker;
-import levelpoints.levelpoints.mySQL;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -18,9 +17,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Explosive;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,15 +26,13 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class UtilCollector implements Utils {
 
@@ -54,7 +49,7 @@ public class UtilCollector implements Utils {
     public FileConfiguration TopListConfig = YamlConfiguration.loadConfiguration(TopListFile);
     public FileConfiguration WSConfig = YamlConfiguration.loadConfiguration(WSFile);
 
-
+    public NumberFormat formatter = new DecimalFormat("0.0");
 
     private HashMap<UUID, YamlConfiguration> usersConfig = new HashMap<>();
     private long daytime = (1000 * 60 * 60);
@@ -247,44 +242,105 @@ public class UtilCollector implements Utils {
     public void RunSQLUpdate(Player player) {
         File userdata = new File(LPS.userFolder, player.getUniqueId() + ".yml");
         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
+        Connection connection = LPS.getConnection();
 
-        Bukkit.getScheduler().runTaskAsynchronously(LPS, new Runnable() {
+        try {
+            if(connection.isClosed()){
+                SQLReconnect();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(LPS, new Runnable() {
             @Override
             public void run() {
                 try {
-                    PreparedStatement statement = LPS.getConnection().prepareStatement("UPDATE " + table + " SET PRESTIGE=? WHERE UUID=?");
+                    Connection connection = LPS.getConnection();
+                    PreparedStatement statement = connection.prepareStatement("UPDATE " + table + " SET PRESTIGE=? WHERE UUID=?");
                     statement.setString(1, String.valueOf(UsersConfig.getInt("Prestige")));
                     statement.setString(2, player.getUniqueId().toString());
                     statement.executeUpdate();
 
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    PreparedStatement statement = LPS.getConnection().prepareStatement("UPDATE " + table + " SET LEVEL=? WHERE UUID=?");
+                    statement = LPS.getConnection().prepareStatement("UPDATE " + table + " SET LEVEL=? WHERE UUID=?");
                     statement.setString(1, String.valueOf(UsersConfig.getInt("Level")));
                     statement.setString(2, player.getUniqueId().toString());
                     statement.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
 
-                try {
-                    PreparedStatement statement = LPS.getConnection().prepareStatement("UPDATE " + table + " SET EXP=? WHERE UUID=?");
+                    statement = LPS.getConnection().prepareStatement("UPDATE " + table + " SET EXP=? WHERE UUID=?");
                     statement.setString(1, String.valueOf(UsersConfig.getInt("EXP.Amount")));
                     statement.setString(2, player.getUniqueId().toString());
                     statement.executeUpdate();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    Connection connection = LPS.getConnection();
+                    try {
+                        if(connection.isClosed()){
+                            RunSQLUpdate(player);
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
                 }
+
+            }
+
+        }, (1 * 2));
+
+    }
+
+
+    @Override
+    public void RunSQLDownload(Player player) {
+        File userdata = new File(LPS.userFolder, player.getUniqueId() + ".yml");
+        FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
+        Connection connection = LPS.getConnection();
+        try {
+            if (connection.isClosed()) {
+                SQLReconnect();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Bukkit.getScheduler().runTaskAsynchronously(LPS, new Runnable() {
+            @Override
+            public void run() {
                 try {
-                    LPS.getConnection().close();
+                    Connection connection = LPS.getConnection();
+                    PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + table + " WHERE UUID=?");
+                    statement.setString(1, player.getUniqueId().toString());
+                    ResultSet results = statement.executeQuery();
+                    results.next();
+                    if (statement != null) {
+                        UsersConfig.set("EXP.Amount", results.getInt("EXP"));
+
+                        UsersConfig.save(userdata);
+                    }
+                    statement = LPS.getConnection().prepareStatement("SELECT * FROM " + table + " WHERE UUID=?");
+                    statement.setString(1, player.getUniqueId().toString());
+                    results = statement.executeQuery();
+                    results.next();
+                    if (statement != null) {
+                        UsersConfig.set("Level", results.getInt("LEVEL"));
+                        UsersConfig.save(userdata);
+                    }
+                    statement = LPS.getConnection().prepareStatement("SELECT * FROM " + table + " WHERE UUID=?");
+                    statement.setString(1, player.getUniqueId().toString());
+                    results = statement.executeQuery();
+                    results.next();
+                    if (statement != null) {
+                        UsersConfig.set("Prestige", results.getInt("PRESTIGE"));
+                        UsersConfig.save(userdata);
+                    }
+
                 } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    LPS.getConnection().close();
-                } catch (SQLException e) {
+                    Connection connection = LPS.getConnection();
+                    try {
+                        if (connection.isClosed()) {
+                            RunSQLUpdate(player);
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -294,76 +350,19 @@ public class UtilCollector implements Utils {
     }
 
     @Override
-    public void RunSQLDownload(Player player) {
-        File userdata = new File(LPS.userFolder, player.getUniqueId() + ".yml");
-        FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
-
-        Bukkit.getScheduler().runTaskAsynchronously(LPS, new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    PreparedStatement statement = LPS.getConnection().prepareStatement("SELECT * FROM " + table + " WHERE UUID=?");
-                    statement.setString(1, player.getUniqueId().toString());
-                    ResultSet results = statement.executeQuery();
-                    results.next();
-                    if (statement != null) {
-                        UsersConfig.set("EXP.Amount", results.getInt("EXP"));
-
-                        UsersConfig.save(userdata);
-                    }
-
-                } catch (SQLException e) {
-
-                    e.printStackTrace();
-
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    PreparedStatement statement = LPS.getConnection().prepareStatement("SELECT * FROM " + table + " WHERE UUID=?");
-                    statement.setString(1, player.getUniqueId().toString());
-                    ResultSet results = statement.executeQuery();
-                    results.next();
-                    if (statement != null) {
-                        UsersConfig.set("Level", results.getInt("LEVEL"));
-                        UsersConfig.save(userdata);
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    PreparedStatement statement = LPS.getConnection().prepareStatement("SELECT * FROM " + table + " WHERE UUID=?");
-                    statement.setString(1, player.getUniqueId().toString());
-                    ResultSet results = statement.executeQuery();
-                    results.next();
-                    if (statement != null) {
-                        UsersConfig.set("Prestige", results.getInt("PRESTIGE"));
-                        UsersConfig.save(userdata);
-                    }
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    LPS.getConnection().close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    LPS.getConnection().close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        });
-
+    public void SQLReconnect() {
+        try {
+            LPS.setConnection(DriverManager.getConnection("jdbc:mysql://" + LPS.host + ":" + LPS.port + "/" + LPS.database, LPS.username, LPS.password));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            LPS.statment = LPS.connection.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        LPS.getServer().getConsoleSender().sendMessage(API.format("&bReconnecting to SQL"));
+        SQLDisconnect(LPS.getConfig().getInt("SQLCloseTimer"));
     }
 
 
@@ -490,7 +489,21 @@ public class UtilCollector implements Utils {
             return;
         }
     }
+    @Override
+    public void SQLDisconnect(int seconds) {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(LPS, new Runnable() {
+            public void run() {
+                try {
+                    LPS.connection.close();
+                    LPS.getServer().getConsoleSender().sendMessage(API.format("&4Disconnected from SQL &f- &cReconnect needs to take place"));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
 
+        }, (seconds * 20));
+
+    }
 
     @Override
     public void wait(int seconds, Player player) {
@@ -646,8 +659,11 @@ public class UtilCollector implements Utils {
                 } else if (newEXP > EXPRequired) {
 
 
-                    int OverLap = newEXP - EXPRequired;
 
+
+                    int newEXPS = newEXP;
+                    int RequiredEXP = EXPRequired;
+                    int OverLap = newEXPS - RequiredEXP;
                     UsersConfig.set("EXP.Amount", OverLap);
                     UsersConfig.set("Level", CurrentLevel + 1);
                     try {
@@ -657,44 +673,17 @@ public class UtilCollector implements Utils {
                     }
                     LevelUpEventTrigger(player.getPlayer(), CurrentLevel + 1, true, 0);
                 } else {
-                    UsersConfig.set("EXP.Amount", EXPCurrent + amount);
+
+                    int newEXPS = EXPCurrent + amount;
+                    UsersConfig.set("EXP.Amount", newEXP);
                     try {
                         UsersConfig.save(userdata);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }
-                double required_progress = EXPRequired;
-                double current_progress = newEXP;
-                double progress_percentage = current_progress / required_progress;
-                StringBuilder sb = new StringBuilder();
-                int bar_length = 30;
-                String completed = API.format(getLangConfig().getString("lpBarDesignCompleted"));
-                String need = API.format(getLangConfig().getString("lpBarDesignRequired"));
-                for (int i = 0; i < bar_length; i++) {
-                    if (i < bar_length * progress_percentage) {
-                        sb.append(completed); //what to append if percentage is covered (e.g. GREEN '|'s)
-                    } else {
-                        sb.append(need); //what to append if percentage is not covered (e.g. GRAY '|'s)
-                    }
-                }
-                if (UsersConfig.getBoolean("ActionBar")) {
-                    if (LPS.getConfig().getBoolean("Actionbar")) {
-                        ActionBar(player, API.format(getLangConfig().getString("lpActionBar").replace("{PLAYER_LEVEL}", String.valueOf(CurrentLevel)).replace("{BAR}", sb.toString()).replace("{EXP_CURRENT}", String.valueOf(newEXP)).replace("{EXP_REQUIRED}", String.valueOf(EXPRequired))));
-                    }
-                }
-            } else {
-                if (newEXP > EXPRequired) {
-                    return;
-                }else{
-                    UsersConfig.set("EXP.Amount", EXPCurrent + amount);
-                    try {
-                        UsersConfig.save(userdata);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    double required_progress = EXPRequired;
-                    double current_progress = newEXP;
+
+                    double  required_progress = EXPRequired;
+                    double current_progress = newEXPS;
                     double progress_percentage = current_progress / required_progress;
                     StringBuilder sb = new StringBuilder();
                     int bar_length = 30;
@@ -709,7 +698,46 @@ public class UtilCollector implements Utils {
                     }
                     if (UsersConfig.getBoolean("ActionBar")) {
                         if (LPS.getConfig().getBoolean("Actionbar")) {
-                            ActionBar(player, API.format(getLangConfig().getString("lpActionBar").replace("{PLAYER_LEVEL}", String.valueOf(CurrentLevel)).replace("{BAR}", sb.toString()).replace("{EXP_CURRENT}", String.valueOf(newEXP)).replace("{EXP_REQUIRED}", String.valueOf(EXPRequired))));
+                            ActionBar(player, API.format(getLangConfig().getString("lpActionBar").replace("{PLAYER_LEVEL}", String.valueOf(CurrentLevel)).replace("{BAR}", sb.toString()).replace("{EXP_CURRENT}", String.valueOf(formatter.format(current_progress))).replace("{EXP_REQUIRED}", String.valueOf(formatter.format(required_progress)))));
+                        }
+                    }
+                }
+            } else {
+                if (newEXP > EXPRequired) {
+                    UsersConfig.set("EXP.Amount", EXPRequired);
+                    try {
+                        UsersConfig.save(userdata);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return;
+                }else{
+
+
+                    int newEXPS = EXPCurrent + amount;
+                    UsersConfig.set("EXP.Amount", newEXPS);
+                    try {
+                        UsersConfig.save(userdata);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    double required_progress = Math.round(Float.parseFloat(formatter.format(EXPRequired)));;
+                    double current_progress = newEXPS;
+                    double progress_percentage = current_progress / required_progress;
+                    StringBuilder sb = new StringBuilder();
+                    int bar_length = 30;
+                    String completed = API.format(getLangConfig().getString("lpBarDesignCompleted"));
+                    String need = API.format(getLangConfig().getString("lpBarDesignRequired"));
+                    for (int i = 0; i < bar_length; i++) {
+                        if (i < bar_length * progress_percentage) {
+                            sb.append(completed); //what to append if percentage is covered (e.g. GREEN '|'s)
+                        } else {
+                            sb.append(need); //what to append if percentage is not covered (e.g. GRAY '|'s)
+                        }
+                    }
+                    if (UsersConfig.getBoolean("ActionBar")) {
+                        if (LPS.getConfig().getBoolean("Actionbar")) {
+                            ActionBar(player, API.format(getLangConfig().getString("lpActionBar").replace("{PLAYER_LEVEL}", String.valueOf(CurrentLevel)).replace("{BAR}", sb.toString()).replace("{EXP_CURRENT}", String.valueOf(current_progress)).replace("{EXP_REQUIRED}", String.valueOf(required_progress))));
                         }
                     }
                 }
@@ -822,20 +850,20 @@ public class UtilCollector implements Utils {
     }
 
     @Override
-    public int getMaxLevelEXP(Player player) {
+    public double getMaxLevelEXP(Player player) {
 
 
-        int MaxEXP;
+        double MaxEXP;
         int CurrentLevel = getCurrentLevel(player);
-        int EXPR = getLevelsConfig().getInt("LevelingEXP");
+        double EXPR = getLevelsConfig().getDouble("LevelingEXP");
         int MaxLevel = getMaxLevel();
         File userdata = new File(LPS.userFolder, player.getUniqueId() + ".yml");
         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
 
         if (getLevelsConfig().getBoolean("PrestigeLeveling")) {
-            MaxEXP = getLevelsConfig().getInt("Prestige-" + UsersConfig.getInt("Prestige") + ".Level-" + MaxLevel);
+            MaxEXP = getLevelsConfig().getInt("Prestige-" + UsersConfig.getDouble("Prestige") + ".Level-" + MaxLevel);
         } else if (getLevelsConfig().getBoolean("CustomLeveling")) {
-            MaxEXP = getLevelsConfig().getInt("Level-" + MaxLevel);
+            MaxEXP = getLevelsConfig().getDouble("Level-" + MaxLevel);
         } else {
             MaxEXP = MaxLevel * EXPR;
         }
@@ -850,7 +878,12 @@ public class UtilCollector implements Utils {
         FileConfiguration LevelConfig = YamlConfiguration.loadConfiguration(LevelFile);
         return LevelConfig;
     }
-
+    @Override
+    public FileConfiguration getTopListConfig() {
+        File TopFile = new File(LPS.getDataFolder(), "TopList.yml");
+        FileConfiguration TopConfig = YamlConfiguration.loadConfiguration(TopFile);
+        return TopConfig;
+    }
     @Override
     public FileConfiguration getEXPConfig() {
 

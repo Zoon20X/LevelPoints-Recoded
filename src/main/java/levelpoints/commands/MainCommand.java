@@ -23,8 +23,11 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.Normalizer;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 
 public class MainCommand implements CommandExecutor {
@@ -96,7 +99,7 @@ public class MainCommand implements CommandExecutor {
                         if (target != null) {
 
                             //lp.CustomXP(target, Integer.parseInt(args[2]), 0);
-                            uc.GainEXP(target, Integer.parseInt(args[2]));
+                            uc.GainEXP(target, Integer.valueOf(args[2]));
                             sender.sendMessage(API.format(uc.getLangConfig().getString("lpAdminEXPGive").replace("{LP_TARGET}", target.getName()).replace("{EXP_AMOUNT}", args[2])));
                             target.sendMessage(API.format(uc.getLangConfig().getString("lpEXPGive").replace("{EXP_Amount}", args[2]).replace("{LP_USER}", uc.getLangConfig().getString("lpServerName"))));
 
@@ -122,9 +125,9 @@ public class MainCommand implements CommandExecutor {
                         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
 
                         if (target != null) {
-                            int expp = uc.getCurrentEXP(target);
-                            int t = Integer.parseInt(args[2]);
-                            int tep = expp - t;
+                            double expp = uc.getCurrentEXP(target);
+                            double t = Double.valueOf(args[2]);
+                            double tep = expp - t;
                             UsersConfig.set("EXP.Amount", tep);
                             try {
                                 UsersConfig.save(userdata);
@@ -156,7 +159,7 @@ public class MainCommand implements CommandExecutor {
                         // Here you can send to player or do whatever you wan't.
 
                     }
-                    ConfigurationSection cf = uc.TopListConfig.getConfigurationSection("");
+                    ConfigurationSection cf = uc.getTopListConfig().getConfigurationSection("");
                     cf.getValues(false)
                             .entrySet()
                             .stream()
@@ -220,7 +223,7 @@ public class MainCommand implements CommandExecutor {
                                     player.sendMessage(API.format(uc.getLangConfig().getString("lpsPrestigeLevelUP").replace("{PRESTIGE_AMOUNT}", String.valueOf(uc.getCurrentPrestige(player)))));
                                     return true;
                                 } else {
-                                    int need = uc.getRequiredEXP(player) - uc.getCurrentEXP(player);
+                                    double need = uc.getRequiredEXP(player) - uc.getCurrentEXP(player);
 
 
                                     player.sendMessage(API.format(uc.getLangConfig().getString("lpsPrestigeMoreEXP").replace("{EXP_AMOUNT}", String.valueOf(need))));
@@ -232,21 +235,25 @@ public class MainCommand implements CommandExecutor {
                         if (args[0].equalsIgnoreCase("info")) {
 
 
-                            int LevelUpEXP = uc.getRequiredEXP(player);
+                            double LevelUpEXP = uc.getRequiredEXP(player);
                             int levels = uc.getCurrentLevel(player);
                             int pres = UsersConfig.getInt("Prestige");
 
-                            int expss = UsersConfig.getInt("EXP.Amount");
+                            double expss = uc.getCurrentEXP(player);
 
-                            float percentage = expss * 100;
+                            double percentage = expss * 100;
 
-                            String EXP = expss + "/" + LevelUpEXP;
+
                             String Percentage = Math.round(percentage / LevelUpEXP) + "%";
 
+                            String LPRE = NumberFormat.getNumberInstance(Locale.US).format(Math.round(Float.parseFloat(uc.formatter.format(LevelUpEXP))));
+                            String LPHAVE = NumberFormat.getNumberInstance(Locale.US).format(Math.round(Float.parseFloat(uc.formatter.format(expss))));
 
+                            String EXP = LPHAVE + "/" + LPRE;
                             for (String x : uc.getLangConfig().getStringList("lpsInfo")) {
                                 sender.sendMessage(API.format(x.replace("{lp_player}", player.getName()).replace("{lp_level}", String.valueOf(levels)).replace("{lp_xp}", EXP).replace("{lp_progress}", Percentage).replace("{lp_prestige}", Integer.toString(pres))));
                             }
+;
                             return true;
                         }
                         if (args[0].equalsIgnoreCase("toggle")) {
@@ -377,11 +384,11 @@ public class MainCommand implements CommandExecutor {
 
                             int levels = uc.getCurrentLevel(TargetPlayer);
                             int pres = UsersConfig.getInt("Prestige");
-                            int LevelUpEXP = uc.getRequiredEXP(TargetPlayer);
-                            int expss = UsersConfig.getInt("EXP.Amount");
+                            double LevelUpEXP = uc.getRequiredEXP(TargetPlayer);
+                            double expss = uc.getCurrentEXP(TargetPlayer);
 
 
-                            float percentage = expss * 100;
+                            double percentage = expss * 100;
                             String EXP = expss + "/" + LevelUpEXP;
                             String Percentage = Math.round(percentage / LevelUpEXP) + "%";
 
