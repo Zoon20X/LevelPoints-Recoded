@@ -56,29 +56,3 @@ Rewards:
   Prestige-0:
     Level-5:
       - money give %player% 1000
-    Level-10:
-      - enjin addpoints %player% 5
-      - nte player %player% suffix ' &8[&7Novice&8]'
-    Level-15:
-      - enjin addpoints %player% 5
-      - money give %player% 2000
-    Level-20:
-      - enjin addpoints %player% 5
-      - money give %player% 5000
-    Level-25:
-      - money give %player% 10000
-    Level-50:
-      - enjin addpoints %player% 25
-      - nte player %player% suffix ' &8[&9Adept&8]'
-    Level-55:
-      - enjin addpoints %player% 5
-      - money give %player% 15000
-    Level-60:
-      - enjin addpoints %player% 10
-      - money give %player% 20000
-    Level-100:
-      - enjin addpoints %player% 10
-      - nte player %player% suffix ' &8[&6Expert&8]'
-    Level-150:
-      - enjin addpoints %player% 10
-      - nte player %player% suffix ' &8[&1Master&8]'

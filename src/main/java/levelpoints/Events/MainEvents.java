@@ -197,7 +197,6 @@ public class MainEvents implements Listener {
         if (hasOverlap) {
             int Overamount = event.getOverlapAmount();
 
-            player.sendMessage(String.valueOf(Overamount));
             config.set(player.getUniqueId() + ".Name", player.getName());
             config.set(player.getUniqueId() + ".Level", Level);
 
@@ -658,7 +657,7 @@ public class MainEvents implements Listener {
     }
 
     @EventHandler
-    public void onEntityDeath(final EntityDeathEvent event) throws IOException, SQLException {
+    public void onEntityDeath(EntityDeathEvent event) throws IOException, SQLException {
 
         if (event.getEntity() instanceof Monster) {
             Monster monsterEnt = (Monster) event.getEntity();

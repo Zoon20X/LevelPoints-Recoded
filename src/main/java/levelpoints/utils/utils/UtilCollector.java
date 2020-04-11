@@ -657,8 +657,6 @@ public class UtilCollector implements Utils {
                     LevelUpEventTrigger(player.getPlayer(), CurrentLevel + 1, false, 0);
 
                 } else if (newEXP > EXPRequired) {
-                    player.sendMessage(String.valueOf(EXPRequired));
-
 
 
 

@@ -392,6 +392,8 @@ public class MainCommand implements CommandExecutor {
 
 
                             double percentage = expss * 100;
+
+
                             String EXP = expss + "/" + LevelUpEXP;
                             String Percentage = Math.round(percentage / LevelUpEXP) + "%";
 
