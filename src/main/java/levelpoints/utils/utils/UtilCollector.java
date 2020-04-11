@@ -642,7 +642,7 @@ public class UtilCollector implements Utils {
 
         }
         int newEXP = EXPCurrent + amount;
-        if (amount != 0) {
+        if (amount != 0 || newEXP >= EXPRequired) {
             if (CurrentLevel != MaxLevel) {
 
                 if (newEXP == EXPRequired) {
@@ -657,6 +657,7 @@ public class UtilCollector implements Utils {
                     LevelUpEventTrigger(player.getPlayer(), CurrentLevel + 1, false, 0);
 
                 } else if (newEXP > EXPRequired) {
+                    player.sendMessage(String.valueOf(EXPRequired));
 
 
 
@@ -671,7 +672,7 @@ public class UtilCollector implements Utils {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    LevelUpEventTrigger(player.getPlayer(), CurrentLevel + 1, true, 0);
+                    LevelUpEventTrigger(player.getPlayer(), CurrentLevel + 1, true, OverLap);
                 } else {
 
                     int newEXPS = EXPCurrent + amount;

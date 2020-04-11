@@ -196,7 +196,8 @@ public class MainEvents implements Listener {
         FileConfiguration config = uc.getTopListConfig();
         if (hasOverlap) {
             int Overamount = event.getOverlapAmount();
-            uc.GainEXP(player, Overamount);
+
+            player.sendMessage(String.valueOf(Overamount));
             config.set(player.getUniqueId() + ".Name", player.getName());
             config.set(player.getUniqueId() + ".Level", Level);
 
@@ -205,6 +206,7 @@ public class MainEvents implements Listener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            uc.GainEXP(player, 0);
         } else {
 
             if (lp.getConfig().getBoolean("UseSQL")) {

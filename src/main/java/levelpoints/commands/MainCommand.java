@@ -60,25 +60,27 @@ public class MainCommand implements CommandExecutor {
                     sender.sendMessage(API.format(x));
                 }
             }else{
+                sender.sendMessage("1");
                 sender.sendMessage(API.format(uc.getLangConfig().getString("LPSErrorPermission")));
             }
         }
 
         if(args.length >= 1) {
-            if (sender.hasPermission("lp.admin.reload")) {
+
                 if (args.length == 1) {
                     if (args[0].equalsIgnoreCase("reload")) {
+                        if (sender.hasPermission("lp.admin.reload")) {
+                            lp.reloadConfig();
+                            uc.RunFiles();
 
-                        lp.reloadConfig();
-                        uc.RunFiles();
+                            sender.sendMessage(API.format(uc.getLangConfig().getString("lpreload")));
+                        } else {
+                            sender.sendMessage("2");
+                            sender.sendMessage(API.format(uc.getLangConfig().getString("LPSErrorPermission")));
+                        }
 
-                        sender.sendMessage(API.format(uc.getLangConfig().getString("lpreload")));
                     }
-
                 }
-            } else {
-                sender.sendMessage(API.format(uc.getLangConfig().getString("LPSErrorPermission")));
-            }
 
             if (sender.hasPermission("lp.admin.give")) {
 
@@ -233,6 +235,7 @@ public class MainCommand implements CommandExecutor {
                             }
                         }
                         if (args[0].equalsIgnoreCase("info")) {
+
 
 
                             double LevelUpEXP = uc.getRequiredEXP(player);
@@ -445,9 +448,13 @@ public class MainCommand implements CommandExecutor {
                             if (args[1].equalsIgnoreCase("list")) {
 
                                 ConfigurationSection BoostersList = UsersConfig.getConfigurationSection("Boosters");
-                                for (String x : BoostersList.getKeys(false)) {
-                                    int amount = UsersConfig.getInt("Boosters." + x);
-                                    player.sendMessage(API.format(uc.getLangConfig().getString("lpsBoosterList").replace("{Booster_Multiplier}", x).replace("{Booster_Amount}", String.valueOf(amount))));
+                                if (BoostersList == null) {
+                                    player.sendMessage(API.format("&cYou currently have 0 boosters"));
+                                } else {
+                                    for (String x : BoostersList.getKeys(false)) {
+                                        int amount = UsersConfig.getInt("Boosters." + x);
+                                        player.sendMessage(API.format(uc.getLangConfig().getString("lpsBoosterList").replace("{Booster_Multiplier}", x).replace("{Booster_Amount}", String.valueOf(amount))));
+                                    }
                                 }
                             }
                             if (args[1].equalsIgnoreCase("use")) {
