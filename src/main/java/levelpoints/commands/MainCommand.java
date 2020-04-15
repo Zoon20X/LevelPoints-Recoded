@@ -419,7 +419,28 @@ public class MainCommand implements CommandExecutor {
                             String Percentage = Math.round(percentage / LevelUpEXP) + "%";
 
                             for (String x : uc.getLangConfig().getStringList("lpsInfo")) {
+                                Date cDate = new Date();
+                                String cDateS = format.format(cDate);
+                                try {
+                                    until = format.parse(UsersConfig.getString("BoosterOff"));
+                                    current = format.parse(cDateS);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                if (!current.after(until)) {
+                                    long diff = until.getTime() - current.getTime();
+                                    long diffSeconds = diff / 1000 % 60;
+                                    long diffMinutes = diff / (60 * 1000) % 60;
+                                    long diffHours = diff / (60 * 60 * 1000) % 24;
+                                    long diffDays = diff / (daytime);
+                                    String timeleft = API.format(uc.getLangConfig().getString("lpsTimeFormat").replace("{DAYS}", String.valueOf(diffDays)).replace("{HOURS}", String.valueOf(diffHours)).replace("{MINUTES}", String.valueOf(diffMinutes)).replace("{SECONDS}", String.valueOf(diffSeconds)));
 
+                                    x = x.replace("{lp_Booster_Active}", timeleft);
+
+                                }else{
+                                    x = x.replace("{lp_Booster_Active}", uc.getLangConfig().getString("lpBoosterNone"));
+                                }
+                                x = x.replace("{lp_Booster_Multiplier}", String.valueOf(UsersConfig.getInt("ActiveBooster"))).replace("{lp_Kills}", String.valueOf(UsersConfig.getInt("Kills"))).replace("{lp_Deaths}", String.valueOf(UsersConfig.getInt("Deaths"))).replace("{lp_Placed}", String.valueOf(UsersConfig.getInt("BlocksPlaced"))).replace("{lp_Broken}", String.valueOf(UsersConfig.getInt("BlocksBroken")));
                                 sender.sendMessage(API.format(x.replace("{lp_player}", str.toString()).replace("{lp_level}", String.valueOf(levels)).replace("{lp_xp}", EXP).replace("{lp_progress}", Percentage).replace("{lp_prestige}", Integer.toString(pres))));
                             }
                             return true;

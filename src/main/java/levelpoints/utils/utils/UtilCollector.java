@@ -18,8 +18,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-import sh.okx.rankup.Rankup;
+
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -46,7 +46,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Crops;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
-import sh.okx.rankup.RankupRegisterEvent;
 
 import java.io.File;
 import java.io.IOException;
