@@ -24,6 +24,18 @@ lpsInfo:
   - '&2EXP Progress&7> &a{lp_progress}'
   - '&2Prestige&7> &a{lp_prestige}'
 
+
+#These are extra flags that can be used in LpsInfo these won't be used unless they are copied and pasted to lpsInfo so copy the ones you are going to use
+LPSEXTRA:
+  - '&2Multiplier&7> &a{lp_Booster_Multiplier}'
+  - '&2Booster&7> &a{lp_Booster_Active}'
+  - '&2Kills/Deaths&7> &a{lp_Kills} / {lp_Deaths}'
+  - '&2Blocks-Placed/Broken&7> &a{lp_Placed} / {lp_Broken}'
+
+
+
+
+lpBoosterNone: "&cNo booster activated"
 lpsBoosterList: '&3{Booster_Multiplier}X &8>> &b{Booster_Amount}'
 
 lpsBoosterCooldown: '&4Error&8>> &cyou currently still have {TIME_FORMAT}&c left, please wait before using another booster'

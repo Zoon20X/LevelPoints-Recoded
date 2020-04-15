@@ -18,6 +18,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+import sh.okx.rankup.Rankup;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -685,7 +687,7 @@ public class UtilCollector implements Utils {
                     double current_progress = newEXPS;
                     double progress_percentage = current_progress / required_progress;
                     StringBuilder sb = new StringBuilder();
-                    int bar_length = 30;
+                    int bar_length = LPS.getConfig().getInt("ActionBarSize");
                     String completed = API.format(getLangConfig().getString("lpBarDesignCompleted"));
                     String need = API.format(getLangConfig().getString("lpBarDesignRequired"));
                     for (int i = 0; i < bar_length; i++) {
@@ -724,7 +726,7 @@ public class UtilCollector implements Utils {
                     double current_progress = newEXPS;
                     double progress_percentage = current_progress / required_progress;
                     StringBuilder sb = new StringBuilder();
-                    int bar_length = 30;
+                    int bar_length = LPS.getConfig().getInt("ActionBarSize");
                     String completed = API.format(getLangConfig().getString("lpBarDesignCompleted"));
                     String need = API.format(getLangConfig().getString("lpBarDesignRequired"));
                     for (int i = 0; i < bar_length; i++) {

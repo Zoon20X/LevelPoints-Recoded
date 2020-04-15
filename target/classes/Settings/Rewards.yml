@@ -54,5 +54,5 @@ Rewards:
   # - give %player% diamond 1
   # Make sure when adding ranks to set it out exactly like this: Level-* (* = what level you want)
   Prestige-0:
-    Level-5:
-      - money give %player% 1000
+    Level-1:
+      - say %player% diamond 1

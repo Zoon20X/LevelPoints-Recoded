@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.mcMMO-Dev:mcMMO:601297">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/mcMMO-Dev/mcMMO/601297/mcMMO-601297.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/mcMMO-Dev/mcMMO/601297/mcMMO-601297-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/mcMMO-Dev/mcMMO/601297/mcMMO-601297-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

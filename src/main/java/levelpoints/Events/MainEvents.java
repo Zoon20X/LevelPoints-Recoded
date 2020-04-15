@@ -12,6 +12,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import levelpoints.LevelPointsEvents.FarmEvent;
 import levelpoints.LevelPointsEvents.LevelUpEvent;
 import levelpoints.levelpoints.LevelPoints;
+
 import levelpoints.levelpoints.mySQL;
 import levelpoints.utils.utils.API;
 import levelpoints.utils.utils.UtilCollector;
@@ -45,6 +46,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Crops;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
+import sh.okx.rankup.RankupRegisterEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,6 +73,8 @@ public class MainEvents implements Listener {
 
     public MainEvents(LevelPoints levelPoints) {
     }
+
+
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChat(AsyncPlayerChatEvent event) {
@@ -460,6 +464,25 @@ public class MainEvents implements Listener {
                 }
             }
         }
+
+        if(lp.getConfig().getBoolean("SaveBlockBreaks&Placed")){
+            if(UsersConfig.getConfigurationSection("").contains("BlocksBroken")){
+                int Current = UsersConfig.getInt("BlocksBroken");
+                UsersConfig.set("BlocksBroken", Current + 1);
+                try {
+                    UsersConfig.save(userdata);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                UsersConfig.set("BlocksBroken", 1);
+                try {
+                    UsersConfig.save(userdata);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @EventHandler
@@ -545,6 +568,24 @@ public class MainEvents implements Listener {
                 double tep = expp - t;
                 UsersConfig.set("EXP.Amount", tep);
                 UsersConfig.save(userdata);
+            }
+        }
+        if(lp.getConfig().getBoolean("SaveBlockBreaks&Placed")){
+            if(UsersConfig.getConfigurationSection("").contains("BlocksPlaced")){
+                int Current = UsersConfig.getInt("BlocksPlaced");
+                UsersConfig.set("BlocksPlaced", Current + 1);
+                try {
+                    UsersConfig.save(userdata);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                UsersConfig.set("BlocksPlaced", 1);
+                try {
+                    UsersConfig.save(userdata);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -650,6 +691,46 @@ public class MainEvents implements Listener {
                             UsersConfig.save(userdata);
                         }
                     }
+                }
+            }
+            if(lp.getConfig().getBoolean("SaveKills&Deaths")){
+                File userdata = new File(lp.userFolder, Killer.getUniqueId() + ".yml");
+                FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
+                if(UsersConfig.getConfigurationSection("").contains("Kills")){
+                    int Current = UsersConfig.getInt("Kills");
+                    UsersConfig.set("Kills", Current + 1);
+                    try {
+                        UsersConfig.save(userdata);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    UsersConfig.set("Kills", 1);
+                    try {
+                        UsersConfig.save(userdata);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        if(lp.getConfig().getBoolean("SaveKills&Deaths")){
+            File userdata = new File(lp.userFolder, player.getUniqueId() + ".yml");
+            FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
+            if(UsersConfig.getConfigurationSection("").contains("Deaths")){
+                int Current = UsersConfig.getInt("Deaths");
+                UsersConfig.set("Deaths", Current + 1);
+                try {
+                    UsersConfig.save(userdata);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                UsersConfig.set("Deaths", 1);
+                try {
+                    UsersConfig.save(userdata);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
