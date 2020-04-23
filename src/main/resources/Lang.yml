@@ -40,6 +40,7 @@ lpsBoosterList: '&3{Booster_Multiplier}X &8>> &b{Booster_Amount}'
 
 lpsBoosterCooldown: '&4Error&8>> &cyou currently still have {TIME_FORMAT}&c left, please wait before using another booster'
 BoosterGive: '&2You have just got {BoosterMultiplier}x Booster'
+BoosterAdminGive: '&2You just gave {Player_Name} {BoosterMultiplier}x Booster'
 lpsTimeFormat: '&3{HOURS}:{MINUTES}:{SECONDS}' #this will only support up to {DAYS} will never support above it
 
 lpsPrestigeLevelUP: '&2You Just Prestiged to &a{PRESTIGE_AMOUNT}'

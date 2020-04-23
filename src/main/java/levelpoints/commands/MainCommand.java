@@ -8,9 +8,11 @@ import levelpoints.utils.utils.API;
 import levelpoints.utils.utils.UtilCollector;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.MemorySection;
@@ -18,13 +20,17 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.*;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,6 +38,7 @@ import java.util.Locale;
 public class MainCommand implements CommandExecutor {
     private Plugin plugin = LevelPoints.getPlugin(LevelPoints.class);
     private LevelPoints lp = LevelPoints.getPlugin(LevelPoints.class);
+
 
     public int posTop;
     private SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
@@ -59,7 +66,6 @@ public class MainCommand implements CommandExecutor {
                     sender.sendMessage(API.format(x));
                 }
             }else{
-                sender.sendMessage("1");
                 sender.sendMessage(API.format(uc.getLangConfig().getString("LPSErrorPermission")));
             }
         }
@@ -418,6 +424,7 @@ public class MainCommand implements CommandExecutor {
                             String EXP = expss + "/" + LevelUpEXP;
                             String Percentage = Math.round(percentage / LevelUpEXP) + "%";
 
+
                             for (String x : uc.getLangConfig().getStringList("lpsInfo")) {
                                 Date cDate = new Date();
                                 String cDateS = format.format(cDate);
@@ -449,6 +456,7 @@ public class MainCommand implements CommandExecutor {
                         }
                     }
                 }
+
                 if(args.length == 5){
                     if(sender.hasPermission("lp.*")){
                         if(args[0].equalsIgnoreCase("booster")){
@@ -477,6 +485,7 @@ public class MainCommand implements CommandExecutor {
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
+                                    sender.sendMessage(API.format(uc.getLangConfig().getString("BoosterAdminGive").replace("{BoosterMultiplier}", String.valueOf(Multipler)).replace("{Player_Name}", Target.getName())));
                                     Target.sendMessage(API.format(uc.getLangConfig().getString("BoosterGive")).replace("{BoosterMultiplier}", String.valueOf(Multipler)));
                                 }
                             }
@@ -506,6 +515,42 @@ public class MainCommand implements CommandExecutor {
                                     uc.boosteruseclick(player, Integer.parseInt(args[2]));
                                 } catch (IOException e) {
                                     e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
+            }else if (sender instanceof ConsoleCommandSender){
+                if(args.length == 5){
+                    if(sender.hasPermission("lp.*")){
+                        if(args[0].equalsIgnoreCase("booster")){
+                            if(args[1].equalsIgnoreCase("give")){
+                                Player Target = Bukkit.getPlayer(args[2]);
+                                if(Target != null) {
+                                    int Multipler = 0;
+                                    int amount = 0;
+                                    try {
+                                        Multipler = Integer.parseInt(args[3]);
+                                        amount = Integer.parseInt(args[4]);
+                                    }catch (NumberFormatException e){
+                                        sender.sendMessage(API.format("&4Error&8>> &cString is not a Number"));
+                                    }
+                                    File userdata = new File(lp.userFolder, Target.getUniqueId() + ".yml");
+                                    FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
+
+                                    if(UsersConfig.getInt("Boosters." + Multipler) == 0) {
+                                        UsersConfig.set("Boosters." + Multipler, amount);
+                                    }else{
+                                        int current = uc.getCurrentBoosters(Target, Multipler);
+                                        UsersConfig.set("Boosters." + Multipler, amount + current);
+                                    }
+                                    try {
+                                        UsersConfig.save(userdata);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    sender.sendMessage(API.format(uc.getLangConfig().getString("BoosterAdminGive").replace("{BoosterMultiplier}", String.valueOf(Multipler)).replace("{Player_Name}", Target.getName())));
+                                    Target.sendMessage(API.format(uc.getLangConfig().getString("BoosterGive")).replace("{BoosterMultiplier}", String.valueOf(Multipler)));
                                 }
                             }
                         }

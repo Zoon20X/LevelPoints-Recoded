@@ -96,6 +96,7 @@ public class UtilCollector implements Utils {
         String PlayerFolder = LPS.getDataFolder() + "/Players/";
 
         File userFile = new File(LPS.userFolder, uuid + ".yml");
+        if (Bukkit.getPlayer(uuid) != null) {
             if (!userFile.exists()) {
                 try {
                     userFile.createNewFile();
@@ -106,6 +107,7 @@ public class UtilCollector implements Utils {
             }
             usersConfig.put(uuid, YamlConfiguration.loadConfiguration(userFile));
         }
+    }
 
     @Override
     public void PlayerDataLoad(Player player) throws IOException {
@@ -315,6 +317,7 @@ public class UtilCollector implements Utils {
 
                         UsersConfig.save(userdata);
                     }
+
                     statement = LPS.getConnection().prepareStatement("SELECT * FROM " + table + " WHERE UUID=?");
                     statement.setString(1, player.getUniqueId().toString());
                     results = statement.executeQuery();

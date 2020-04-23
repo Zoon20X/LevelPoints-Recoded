@@ -144,7 +144,7 @@ public class MainEvents implements Listener {
 
         uc.PlayerAdd(event.getUniqueId(), event.getName());
 
-        wait(2, event.getUniqueId(), event.getName());
+        wait(3, event.getUniqueId(), event.getName());
 
     }
 
@@ -163,7 +163,7 @@ public class MainEvents implements Listener {
                     sql.createPlayer(uuid, name);
                 }
             }
-        }, (seconds * 10));
+        }, (seconds * 25));
     }
 
     @EventHandler
@@ -415,7 +415,6 @@ public class MainEvents implements Listener {
 
                     Crops crop = new Crops();
                     crop.setData(FarmData.getData());
-                    player.sendMessage(String.valueOf(FarmData.getData()));
                     if (crop.getData() == (byte) 7) {
 
 
@@ -493,7 +492,6 @@ public class MainEvents implements Listener {
         }else{
             Item item = (Item) event.getCaught();
 
-            ItemStack AIR = new ItemStack(Material.AIR);
             ItemStack CaughtItem = item.getItemStack();
             ItemMeta CaughtMeta = CaughtItem.getItemMeta();
 
@@ -504,13 +502,14 @@ public class MainEvents implements Listener {
                 if(uc.getEXPConfig().getBoolean("Fishing.RandomEXP")){
                     int chanceAfter = (int) (EXPChance * 10);
 
+
                     int max = 1000;
                     int min = 0;
 
                     Random r = new Random();
                     int re = r.nextInt(((max - min) + 1)) + min;
                     if (re <= chanceAfter) {
-                        item.setItemStack(AIR);
+                        item.setItemStack(null);
                         int EXPMax = EXPAmount;
                         int EXPMin = 0;
 
@@ -527,7 +526,7 @@ public class MainEvents implements Listener {
                     Random r = new Random();
                     int re = r.nextInt(((max - min) + 1)) + min;
                     if (re <= chanceAfter) {
-                        item.setItemStack(AIR);
+                        item.setItemStack(null);
 
                         uc.GainEXP(player, EXPAmount);
                     }
@@ -594,8 +593,8 @@ public class MainEvents implements Listener {
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
 
-        if (uc.getEXPConfig().getBoolean("PvpLeveluse")) {
-            int levelpvp = uc.getEXPConfig().getInt("PvpLevel");
+        if (uc.getLevelsConfig().getBoolean("PvpLeveluse")) {
+            int levelpvp = uc.getLevelsConfig().getInt("PvpLevel");
             if (!(event.getDamager() instanceof Player)) {
                 return;
             } else {
@@ -607,7 +606,6 @@ public class MainEvents implements Listener {
                     File attackerdata = new File(lp.userFolder, Attacker.getUniqueId() + ".yml");
                     FileConfiguration PlayerConfig = YamlConfiguration.loadConfiguration(playerData);
                     FileConfiguration AttackerConfig = YamlConfiguration.loadConfiguration(attackerdata);
-
                     if ((PlayerConfig.getInt("Level") < levelpvp)) {
                         event.setCancelled(true);
                         uc.Title(player,  ChatColor.DARK_RED + "You Must BE", ChatColor.RED + "Level 5 to PVP");

@@ -1,6 +1,7 @@
 package levelpoints.levelpoints;
 
 import levelpoints.utils.utils.UtilCollector;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -41,28 +42,31 @@ public class mySQL implements Listener {
         return false;
     }
 
-    public void createPlayer(final UUID uuid, String name){
-        File userdata = new File(lp.userFolder, uuid + ".yml");
-        FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
-        try{
-            Connection connection = lp.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + lp.table + " WHERE UUID=?");
-            statement.setString(1, uuid.toString());
-            ResultSet results = statement.executeQuery();
-            results.next();
-            if(playerExists(uuid) != true){
-                PreparedStatement insert = connection.prepareStatement("INSERT INTO " + lp.table + " (UUID,NAME,LEVEL,EXP,PRESTIGE) VALUE (?,?,?,?,?)");
-                insert.setString(1, uuid.toString());
-                insert.setString(2, name);
-                insert.setString(3, String.valueOf(UsersConfig.getInt("Level")));
-                insert.setString(4, String.valueOf(UsersConfig.getInt("EXP.Amount")));
-                insert.setString(5, String.valueOf(UsersConfig.getInt("Prestige")));
-                insert.executeUpdate();
+    public void createPlayer(final UUID uuid, String name) {
+        if (Bukkit.getPlayer(uuid) != null) {
 
-                lp.getServer().getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "Player Added to Database");
+            File userdata = new File(lp.userFolder, uuid + ".yml");
+            FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
+            try {
+                Connection connection = lp.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + lp.table + " WHERE UUID=?");
+                statement.setString(1, uuid.toString());
+                ResultSet results = statement.executeQuery();
+                results.next();
+                if (playerExists(uuid) != true) {
+                    PreparedStatement insert = connection.prepareStatement("INSERT INTO " + lp.table + " (UUID,NAME,LEVEL,EXP,PRESTIGE) VALUE (?,?,?,?,?)");
+                    insert.setString(1, uuid.toString());
+                    insert.setString(2, name);
+                    insert.setString(3, String.valueOf(UsersConfig.getInt("Level")));
+                    insert.setString(4, String.valueOf(UsersConfig.getInt("EXP.Amount")));
+                    insert.setString(5, String.valueOf(UsersConfig.getInt("Prestige")));
+                    insert.executeUpdate();
+
+                    lp.getServer().getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "Player Added to Database");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
