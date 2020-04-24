@@ -1,5 +1,6 @@
 package levelpoints.utils.utils;
 
+import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -10,6 +11,11 @@ import java.util.UUID;
 public interface Utils {
 
 
+    void createBossbar(Player player);
+    void bossbarAddPlayer(BossBar bossBar, Player player);
+    void bossbarRemovePlayer(BossBar bossBar, Player player);
+    BossBar getBossbar(Player player);
+    void updateBossbar(BossBar bossBar, Player player);
     void ActionBar(Player player, String Message);
 
     void PlayerAdd(UUID uuid, String Name);

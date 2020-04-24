@@ -14,6 +14,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 
 import org.bukkit.ChatColor;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -72,6 +75,7 @@ public class UtilCollector implements Utils {
     private int frostday;
 
     private int cooldowntimer;
+    private static HashMap<Player, BossBar> bossbar = new HashMap<>();
 
     public Connection getConnection() {
         return connection;
@@ -79,6 +83,38 @@ public class UtilCollector implements Utils {
 
     public void setConnection(Connection connection) {
         this.connection = connection;
+    }
+
+    @Override
+    public void createBossbar(Player player) {
+        BossBar boss =  Bukkit.createBossBar(API.format(getLangConfig().getString("lpBossBarTitle").replace("{lp_level}", String.valueOf(getCurrentLevel(player)))), BarColor.valueOf(LPS.getConfig().getString("BossBarColor")), BarStyle.SOLID);
+        bossbar.put(player, boss);
+    }
+
+    @Override
+    public void bossbarAddPlayer(BossBar bossBar, Player player) {
+        bossBar.addPlayer(player);
+
+    }
+
+    @Override
+    public void bossbarRemovePlayer(BossBar bossBar, Player player) {
+        bossBar.removePlayer(player);
+    }
+    @Override
+    public BossBar getBossbar(Player player) {
+
+        return bossbar.get(player);
+    }
+
+    @Override
+    public void updateBossbar(BossBar bossBar, Player player) {
+        int EXPCurrent = getCurrentEXP(player);
+        int EXPRequired = getRequiredEXP(player);
+        double  required_progress = EXPRequired;
+        double current_progress = EXPCurrent;
+        double progress_percentage = current_progress / required_progress;
+        bossBar.setProgress(progress_percentage);
     }
 
     @Override
@@ -647,7 +683,9 @@ public class UtilCollector implements Utils {
         }
         int newEXP = EXPCurrent + amount;
         if (amount != 0 || newEXP >= EXPRequired) {
+
             if (CurrentLevel != MaxLevel) {
+
 
                 if (newEXP == EXPRequired) {
 
@@ -677,8 +715,10 @@ public class UtilCollector implements Utils {
                     LevelUpEventTrigger(player.getPlayer(), CurrentLevel + 1, true, OverLap);
                 } else {
 
+
                     int newEXPS = EXPCurrent + amount;
                     UsersConfig.set("EXP.Amount", newEXP);
+
                     try {
                         UsersConfig.save(userdata);
                     } catch (IOException e) {
@@ -704,6 +744,9 @@ public class UtilCollector implements Utils {
                             ActionBar(player, API.format(getLangConfig().getString("lpActionBar").replace("{PLAYER_LEVEL}", String.valueOf(CurrentLevel)).replace("{BAR}", sb.toString()).replace("{EXP_CURRENT}", String.valueOf(formatter.format(current_progress))).replace("{EXP_REQUIRED}", String.valueOf(formatter.format(required_progress)))));
                         }
                     }
+                    if(LPS.getConfig().getBoolean("BossBar")) {
+                        updateBossbar(getBossbar(player), player);
+                    }
                 }
             } else {
                 if (newEXP > EXPRequired) {
@@ -717,8 +760,10 @@ public class UtilCollector implements Utils {
                 }else{
 
 
+
                     int newEXPS = EXPCurrent + amount;
                     UsersConfig.set("EXP.Amount", newEXPS);
+
                     try {
                         UsersConfig.save(userdata);
                     } catch (IOException e) {
@@ -728,6 +773,7 @@ public class UtilCollector implements Utils {
                     double current_progress = newEXPS;
                     double progress_percentage = current_progress / required_progress;
                     StringBuilder sb = new StringBuilder();
+
                     int bar_length = LPS.getConfig().getInt("ActionBarSize");
                     String completed = API.format(getLangConfig().getString("lpBarDesignCompleted"));
                     String need = API.format(getLangConfig().getString("lpBarDesignRequired"));
@@ -743,11 +789,12 @@ public class UtilCollector implements Utils {
                             ActionBar(player, API.format(getLangConfig().getString("lpActionBar").replace("{PLAYER_LEVEL}", String.valueOf(CurrentLevel)).replace("{BAR}", sb.toString()).replace("{EXP_CURRENT}", String.valueOf(current_progress)).replace("{EXP_REQUIRED}", String.valueOf(required_progress))));
                         }
                     }
+                    if(LPS.getConfig().getBoolean("BossBar")) {
+                        updateBossbar(getBossbar(player), player);
+                    }
                 }
-
             }
         }
-
     }
 
     @Override

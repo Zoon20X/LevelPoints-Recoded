@@ -27,6 +27,9 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -51,10 +54,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 import static net.md_5.bungee.api.ChatColor.AQUA;
 import static net.md_5.bungee.api.ChatColor.GOLD;
@@ -64,15 +64,12 @@ public class MainEvents implements Listener {
     private Plugin plugin = LevelPoints.getPlugin(LevelPoints.class);
     private LevelPoints lp = LevelPoints.getPlugin(LevelPoints.class);
 
-
     private LPSAPI lpapi = (LPSAPI) Bukkit.getPluginManager().getPlugin("LPSAPI");
     UtilCollector uc = new UtilCollector();
 
 
-
     public MainEvents(LevelPoints levelPoints) {
     }
-
 
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -91,7 +88,7 @@ public class MainEvents implements Listener {
         String symbol = lp.getConfig().getString("Symbol");
         Boolean lpsChat = lp.getConfig().getBoolean("LPSFormat");
 
-        if(lpsChat) {
+        if (lpsChat) {
 
             for (String key : uc.getFormatsConfig().getKeys(false)) {
 
@@ -101,39 +98,37 @@ public class MainEvents implements Listener {
                 int formatMax = formats.getInt(key + ".MaxLevel");
 
 
-                if(prestige == formats.getInt(key + ".Prestige"))
-                if (level >= formatMin && level <= formatMax) {
-                    chat = chat.replace("%1$s", player.getName()).replace("%2$s", message);
+                if (prestige == formats.getInt(key + ".Prestige"))
+                    if (level >= formatMin && level <= formatMax) {
+                        chat = chat.replace("%1$s", player.getName()).replace("%2$s", message);
 
-                    String Format = uc.getFormatsConfig().getString(key + ".Format");
+                        String Format = uc.getFormatsConfig().getString(key + ".Format");
 
-                    String FormatTags = null;
-                    String FormatColor = null;
+                        String FormatTags = null;
+                        String FormatColor = null;
 
-                    FormatTags = Format.replace("{level}", levels).replace("{symbol}", symbol).replace("{prestige}", prestigess).replace("{name}", player.getName()).replace("{message}", message).replace("{format}", chat);
+                        FormatTags = Format.replace("{level}", levels).replace("{symbol}", symbol).replace("{prestige}", prestigess).replace("{name}", player.getName()).replace("{message}", message).replace("{format}", chat);
 
-                    String Text = PlaceholderAPI.setPlaceholders(player, FormatTags);
-
-
+                        String Text = PlaceholderAPI.setPlaceholders(player, FormatTags);
 
 
-                    event.setCancelled(true);
-                    for(Player p : Bukkit.getOnlinePlayers()) {
-                        if(player.hasPermission("lp.admin.color")){
-                            p.sendMessage(Text);
-                        }else{
-                            if(Text.contains(API.format(message))) {
+                        event.setCancelled(true);
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            if (player.hasPermission("lp.admin.color")) {
+                                p.sendMessage(Text);
+                            } else {
+                                if (Text.contains(API.format(message))) {
 
-                                String messageStrip = ChatColor.stripColor(message);
+                                    String messageStrip = ChatColor.stripColor(message);
 
-                                String Texts = Text.replace(API.format(message), ChatColor.stripColor(messageStrip));
+                                    String Texts = Text.replace(API.format(message), ChatColor.stripColor(messageStrip));
 
-                                p.sendMessage(Texts);
+                                    p.sendMessage(Texts);
+                                }
                             }
-                        }
 
+                        }
                     }
-                }
             }
         }
 
@@ -153,7 +148,7 @@ public class MainEvents implements Listener {
             public void run() {
                 if (lp.getConfig().getBoolean("UseSQL")) {
                     try {
-                        if(lp.connection.isClosed()){
+                        if (lp.connection.isClosed()) {
                             uc.SQLReconnect();
                         }
                     } catch (SQLException e) {
@@ -166,8 +161,10 @@ public class MainEvents implements Listener {
         }, (seconds * 25));
     }
 
+
     @EventHandler
     public void onJoin(PlayerJoinEvent event) throws IOException {
+
 
         uc.PlayerDataLoad(event.getPlayer());
         if (lp.getConfig().getBoolean("UseSQL")) {
@@ -176,6 +173,16 @@ public class MainEvents implements Listener {
             uc.wait(3, event.getPlayer());
             //uc.RunSQLDownload(event.getPlayer());
         }
+        if (lp.getConfig().getBoolean("BossBar")) {
+            if (uc.getBossbar(event.getPlayer()) == null) {
+                uc.createBossbar(event.getPlayer());
+
+            }
+            if (!uc.getBossbar(event.getPlayer()).getPlayers().contains(event.getPlayer())) {
+                uc.bossbarAddPlayer(uc.getBossbar(event.getPlayer()), event.getPlayer());
+                uc.updateBossbar(uc.getBossbar(event.getPlayer()), event.getPlayer());
+            }
+        }
     }
 
     @EventHandler
@@ -183,6 +190,11 @@ public class MainEvents implements Listener {
         if (lp.getConfig().getBoolean("UseSQL")) {
 
             uc.RunSQLUpdate(event.getPlayer());
+        }
+        if(lp.getConfig().getBoolean("BossBar")) {
+            if (uc.getBossbar(event.getPlayer()).getPlayers().contains(event.getPlayer())) {
+                uc.bossbarRemovePlayer(uc.getBossbar(event.getPlayer()), event.getPlayer());
+            }
         }
     }
     @EventHandler
@@ -482,7 +494,6 @@ public class MainEvents implements Listener {
             }
         }
     }
-
     @EventHandler
     public void fish(PlayerFishEvent event){
 

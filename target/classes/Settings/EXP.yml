@@ -93,7 +93,6 @@ Resources: true
 #####################################
 
 FarmEXP: true
-1.8-1.13.2: true
 #run this only if you're running 1.8-1.13.2
 Farming:
     WHEAT: 1
