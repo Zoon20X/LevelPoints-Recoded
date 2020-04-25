@@ -55,20 +55,12 @@ SKELETON: 0
 SPIDER: 0
 CREEPER: 0
 ENDERMAN: 0
-
-#####################################
-#  Earn EXP on Passive Mobs Kill    #
-#####################################
-Passive-Mobs: false
-
-#####################################
-#     Amount of EXP for Mobs Kill   #
-#####################################
 COW: 0
 PIG: 0
 CHICKEN: 0
 RABBIT: 0
 SHEEP: 0
+
 
 
 #####################################

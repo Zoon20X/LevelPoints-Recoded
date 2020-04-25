@@ -62,26 +62,29 @@ public class MainCommand implements CommandExecutor {
         if (args.length == 0) {
             if(sender.hasPermission("lp.lps")) {
                 for (String x : uc.getLangConfig().getStringList("lp")) {
-
-                    sender.sendMessage(API.format(x));
+                    API api = new API();
+                    sender.sendMessage(api.format(x));
                 }
             }else{
-                sender.sendMessage(API.format(uc.getLangConfig().getString("LPSErrorPermission")));
+                API api = new API();
+                sender.sendMessage(api.format(uc.getLangConfig().getString("LPSErrorPermission")));
             }
         }
 
         if(args.length >= 1) {
+
 
                 if (args.length == 1) {
                     if (args[0].equalsIgnoreCase("reload")) {
                         if (sender.hasPermission("lp.admin.reload")) {
                             lp.reloadConfig();
                             uc.RunFiles();
+                            API api = new API();
 
-                            sender.sendMessage(API.format(uc.getLangConfig().getString("lpreload")));
+                            sender.sendMessage(api.format(uc.getLangConfig().getString("lpreload")));
                         } else {
-                            sender.sendMessage("2");
-                            sender.sendMessage(API.format(uc.getLangConfig().getString("LPSErrorPermission")));
+                            API api = new API();
+                            sender.sendMessage(api.format(uc.getLangConfig().getString("LPSErrorPermission")));
                         }
 
                     }
@@ -91,12 +94,14 @@ public class MainCommand implements CommandExecutor {
 
                 if (args[0].equalsIgnoreCase("expgive")) {
                     if (args.length == 1) {
-                        sender.sendMessage(API.format(uc.getLangConfig().getString("lpsEXPGIVEPlayer")));
+                        API api = new API();
+                        sender.sendMessage(api.format(uc.getLangConfig().getString("lpsEXPGIVEPlayer")));
                         return true;
                     }
 
                     if (args.length == 2) {
-                        sender.sendMessage(API.format(uc.getLangConfig().getString("lpsEXPGIVEAmount")));
+                        API api = new API();
+                        sender.sendMessage(api.format(uc.getLangConfig().getString("lpsEXPGIVEAmount")));
                         return true;
                     }
                     if (args.length == 3) {
@@ -107,8 +112,9 @@ public class MainCommand implements CommandExecutor {
 
                             //lp.CustomXP(target, Integer.parseInt(args[2]), 0);
                             uc.GainEXP(target, Integer.valueOf(args[2]));
-                            sender.sendMessage(API.format(uc.getLangConfig().getString("lpAdminEXPGive").replace("{LP_TARGET}", target.getName()).replace("{EXP_AMOUNT}", args[2])));
-                            target.sendMessage(API.format(uc.getLangConfig().getString("lpEXPGive").replace("{EXP_Amount}", args[2]).replace("{LP_USER}", uc.getLangConfig().getString("lpServerName"))));
+                            API api = new API();
+                            sender.sendMessage(api.format(uc.getLangConfig().getString("lpAdminEXPGive").replace("{lp_Target}", target.getName()).replace("{lp_Earn_Exp}", args[2])));
+                            target.sendMessage(api.format(uc.getLangConfig().getString("lpEXPGive").replace("{lp_Earn_Exp}", args[2]).replace("{lp_player}", uc.getLangConfig().getString("lpServerName"))));
 
                         }
                     }
@@ -119,11 +125,13 @@ public class MainCommand implements CommandExecutor {
                 if (args[0].equalsIgnoreCase("expremove")) {
 
                     if (args.length == 1) {
-                        sender.sendMessage(API.format(uc.getLangConfig().getString("lpsEXPREMOVEPlayer")));
+                        API api = new API();
+                        sender.sendMessage(api.format(uc.getLangConfig().getString("lpsEXPREMOVEPlayer")));
                         return true;
                     }
                     if (args.length == 2) {
-                        sender.sendMessage(API.format(uc.getLangConfig().getString("lpsEXPREMOVEAmount")));
+                        API api = new API();
+                        sender.sendMessage(api.format(uc.getLangConfig().getString("lpsEXPREMOVEAmount")));
                         return true;
                     }
                     if (args.length == 3) {
@@ -142,14 +150,17 @@ public class MainCommand implements CommandExecutor {
                                 e.printStackTrace();
                             }
                         }
-
-
+                        if(lp.getConfig().getBoolean("BossBar")){
+                            uc.updateBossbar(uc.getBossbar(target), target);
+                        }
                         if (sender instanceof Player) {
-                            target.sendMessage(API.format(uc.getLangConfig().getString("lpEXPRemove").replace("{EXP_AMOUNT}", args[2]).replace("{LP_USER}", sender.getName())));
-                            sender.sendMessage(API.format(uc.getLangConfig().getString("lpAdminEXPRemove").replace("{LP_TARGET}", target.getName()).replace("{EXP_AMOUNT}", args[2])));
+                            API api = new API();
+                            target.sendMessage(api.format(uc.getLangConfig().getString("lpEXPRemove").replace("{lp_Earn_Exp}", args[2]).replace("{LP_USER}", sender.getName())));
+                            sender.sendMessage(api.format(uc.getLangConfig().getString("lpAdminEXPRemove").replace("{lp_Target}", target.getName()).replace("{lp_Earn_Exp}", args[2])));
                         }else{
-                            target.sendMessage(API.format(uc.getLangConfig().getString("lpEXPRemove").replace("{EXP_AMOUNT}", args[2]).replace("{LP_USER}", uc.getLangConfig().getString("lpServerName"))));
-                            sender.sendMessage(API.format(uc.getLangConfig().getString("lpAdminEXPRemove").replace("{LP_TARGET}", target.getName()).replace("{EXP_AMOUNT}", args[2])));
+                            API api = new API();
+                            target.sendMessage(api.format(uc.getLangConfig().getString("lpEXPRemove").replace("{lp_Earn_Exp}", args[2]).replace("{lp_player}", uc.getLangConfig().getString("lpServerName"))));
+                            sender.sendMessage(api.format(uc.getLangConfig().getString("lpAdminEXPRemove").replace("{lp_Target}", target.getName()).replace("{lp_Earn_Exp}", args[2])));
                         }
 
                     }
@@ -162,7 +173,8 @@ public class MainCommand implements CommandExecutor {
 
 
                     for (String x : uc.getLangConfig().getStringList("lpsTopListTop")) {
-                        sender.sendMessage(API.format(x));
+                        API api = new API((Player) sender, x);
+                        sender.sendMessage(api.formatTags());
                         // Here you can send to player or do whatever you wan't.
 
                     }
@@ -183,13 +195,15 @@ public class MainCommand implements CommandExecutor {
                                 String playername = ((MemorySection) f.getValue()).getString("Name");
 
                                 for (String x : uc.getLangConfig().getStringList("lpsTopListMid")) {
-                                    sender.sendMessage(API.format(x).replace("{LP_Ranked}", Integer.toString(posTop)).replace("{LP_Player}", playername).replace("{LP_LEVEL}", Integer.toString(points)));
+                                    API api = new API((Player) sender, x);
+                                    sender.sendMessage(api.formatTags());
                                     // Here you can send to player or do whatever you wan't.
 
                                 }
                             });
                     for (String x : uc.getLangConfig().getStringList("lpsTopListBottom")) {
-                        sender.sendMessage(API.format(x));
+                        API api = new API((Player) sender, x);
+                        sender.sendMessage(api.formatTags());
                         // Here you can send to player or do whatever you wan't.
 
                     }
@@ -198,7 +212,8 @@ public class MainCommand implements CommandExecutor {
                     }
                 }
             } else {
-                sender.sendMessage(API.format(uc.getLangConfig().getString("LPSErrorPermission")));
+                API api = new API();
+                sender.sendMessage(api.format(uc.getLangConfig().getString("LPSErrorPermission")));
             }
         }
 
@@ -227,16 +242,18 @@ public class MainCommand implements CommandExecutor {
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
-                                    player.sendMessage(API.format(uc.getLangConfig().getString("lpsPrestigeLevelUP").replace("{PRESTIGE_AMOUNT}", String.valueOf(uc.getCurrentPrestige(player)))));
+                                    API api = new API(player, uc.getLangConfig().getString("lpsPrestigeLevelUP"));
+                                    player.sendMessage(api.formatTags());
                                     return true;
                                 } else {
                                     double need = uc.getRequiredEXP(player) - uc.getCurrentEXP(player);
 
-
-                                    player.sendMessage(API.format(uc.getLangConfig().getString("lpsPrestigeMoreEXP").replace("{EXP_AMOUNT}", String.valueOf(need))));
+                                    API api = new API();
+                                    player.sendMessage(api.format(uc.getLangConfig().getString("lpsPrestigeMoreEXP").replace("{EXP_AMOUNT}", String.valueOf(need))));
                                 }
                             } else {
-                                player.sendMessage(API.format(uc.getLangConfig().getString("lpsPrestigeLevelNot").replace("{MAX_LEVEL}", String.valueOf(uc.getMaxLevel()))));
+                                API api = new API(player, uc.getLangConfig().getString("lpsPrestigeLevelNot"));
+                                player.sendMessage(api.formatTags());
                             }
                         }
                         if (args[0].equalsIgnoreCase("info")) {
@@ -259,29 +276,8 @@ public class MainCommand implements CommandExecutor {
 
                             String EXP = LPHAVE + "/" + LPRE;
                             for (String x : uc.getLangConfig().getStringList("lpsInfo")) {
-                                Date cDate = new Date();
-                                String cDateS = format.format(cDate);
-                                try {
-                                    until = format.parse(UsersConfig.getString("BoosterOff"));
-                                    current = format.parse(cDateS);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                                if (!current.after(until)) {
-                                    long diff = until.getTime() - current.getTime();
-                                    long diffSeconds = diff / 1000 % 60;
-                                    long diffMinutes = diff / (60 * 1000) % 60;
-                                    long diffHours = diff / (60 * 60 * 1000) % 24;
-                                    long diffDays = diff / (daytime);
-                                    String timeleft = API.format(uc.getLangConfig().getString("lpsTimeFormat").replace("{DAYS}", String.valueOf(diffDays)).replace("{HOURS}", String.valueOf(diffHours)).replace("{MINUTES}", String.valueOf(diffMinutes)).replace("{SECONDS}", String.valueOf(diffSeconds)));
-
-                                    x = x.replace("{lp_Booster_Active}", timeleft);
-
-                                }else{
-                                    x = x.replace("{lp_Booster_Active}", uc.getLangConfig().getString("lpBoosterNone"));
-                                }
-                                x = x.replace("{lp_Booster_Multiplier}", String.valueOf(UsersConfig.getInt("ActiveBooster"))).replace("{lp_Kills}", String.valueOf(UsersConfig.getInt("Kills"))).replace("{lp_Deaths}", String.valueOf(UsersConfig.getInt("Deaths"))).replace("{lp_Placed}", String.valueOf(UsersConfig.getInt("BlocksPlaced"))).replace("{lp_Broken}", String.valueOf(UsersConfig.getInt("BlocksBroken")));
-                                sender.sendMessage(API.format(x.replace("{lp_player}", player.getName()).replace("{lp_level}", String.valueOf(levels)).replace("{lp_xp}", EXP).replace("{lp_progress}", Percentage).replace("{lp_prestige}", Integer.toString(pres))));
+                                API api = new API(player, x);
+                                sender.sendMessage(api.formatTags());
                             }
 ;
                             return true;
@@ -297,7 +293,8 @@ public class MainCommand implements CommandExecutor {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            player.sendMessage(API.format(uc.getLangConfig().getString("lpsActionBarToggle").replace("{LP_Toggle_Value}", String.valueOf(UsersConfig.getBoolean("ActionBar")))));
+                            API api = new API();
+                            player.sendMessage(api.format(uc.getLangConfig().getString("lpsActionBarToggle").replace("{LP_Toggle_Value}", String.valueOf(UsersConfig.getBoolean("ActionBar")))));
 
                         }
                     }
@@ -324,8 +321,9 @@ public class MainCommand implements CommandExecutor {
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-                                target.sendMessage(API.format(uc.getLangConfig().getString("lpSetPrestige").replace("{PRESTIGE}", args[2]).replace("{LP_USER}", sender.getName())));
-                                sender.sendMessage(API.format(uc.getLangConfig().getString("lpAdminSetPrestige").replace("{LP_TARGET}", target.getName()).replace("{PRESTIGE}", args[2])));
+                                API api = new API();
+                                target.sendMessage(api.format(uc.getLangConfig().getString("lpSetPrestige").replace("{lp_Earn_Prestige}", args[2]).replace("{lp_player}", sender.getName())));
+                                sender.sendMessage(api.format(uc.getLangConfig().getString("lpAdminSetPrestige").replace("{lp_Target}", target.getName()).replace("{lp_Earn_Prestige}", args[2])));
                             }
                         } else {
                             player.sendMessage(ChatColor.RED + "You Have Insufficient Permission");
@@ -356,13 +354,17 @@ public class MainCommand implements CommandExecutor {
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-
-                                target.sendMessage(API.format(uc.getLangConfig().getString("lpSetLevel").replace("{LEVEL}", args[2]).replace("{LP_USER}", sender.getName())));
-                                sender.sendMessage(API.format(uc.getLangConfig().getString("lpAdminSetLevel").replace("{LP_TARGET}", target.getName()).replace("{LEVEL}", args[2])));
+                                API api = new API();
+                                target.sendMessage(api.format(uc.getLangConfig().getString("lpSetLevel").replace("{lp_Earn_Level}", args[2]).replace("{lp_player}", sender.getName())));
+                                sender.sendMessage(api.format(uc.getLangConfig().getString("lpAdminSetLevel").replace("{lp_Target}", target.getName()).replace("{lp_Earn_Level}", args[2])));
+                                if(lp.getConfig().getBoolean("BossBar")){
+                                    uc.updateBossbar(uc.getBossbar(target), target);
+                                }
                             }
                         } else {
                             player.sendMessage(ChatColor.RED + "You Have Insufficient Permission");
                         }
+
                     }
                     if (args[0].equalsIgnoreCase("addlevel")) {
                         if (player.hasPermission("lp.admin")) {
@@ -393,7 +395,9 @@ public class MainCommand implements CommandExecutor {
                                 e.printStackTrace();
                             }
 
-
+                            if(lp.getConfig().getBoolean("BossBar")){
+                                uc.updateBossbar(uc.getBossbar(target), target);
+                            }
                         }
                     }
                 }
@@ -426,33 +430,13 @@ public class MainCommand implements CommandExecutor {
 
 
                             for (String x : uc.getLangConfig().getStringList("lpsInfo")) {
-                                Date cDate = new Date();
-                                String cDateS = format.format(cDate);
-                                try {
-                                    until = format.parse(UsersConfig.getString("BoosterOff"));
-                                    current = format.parse(cDateS);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                                if (!current.after(until)) {
-                                    long diff = until.getTime() - current.getTime();
-                                    long diffSeconds = diff / 1000 % 60;
-                                    long diffMinutes = diff / (60 * 1000) % 60;
-                                    long diffHours = diff / (60 * 60 * 1000) % 24;
-                                    long diffDays = diff / (daytime);
-                                    String timeleft = API.format(uc.getLangConfig().getString("lpsTimeFormat").replace("{DAYS}", String.valueOf(diffDays)).replace("{HOURS}", String.valueOf(diffHours)).replace("{MINUTES}", String.valueOf(diffMinutes)).replace("{SECONDS}", String.valueOf(diffSeconds)));
-
-                                    x = x.replace("{lp_Booster_Active}", timeleft);
-
-                                }else{
-                                    x = x.replace("{lp_Booster_Active}", uc.getLangConfig().getString("lpBoosterNone"));
-                                }
-                                x = x.replace("{lp_Booster_Multiplier}", String.valueOf(UsersConfig.getInt("ActiveBooster"))).replace("{lp_Kills}", String.valueOf(UsersConfig.getInt("Kills"))).replace("{lp_Deaths}", String.valueOf(UsersConfig.getInt("Deaths"))).replace("{lp_Placed}", String.valueOf(UsersConfig.getInt("BlocksPlaced"))).replace("{lp_Broken}", String.valueOf(UsersConfig.getInt("BlocksBroken")));
-                                sender.sendMessage(API.format(x.replace("{lp_player}", str.toString()).replace("{lp_level}", String.valueOf(levels)).replace("{lp_xp}", EXP).replace("{lp_progress}", Percentage).replace("{lp_prestige}", Integer.toString(pres))));
+                                API api = new API(TargetPlayer, x);
+                                sender.sendMessage(api.format(api.formatTags()));
                             }
                             return true;
                         } else {
-                            sender.sendMessage(API.format(uc.getLangConfig().getString("LPSNotOnline")));
+                            API api = new API();
+                            sender.sendMessage(api.format(uc.getLangConfig().getString("LPSNotOnline")));
                         }
                     }
                 }
@@ -469,7 +453,8 @@ public class MainCommand implements CommandExecutor {
                                         Multipler = Integer.parseInt(args[3]);
                                         amount = Integer.parseInt(args[4]);
                                     }catch (NumberFormatException e){
-                                        sender.sendMessage(API.format("&4Error&8>> &cString is not a Number"));
+                                        API api = new API();
+                                        sender.sendMessage(api.format("&4Error&8>> &cString is not a Number"));
                                     }
                                     File userdata = new File(lp.userFolder, Target.getUniqueId() + ".yml");
                                     FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
@@ -485,8 +470,9 @@ public class MainCommand implements CommandExecutor {
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
-                                    sender.sendMessage(API.format(uc.getLangConfig().getString("BoosterAdminGive").replace("{BoosterMultiplier}", String.valueOf(Multipler)).replace("{Player_Name}", Target.getName())));
-                                    Target.sendMessage(API.format(uc.getLangConfig().getString("BoosterGive")).replace("{BoosterMultiplier}", String.valueOf(Multipler)));
+                                    API api = new API();
+                                    sender.sendMessage(api.format(uc.getLangConfig().getString("BoosterAdminGive").replace("{BoosterMultiplier}", String.valueOf(Multipler)).replace("{lp_player}", Target.getName())));
+                                    Target.sendMessage(api.format(uc.getLangConfig().getString("BoosterGive")).replace("{BoosterMultiplier}", String.valueOf(Multipler)));
                                 }
                             }
                         }
@@ -502,11 +488,13 @@ public class MainCommand implements CommandExecutor {
 
                                 ConfigurationSection BoostersList = UsersConfig.getConfigurationSection("Boosters");
                                 if (BoostersList == null) {
-                                    player.sendMessage(API.format("&cYou currently have 0 boosters"));
+                                    API api = new API();
+                                    player.sendMessage(api.format("&cYou currently have 0 boosters"));
                                 } else {
                                     for (String x : BoostersList.getKeys(false)) {
                                         int amount = UsersConfig.getInt("Boosters." + x);
-                                        player.sendMessage(API.format(uc.getLangConfig().getString("lpsBoosterList").replace("{Booster_Multiplier}", x).replace("{Booster_Amount}", String.valueOf(amount))));
+                                        API api = new API();
+                                        player.sendMessage(api.format(uc.getLangConfig().getString("lpsBoosterList").replace("{Booster_Multiplier}", x).replace("{Booster_Amount}", String.valueOf(amount))));
                                     }
                                 }
                             }
@@ -518,6 +506,8 @@ public class MainCommand implements CommandExecutor {
                                 }
                             }
                         }
+                    }else{
+
                     }
                 }
             }else if (sender instanceof ConsoleCommandSender){
@@ -533,7 +523,8 @@ public class MainCommand implements CommandExecutor {
                                         Multipler = Integer.parseInt(args[3]);
                                         amount = Integer.parseInt(args[4]);
                                     }catch (NumberFormatException e){
-                                        sender.sendMessage(API.format("&4Error&8>> &cString is not a Number"));
+                                        API api = new API();
+                                        sender.sendMessage(api.format("&4Error&8>> &cString is not a Number"));
                                     }
                                     File userdata = new File(lp.userFolder, Target.getUniqueId() + ".yml");
                                     FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
@@ -549,8 +540,9 @@ public class MainCommand implements CommandExecutor {
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
-                                    sender.sendMessage(API.format(uc.getLangConfig().getString("BoosterAdminGive").replace("{BoosterMultiplier}", String.valueOf(Multipler)).replace("{Player_Name}", Target.getName())));
-                                    Target.sendMessage(API.format(uc.getLangConfig().getString("BoosterGive")).replace("{BoosterMultiplier}", String.valueOf(Multipler)));
+                                    API api = new API();
+                                    sender.sendMessage(api.format(uc.getLangConfig().getString("BoosterAdminGive").replace("{BoosterMultiplier}", String.valueOf(Multipler)).replace("{lp_player}", Target.getName())));
+                                    Target.sendMessage(api.format(uc.getLangConfig().getString("BoosterGive")).replace("{BoosterMultiplier}", String.valueOf(Multipler)));
                                 }
                             }
                         }
@@ -558,7 +550,8 @@ public class MainCommand implements CommandExecutor {
                 }
             }
         }else{
-            sender.sendMessage(API.format(uc.getLangConfig().getString("LPSErrorPermission").replace("{PLAYER}", sender.getName())));
+            API api = new API((Player) sender, uc.getLangConfig().getString("LPSErrorPermission"));
+            sender.sendMessage(api.formatTags());
         }
         return true;
     }

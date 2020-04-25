@@ -18,6 +18,7 @@ public interface Utils {
     void updateBossbar(BossBar bossBar, Player player);
     void ActionBar(Player player, String Message);
 
+    String getProgressBar(Player player);
     void PlayerAdd(UUID uuid, String Name);
     void PlayerDataLoad(Player player) throws IOException;
     void wait(int seconds, Player player);

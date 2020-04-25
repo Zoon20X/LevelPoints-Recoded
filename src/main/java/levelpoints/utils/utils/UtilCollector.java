@@ -109,12 +109,19 @@ public class UtilCollector implements Utils {
 
     @Override
     public void updateBossbar(BossBar bossBar, Player player) {
-        int EXPCurrent = getCurrentEXP(player);
-        int EXPRequired = getRequiredEXP(player);
-        double  required_progress = EXPRequired;
-        double current_progress = EXPCurrent;
-        double progress_percentage = current_progress / required_progress;
-        bossBar.setProgress(progress_percentage);
+        if (bossBar == null) {
+            createBossbar(player);
+            getBossbar(player).addPlayer(player);
+            updateBossbar(getBossbar(player), player);
+        } else {
+            int EXPCurrent = getCurrentEXP(player);
+            int EXPRequired = getRequiredEXP(player);
+            double required_progress = EXPRequired;
+            double current_progress = EXPCurrent;
+            double progress_percentage = current_progress / required_progress;
+            bossBar.setProgress(progress_percentage);
+            bossBar.setTitle(API.format(getLangConfig().getString("lpBossBarTitle").replace("{lp_level}", String.valueOf(getCurrentLevel(player)))));
+        }
     }
 
     @Override
@@ -125,6 +132,25 @@ public class UtilCollector implements Utils {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Message));
         }
 
+    }
+
+    @Override
+    public String getProgressBar(Player player) {
+        double  required_progress = getRequiredEXP(player);
+        double current_progress = getCurrentEXP(player);
+        double progress_percentage = current_progress / required_progress;
+        StringBuilder sb = new StringBuilder();
+        int bar_length = LPS.getConfig().getInt("ActionBarSize");
+        String completed = API.format(getLangConfig().getString("lpBarDesignCompleted"));
+        String need = API.format(getLangConfig().getString("lpBarDesignRequired"));
+        for (int i = 0; i < bar_length; i++) {
+            if (i < bar_length * progress_percentage) {
+                sb.append(completed); //what to append if percentage is covered (e.g. GREEN '|'s)
+            } else {
+                sb.append(need); //what to append if percentage is not covered (e.g. GRAY '|'s)
+            }
+        }
+        return sb.toString();
     }
 
     @Override
@@ -725,23 +751,10 @@ public class UtilCollector implements Utils {
                         e.printStackTrace();
                     }
 
-                    double  required_progress = EXPRequired;
-                    double current_progress = newEXPS;
-                    double progress_percentage = current_progress / required_progress;
-                    StringBuilder sb = new StringBuilder();
-                    int bar_length = LPS.getConfig().getInt("ActionBarSize");
-                    String completed = API.format(getLangConfig().getString("lpBarDesignCompleted"));
-                    String need = API.format(getLangConfig().getString("lpBarDesignRequired"));
-                    for (int i = 0; i < bar_length; i++) {
-                        if (i < bar_length * progress_percentage) {
-                            sb.append(completed); //what to append if percentage is covered (e.g. GREEN '|'s)
-                        } else {
-                            sb.append(need); //what to append if percentage is not covered (e.g. GRAY '|'s)
-                        }
-                    }
                     if (UsersConfig.getBoolean("ActionBar")) {
                         if (LPS.getConfig().getBoolean("Actionbar")) {
-                            ActionBar(player, API.format(getLangConfig().getString("lpActionBar").replace("{PLAYER_LEVEL}", String.valueOf(CurrentLevel)).replace("{BAR}", sb.toString()).replace("{EXP_CURRENT}", String.valueOf(formatter.format(current_progress))).replace("{EXP_REQUIRED}", String.valueOf(formatter.format(required_progress)))));
+                            API api = new API(player, getLangConfig().getString("lpActionBar"));
+                            ActionBar(player, api.formatTags());
                         }
                     }
                     if(LPS.getConfig().getBoolean("BossBar")) {
@@ -769,24 +782,10 @@ public class UtilCollector implements Utils {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    double required_progress = Math.round(Float.parseFloat(formatter.format(EXPRequired)));;
-                    double current_progress = newEXPS;
-                    double progress_percentage = current_progress / required_progress;
-                    StringBuilder sb = new StringBuilder();
-
-                    int bar_length = LPS.getConfig().getInt("ActionBarSize");
-                    String completed = API.format(getLangConfig().getString("lpBarDesignCompleted"));
-                    String need = API.format(getLangConfig().getString("lpBarDesignRequired"));
-                    for (int i = 0; i < bar_length; i++) {
-                        if (i < bar_length * progress_percentage) {
-                            sb.append(completed); //what to append if percentage is covered (e.g. GREEN '|'s)
-                        } else {
-                            sb.append(need); //what to append if percentage is not covered (e.g. GRAY '|'s)
-                        }
-                    }
                     if (UsersConfig.getBoolean("ActionBar")) {
                         if (LPS.getConfig().getBoolean("Actionbar")) {
-                            ActionBar(player, API.format(getLangConfig().getString("lpActionBar").replace("{PLAYER_LEVEL}", String.valueOf(CurrentLevel)).replace("{BAR}", sb.toString()).replace("{EXP_CURRENT}", String.valueOf(current_progress)).replace("{EXP_REQUIRED}", String.valueOf(required_progress))));
+                            API api = new API(player, getLangConfig().getString("lpActionBar"));
+                            ActionBar(player, api.formatTags());
                         }
                     }
                     if(LPS.getConfig().getBoolean("BossBar")) {

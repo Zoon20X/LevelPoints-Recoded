@@ -7,6 +7,7 @@ import levelpoints.utils.utils.UtilCollector;
 import lpsapi.lpsapi.LPSAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -116,6 +117,9 @@ public final class LevelPoints extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            uc.bossbarRemovePlayer(uc.getBossbar(player), player);
+        }
     }
 
 }

@@ -20,7 +20,7 @@ lp:
 lpsInfo:
   - '&bPlayer&7> &3{lp_player}'
   - '&2Level&7> &a{lp_level}'
-  - '&2EXP&7> &a{lp_xp}'
+  - '&2EXP&7> &a{lp_exp} / {lp_Required_EXP}'
   - '&2EXP Progress&7> &a{lp_progress}'
   - '&2Prestige&7> &a{lp_prestige}'
 
@@ -39,12 +39,12 @@ lpsBoosterList: '&3{Booster_Multiplier}X &8>> &b{Booster_Amount}'
 
 lpsBoosterCooldown: '&4Error&8>> &cyou currently still have {TIME_FORMAT}&c left, please wait before using another booster'
 BoosterGive: '&2You have just got {BoosterMultiplier}x Booster'
-BoosterAdminGive: '&2You just gave {Player_Name} {BoosterMultiplier}x Booster'
+BoosterAdminGive: '&2You just gave {lp_player} {BoosterMultiplier}x Booster'
 lpsTimeFormat: '&3{HOURS}:{MINUTES}:{SECONDS}' #this will only support up to {DAYS} will never support above it
 
-lpsPrestigeLevelUP: '&2You Just Prestiged to &a{PRESTIGE_AMOUNT}'
-lpsPrestigeLevelNot: '&cSorry but you are not Level: &4{MAX_LEVEL}&c, you must keep leveling up to be able to prestige'
-lpsPrestigeMoreEXP: '&cSorry but you are missing &4{EXP_AMOUNT}&c EXP to be able to prestige'
+lpsPrestigeLevelUP: '&2You Just Prestiged to &a{lp_prestige}'
+lpsPrestigeLevelNot: '&cSorry but you are not Level: &4{lp_Max_Level}&c, you must keep leveling up to be able to prestige'
+lpsPrestigeMoreEXP: '&cSorry but you are missing &4{lp_Required_EXP}&c EXP to be able to prestige'
 
 lpsActionBarToggle: '&2You have toggled the LevelPoints Actionbar &6{LP_Toggle_Value}'
 
@@ -56,7 +56,7 @@ lpsEXPREMOVEAmount: '&cYou Must Pick a Number of EXP to remove'
 lpsTopListTop:
   - '&8-----------------------'
 lpsTopListMid:
-  - '&b{LP_Ranked} &3{LP_Player} &b- {LP_LEVEL}'  #Warning the player tops should always only be in the mid or formatting will break
+  - '&b{LP_Ranked} &3{lp_player} &b- {lp_level}'  #Warning the player tops should always only be in the mid or formatting will break
 lpsTopListBottom:
   - '&8-----------------------'
 
@@ -74,28 +74,28 @@ lpRewardMessage: '&bYou Have Received Leveling Reward'
 lpRewardTitleTop: '&bLeveling Reward Received'
 lpRewardTitleBottom: '&8Level Reward: &b'
 
-lpPerLevelOre: '&cYou Need To Be {lp_required_level} to mine this block'
+lpPerLevelOre: '&cYou Need To Be {lp_Required_Level} to mine this block'
 
-lpTimedReward: '&2You Just Received &6{EXP_Timed_Amount} &2next amount will be in &6{EXP_Timed_Delay} so stay online'
+lpTimedReward: '&2You Just Received &6{lp_Timed_EXP} &2next amount will be in &6{lp_Timed_Delay} so stay online'
 
-lpEXPGive: '&2You Just Received &6{EXP_Amount} &2EXP from &6{LP_USER}' #Warning if you are using the EXP give command through the console DO NOT place THE, as (LP_USER) will auto correct to lpServerName anyway
-lpSetLevel: '&2Your new Level: &6{LEVEL} &2was set by &6{LP_USER}' #Warning if you are using the setlevel command through the console DO NOT place THE, as (LP_USER) will auto correct to lpServerName anyway
-lpSetPrestige: '&2Your new Prestige: &6{PRESTIGE} &2was set by &6{LP_USER}' #Warning if you are using the setPrestige command through the console DO NOT place THE, as (LP_USER) will auto correct to lpServerName anyway
+lpEXPGive: '&2You Just Received &6{lp_Earn_Exp} &2EXP from &6{lp_player}' #Warning if you are using the EXP give command through the console DO NOT place THE, as (LP_USER) will auto correct to lpServerName anyway
+lpSetLevel: '&2Your new Level: &6{lp_Earn_Level} &2was set by &6{lp_player}' #Warning if you are using the setlevel command through the console DO NOT place THE, as (LP_USER) will auto correct to lpServerName anyway
+lpSetPrestige: '&2Your new Prestige: &6{lp_Earn_Prestige} &2was set by &6{lp_player}' #Warning if you are using the setPrestige command through the console DO NOT place THE, as (LP_USER) will auto correct to lpServerName anyway
 lpServerName: 'SERVER' #use this for when you are sending EXPGIVE command through console: DO NOT USE COLOR CODES THEY WILL NOT SHOW
-lpAdminEXPGive: '&2You Just Gave &6{LP_TARGET} &2EXP: &6{EXP_AMOUNT}' #This Will Send the The User that Uses The EXPGIVE Command
-lpAdminSetLevel: '&2You Just set &6{LP_TARGET} &2Level: &6{LEVEL}' #This Will Send the The User that Uses The setlevel Command
-lpAdminSetPrestige: '&2You Just set &6{LP_TARGET} &2Prestige: &6{PRESTIGE}' #This Will Send the The User that Uses The setPrestige Command
+lpAdminEXPGive: '&2You Just Gave &6{lp_Target} &2EXP: &6{lp_Earn_Exp}' #This Will Send the The User that Uses The EXPGIVE Command
+lpAdminSetLevel: '&2You Just set &6{lp_Target} &2Level: &6{lp_Earn_Level}' #This Will Send the The User that Uses The setlevel Command
+lpAdminSetPrestige: '&2You Just set &6{lp_Target} &2Prestige: &6{lp_Earn_Prestige}' #This Will Send the The User that Uses The setPrestige Command
 
-lpEXPRemove: '&cYou Must lost &4{EXP_AMOUNT} &cEXP from &4{LP_USER}' #Warning if you are using the EXP remove command through the console DO NOT place THE, as (LP_USER) will auto correct to lpServerName anyway
-lpAdminEXPRemove: '&cYou Just Took &4{LP_TARGET} &cEXP: &4{EXP_AMOUNT}' #This Will Send the The User that Uses The EXPREMOVE Command
+lpEXPRemove: '&cYou Must lost &4{lp_Earn_Exp} &cEXP from &4{lp_player}' #Warning if you are using the EXP remove command through the console DO NOT place THE, as (LP_USER) will auto correct to lpServerName anyway
+lpAdminEXPRemove: '&cYou Just Took &4{lp_Target} &cEXP: &4{lp_Earn_Exp}' #This Will Send the The User that Uses The EXPREMOVE Command
 
 
-EXPEarn: '&2You just earned &6{EXP_Amount} &2for &6{Earn_Task}'
+EXPEarn: '&2You just earned &6{lp_Earn_Exp} &2for &6{lp_Earn_Task}'
 
-lpActionBar: '&bLevel: {PLAYER_LEVEL} &3{BAR} &b{EXP_CURRENT}/{EXP_REQUIRED}'
+lpActionBar: '&bLevel: {lp_player} &3{lp_Progress_Bar} &b{lp_exp}/{lp_Required_EXP}'
 lpBarDesignCompleted: '&3|'
 lpBarDesignRequired: '&7|'
 
 
-LPSErrorPermission: '&4Sorry &c{PLAYER} &4but you do not have the correct permissions, contact an admin if you believe this to be broken'
-LPSNotOnline: '&4Sorry &c{PLAYER} &4does not seem to be online right now'
+LPSErrorPermission: '&4Sorry &c{lp_player} &4but you do not have the correct permissions, contact an admin if you believe this to be broken'
+LPSNotOnline: '&4Sorry &c{lp_player} &4does not seem to be online right now'

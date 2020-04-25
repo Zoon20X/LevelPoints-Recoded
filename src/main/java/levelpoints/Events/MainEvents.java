@@ -615,17 +615,18 @@ public class MainEvents implements Listener {
 
                     File playerData = new File(lp.userFolder, player.getUniqueId() + ".yml");
                     File attackerdata = new File(lp.userFolder, Attacker.getUniqueId() + ".yml");
+
                     FileConfiguration PlayerConfig = YamlConfiguration.loadConfiguration(playerData);
                     FileConfiguration AttackerConfig = YamlConfiguration.loadConfiguration(attackerdata);
-                    if ((PlayerConfig.getInt("Level") < levelpvp)) {
+                    if (uc.getCurrentLevel(player) < levelpvp) {
                         event.setCancelled(true);
-                        uc.Title(player,  ChatColor.DARK_RED + "You Must BE", ChatColor.RED + "Level 5 to PVP");
-                        Attacker.sendMessage(ChatColor.RED + player.getName() + " Must to Level 5 to allow pvp");
+                        uc.Title(player,  ChatColor.DARK_RED + "You must be", ChatColor.RED + "Level "+levelpvp+" to PVP");
+                        Attacker.sendMessage(ChatColor.RED + player.getName() + " Must to Level "+levelpvp+" to allow pvp");
 
                     }
-                    if ((AttackerConfig.getInt("Level") < levelpvp)) {
+                    if (uc.getCurrentLevel(Attacker) < levelpvp) {
                         event.setCancelled(true);
-                        uc.Title(Attacker,ChatColor.DARK_RED + "You Must BE", ChatColor.RED + "Level 5 to PVP");
+                        uc.Title(Attacker,ChatColor.DARK_RED + "You must be", ChatColor.RED + "Level "+levelpvp+" to PVP");
 
                     }
                 } else {
@@ -643,10 +644,15 @@ public class MainEvents implements Listener {
                 FileConfiguration PlayerConfig = YamlConfiguration.loadConfiguration(playerData);
                 FileConfiguration AttackerConfig = YamlConfiguration.loadConfiguration(attackerdata);
 
-                if ((PlayerConfig.getInt("Level") < levelpvp)) {
+                if (uc.getCurrentLevel(player) < levelpvp) {
                     event.setCancelled(true);
-                    uc.Title(player,  ChatColor.DARK_RED + "You Must BE", ChatColor.RED + "Level 5 to PVP");
-                    Attacker.sendMessage(ChatColor.RED + player.getName() + " Must to Level 5 to allow pvp");
+                    uc.Title(player,  ChatColor.DARK_RED + "You must be", ChatColor.RED + "Level "+ levelpvp +" to PVP");
+                    Attacker.sendMessage(ChatColor.RED + player.getName() + " must be level "+ levelpvp +" to allow pvp");
+
+                }
+                if (uc.getCurrentLevel(Attacker) < levelpvp) {
+                    event.setCancelled(true);
+                    uc.Title(Attacker,ChatColor.DARK_RED + "You must be", ChatColor.RED + "Level "+levelpvp+" to PVP");
 
                 }
             }
@@ -748,8 +754,8 @@ public class MainEvents implements Listener {
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) throws IOException, SQLException {
 
-        if (event.getEntity() instanceof Monster) {
-            Monster monsterEnt = (Monster) event.getEntity();
+        if (event.getEntity() instanceof LivingEntity) {
+            LivingEntity monsterEnt = event.getEntity();
             Object mcPlayer = monsterEnt.getKiller();
             Player player = ((Player) mcPlayer);
             if (mcPlayer == null) {
@@ -759,6 +765,7 @@ public class MainEvents implements Listener {
                     player.sendMessage(monsterEnt.getType().toString());
                 }
             }
+
 
 
             if (uc.getEXPConfig().getBoolean("PerWorld")) {
@@ -802,61 +809,6 @@ public class MainEvents implements Listener {
                     } else {
                         uc.GainEXP(player, uc.getEXPConfig().getInt(monsterEnt.getType().toString()));
                     }
-                }
-
-            }
-        } else {
-            if (event.getEntity() instanceof Animals) {
-                Animals ani = (Animals) event.getEntity();
-                Object mcplayer = ani.getKiller();
-                Player player = (Player) mcplayer;
-                if (mcplayer == null) {
-                    return;
-                }else {
-                    if (uc.getEXPConfig().getBoolean("Debug")) {
-                        player.sendMessage(ani.getType().toString());
-                    }
-                }
-
-
-                if (uc.getEXPConfig().getBoolean("PerWorld")) {
-
-                    List<String> worlds = uc.getEXPConfig().getStringList("Worlds");
-                    for (String world : worlds)
-                        if (player.getLocation().getWorld().getName().equalsIgnoreCase(world)) {
-                            if (mcplayer == null)
-                                return;
-
-                            if (uc.getEXPConfig().getBoolean("Passive-Mobs")) {
-                                if (uc.getEXPConfig().getBoolean("RandomEXP")) {
-
-                                    int max = uc.getEXPConfig().getInt(ani.getType().toString());
-                                    int min = 0;
-
-                                    Random r = new Random();
-                                    int re = r.nextInt((max - min) + 1) + min;
-                                    uc.GainEXP(player, re);
-                                } else {
-                                    uc.GainEXP(player, uc.getEXPConfig().getInt(ani.getType().toString()));
-                                }
-
-                            }
-                        }
-                } else {
-                    if (mcplayer == null)
-                        return;
-                    if (uc.getEXPConfig().getBoolean("RandomEXP")) {
-
-                        int max = uc.getEXPConfig().getInt(ani.getType().toString());
-                        int min = 0;
-
-                        Random r = new Random();
-                        int re = r.nextInt((max - min) + 1) + min;
-                        uc.GainEXP(player, re);
-                    } else {
-                        uc.GainEXP(player, uc.getEXPConfig().getInt(ani.getType().toString()));
-                    }
-
                 }
 
             }
