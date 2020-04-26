@@ -471,8 +471,13 @@ public class MainCommand implements CommandExecutor {
                                         e.printStackTrace();
                                     }
                                     API api = new API();
-                                    sender.sendMessage(api.format(uc.getLangConfig().getString("BoosterAdminGive").replace("{BoosterMultiplier}", String.valueOf(Multipler)).replace("{lp_player}", Target.getName())));
-                                    Target.sendMessage(api.format(uc.getLangConfig().getString("BoosterGive")).replace("{BoosterMultiplier}", String.valueOf(Multipler)));
+                                    sender.sendMessage(api.format(uc.getLangConfig().getString("BoosterAdminGive")
+                                            .replace("{BoosterMultiplier}", String.valueOf(Multipler))
+                                            .replace("{lp_player}", Target.getName()))
+                                            .replace("{Booster_Amount}", String.valueOf(amount)));
+                                    Target.sendMessage(api.format(uc.getLangConfig().getString("BoosterGive"))
+                                            .replace("{BoosterMultiplier}", String.valueOf(Multipler))
+                                            .replace("{Booster_Amount}", String.valueOf(amount)));
                                 }
                             }
                         }
@@ -541,8 +546,13 @@ public class MainCommand implements CommandExecutor {
                                         e.printStackTrace();
                                     }
                                     API api = new API();
-                                    sender.sendMessage(api.format(uc.getLangConfig().getString("BoosterAdminGive").replace("{BoosterMultiplier}", String.valueOf(Multipler)).replace("{lp_player}", Target.getName())));
-                                    Target.sendMessage(api.format(uc.getLangConfig().getString("BoosterGive")).replace("{BoosterMultiplier}", String.valueOf(Multipler)));
+                                    sender.sendMessage(api.format(uc.getLangConfig().getString("BoosterAdminGive")
+                                            .replace("{BoosterMultiplier}", String.valueOf(Multipler))
+                                            .replace("{lp_player}", Target.getName())
+                                            .replace("{Booster_Amount}", String.valueOf(amount))));
+                                    Target.sendMessage(api.format(uc.getLangConfig().getString("BoosterGive"))
+                                            .replace("{BoosterMultiplier}", String.valueOf(Multipler))
+                                            .replace("{Booster_Amount}", String.valueOf(amount)));
                                 }
                             }
                         }

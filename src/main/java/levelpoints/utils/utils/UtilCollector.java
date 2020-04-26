@@ -120,7 +120,8 @@ public class UtilCollector implements Utils {
             double current_progress = EXPCurrent;
             double progress_percentage = current_progress / required_progress;
             bossBar.setProgress(progress_percentage);
-            bossBar.setTitle(API.format(getLangConfig().getString("lpBossBarTitle").replace("{lp_level}", String.valueOf(getCurrentLevel(player)))));
+            API api = new API(player, getLangConfig().getString("lpBossBarTitle"));
+            bossBar.setTitle(api.formatTags());
         }
     }
 
