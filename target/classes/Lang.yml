@@ -38,8 +38,8 @@ lpBoosterNone: "&cNo booster activated"
 lpsBoosterList: '&3{Booster_Multiplier}X &8>> &b{Booster_Amount}'
 
 lpsBoosterCooldown: '&4Error&8>> &cyou currently still have {TIME_FORMAT}&c left, please wait before using another booster'
-BoosterGive: '&2You have just got {BoosterMultiplier}x Booster'
-BoosterAdminGive: '&2You just gave {lp_player} {BoosterMultiplier}x Booster'
+BoosterGive: '&2You have just got {Booster_Amount} {BoosterMultiplier}x Booster(s)'
+BoosterAdminGive: '&2You just gave {lp_player} {Booster_Amount} {BoosterMultiplier}x Booster(s)'
 lpsTimeFormat: '&3{HOURS}:{MINUTES}:{SECONDS}' #this will only support up to {DAYS} will never support above it
 
 lpsPrestigeLevelUP: '&2You Just Prestiged to &a{lp_prestige}'

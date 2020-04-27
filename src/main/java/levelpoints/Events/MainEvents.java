@@ -266,7 +266,6 @@ public class MainEvents implements Listener {
         ItemMeta itemm = item.getItemMeta();
         File userdata = new File(lp.userFolder, player.getUniqueId() + ".yml");
         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
-
         if(lp.getConfig().getBoolean("GriefPrevention")){
             if(!Check(player)){
 
@@ -416,59 +415,55 @@ public class MainEvents implements Listener {
                 }
             }
         }
+
         if (uc.getEXPConfig().getBoolean("FarmEXP")) {
-            ConfigurationSection HouseNums = uc.getEXPConfig().getConfigurationSection("Farming");
+            ConfigurationSection Farms = uc.getEXPConfig().getConfigurationSection("Farming");
 
             if (uc.getEXPConfig().getBoolean("1.8-1.13.2")) {
 
                 if (block.getType() == Material.CROPS) {
-
                     MaterialData FarmData = block.getState().getData();
 
                     Crops crop = new Crops();
                     crop.setData(FarmData.getData());
+
                     if (crop.getData() == (byte) 7) {
 
-
                         ConfigurationSection FarmBlocks = uc.getEXPConfig().getConfigurationSection("Farming.");
-
+                        int amount = 0;
                         for (ItemStack x : block.getDrops()) {
 
-
-                            if (FarmBlocks.contains(x.getType().toString().replace("_ITEM", ""))) {
-
-                                int amount = uc.getEXPConfig().getInt("Farming." + x.getType().toString().replace("_ITEM", ""));
+                            if (x.getType().toString().equals("CROPS")) {
+                                amount = uc.getEXPConfig().getInt("Farming.WHEAT");
+                                uc.FarmEventTrigger(player, "WHEAT", amount, "Farming");
+                            } else if (FarmBlocks.contains(x.getType().toString().replace("_ITEM", ""))) {
+                                amount = uc.getEXPConfig().getInt("Farming." + x.getType().toString().replace("_ITEM", ""));
 
                                 uc.FarmEventTrigger(player, x.getType().toString().replace("_ITEM", ""), amount, "Farming");
                             }
                         }
                     }
-                } else {
-
-                    for (String id : HouseNums.getKeys(false)) {
-                        if (block.getType() == Material.getMaterial("CROPS") || block.getType() == Material.getMaterial(id)) {
+                }
+            } else {
 
 
-                            MaterialData FarmData = block.getState().getData();
+                MaterialData FarmData = block.getState().getData();
 
-                            Crops crop = new Crops();
-                            crop.setData(FarmData.getData());
+                Crops crop = new Crops();
+                crop.setData(FarmData.getData());
 
-                            if (crop.getData() == (byte) 7) {
-                                ConfigurationSection FarmBlocks = uc.getEXPConfig().getConfigurationSection("Farming.");
-                                int amount = 0;
-                                for (ItemStack x : block.getDrops()) {
+                if (crop.getData() == (byte) 7) {
 
-                                    if (x.getType().toString().equals("CROPS")) {
-                                        amount = uc.getEXPConfig().getInt("Farming.WHEAT");
-                                        uc.FarmEventTrigger(player, "WHEAT", amount, "Farming");
-                                    } else if (FarmBlocks.contains(x.getType().toString().replace("_ITEM", ""))) {
-                                        amount = uc.getEXPConfig().getInt("Farming." + x.getType().toString().replace("_ITEM", ""));
+                    ConfigurationSection FarmBlocks = uc.getEXPConfig().getConfigurationSection("Farming.");
+                    int amount = 0;
+                    for (ItemStack x : block.getDrops()) {
+                        if (x.getType().equals(Material.getMaterial("LEGACY_CROPS"))) {
+                            amount = uc.getEXPConfig().getInt("Farming.WHEAT");
+                            uc.FarmEventTrigger(player, "WHEAT", amount, "Farming");
+                        } else if (FarmBlocks.contains(x.getType().toString().replace("_ITEM", ""))) {
+                            amount = uc.getEXPConfig().getInt("Farming." + x.getType().toString().replace("_ITEM", ""));
 
-                                        uc.FarmEventTrigger(player, x.getType().toString().replace("_ITEM", ""), amount, "Farming");
-                                    }
-                                }
-                            }
+                            uc.FarmEventTrigger(player, x.getType().toString().replace("_ITEM", ""), amount, "Farming");
                         }
                     }
                 }
@@ -558,7 +553,7 @@ public class MainEvents implements Listener {
 
 
         uc.GainEXP(player, exp);
-        player.sendMessage(API.format(uc.getLangConfig().getString("EXPEarn").replace("{EXP_Amount}", String.valueOf(exp)).replace("{Earn_Task}", task)));
+        player.sendMessage(API.format(uc.getLangConfig().getString("EXPEarn").replace("{lp_Earn_Exp}", String.valueOf(exp)).replace("{lp_Earn_Task}", task)));
 
     }
 

@@ -128,8 +128,8 @@ public class UtilCollector implements Utils {
     @Override
     public void ActionBar(Player player, String Message) {
 
-
         if (!Bukkit.getVersion().contains("1.8")) {
+
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Message));
         }
 
