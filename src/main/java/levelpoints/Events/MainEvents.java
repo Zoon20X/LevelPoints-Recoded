@@ -178,7 +178,6 @@ public class MainEvents implements Listener {
             if (!lp.getConfig().getBoolean("ShowOnEXPOnly")) {
                 if (uc.getBossbar(event.getPlayer()) == null) {
                     uc.createBossbar(event.getPlayer());
-
                 }
                 if (!uc.getBossbar(event.getPlayer()).getPlayers().contains(event.getPlayer())) {
                     uc.bossbarAddPlayer(uc.getBossbar(event.getPlayer()), event.getPlayer());
@@ -556,8 +555,9 @@ public class MainEvents implements Listener {
 
 
         uc.GainEXP(player, exp);
-        player.sendMessage(API.format(uc.getLangConfig().getString("EXPEarn").replace("{lp_Earn_Exp}", String.valueOf(exp)).replace("{lp_Earn_Task}", task)));
-
+        if(uc.getEXPConfig().getBoolean("TaskMessage")) {
+            player.sendMessage(API.format(uc.getLangConfig().getString("EXPEarn").replace("{lp_Earn_Exp}", String.valueOf(exp)).replace("{lp_Earn_Task}", task)));
+        }
     }
 
     @EventHandler

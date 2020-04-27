@@ -5,6 +5,11 @@
 PvpLeveluse: false
 PvpLevel: 5
 
+#This option will force players to be x levels apart to be able to engage in pvp together
+PvpDistance: false
+PvpMin: 5 #this option is how many levels apart they can be
+
+
 #############################
 #      Starting EXP         #
 #############################

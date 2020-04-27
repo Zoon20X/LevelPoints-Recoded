@@ -87,6 +87,8 @@ Resources: true
 FarmEXP: true
 #run this only if you're running 1.8-1.13.2 if not turn to false to support 1.14+
 1.8-1.13.2: false
+TaskMessage: false
+#task message is the message when a player earns exp from specified tasks, this one is farming
 Farming:
     WHEAT: 1
     CARROT: 1

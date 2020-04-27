@@ -11,6 +11,8 @@ import levelpoints.levelpoints.WildStacker;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
+
+
 import org.bukkit.Bukkit;
 
 import org.bukkit.ChatColor;
@@ -20,6 +22,7 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+
 import org.bukkit.entity.Player;
 
 
@@ -27,6 +30,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.*;
@@ -148,6 +155,54 @@ public class UtilCollector implements Utils {
         if (!Bukkit.getVersion().contains("1.8")) {
 
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Message));
+        } else {
+            String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+
+            try {
+                Class<?> c1 = Class.forName("org.bukkit.craftbukkit." + version + ".entity.CraftPlayer");
+                Object p = c1.cast(player);
+                Object ppoc;
+                Class<?> c4 = Class.forName("net.minecraft.server." + version + ".PacketPlayOutChat");
+                Class<?> c5 = Class.forName("net.minecraft.server." + version + ".Packet");
+
+                Class<?> c2 = Class.forName("net.minecraft.server." + version + ".ChatComponentText");
+                Class<?> c3 = Class.forName("net.minecraft.server." + version + ".IChatBaseComponent");
+                Object o = c2.getConstructor(new Class<?>[]{String.class}).newInstance(API.format(Message));
+                ppoc = c4.getConstructor(new Class<?>[]{c3, byte.class}).newInstance(o, (byte) 2);
+                Method getHandle = c1.getDeclaredMethod("getHandle");
+                Object handle = getHandle.invoke(p);
+
+                Field fieldConnection = handle.getClass().getDeclaredField("playerConnection");
+                Object playerConnection = fieldConnection.get(handle);
+
+                Method sendPacket = playerConnection.getClass().getDeclaredMethod("sendPacket", c5);
+                sendPacket.invoke(playerConnection, ppoc);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void send(Player player, Object packet) {
+        try {
+            Object handle = player.getClass().getMethod("getHandle").invoke(player);
+            Object playerConnection = handle.getClass().getField("playerConnection").get(handle);
+            playerConnection.getClass().getDeclaredMethod("sendPacket", getNMSClass("Packet")).invoke(playerConnection, packet);
+        }
+
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    private Class<?> getNMSClass(String name){
+        String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+        Bukkit.getServer().getConsoleSender().sendMessage(version);
+        try {
+            return Class.forName("net.minecraft.server." + version + "." + name);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
         }
 
     }
