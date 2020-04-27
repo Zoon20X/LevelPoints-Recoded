@@ -89,18 +89,35 @@ public class UtilCollector implements Utils {
     public void createBossbar(Player player) {
         BossBar boss =  Bukkit.createBossBar(API.format(getLangConfig().getString("lpBossBarTitle").replace("{lp_level}", String.valueOf(getCurrentLevel(player)))), BarColor.valueOf(LPS.getConfig().getString("BossBarColor")), BarStyle.SOLID);
         bossbar.put(player, boss);
+        if(LPS.getConfig().getBoolean("ShowOnEXPOnly")){
+            BossBarShowTime(player);
+        }
     }
 
     @Override
     public void bossbarAddPlayer(BossBar bossBar, Player player) {
         bossBar.addPlayer(player);
 
+
     }
 
     @Override
     public void bossbarRemovePlayer(BossBar bossBar, Player player) {
         bossBar.removePlayer(player);
+        bossbar.remove(player);
     }
+
+    @Override
+    public void BossBarShowTime(Player player) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(LPS, new Runnable() {
+            @Override
+            public void run() {
+                bossbarRemovePlayer(getBossbar(player), player);
+
+            }
+        }, 20L * LPS.getConfig().getInt("ShowTime"));
+    }
+
     @Override
     public BossBar getBossbar(Player player) {
 

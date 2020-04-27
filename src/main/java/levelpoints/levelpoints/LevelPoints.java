@@ -117,9 +117,6 @@ public final class LevelPoints extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            uc.bossbarRemovePlayer(uc.getBossbar(player), player);
-        }
     }
 
 }

@@ -98,6 +98,7 @@ public class MainEvents implements Listener {
                 int formatMax = formats.getInt(key + ".MaxLevel");
 
 
+
                 if (prestige == formats.getInt(key + ".Prestige"))
                     if (level >= formatMin && level <= formatMax) {
                         chat = chat.replace("%1$s", player.getName()).replace("%2$s", message);
@@ -174,13 +175,15 @@ public class MainEvents implements Listener {
             //uc.RunSQLDownload(event.getPlayer());
         }
         if (lp.getConfig().getBoolean("BossBar")) {
-            if (uc.getBossbar(event.getPlayer()) == null) {
-                uc.createBossbar(event.getPlayer());
+            if (!lp.getConfig().getBoolean("ShowOnEXPOnly")) {
+                if (uc.getBossbar(event.getPlayer()) == null) {
+                    uc.createBossbar(event.getPlayer());
 
-            }
-            if (!uc.getBossbar(event.getPlayer()).getPlayers().contains(event.getPlayer())) {
-                uc.bossbarAddPlayer(uc.getBossbar(event.getPlayer()), event.getPlayer());
-                uc.updateBossbar(uc.getBossbar(event.getPlayer()), event.getPlayer());
+                }
+                if (!uc.getBossbar(event.getPlayer()).getPlayers().contains(event.getPlayer())) {
+                    uc.bossbarAddPlayer(uc.getBossbar(event.getPlayer()), event.getPlayer());
+                    uc.updateBossbar(uc.getBossbar(event.getPlayer()), event.getPlayer());
+                }
             }
         }
     }
@@ -649,6 +652,28 @@ public class MainEvents implements Listener {
                     event.setCancelled(true);
                     uc.Title(Attacker,ChatColor.DARK_RED + "You must be", ChatColor.RED + "Level "+levelpvp+" to PVP");
 
+                }
+            }
+        }
+        if(uc.getLevelsConfig().getBoolean("PvpDistance")){
+            if (!(event.getDamager() instanceof Player)) {
+                return;
+            } else {
+                if (event.getEntity() instanceof Player) {
+                    Player Attacker = (Player) event.getDamager();
+                    Player player = (Player) event.getEntity();
+                    int AttackerLevel = uc.getCurrentLevel(Attacker);
+                    int playerLevel = uc.getCurrentLevel(player);
+                    if(AttackerLevel > playerLevel) {
+
+                        if(AttackerLevel - playerLevel > uc.getLevelsConfig().getInt("PvpMin")){
+                            event.setCancelled(true);
+                        }
+                    }else{
+                        if(playerLevel - AttackerLevel > uc.getLevelsConfig().getInt("PvpMin")){
+                            event.setCancelled(true);
+                        }
+                    }
                 }
             }
         }

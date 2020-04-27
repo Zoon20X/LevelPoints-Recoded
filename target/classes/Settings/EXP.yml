@@ -85,7 +85,8 @@ Resources: true
 #####################################
 
 FarmEXP: true
-#run this only if you're running 1.8-1.13.2
+#run this only if you're running 1.8-1.13.2 if not turn to false to support 1.14+
+1.8-1.13.2: false
 Farming:
     WHEAT: 1
     CARROT: 1

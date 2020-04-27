@@ -14,6 +14,7 @@ public interface Utils {
     void createBossbar(Player player);
     void bossbarAddPlayer(BossBar bossBar, Player player);
     void bossbarRemovePlayer(BossBar bossBar, Player player);
+    void BossBarShowTime(Player player);
     BossBar getBossbar(Player player);
     void updateBossbar(BossBar bossBar, Player player);
     void ActionBar(Player player, String Message);
