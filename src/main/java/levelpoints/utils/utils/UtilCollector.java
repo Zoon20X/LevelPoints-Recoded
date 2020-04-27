@@ -1086,7 +1086,7 @@ public class UtilCollector implements Utils {
 
 
                             if (getEXPConfig().getBoolean("EXPMessage")) {
-                                p.sendMessage(API.format(getLangConfig().getString("lpTimedReward").replace("{EXP_Timed_Amount}", Integer.toString(getEXPConfig().getInt("GiveAmount"))).replace("{EXP_Timed_Delay}", TimeMessage)));
+                                p.sendMessage(API.format(getLangConfig().getString("lpTimedReward").replace("{lp_Timed_EXP}", Integer.toString(getEXPConfig().getInt("GiveAmount"))).replace("{lp_Timed_Delay}", TimeMessage)));
 
                             }
                         }

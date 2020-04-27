@@ -92,7 +92,7 @@ lpAdminEXPRemove: '&cYou Just Took &4{lp_Target} &cEXP: &4{lp_Earn_Exp}' #This W
 
 EXPEarn: '&2You just earned &6{lp_Earn_Exp} &2for &6{lp_Earn_Task}'
 
-lpActionBar: '&bLevel: {lp_player} &3{lp_Progress_Bar} &b{lp_exp}/{lp_Required_EXP}'
+lpActionBar: '&bLevel: {lp_level} &3{lp_Progress_Bar} &b{lp_exp}/{lp_Required_EXP}'
 lpBarDesignCompleted: '&3|'
 lpBarDesignRequired: '&7|'
 

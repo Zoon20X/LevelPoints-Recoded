@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="LevelPoints:jar">
-    <output-path>D:/My Servers/VenturesCraft/plugins</output-path>
+  <artifact type="jar" name="1.15.2">
+    <output-path>$PROJECT_DIR$/../../My Servers/1.15/plugins</output-path>
     <root id="archive" name="LevelPoints.jar">
       <element id="module-output" name="LevelPoints" />
     </root>

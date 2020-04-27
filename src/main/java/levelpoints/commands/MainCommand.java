@@ -249,11 +249,10 @@ public class MainCommand implements CommandExecutor {
                                     double need = uc.getRequiredEXP(player) - uc.getCurrentEXP(player);
 
                                     API api = new API();
-                                    player.sendMessage(api.format(uc.getLangConfig().getString("lpsPrestigeMoreEXP").replace("{EXP_AMOUNT}", String.valueOf(need))));
+                                    player.sendMessage(api.format(uc.getLangConfig().getString("lpsPrestigeMoreEXP").replace("{lp_Required_EXP}", String.valueOf(need))));
                                 }
                             } else {
-                                API api = new API(player, uc.getLangConfig().getString("lpsPrestigeLevelNot"));
-                                player.sendMessage(api.formatTags());
+                                player.sendMessage(API.format(uc.getLangConfig().getString("lpsPrestigeLevelNot").replace("{lp_Max_Level}", String.valueOf(uc.getMaxLevel()))));
                             }
                         }
                         if (args[0].equalsIgnoreCase("info")) {

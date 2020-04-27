@@ -66,6 +66,7 @@ public class MainEvents implements Listener {
 
     private LPSAPI lpapi = (LPSAPI) Bukkit.getPluginManager().getPlugin("LPSAPI");
     UtilCollector uc = new UtilCollector();
+    private HashMap<String, String> drops = new HashMap<>();
 
 
     public MainEvents(LevelPoints levelPoints) {
@@ -194,8 +195,10 @@ public class MainEvents implements Listener {
             uc.RunSQLUpdate(event.getPlayer());
         }
         if(lp.getConfig().getBoolean("BossBar")) {
-            if (uc.getBossbar(event.getPlayer()).getPlayers().contains(event.getPlayer())) {
-                uc.bossbarRemovePlayer(uc.getBossbar(event.getPlayer()), event.getPlayer());
+            if(uc.getBossbar(event.getPlayer()) != null) {
+                if (uc.getBossbar(event.getPlayer()).getPlayers().contains(event.getPlayer())) {
+                    uc.bossbarRemovePlayer(uc.getBossbar(event.getPlayer()), event.getPlayer());
+                }
             }
         }
     }
@@ -411,6 +414,7 @@ public class MainEvents implements Listener {
                         if (!item.getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
                             uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
                         }
+
                     } else {
                         uc.GainEXP(player, uc.getEXPConfig().getInt(block.getType().toString()));
                     }
@@ -434,14 +438,18 @@ public class MainEvents implements Listener {
                         ConfigurationSection FarmBlocks = uc.getEXPConfig().getConfigurationSection("Farming.");
                         int amount = 0;
                         for (ItemStack x : block.getDrops()) {
-
-                            if (x.getType().toString().equals("CROPS")) {
+                            if (drops.isEmpty()) {
+                                drops.put(x.getType().toString(), x.getType().toString());
+                            }
+                        }
+                        for (String x : drops.keySet()) {
+                            if (x.equals("CROPS")) {
                                 amount = uc.getEXPConfig().getInt("Farming.WHEAT");
                                 uc.FarmEventTrigger(player, "WHEAT", amount, "Farming");
-                            } else if (FarmBlocks.contains(x.getType().toString().replace("_ITEM", ""))) {
-                                amount = uc.getEXPConfig().getInt("Farming." + x.getType().toString().replace("_ITEM", ""));
+                            } else if (FarmBlocks.contains(x.replace("_ITEM", ""))) {
+                                amount = uc.getEXPConfig().getInt("Farming." + x.replace("_ITEM", ""));
 
-                                uc.FarmEventTrigger(player, x.getType().toString().replace("_ITEM", ""), amount, "Farming");
+                                uc.FarmEventTrigger(player, x.replace("_ITEM", ""), amount, "Farming");
                             }
                         }
                     }
@@ -459,15 +467,21 @@ public class MainEvents implements Listener {
                     ConfigurationSection FarmBlocks = uc.getEXPConfig().getConfigurationSection("Farming.");
                     int amount = 0;
                     for (ItemStack x : block.getDrops()) {
-                        if (x.getType().equals(Material.getMaterial("LEGACY_CROPS"))) {
-                            amount = uc.getEXPConfig().getInt("Farming.WHEAT");
-                            uc.FarmEventTrigger(player, "WHEAT", amount, "Farming");
-                        } else if (FarmBlocks.contains(x.getType().toString().replace("_ITEM", ""))) {
-                            amount = uc.getEXPConfig().getInt("Farming." + x.getType().toString().replace("_ITEM", ""));
-
-                            uc.FarmEventTrigger(player, x.getType().toString().replace("_ITEM", ""), amount, "Farming");
+                        if (drops.isEmpty()) {
+                            drops.put(x.getType().toString(), x.getType().toString());
                         }
                     }
+                    for (String x : drops.keySet()) {
+                        if (x.equals("LEGACY_CROPS")) {
+                            amount = uc.getEXPConfig().getInt("Farming.WHEAT");
+                            uc.FarmEventTrigger(player, "WHEAT", amount, "Farming");
+                        } else if (FarmBlocks.contains(x.replace("_ITEM", ""))) {
+                            amount = uc.getEXPConfig().getInt("Farming." + x.replace("_ITEM", ""));
+
+                            uc.FarmEventTrigger(player, x.replace("_ITEM", ""), amount, "Farming");
+                        }
+                    }
+                    drops.clear();
                 }
             }
         }
