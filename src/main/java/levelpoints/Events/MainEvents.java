@@ -248,7 +248,6 @@ public class MainEvents implements Listener {
 
         DataStore dataStore = GriefPrevention.instance.dataStore;
         Claim claim = dataStore.getClaimAt(player.getLocation(), true, null);
-        player.sendMessage(String.valueOf(claim));
         if(claim != null){
             if(player.getName().equalsIgnoreCase(claim.getOwnerName())){
 
@@ -273,7 +272,6 @@ public class MainEvents implements Listener {
         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
         if(lp.getConfig().getBoolean("GriefPrevention")){
             if(!Check(player)){
-
                 return;
             }
         }
