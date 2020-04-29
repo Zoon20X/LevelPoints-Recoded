@@ -1,0 +1,13 @@
+#This file will have 1 example rank
+
+#VIP:
+#  Permission: lps.vip #permission player needs to use this rank
+#  Multiplier: 2 #multiplier of xp they will get
+#  Priority: 1 #this is used to specify what multiplier to use when player has more then 1 permission
+#
+# priority should be higher the better the ranks so they get the benefits of higher ranks then lower
+
+VIP:
+  Permission: lps.vip
+  Multiplier: 2
+  Priority: 1

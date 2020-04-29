@@ -44,6 +44,7 @@ public interface Utils {
     int getRequiredEXP(Player player);
     int getMaxLevel();
     int getCurrentLevel(Player player);
+    int getRankMultiplier(Player player);
     int getCurrentPrestige(Player player);
     int getCurrentEXP(Player player);
     int getCurrentBoosters(Player player, int Multipler);
@@ -52,6 +53,7 @@ public interface Utils {
     void TimedEXP();
     double getMaxLevelEXP(Player player);
     FileConfiguration getLevelsConfig();
+    FileConfiguration getMultipliersConfig();
     FileConfiguration getEXPConfig();
     FileConfiguration getRewardsConfig();
     FileConfiguration getFormatsConfig();

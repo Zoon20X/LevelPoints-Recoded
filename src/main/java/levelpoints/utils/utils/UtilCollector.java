@@ -20,6 +20,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -30,9 +31,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -83,6 +82,7 @@ public class UtilCollector implements Utils {
 
     private int cooldowntimer;
     private static HashMap<Player, BossBar> bossbar = new HashMap<>();
+    private static HashMap<Player, Integer> Multipliers = new HashMap<>();
 
     public Connection getConnection() {
         return connection;
@@ -183,29 +183,7 @@ public class UtilCollector implements Utils {
         }
     }
 
-    private void send(Player player, Object packet) {
-        try {
-            Object handle = player.getClass().getMethod("getHandle").invoke(player);
-            Object playerConnection = handle.getClass().getField("playerConnection").get(handle);
-            playerConnection.getClass().getDeclaredMethod("sendPacket", getNMSClass("Packet")).invoke(playerConnection, packet);
-        }
 
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-    private Class<?> getNMSClass(String name){
-        String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-        Bukkit.getServer().getConsoleSender().sendMessage(version);
-        try {
-            return Class.forName("net.minecraft.server." + version + "." + name);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-    }
 
     @Override
     public String getProgressBar(Player player) {
@@ -539,7 +517,6 @@ public class UtilCollector implements Utils {
             LPS.getServer().getConsoleSender().sendMessage(API.format("&3Running Extra File Check...."));
             if (getRewardsConfig().getString("Type").equals("FILECHANCE")) {
 
-
                 File FileChanceFile = new File(LPS.getDataFolder(), "/Settings/FileChance.yml");
                 FileChanceConfig = YamlConfiguration.loadConfiguration(FileChanceFile);
             } else {
@@ -549,6 +526,11 @@ public class UtilCollector implements Utils {
                 getFormatsConfig();
             } else {
                 LPS.getServer().getConsoleSender().sendMessage(API.format("&3Not running LevelPoints built in Chat system"));
+            }
+            if (LPS.getConfig().getBoolean("RankMultipliers")) {
+                getMultipliersConfig();
+            } else {
+                LPS.getServer().getConsoleSender().sendMessage(API.format("&3Not running Rank Multipliers"));
             }
         } catch (Exception e) {
             LPS.getServer().getConsoleSender().sendMessage(API.format("&4All & or some files failed to load, please consult the developer: &cZoon20X"));
@@ -600,7 +582,14 @@ public class UtilCollector implements Utils {
         } else {
             LPS.getServer().getConsoleSender().sendMessage(API.format("&3Not running LevelPoints built in Chat system"));
         }
+        if (LPS.getConfig().getBoolean("RankMultipliers")) {
+            File MultiplierFile = new File(LPS.getDataFolder(), "/Settings/RankMultipliers.yml");
+            FileConfiguration MultiplierConfig = YamlConfiguration.loadConfiguration(MultiplierFile);
+            SaveLoadFiles(MultiplierFile, MultiplierConfig, "/Settings/RankMultipliers.yml", "Settings/RankMultipliers.yml", "RankMultipliers");
 
+        } else {
+            LPS.getServer().getConsoleSender().sendMessage(API.format("&3Not running Rank Multipliers"));
+        }
         RunFiles();
 
         LPS.getServer().getConsoleSender().sendMessage(API.format("&3Running VersionChecker Module...."));
@@ -775,10 +764,20 @@ public class UtilCollector implements Utils {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        if(LPS.getConfig().getBoolean("RankMultipliers")){
+            int multi = getRankMultiplier(player);
+
+            BoosterActive = BoosterActive + multi;
+
+        }
+
         if (!current.after(until)) {
 
             amount = amount * BoosterActive;
 
+        }else if(LPS.getConfig().getBoolean("RankMultipliers")){
+            amount = amount * getRankMultiplier(player);
         }
         int newEXP = EXPCurrent + amount;
         if (amount != 0 || newEXP >= EXPRequired) {
@@ -970,6 +969,28 @@ public class UtilCollector implements Utils {
 
         return Max;
     }
+    @Override
+    public int getRankMultiplier(Player player) {
+        ConfigurationSection cs = getMultipliersConfig().getConfigurationSection("");
+        Multipliers.remove(player);
+        for(String x : cs.getKeys(false)) {
+
+            boolean perm =player.hasPermission(getMultipliersConfig().getString(x + ".Permission"));
+            if(perm) {
+
+                if (Multipliers.isEmpty() || !Multipliers.containsKey(player)) {
+                    Multipliers.put(player, getMultipliersConfig().getInt(x + ".Multiplier"));
+                }else{
+                    if(Multipliers.get(player) < getMultipliersConfig().getInt(x + ".Multiplier")){
+
+                        Multipliers.put(player, getMultipliersConfig().getInt(x + ".Multiplier"));
+                    }
+                }
+            }
+
+        }
+        return Multipliers.get(player);
+    }
 
     @Override
     public double getMaxLevelEXP(Player player) {
@@ -1000,6 +1021,15 @@ public class UtilCollector implements Utils {
         FileConfiguration LevelConfig = YamlConfiguration.loadConfiguration(LevelFile);
         return LevelConfig;
     }
+
+    @Override
+    public FileConfiguration getMultipliersConfig() {
+        File MultiplierFile = new File(LPS.getDataFolder(), "/Settings/RankMultipliers.yml");
+        FileConfiguration MultiplierConfig = YamlConfiguration.loadConfiguration(MultiplierFile);
+        return MultiplierConfig;
+    }
+
+
     @Override
     public FileConfiguration getTopListConfig() {
         File TopFile = new File(LPS.getDataFolder(), "TopList.yml");
