@@ -7,9 +7,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class API{
     private SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
@@ -46,11 +49,12 @@ public class API{
 
     public String formatTags(){
         UtilCollector uc = new UtilCollector();
-        double percentage = uc.getCurrentEXP(player) * 100;
+        double percentage = uc.getCurrentEXP(player);
         File userdata = new File(lps.userFolder, player.getUniqueId() + ".yml");
         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
+        double expre = uc.getRequiredEXP(player);
 
-        String Percentage = Math.round(percentage / uc.getRequiredEXP(player)) + "%";
+        String Percentage = Math.round((percentage / expre) * 100) + "%";
         Date cDate = new Date();
         String cDateS = format.format(cDate);
         try {
@@ -75,8 +79,8 @@ public class API{
         }
         msg = format(msg.replace("{lp_player}", player.getName())
                 .replace("{lp_level}", String.valueOf(uc.getCurrentLevel(player)))
-                .replace("{lp_exp}", String.valueOf(uc.getCurrentEXP(player)))
-                .replace("{lp_Required_EXP}", String.valueOf(uc.getRequiredEXP(player)))
+                .replace("{lp_exp}", NumberFormat.getNumberInstance(Locale.US).format(Math.round(Float.parseFloat(uc.formatter.format(uc.getCurrentEXP(player))))))
+                .replace("{lp_Required_EXP}", NumberFormat.getNumberInstance(Locale.US).format(Math.round(Float.parseFloat(uc.formatter.format(uc.getRequiredEXP(player))))))
                 .replace("{lp_progress}", Percentage)
                 .replace("{lp_prestige}", String.valueOf(uc.getCurrentPrestige(player))))
                 .replace("{lp_Progress_Bar}", uc.getProgressBar(player))
