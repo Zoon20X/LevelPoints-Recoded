@@ -27,6 +27,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.Console;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.text.*;
 import java.util.Date;
@@ -72,8 +74,15 @@ public class MainCommand implements CommandExecutor {
         }
 
         if(args.length >= 1) {
-
-
+            if(args[0].equalsIgnoreCase("test")){
+                double math = 0;
+                for(int i = 0; i<Integer.parseInt(args[1]); i++){
+                     math = 50 * Math.pow(1.5,i );
+                     BigDecimal bigDecimal = BigDecimal.valueOf(math);
+                     bigDecimal.setScale(0, RoundingMode.HALF_UP);
+                     sender.sendMessage(NumberFormat.getNumberInstance(Locale.US).format(Math.round(Float.parseFloat(uc.formatter.format(bigDecimal.doubleValue())))));
+                }
+            }
                 if (args.length == 1) {
                     if (args[0].equalsIgnoreCase("reload")) {
                         if (sender.hasPermission("lp.admin.reload")) {
@@ -195,8 +204,7 @@ public class MainCommand implements CommandExecutor {
                                 String playername = ((MemorySection) f.getValue()).getString("Name");
 
                                 for (String x : uc.getLangConfig().getStringList("lpsTopListMid")) {
-                                    API api = new API((Player) sender, x);
-                                    sender.sendMessage(api.formatTags());
+                                    sender.sendMessage(API.format(x).replace("{LP_Ranked}", Integer.toString(posTop)).replace("{lp_player}", playername).replace("{lp_level}", Integer.toString(points)));
                                     // Here you can send to player or do whatever you wan't.
 
                                 }
@@ -257,23 +265,6 @@ public class MainCommand implements CommandExecutor {
                         }
                         if (args[0].equalsIgnoreCase("info")) {
 
-
-
-                            double LevelUpEXP = uc.getRequiredEXP(player);
-                            int levels = uc.getCurrentLevel(player);
-                            int pres = UsersConfig.getInt("Prestige");
-
-                            double expss = uc.getCurrentEXP(player);
-
-                            double percentage = expss * 100;
-
-
-                            String Percentage = Math.round(percentage / LevelUpEXP) + "%";
-
-                            String LPRE = NumberFormat.getNumberInstance(Locale.US).format(Math.round(Float.parseFloat(uc.formatter.format(LevelUpEXP))));
-                            String LPHAVE = NumberFormat.getNumberInstance(Locale.US).format(Math.round(Float.parseFloat(uc.formatter.format(expss))));
-
-                            String EXP = LPHAVE + "/" + LPRE;
                             for (String x : uc.getLangConfig().getStringList("lpsInfo")) {
                                 API api = new API(player, x);
                                 sender.sendMessage(api.formatTags());

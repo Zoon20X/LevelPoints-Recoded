@@ -400,7 +400,6 @@ public class UtilCollector implements Utils {
             }
 
         }, (1 * 2));
-
     }
 
 
@@ -461,7 +460,6 @@ public class UtilCollector implements Utils {
                     e.printStackTrace();
                 }
             }
-
         });
 
     }

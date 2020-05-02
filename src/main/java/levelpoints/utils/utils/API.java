@@ -77,10 +77,11 @@ public class API{
         }else{
             msg = msg.replace("{lp_Booster_Active}", uc.getLangConfig().getString("lpBoosterNone"));
         }
+
         msg = format(msg.replace("{lp_player}", player.getName())
                 .replace("{lp_level}", String.valueOf(uc.getCurrentLevel(player)))
-                .replace("{lp_exp}", NumberFormat.getNumberInstance(Locale.US).format(Math.round(Float.parseFloat(uc.formatter.format(uc.getCurrentEXP(player))))))
-                .replace("{lp_Required_EXP}", NumberFormat.getNumberInstance(Locale.US).format(Math.round(Float.parseFloat(uc.formatter.format(uc.getRequiredEXP(player))))))
+                .replace("{lp_exp}", String.valueOf(uc.getCurrentEXP(player)))
+                .replace("{lp_Required_EXP}", String.valueOf(uc.getRequiredEXP(player)))
                 .replace("{lp_progress}", Percentage)
                 .replace("{lp_prestige}", String.valueOf(uc.getCurrentPrestige(player))))
                 .replace("{lp_Progress_Bar}", uc.getProgressBar(player))

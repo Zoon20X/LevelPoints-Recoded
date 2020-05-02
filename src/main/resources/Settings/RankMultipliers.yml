@@ -3,11 +3,9 @@
 #VIP:
 #  Permission: lps.vip #permission player needs to use this rank
 #  Multiplier: 2 #multiplier of xp they will get
-#  Priority: 1 #this is used to specify what multiplier to use when player has more then 1 permission
-#
-# priority should be higher the better the ranks so they get the benefits of higher ranks then lower
+# Ranks should be placed from top (lowest rank) - bottom (Highest) as the system,
+# as the system is using it as a priority checker
 
 VIP:
   Permission: lps.vip
   Multiplier: 2
-  Priority: 1

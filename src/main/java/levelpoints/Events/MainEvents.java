@@ -161,9 +161,18 @@ public class MainEvents implements Listener {
                 }
             }
         }, (seconds * 25));
+
+
     }
 
-
+    public void up(int seconds, Player player) {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(lp, new Runnable() {
+            public void run() {
+                UtilCollector uc = new UtilCollector();
+                uc.updateBossbar(uc.getBossbar(player), player);
+            }
+        }, (seconds * 10));
+    }
     @EventHandler
     public void onJoin(PlayerJoinEvent event) throws IOException {
 
@@ -173,6 +182,7 @@ public class MainEvents implements Listener {
 
 
             uc.wait(3, event.getPlayer());
+            up(4, event.getPlayer());
             //uc.RunSQLDownload(event.getPlayer());
         }
         if (lp.getConfig().getBoolean("BossBar")) {
@@ -240,6 +250,7 @@ public class MainEvents implements Listener {
                 e.printStackTrace();
             }
         }
+        uc.updateBossbar(uc.getBossbar(player), player);
 
 
     }
