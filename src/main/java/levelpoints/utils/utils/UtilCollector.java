@@ -504,6 +504,7 @@ public class UtilCollector implements Utils {
             getRewardsConfig();
             getEXPConfig();
             getLangConfig();
+            getMMobsConfig();
 
             TopListConfig = YamlConfiguration.loadConfiguration(TopListFile);
 
@@ -545,6 +546,8 @@ public class UtilCollector implements Utils {
         FileConfiguration RewardsConfig = YamlConfiguration.loadConfiguration(RewardsFile);
         File LangFile = new File(LPS.getDataFolder(), "/Lang.yml");
         FileConfiguration LangConfig = YamlConfiguration.loadConfiguration(LangFile);
+        File MMFile = new File(LPS.getDataFolder(), "/OtherSettings/MythicMobs.yml");
+        FileConfiguration MMConfig = YamlConfiguration.loadConfiguration(MMFile);
 
         usersConfig.clear();
         LPS.saveDefaultConfig();
@@ -562,6 +565,7 @@ public class UtilCollector implements Utils {
         SaveLoadFiles(LevelFile, LevelConfig, "/Settings/Levels.yml", "Settings/Levels.yml", "Levels");
         SaveLoadFiles(RewardsFile, RewardsConfig, "/Settings/Rewards.yml", "Settings/Rewards.yml", "Rewards");
         SaveLoadFiles(WSFile, WSConfig, "/OtherSettings/WildStacker.yml", "OtherSettings/WildStacker.yml", "WildStacker");
+        SaveLoadFiles(MMFile, MMConfig, "/OtherSettings/MythicMobs.yml", "OtherSettings/MythicMobs.yml", "MythicMobs");
 
         SaveLoadFiles(LangFile, LangConfig, "Lang.yml", "Lang.yml", "Lang");
 
@@ -595,6 +599,12 @@ public class UtilCollector implements Utils {
         LPS.worldGuardPlugin = LPS.getWorldGuard();
         if (LPS.getConfig().getBoolean("WildStacker")) {
             LPS.getServer().getPluginManager().registerEvents(new WildStacker(this), LPS);
+            LPS.getServer().getConsoleSender().sendMessage(API.format("&3Hooked into WildStacker"));
+        }
+        if (LPS.getConfig().getBoolean("MythicMobs")) {
+            if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
+                LPS.getServer().getConsoleSender().sendMessage(API.format("&3Hooked into MythicMobs"));
+            }
         }
         TimedEXP();
 
@@ -1018,6 +1028,13 @@ public class UtilCollector implements Utils {
         File LevelFile = new File(LPS.getDataFolder(), "/Settings/Levels.yml");
         FileConfiguration LevelConfig = YamlConfiguration.loadConfiguration(LevelFile);
         return LevelConfig;
+    }
+
+    @Override
+    public FileConfiguration getMMobsConfig() {
+        File MMFile = new File(LPS.getDataFolder(), "/OtherSettings/MythicMobs.yml");
+        FileConfiguration MMConfig = YamlConfiguration.loadConfiguration(MMFile);
+        return MMConfig;
     }
 
     @Override

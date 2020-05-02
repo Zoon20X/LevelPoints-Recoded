@@ -53,6 +53,7 @@ public interface Utils {
     void TimedEXP();
     double getMaxLevelEXP(Player player);
     FileConfiguration getLevelsConfig();
+    FileConfiguration getMMobsConfig();
     FileConfiguration getMultipliersConfig();
     FileConfiguration getEXPConfig();
     FileConfiguration getRewardsConfig();

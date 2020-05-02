@@ -22,6 +22,11 @@
       <option name="url" value="https://maven.enginehub.org/repo/" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="zz_lumine-repo" />
+      <option name="name" value="zz_lumine-repo" />
+      <option name="url" value="http://mvn.lumine.io/repository/maven-releases/" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="placeholderapi" />
       <option name="name" value="placeholderapi" />
       <option name="url" value="http://repo.extendedclip.com/content/repositories/placeholderapi/" />
