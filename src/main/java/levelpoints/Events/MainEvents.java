@@ -5,11 +5,15 @@ import com.sk89q.worldedit.regions.Regions;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.LocalPlayer;
 ;
+
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
+
 import io.lumine.xikage.mythicmobs.MythicMobs;
+import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import levelpoints.LevelPointsEvents.FarmEvent;
 import levelpoints.LevelPointsEvents.LevelUpEvent;
@@ -18,6 +22,7 @@ import levelpoints.levelpoints.LevelPoints;
 import levelpoints.levelpoints.mySQL;
 import levelpoints.utils.utils.API;
 import levelpoints.utils.utils.UtilCollector;
+import levelpoints.utils.utils.WorldGuardAPI;
 import lpsapi.lpsapi.LPSAPI;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.ryanhamshire.GriefPrevention.Claim;
@@ -44,6 +49,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
@@ -65,7 +71,7 @@ import static net.md_5.bungee.api.ChatColor.GOLD;
 public class MainEvents implements Listener {
     private Plugin plugin = LevelPoints.getPlugin(LevelPoints.class);
     private LevelPoints lp = LevelPoints.getPlugin(LevelPoints.class);
-
+    private WorldGuardAPI worldGuardAPI = new WorldGuardAPI(lp.getServer().getPluginManager().getPlugin("WorldGuard"), lp);
 
     private LPSAPI lpapi = (LPSAPI) Bukkit.getPluginManager().getPlugin("LPSAPI");
     UtilCollector uc = new UtilCollector();
@@ -148,6 +154,7 @@ public class MainEvents implements Listener {
 
     }
 
+
     public void wait(int seconds, UUID uuid, String name) {
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(lp, new Runnable() {
             public void run() {
@@ -185,7 +192,9 @@ public class MainEvents implements Listener {
 
 
             uc.wait(3, event.getPlayer());
-            up(4, event.getPlayer());
+            if(lp.getConfig().getBoolean("BossBar")) {
+                up(4, event.getPlayer());
+            }
             //uc.RunSQLDownload(event.getPlayer());
         }
         if (lp.getConfig().getBoolean("BossBar")) {
@@ -322,13 +331,12 @@ public class MainEvents implements Listener {
             }
 
             if (uc.getEXPConfig().getBoolean("WorldGuard.RestrictRegions")) {
-                LocalPlayer LocalP = lp.worldGuardPlugin.wrapPlayer(player);
-                Location playerVector = block.getLocation();
-                RegionManager rm = lp.worldGuardPlugin.getRegionManager(block.getWorld());
-                ApplicableRegionSet appregion = rm.getApplicableRegions(playerVector);
 
-                if (!appregion.getRegions().isEmpty()) {
-                    for (ProtectedRegion regions : appregion) {
+
+                ApplicableRegionSet checkSet = worldGuardAPI.getRegionSet(player.getLocation());
+
+                if (!checkSet.getRegions().isEmpty()) {
+                    for (ProtectedRegion regions : checkSet) {
 
                         if (uc.getEXPConfig().getStringList("WorldGuard.regionsToRestrict").contains(regions.getId())) {
                             return;
@@ -595,6 +603,34 @@ public class MainEvents implements Listener {
 
         }
 
+    }
+    @EventHandler
+    public void shoot(EntityShootBowEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            if (lp.getConfig().getBoolean("RequiredItemLore")) {
+                int level = uc.getCurrentLevel(player);
+                ItemStack item = event.getBow();
+                if (item.hasItemMeta()) {
+                    ItemMeta im = item.getItemMeta();
+                    String Level = null;
+                    if (im.hasLore()) {
+                        for (String x : im.getLore()) {
+                            if (x.contains(API.format(uc.getLangConfig().getString("lpRequirement").replace("{Required_Level}", "")))) {
+                                Level = x;
+                            }
+                        }
+                        if (Level != null) {
+                            Level = Level.replace(API.format(uc.getLangConfig().getString("lpRequirement").replace("{Required_Level}", "")), "");
+                            if (uc.getCurrentLevel(player) < Integer.parseInt(Level)) {
+                                event.setCancelled(true);
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
     }
     @EventHandler
     public void onFarm(FarmEvent event){
@@ -928,11 +964,12 @@ public class MainEvents implements Listener {
         Player player = event.getPlayer();
         if(uc.getLevelsConfig().getBoolean("WorldGuard.RequiredLevels")){
             ConfigurationSection cs = uc.getLevelsConfig().getConfigurationSection("WorldGuard.Regions");
-            RegionManager rm = lp.worldGuardPlugin.getRegionManager(player.getWorld());
-            ApplicableRegionSet appregion = rm.getApplicableRegions(player.getLocation());
+
+            ApplicableRegionSet checkSet = worldGuardAPI.getRegionSet(player.getLocation());
+
             Set<String> css = cs.getKeys(false);
-            if (!appregion.getRegions().isEmpty()) {
-                for (ProtectedRegion regions : appregion) {
+            if (!checkSet.getRegions().isEmpty()) {
+                for (ProtectedRegion regions : checkSet) {
                     if (css.contains(regions.getId())) {
                         if (uc.getLevelsConfig().getInt("WorldGuard.Regions." + regions.getId() + ".Prestige") >= uc.getCurrentPrestige(player)) {
                             if (uc.getLevelsConfig().getInt("WorldGuard.Regions." + regions.getId() + ".Level") > uc.getCurrentLevel(player)) {

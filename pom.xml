@@ -84,6 +84,10 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
+        <repository>
+            <id>sk89q-repo</id>
+            <url>https://maven.enginehub.org/repo/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -110,6 +114,12 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.39</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.sk89q.worldguard</groupId>-->
+<!--            <artifactId>worldguard-bukkit</artifactId>-->
+<!--            <version>LATEST</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
 
     </dependencies>
 
