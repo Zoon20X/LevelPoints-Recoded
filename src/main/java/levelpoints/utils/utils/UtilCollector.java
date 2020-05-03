@@ -2,6 +2,8 @@ package levelpoints.utils.utils;
 
 
 
+import io.lumine.xikage.mythicmobs.MythicMobs;
+import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import levelpoints.Events.MainEvents;
 import levelpoints.LevelPointsEvents.FarmEvent;
 import levelpoints.LevelPointsEvents.LevelUpEvent;
@@ -24,6 +26,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 
@@ -608,6 +611,54 @@ public class UtilCollector implements Utils {
         }
         TimedEXP();
 
+    }
+
+    @Override
+    public void RandomConfigurator(Player player, Entity ent) {
+        if (getEXPConfig().getBoolean("Exp-Kill-Mob")) {
+            if (getEXPConfig().getBoolean("RandomEXP")) {
+                int max = 0;
+                int min = 0;
+
+                Random r = new Random();
+                if (LPS.getConfig().getBoolean("MythicMobs")) {
+                    if (MythicMobs.inst().getAPIHelper().isMythicMob(ent)) {
+                        ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(ent);
+                        ConfigurationSection cs = getMMobsConfig().getConfigurationSection("");
+                        Set<String> css = cs.getKeys(false);
+                        if (css.contains(mob.getType().getInternalName())) {
+                            max = getMMobsConfig().getInt(mob.getType().getInternalName() + ".EXP");
+                            int re = r.nextInt((max - min) + 1) + min;
+                            GainEXP(player, re);
+                        }
+
+                    } else {
+                        max = getEXPConfig().getInt(ent.getType().toString());
+                        int re = r.nextInt((max - min) + 1) + min;
+                        GainEXP(player, re);
+                    }
+                }else{
+                    max = getEXPConfig().getInt(ent.getType().toString());
+                    int re = r.nextInt((max - min) + 1) + min;
+                    GainEXP(player, re);
+                }
+            } else {
+                if (LPS.getConfig().getBoolean("MythicMobs")) {
+                    if (MythicMobs.inst().getAPIHelper().isMythicMob(ent)) {
+                        ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(ent);
+                        ConfigurationSection cs = getMMobsConfig().getConfigurationSection("");
+                        Set<String> css = cs.getKeys(false);
+                        if (css.contains(mob.getType().getInternalName())) {
+                            GainEXP(player, getMMobsConfig().getInt(mob.getType().getInternalName() + ".EXP"));
+                        }
+                    } else {
+                        GainEXP(player, getEXPConfig().getInt(ent.getType().toString()));
+                    }
+                }else{
+                    GainEXP(player, getEXPConfig().getInt(ent.getType().toString()));
+                }
+            }
+        }
     }
 
     @Override

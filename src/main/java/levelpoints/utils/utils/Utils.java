@@ -2,6 +2,7 @@ package levelpoints.utils.utils;
 
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -33,6 +34,7 @@ public interface Utils {
     void FarmEventTrigger(Player player, String FarmedItem, int expAmount, String Task);
 
     void RunModuels();
+    void RandomConfigurator(Player player, Entity ent);
     void SaveLoadFiles(File file, FileConfiguration config, String Location, String secLoc, String Name);
     void MySQL();
     void versionChecker();

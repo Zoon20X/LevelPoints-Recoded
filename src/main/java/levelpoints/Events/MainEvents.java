@@ -292,6 +292,29 @@ public class MainEvents implements Listener {
             }
         }
 
+        if(lp.getConfig().getBoolean("RequiredItemLore")) {
+
+            ItemStack items = player.getInventory().getItemInMainHand();
+            if (items.hasItemMeta()) {
+                ItemMeta im = item.getItemMeta();
+                String Level = null;
+                if (im.hasLore()) {
+                    for (String x : im.getLore()) {
+                        if (x.contains(API.format(uc.getLangConfig().getString("lpRequirement").replace("{Required_Level}", "")))) {
+                            Level = x;
+                        }
+                    }
+                    if (Level != null) {
+                        Level = Level.replace(API.format(uc.getLangConfig().getString("lpRequirement").replace("{Required_Level}", "")), "");
+                        if (uc.getCurrentLevel(player) < Integer.parseInt(Level)) {
+                            event.setCancelled(true);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
         if (uc.getEXPConfig().getBoolean("Resources")) {
 
             if (uc.getEXPConfig().getBoolean("Debug")) {
@@ -624,14 +647,31 @@ public class MainEvents implements Listener {
             }
         }
     }
-    
-    
-    //KILLING MOBS EVENTS BELOW
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
-
-
-
+        if(lp.getConfig().getBoolean("RequiredItemLore")){
+            if(event.getDamager() instanceof Player){
+                Player player = (Player) event.getDamager();
+                ItemStack item = player.getInventory().getItemInMainHand();
+                if(item.hasItemMeta()){
+                    ItemMeta im = item.getItemMeta();
+                    String Level = null;
+                    if(im.hasLore()){
+                        for(String x : im.getLore()){
+                            if(x.contains(API.format(uc.getLangConfig().getString("lpRequirement").replace("{Required_Level}", "")))) {
+                                Level = x;
+                            }
+                        }
+                        if(Level !=null){
+                            Level = Level.replace(API.format(uc.getLangConfig().getString("lpRequirement").replace("{Required_Level}", "")), "");
+                            if(uc.getCurrentLevel(player)<Integer.parseInt(Level)){
+                                event.setCancelled(true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         if (uc.getLevelsConfig().getBoolean("PvpLeveluse")) {
             int levelpvp = uc.getLevelsConfig().getInt("PvpLevel");
@@ -715,8 +755,6 @@ public class MainEvents implements Listener {
                 Entity ent = event.getEntity();
                 Player player = (Player) event.getDamager();
                 if (MythicMobs.inst().getAPIHelper().isMythicMob(ent)) {
-
-
                     ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(ent);
                     ConfigurationSection cs = uc.getMMobsConfig().getConfigurationSection("");
                     Set<String> css = cs.getKeys(false);
@@ -865,111 +903,22 @@ public class MainEvents implements Listener {
 
                 }
             }
-
-
-
             if (uc.getEXPConfig().getBoolean("PerWorld")) {
                 List<String> worlds = uc.getEXPConfig().getStringList("Worlds");
                 for (String world : worlds) {
                     if (player.getLocation().getWorld().getName().equalsIgnoreCase(world)) {
 
-                        if (mcPlayer == null)
+                        if (mcPlayer == null) {
                             return;
-
-
-                        if (uc.getEXPConfig().getBoolean("Exp-Kill-Mob")) {
-                            if (uc.getEXPConfig().getBoolean("RandomEXP")) {
-                                int max = 0;
-                                int min = 0;
-
-                                Random r = new Random();
-                                if (lp.getConfig().getBoolean("MythicMobs")) {
-                                    if (MythicMobs.inst().getAPIHelper().isMythicMob(monsterEnt)) {
-                                        ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(monsterEnt);
-                                        ConfigurationSection cs = uc.getMMobsConfig().getConfigurationSection("");
-                                        Set<String> css = cs.getKeys(false);
-                                        if (css.contains(mob.getType().getInternalName())) {
-                                            max = uc.getMMobsConfig().getInt(mob.getType().getInternalName() + ".EXP");
-                                            int re = r.nextInt((max - min) + 1) + min;
-                                            uc.GainEXP(player, re);
-                                        }
-
-                                    } else {
-                                        max = uc.getEXPConfig().getInt(monsterEnt.getType().toString());
-                                        int re = r.nextInt((max - min) + 1) + min;
-                                        uc.GainEXP(player, re);
-                                    }
-                                }else{
-                                    max = uc.getEXPConfig().getInt(monsterEnt.getType().toString());
-                                    int re = r.nextInt((max - min) + 1) + min;
-                                    uc.GainEXP(player, re);
-                                }
-                            } else {
-                                if (lp.getConfig().getBoolean("MythicMobs")) {
-                                    if (MythicMobs.inst().getAPIHelper().isMythicMob(monsterEnt)) {
-                                        ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(monsterEnt);
-                                        ConfigurationSection cs = uc.getMMobsConfig().getConfigurationSection("");
-                                        Set<String> css = cs.getKeys(false);
-                                        if (css.contains(mob.getType().getInternalName())) {
-                                            uc.GainEXP(player, uc.getMMobsConfig().getInt(mob.getType().getInternalName() + ".EXP"));
-                                        }
-                                    } else {
-                                        uc.GainEXP(player, uc.getEXPConfig().getInt(monsterEnt.getType().toString()));
-                                    }
-                                }else{
-                                    uc.GainEXP(player, uc.getEXPConfig().getInt(monsterEnt.getType().toString()));
-                                }
-                            }
                         }
+                        uc.RandomConfigurator(player, monsterEnt);
                     }
                 }
             } else {
-                if (mcPlayer == null)
+                if (mcPlayer == null) {
                     return;
-                if (uc.getEXPConfig().getBoolean("Exp-Kill-Mob")) {
-                    if (uc.getEXPConfig().getBoolean("RandomEXP")) {
-                        int max = 0;
-                        int min = 0;
-
-                        Random r = new Random();
-                        if (lp.getConfig().getBoolean("MythicMobs")) {
-                            if (MythicMobs.inst().getAPIHelper().isMythicMob(monsterEnt)) {
-                                ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(monsterEnt);
-                                ConfigurationSection cs = uc.getMMobsConfig().getConfigurationSection("");
-                                Set<String> css = cs.getKeys(false);
-                                if (css.contains(mob.getType().getInternalName())) {
-                                    max = uc.getMMobsConfig().getInt(mob.getType().getInternalName() + ".EXP");
-                                    int re = r.nextInt((max - min) + 1) + min;
-                                    uc.GainEXP(player, re);
-                                }
-
-                            } else {
-                                max = uc.getEXPConfig().getInt(monsterEnt.getType().toString());
-                                int re = r.nextInt((max - min) + 1) + min;
-                                uc.GainEXP(player, re);
-                            }
-                        }else{
-                            max = uc.getEXPConfig().getInt(monsterEnt.getType().toString());
-                            int re = r.nextInt((max - min) + 1) + min;
-                            uc.GainEXP(player, re);
-                        }
-                    } else {
-                        if (lp.getConfig().getBoolean("MythicMobs")) {
-                            if (MythicMobs.inst().getAPIHelper().isMythicMob(monsterEnt)) {
-                                ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(monsterEnt);
-                                ConfigurationSection cs = uc.getMMobsConfig().getConfigurationSection("");
-                                Set<String> css = cs.getKeys(false);
-                                if (css.contains(mob.getType().getInternalName())) {
-                                    uc.GainEXP(player, uc.getMMobsConfig().getInt(mob.getType().getInternalName() + ".EXP"));
-                                }
-                            } else {
-                                uc.GainEXP(player, uc.getEXPConfig().getInt(monsterEnt.getType().toString()));
-                            }
-                        }else{
-                            uc.GainEXP(player, uc.getEXPConfig().getInt(monsterEnt.getType().toString()));
-                        }
-                    }
                 }
+                uc.RandomConfigurator(player, monsterEnt);
             }
         }
     }
@@ -985,19 +934,18 @@ public class MainEvents implements Listener {
             if (!appregion.getRegions().isEmpty()) {
                 for (ProtectedRegion regions : appregion) {
                     if (css.contains(regions.getId())) {
-                        if (uc.getLevelsConfig().getInt("WorldGuard.Regions." + regions.getId() + ".Level") > uc.getCurrentLevel(player)) {
-                            player.teleport(player.getLocation().add(event.getFrom().toVector().subtract(event.getTo().toVector()).normalize().multiply(2)));
-                            if(uc.getLevelsConfig().getBoolean("WorldGuard.Regions." + regions.getId() + ".MessageUse")){
-                                player.sendMessage(API.format(uc.getLevelsConfig().getString("WorldGuard.Regions." + regions.getId() + ".Message").replace("{LevelRequired}", String.valueOf(uc.getLevelsConfig().getInt("WorldGuard.Regions." + regions.getId() + ".Level")))));
+                        if (uc.getLevelsConfig().getInt("WorldGuard.Regions." + regions.getId() + ".Prestige") >= uc.getCurrentPrestige(player)) {
+                            if (uc.getLevelsConfig().getInt("WorldGuard.Regions." + regions.getId() + ".Level") > uc.getCurrentLevel(player)) {
+                                player.teleport(player.getLocation().add(event.getFrom().toVector().subtract(event.getTo().toVector()).normalize().multiply(2)));
+                                if (uc.getLevelsConfig().getBoolean("WorldGuard.Regions." + regions.getId() + ".MessageUse")) {
+                                    player.sendMessage(API.format(uc.getLevelsConfig().getString("WorldGuard.Regions." + regions.getId() + ".Message").replace("{LevelRequired}", String.valueOf(uc.getLevelsConfig().getInt("WorldGuard.Regions." + regions.getId() + ".Level")))));
+                                }
+                                return;
                             }
-                            return;
                         }
                     }
                 }
             }
         }
     }
-
-
-
 }

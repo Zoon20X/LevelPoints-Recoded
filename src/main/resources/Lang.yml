@@ -32,7 +32,7 @@ LPSEXTRA:
   - '&2Kills/Deaths&7> &a{lp_Kills} / {lp_Deaths}'
   - '&2Blocks-Placed/Broken&7> &a{lp_Placed} / {lp_Broken}'
 
-
+lpRequirement: '&7Level: {Required_Level}' #Must have {Required_Level}
 lpBossBarTitle: '&bLevel:{lp_level}'
 lpBoosterNone: "&cNo booster activated"
 lpsBoosterList: '&3{Booster_Multiplier}X &8>> &b{Booster_Amount}'

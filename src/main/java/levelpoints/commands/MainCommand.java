@@ -31,10 +31,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.text.*;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 
 public class MainCommand implements CommandExecutor {
@@ -286,6 +283,47 @@ public class MainCommand implements CommandExecutor {
                             API api = new API();
                             player.sendMessage(api.format(uc.getLangConfig().getString("lpsActionBarToggle").replace("{LP_Toggle_Value}", String.valueOf(UsersConfig.getBoolean("ActionBar")))));
 
+                        }
+                    }
+                    if(args[0].equalsIgnoreCase("setRequirement")){
+                        if(player.hasPermission("lp.admin")){
+                            ItemStack item = player.getInventory().getItemInMainHand();
+                            if(item !=null){
+                                ItemMeta im = item.getItemMeta();
+                                ArrayList<String> lore = new ArrayList<>();
+                                if(im.hasLore()){
+                                    for(String x : im.getLore()) {
+                                        if(!x.contains(API.format(uc.getLangConfig().getString("lpRequirement").replace("{Required_Level}", "")))) {
+                                            lore.add(x);
+                                        }
+                                    }
+                                    lore.add(API.format(uc.getLangConfig().getString("lpRequirement").replace("{Required_Level}", args[1])));
+                                }else{
+                                    lore.add(API.format(uc.getLangConfig().getString("lpRequirement").replace("{Required_Level}", args[1])));
+                                }
+                                im.setLore(lore);
+                                item.setItemMeta(im);
+
+                            }
+                        }
+                    }
+                    if(args[0].equalsIgnoreCase("removeRequirement")){
+                        if(player.hasPermission("lp.admin")){
+                            ItemStack item = player.getInventory().getItemInMainHand();
+                            if(item !=null){
+                                ItemMeta im = item.getItemMeta();
+                                ArrayList<String> lore = new ArrayList<>();
+                                if(im.hasLore()){
+                                    for(String x : im.getLore()) {
+                                        if(!x.contains(API.format(uc.getLangConfig().getString("lpRequirement").replace("{Required_Level}", "")))) {
+                                            lore.add(x);
+                                        }
+                                    }
+                                }
+                                im.setLore(lore);
+                                item.setItemMeta(im);
+
+                            }
                         }
                     }
                     if (args[0].equalsIgnoreCase("setPrestige")) {

@@ -99,6 +99,7 @@ WorldGuard:
   Regions:
     bossbattle:
       Level: 5 #player must be level 5 to enter region with name bossbattle
+      Prestige: 0 #Player must be prestige 0 or higher to enter
       MessageUse: true
       Message: "&cYou must be level &4{LevelRequired} &cto enter this area" #Will send player message, {LevelRequired} will display level above
 
