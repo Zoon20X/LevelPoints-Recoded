@@ -1,12 +1,12 @@
 name: LevelPoints
-version: 1.2.1.0 - hotfix
+version: 1.2.1.0 - hotfix 2
 main: levelpoints.levelpoints.LevelPoints
 authors: [Zoon20X]
 description: This Plugin is a custom leveling plugin designed for multiple uses
 api-version: 1.13
 
 
-softdepend: [PlaceholderAPI]  # This can use placeholder api for some placeholders
+softdepend: [PlaceholderAPI, WorldGuard]  # This can use placeholder api for some placeholders
 
 commands:
   levelpoints:

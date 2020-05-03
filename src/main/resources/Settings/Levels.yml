@@ -95,7 +95,7 @@ Prestige-1:
 
 #Worldguard region blocking
 WorldGuard:
-  RequiredLevels: true
+  RequiredLevels: false
   Regions:
     bossbattle:
       Level: 5 #player must be level 5 to enter region with name bossbattle

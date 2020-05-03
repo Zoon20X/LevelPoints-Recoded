@@ -71,7 +71,6 @@ import static net.md_5.bungee.api.ChatColor.GOLD;
 public class MainEvents implements Listener {
     private Plugin plugin = LevelPoints.getPlugin(LevelPoints.class);
     private LevelPoints lp = LevelPoints.getPlugin(LevelPoints.class);
-    private WorldGuardAPI worldGuardAPI = new WorldGuardAPI(lp.getServer().getPluginManager().getPlugin("WorldGuard"), lp);
 
     private LPSAPI lpapi = (LPSAPI) Bukkit.getPluginManager().getPlugin("LPSAPI");
     UtilCollector uc = new UtilCollector();
@@ -332,7 +331,7 @@ public class MainEvents implements Listener {
 
             if (uc.getEXPConfig().getBoolean("WorldGuard.RestrictRegions")) {
 
-
+                WorldGuardAPI worldGuardAPI = new WorldGuardAPI(lp.getServer().getPluginManager().getPlugin("WorldGuard"), lp);
                 ApplicableRegionSet checkSet = worldGuardAPI.getRegionSet(player.getLocation());
 
                 if (!checkSet.getRegions().isEmpty()) {
@@ -964,7 +963,7 @@ public class MainEvents implements Listener {
         Player player = event.getPlayer();
         if(uc.getLevelsConfig().getBoolean("WorldGuard.RequiredLevels")){
             ConfigurationSection cs = uc.getLevelsConfig().getConfigurationSection("WorldGuard.Regions");
-
+            WorldGuardAPI worldGuardAPI = new WorldGuardAPI(lp.getServer().getPluginManager().getPlugin("WorldGuard"), lp);
             ApplicableRegionSet checkSet = worldGuardAPI.getRegionSet(player.getLocation());
 
             Set<String> css = cs.getKeys(false);
