@@ -66,6 +66,7 @@ public class MainEvents implements Listener {
     private Plugin plugin = LevelPoints.getPlugin(LevelPoints.class);
     private LevelPoints lp = LevelPoints.getPlugin(LevelPoints.class);
 
+
     private LPSAPI lpapi = (LPSAPI) Bukkit.getPluginManager().getPlugin("LPSAPI");
     UtilCollector uc = new UtilCollector();
     private HashMap<String, String> drops = new HashMap<>();
@@ -252,7 +253,9 @@ public class MainEvents implements Listener {
                 e.printStackTrace();
             }
         }
-        uc.updateBossbar(uc.getBossbar(player), player);
+        if(lp.getConfig().getBoolean("BossBar")) {
+            uc.updateBossbar(uc.getBossbar(player), player);
+        }
 
 
     }
@@ -627,6 +630,9 @@ public class MainEvents implements Listener {
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
 
+
+
+
         if (uc.getLevelsConfig().getBoolean("PvpLeveluse")) {
             int levelpvp = uc.getLevelsConfig().getInt("PvpLevel");
             if (!(event.getDamager() instanceof Player)) {
@@ -658,6 +664,7 @@ public class MainEvents implements Listener {
             }
 
             if (event.getDamager() instanceof Arrow) {
+                Bukkit.getConsoleSender().sendMessage("tesst");
                 final Arrow arrow = (Arrow) event.getDamager();
 
                 Player Attacker = (Player) arrow.getShooter();
@@ -666,6 +673,7 @@ public class MainEvents implements Listener {
                 File attackerdata = new File(lp.userFolder, Attacker.getUniqueId() + ".yml");
                 FileConfiguration PlayerConfig = YamlConfiguration.loadConfiguration(playerData);
                 FileConfiguration AttackerConfig = YamlConfiguration.loadConfiguration(attackerdata);
+
 
                 if (uc.getCurrentLevel(player) < levelpvp) {
                     event.setCancelled(true);
@@ -720,6 +728,32 @@ public class MainEvents implements Listener {
                         }
                     }
                 }
+            }else if (event.getDamager() instanceof Arrow){
+                final Arrow arrow = (Arrow) event.getDamager();
+                if (MythicMobs.inst().getAPIHelper().isMythicMob(event.getEntity())) {
+                    if (arrow.getShooter() instanceof Player) {
+                        ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(event.getEntity());
+                        ConfigurationSection cs = uc.getMMobsConfig().getConfigurationSection("");
+                        Set<String> css = cs.getKeys(false);
+                        if (css.contains(mob.getType().getInternalName())) {
+                            int cl = uc.getCurrentLevel((Player) arrow.getShooter());
+                            int re = uc.getMMobsConfig().getInt(mob.getType().getInternalName() + ".Level");
+                            if (cl < re) {
+                                event.setCancelled(true);
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        if(event.getDamager() instanceof Player) {
+            Player player = (Player) event.getDamager();
+            if (uc.getLevelsConfig().getBoolean("LevelBonus.use")) {
+                double Damage = uc.getLevelsConfig().getDouble("LevelBonus.Level-" + uc.getCurrentLevel(player) + ".Damage");
+
+                event.setDamage(event.getDamage() + Damage);
             }
         }
     }
@@ -939,7 +973,31 @@ public class MainEvents implements Listener {
             }
         }
     }
-    
-    
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent event){
+        Player player = event.getPlayer();
+        if(uc.getLevelsConfig().getBoolean("WorldGuard.RequiredLevels")){
+            ConfigurationSection cs = uc.getLevelsConfig().getConfigurationSection("WorldGuard.Regions");
+            RegionManager rm = lp.worldGuardPlugin.getRegionManager(player.getWorld());
+            ApplicableRegionSet appregion = rm.getApplicableRegions(player.getLocation());
+            Set<String> css = cs.getKeys(false);
+            if (!appregion.getRegions().isEmpty()) {
+                for (ProtectedRegion regions : appregion) {
+                    if (css.contains(regions.getId())) {
+                        if (uc.getLevelsConfig().getInt("WorldGuard.Regions." + regions.getId() + ".Level") > uc.getCurrentLevel(player)) {
+                            player.teleport(player.getLocation().add(event.getFrom().toVector().subtract(event.getTo().toVector()).normalize().multiply(2)));
+                            if(uc.getLevelsConfig().getBoolean("WorldGuard.Regions." + regions.getId() + ".MessageUse")){
+                                player.sendMessage(API.format(uc.getLevelsConfig().getString("WorldGuard.Regions." + regions.getId() + ".Message").replace("{LevelRequired}", String.valueOf(uc.getLevelsConfig().getInt("WorldGuard.Regions." + regions.getId() + ".Level")))));
+                            }
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
 
 }

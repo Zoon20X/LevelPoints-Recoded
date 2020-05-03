@@ -92,3 +92,19 @@ Prestige-1:
   Level-9: 10000
   Level-10: 50000
 
+
+#Worldguard region blocking
+WorldGuard:
+  RequiredLevels: true
+  Regions:
+    bossbattle:
+      Level: 5 #player must be level 5 to enter region with name bossbattle
+      MessageUse: true
+      Message: "&cYou must be level &4{LevelRequired} &cto enter this area" #Will send player message, {LevelRequired} will display level above
+
+LevelBonus:
+  use: false
+  Level-2:
+    Damage: 1 #this will increase the amount of damage by x amount eg 2 + level-2 = 3 damage
+  Level-3:
+    Damage: 1.25 #this will increase the amount of damage by x amount eg 2 + level-2 = 3 damage
