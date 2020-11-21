@@ -49,6 +49,7 @@ public class AsyncEvents {
 
     public static void updateLevelInCache(Player player, Integer value){
         LevelsCache.put(player, value);
+
     }
     public static Integer getLevelTopInCache(Player player){
         return LevelsCache.get(player);

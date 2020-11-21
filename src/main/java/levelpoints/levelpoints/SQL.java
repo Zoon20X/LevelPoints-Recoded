@@ -93,7 +93,17 @@ public class SQL {
                 container.setPrestige(results.getInt("PRESTIGE"));
                 container.setLevel(results.getInt("LEVEL"));
                 container.setBoosters(results.getString("BOOSTERS"));
+                File TopFile = new File(LevelPoints.getInstance().getDataFolder(), "TopList.yml");
+                FileConfiguration TopConfig = YamlConfiguration.loadConfiguration(TopFile);
+                TopConfig.set(player.getUniqueId() + ".Name", player.getName());
+                TopConfig.set(player.getUniqueId() + ".Level", results.getInt("LEVEL"));
+                try {
+                    TopConfig.save(TopFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+
 
         } catch (SQLException e) {
             e.printStackTrace();
