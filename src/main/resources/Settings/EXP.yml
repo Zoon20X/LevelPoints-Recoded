@@ -1,0 +1,116 @@
+#-----------#
+#Anti-Dupe Solutions
+Anti-Abuse:
+  Place:
+    Enabled: false
+    Cooldown:
+      Enabled: false
+      Time: 60
+      BlockBreak: false #enabled this will stop the break of the block until cooldown is finished
+      #if false then it will break and remove the cooldown from cache
+
+  #Will cache location when player places a block with a exp value,
+  #stopping players from earning ore from that location until it's broken
+  Silk: false #Won't give exp to users who use silktouch on a block
+  WorldGuard: #to use this make sure it's set to true in config.yml
+    RestrictedRegions:
+      - spawn
+      - pvp
+    LevelRegions:
+      UseMessage: false
+      Message: 'Hello'
+      spiderTrap: #name of the region
+        Level:  #Levels required to enter certain region
+          Min: 5
+          Max: 10
+  PreciousStones:
+    Enabled: false
+
+#------------#
+#Pvp Solutions
+Pvp:
+  Enabled: false #enable this to allow for players to earn exp for killing each other
+  Amount: 0.0 #Amount of exp per kill
+  DeathAmount: false #player who dies will lose the amount of exp shown above, if player doesn't have enough the killer won't receive any exp
+  Delay:
+    Enabled: false #This is if you want players to earn exp per kill with a cooldown for earning exp
+    Time: 30 #this is in seconds by default it's 30 seconds
+    Message: false #enabling this will message the player a custom message from lang.yml when they trigger the cooldown
+
+#-------------#
+#Earn exp from blocks
+BlockEXP:
+  Enabled: true
+  Blocks:
+    COAL_ORE:
+      Random: false
+      EXP:
+        Min: 1
+        Max: 0 #leave 0 if not using Random
+      RequiredLevel:
+        Break: 0
+        Place: 0
+    STONE:
+      Data: true
+      Random: false
+      0:
+        EXP:
+          Min: 1
+          Max: 0 #leave 0 if not using Random
+        RequiredLevel:
+          Break: 0
+          Place: 0
+    IRON_ORE:
+      Random: false
+      EXP:
+        Min: 0
+        Max: 0 #leave 0 if not using Random
+      RequiredLevel:
+        Break: 0
+        Place: 0
+    GOLD_ORE:
+      Random: false
+      EXP:
+        Min: 0
+        Max: 0 #leave 0 if not using Random
+      RequiredLevel:
+        Break: 0
+        Place: 0
+    DIAMOND_ORE:
+      Random: false
+      EXP:
+        Min: 0
+        Max: 0 #leave 0 if not using Random
+      RequiredLevel:
+        Break: 0
+        Place: 0
+    EMERALD_ORE:
+      Random: false
+      EXP:
+        Min: 0
+        Max: 0 #leave 0 if not using Random
+      RequiredLevel:
+        Break: 0
+        Place: 0
+MobsEXP:
+  Enabled: true
+  Mobs:
+    ZOMBIE:
+      Random: false
+      EXP:
+        Min: 0
+        Max: 0
+      RequiredLevel:
+        Damage: 0 #Level to damage mob
+
+CraftingEXP:
+  Enabled: true
+  Items:
+    DIAMOND_SWORD:
+      EXP: 5
+#------------#
+#Global Timed EXP
+TimedEXP:
+  Enabled: false #Set to true if you want to use, must reboot server when enabling
+  Amount: 1.0 #Amount of exp you want to give players when it hits the time
+  Delay: 60 #Delay (in seconds) between every exp give

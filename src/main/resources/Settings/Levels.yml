@@ -1,0 +1,64 @@
+#-------------#
+#Basic Setup
+Starting:
+  Level: 1 #level players will start with when they join
+  EXP: 0 #exp players will gain when they first join
+
+Max:
+  Level: 100 #Max level for the server, players will be required to prestige if enabled otherwise won't receive any exp
+  Prestige: 1 #Max Prestige once reached this players won't be able to run the lps prestige command again
+
+Toggles:
+  Prestige: true
+  LevelUp:
+    Title: false #will send a player a title when they level up, requires 1.9+ mc
+
+Leveling:
+  RegularLeveling:
+    Enabled: true
+    Formula: '50 * {Level_Player}' #you can use this to make custom formulas for leveling
+  PrestigeLeveling:
+    Enabled: false
+    Formula:
+      0: '50 * {Level_Player}' #foruma for prestige level 0
+  CustomLeveling: #old customLeveling system
+    Enabled: false
+    Levels:
+      Level-1: 50
+      Level-2: 100
+      Level-3: 200
+      Level-4: 350
+      Level-5: 500
+      Level-6: 750
+      Level-7: 1000
+      Level-8: 1500
+      Level-9: 2500
+      Level-10: 5000
+
+Crafting:
+  RequiredLevel:
+    Enabled: false
+    IRON_BLOCK: 5
+Fishing:
+  RequiredLevel:
+    Enabled: false
+    Level: 5
+
+
+LevelBonus:
+  Enabled: false
+  Setting: LEVEL
+  #Settings are as follows
+  #LEVEL - bonus only triggers when player is at that level
+  #GLOBAL - bonus triggers globally to the user and the last bonus earned is the bonus the user will hold until triggered again
+
+  #Bonus
+  #Damage: can be anything with 2 decimal places, will also increase the damage dealt to the entity
+  #Health: MUST be added in .5 iterations, a player can only have 1 heart or half which means values are scaring in .5
+  Levels:
+    Level-2:
+      Damage: 1 #this will increase the amount of damage by x amount eg 2 + level-2 = 3 damage
+      Health: 0.5 #this will add player health not set it, meaning at Level-2 by default players will have 20.5 total health (10.5 hearts)
+    Level-3:
+      Damage: 1.25 #this will increase the amount of damage by x amount eg 2 + level-3 = 3.25 damage
+      Health: 1 #this will add player health not set it, meaning at Level-2 by default players will have 20.5 total health (10.5 hearts)

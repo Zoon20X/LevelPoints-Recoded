@@ -1,0 +1,97 @@
+
+#This message will send to any sender who types /lps or any alias of the command
+lp:
+  - '&8------------------'
+  - '&bLevelPoints'
+  - '&b/lps &fDisplays this menu'
+  - '&b/lps reload &fReloads config/players files'
+  - '&b/lps info <player> &fShows level info of a player'
+  - '&b/lps booster list &fShows the booster backpack'
+  - '&b/lps booster use <multiplier> &fUses a the current selected booster'
+  - '&b/lps prestige &fAllows you to prestige if requirements are met'
+  - '&b/lps booster give <player> <multiplier> <Amount> &fGives the player a booster'
+  - '&b/lps expgive <player> <amount> &fGive experience to a player'
+  - '&b/lps expremove <player> <amount> &fRemove experience from a player'
+  - '&b/lps top &fShows top 10 players'
+  - '&b/lps setlevel <player> <level> &fSets a players level'
+  - '&b/lps setPrestige <player> <Prestige> &fSets a players Prestige'
+  - '&b/lps addlevel <player> <level> &fadds a level to a player instead of setting it'
+  - '&b/lps toggle &f Toggles The LevelPoints Actionbar, (Per Player Setting)'
+  - '&8------------------'
+
+#Player Info when using /lps info <player> #not using <player> will show senders info, WILL NOT WORK IN CONSOLE
+lpsInfo:
+  - '&bPlayer&7> &3{lp_player}'
+  - '&2Level&7> &a{lp_level}'
+  - '&2EXP&7> &a{lp_exp} / {lp_Required_EXP}'
+  - '&2EXP Progress&7> &a{lp_progress}'
+  - '&2Prestige&7> &a{lp_prestige}'
+  - '&2Booster&7> &a{Booster_Active} + {Booster_Date}'
+EXPEarn:
+  Enabled: false
+  Text:
+    - '&2You just earned &6{lp_Earn_Exp} &2for &6{lp_Earn_Task}'
+
+RequiredLevelOre:
+  Enabled: false
+  Text:
+    - '&cYou Need To Be {lp_Required_Level} to mine this block'
+
+
+LpsReload:
+  PlayerData: '&3LevelPoints>> &bReloading online players data'
+  Complete: '&3LevelPoints>> &bReload Complete'
+
+Prestige:
+  Cannot:
+    Enabled: false
+    Message: '&4LevelPoints>> &cYou cannot prestige'
+  Prestiged:
+    Enabled: false
+    Message: '&3LevelPoints>> &bYou have prestiged'
+
+LpsTop:
+  LevelTop:
+    TopDisplay:
+      - '&b----------------'
+    MiddleDisplay:
+      - '&3{lp_Top_Position}: {lp_player} - {lp_level}'
+    BottomDisplay:
+      - '&b----------------'
+  PrestigeTop:
+    TopDisplay:
+      - '&b----------------'
+    MiddleDisplay:
+      - '&3{lp_Top_Position}: {lp_player} - {lp_prestige}/{lp_level}'
+    BottomDisplay:
+      - '&b----------------'
+
+
+
+Formats:
+  Rewards:
+    Chat: '&bYou received {lp_level} reward'
+    Title:
+      Top: '&3Congrats {lp_player}'
+      Bottom: '&bYou received {lp_level} reward'
+    Actionbar: '&bYou received {lp_level} reward'
+    Bossbar:
+      Color: BLUE #look at config.yml for all colors supported
+      Length: 1.0 #must be a double value between 0.0-1.0
+      Message: '&bYou received {lp_level} reward'
+  LevelUp:
+    Chat:
+      Enabled: false
+      Text:
+        - '{level}'
+    Title:
+      Enabled: false
+      Text:
+        Top: '{level}'
+        Bottom: '{player}'
+    ActionBar:
+      Enabled: false
+      Text: '{level}'
+ProgressBar:
+  Complete: '&3|'
+  Required: '&7|'

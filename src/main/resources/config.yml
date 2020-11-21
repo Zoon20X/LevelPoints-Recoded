@@ -1,0 +1,108 @@
+#############################################
+#          LevelPoints                      #
+#     Created By Zoon20X/cchippy18          #
+#############################################
+CheckUpdates: true
+
+#Use this to enable hex colors for 1.16+ this will not work in 1.15 and below
+1.16: false
+
+Lang:
+  PlaceholderAPI: false #allow use for placeholderapi in lang.yml
+
+#--------------#
+#Debug Messages#
+Debug:
+  PlayerData: true #sends debugs when a player data is loaded/ created and when it's saving
+  SQL: true #will show disconnect and reconnect messages *useful for me to find where a error happens*
+  Blocks: false #will show id for a block you break
+  Mobs: false #This is based for basic mobs, mythic mobs debug is in it's own file
+
+
+
+
+#MySQL Setup
+UseSQL: false
+
+host: "localhost"
+port: 3306
+username: "root"
+database: ""
+password: ""
+table: "lpsPlayer"
+#-----------------#
+#Connected plugins#
+WildStacker: false #used for required level for mining spawners
+MythicMobs: false #earn exp for killing custom mobs / bosses
+GriefPrevention: false #used for stopping players abusing block break in others claims
+bSkyblock: false #used for stopping players abusing block break in others islands
+BlockRegen: false #used for level requirement to stop the block event when using blockregen
+WorldGuard: false
+#-----------------#
+#Boss Bar Settings#
+#warning boss bar will only work for 1.9+
+BossBar: false
+BossBarColor: BLUE
+#Colors to choose from (this is a limitation with spigot / mc and not the plugin itself
+#GREEN
+#RED
+#BLUE
+#PURPLE
+#PINK
+#WHITE
+#YELLOW
+#Use the in-Built BossBar
+ShowOnEXPOnly: false
+#this option is used if you would like to show the bossbar only when the player earns exp
+ShowTime: 5
+#this option is used to say how long the bossbar will stay active
+
+
+
+#-----------------#
+#ActionBar - 1.8-1.15.2 (current of release)
+
+#Use the in-Built Actionbar
+ProgressBarSize: 30
+
+Actionbar:
+  Enabled: true
+  Details:
+    Text: '&bLevel: {lp_level} &3{lp_Progress_Bar} &b{lp_exp}/{lp_Required_EXP}'
+  PlaceholderAPI: false #use of placeholderapi in the actionbar
+
+
+#---------------#
+#LPS CHAT
+#this setting is for users whom are using essentials chat
+#or a plugin that doesn't support placeholderapi
+#or users that want perlevel chat formats
+#Use LevelPoints Chat
+LPSFormat: false
+#turning this to true will create a file called formats.yml were you can choose and create different formats for each level MUST Restart if turned to true
+
+
+#---------------#
+#Use Rank Boosters
+RankMultipliers: false
+#Turning this to true will create a new file called RankMultipliers.yml where you can give players
+#permission nodes for a perma booster, warning this will + with whatever booster they activate
+#(rank=3x, active = 4, Current xp multiplier = 7)
+
+#---------------#
+#RequiredItem
+RequiredItemLore: false #Set weather or not you need a certain level to use x item
+
+#-------------#
+#saving more data
+#this will create more data in the player files this data can be shown using tags from lps
+#but no placeholders yet added
+SaveBlockBreaks&Placed: false
+SaveKills&Deaths: false
+
+
+#-------------#
+#booster timer
+#this will soon be removed and replaced with a better system
+#Default is 6 hours
+BoostersTime: 6

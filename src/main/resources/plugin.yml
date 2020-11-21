@@ -1,0 +1,48 @@
+name: LevelPoints
+version: ${project.version}
+main: levelpoints.levelpoints.LevelPoints
+authors: [Zoon20X]
+description: a leveling plugin designed for many needs
+api-version: 1.13
+
+softdepend:
+  - WildStacker
+  - bSkyblock
+  - GriefPrevention
+  - WorldGuard
+  - PlaceholderAPI
+  - MythicMobs
+
+
+commands:
+  lps:
+    usage: /<command>
+    aliases: [levelpoints, levels, lpoints, level]
+permissions:
+  lp.*:
+    description: Gives players all Commands
+    default: op
+    children:
+      lp.admin.*:
+        default: op
+        lp.admin.give:
+          default: op
+        lp.admin.remove:
+          default: op
+        lp.admin.reload:
+          default: op
+        lp.admin.level:
+          default: op
+          children:
+            lp.admin.set:
+              default: op
+            lp.admin.add:
+              default: op
+        lp.admin.color:
+          default: op
+      lp.player:
+        default: not op
+      lp.booster:
+        default: not op
+      lp.lps:
+        default: not op

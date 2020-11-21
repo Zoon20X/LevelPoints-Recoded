@@ -1,0 +1,17 @@
+#Formats
+#Tags that can be used in formats (more coming soon, just request them via Ideas-LP in the discord)
+#{name} - displays player name
+#{message} - displays player message
+#{level} - displays player level in chat
+#{exp} - displays players current exp amount in chat
+#{required_exp} - displays players required exp in chat
+#{prestige} - displays players prestige in chat
+
+Formats:
+  BasicFormat: #can name this anything
+  #this is the format it self it is what lets you choose what the format will look like
+    Format: '&3{level} %vault_rankprefix% &b{name}&8> &f{message}'
+    Prestige: 0
+    MinLevel: 1 #This is the minimum level a player has to be to use this current format
+    MaxLevel: 100 #This is the maximum level a player can be to use this chat format
+    #if the player is between these 2 values the player will be able to use this chat format

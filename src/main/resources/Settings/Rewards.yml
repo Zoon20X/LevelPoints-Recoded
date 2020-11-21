@@ -1,0 +1,25 @@
+Settings:
+  Method: Regular
+  Message:
+    Enabled: false #enable this for the message to run, and configure the message below
+    Type: Title
+    Global: true #enable this if you do not want per reward messages
+    #Message can be changed in lang.yml only if global is true
+
+    #the current message types are shown below
+    #Chat
+    #Title - only usable 1.9+
+    #Actionbar - 1.8+
+    #Bossbar - only usable 1.9+
+
+Rewards:
+  Prestige-0:
+    Level-1:
+      Message: "&2Congratz you got reward {lp_Reward}" #this will only appear if global is set to false
+      #Message formats
+      #Message: "Yeet" use this for actionbar,bossbar,chat
+      #Message:
+      # Top: "Yeetus"
+      # Bottom: "Deletus" #only use this for title
+      cmds:
+        - say %player% diamond 1

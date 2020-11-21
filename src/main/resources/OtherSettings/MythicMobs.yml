@@ -1,0 +1,13 @@
+######################
+#Mythic Mobs Addon   #
+######################
+
+#Down below will show some setting of things you can do by hooking into MythicMobs
+
+#EXP for custom mob
+
+#you can add to this, the first one is just a example
+
+SkeletalMinion:
+  EXP: 1 #EXP it will give when you kill it
+  Level: 2 #Level you must be to deal damage to the mob
