@@ -220,6 +220,18 @@ public class lpsCommand implements CommandExecutor {
                         AsyncEvents.getPlayerContainer(Bukkit.getPlayer(args[1]));
                         PlayerContainer playerContainer = AsyncEvents.getPlayerContainer(Bukkit.getPlayer(args[1]));
                         playerContainer.addEXP(Double.parseDouble(args[2]));
+                        if(FileCache.getConfig("langConfig").getBoolean("EXP.give.sender.enabled")) {
+                            sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("EXP.give.sender.message")
+                                    .replace("{lp_exp_sender}", sender.getName())
+                                    .replace("{lp_exp_player}", Bukkit.getPlayer(args[1]).getName())
+                                    .replace("{lp_exp_amount}", String.valueOf(Double.parseDouble(args[2])))));
+                        }
+                        if(FileCache.getConfig("langConfig").getBoolean("EXP.give.player.enabled")) {
+                            Bukkit.getPlayer(args[1]).sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("EXP.give.player.message")
+                                    .replace("{lp_exp_sender}", sender.getName())
+                                    .replace("{lp_exp_player}", Bukkit.getPlayer(args[1]).getName())
+                                    .replace("{lp_exp_amount}", String.valueOf(Double.parseDouble(args[2])))));
+                        }
                     } else {
                     }
                 }

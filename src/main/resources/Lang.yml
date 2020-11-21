@@ -42,6 +42,15 @@ LpsReload:
   PlayerData: '&3LevelPoints>> &bReloading online players data'
   Complete: '&3LevelPoints>> &bReload Complete'
 
+EXP:
+  give:
+    player:
+      enabled: false
+      message: "&3{lp_exp_sender} &bhas given you &3{lp_exp_player} {lp_exp_amount} &bamount of exp"
+    sender:
+      enabled: false
+      message: "&bYou have given &3{lp_exp_player} {lp_exp_amount} &bamount of exp"
+
 Prestige:
   Cannot:
     Enabled: false
