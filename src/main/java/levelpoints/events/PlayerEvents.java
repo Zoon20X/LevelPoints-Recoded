@@ -143,15 +143,12 @@ public class PlayerEvents implements Listener {
     }
 
     @EventHandler
-    public void boosterActivationEvent(BoosterActivationEvent event){
+    public void boosterActivationEvent(BoosterActivationEvent event) {
         Player player = event.getPlayer();
         PlayerContainer container = AsyncEvents.getPlayerContainer(player);
         Date date = null;
-        try {
-            date = container.getBoosterDate();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        date = container.getBoosterDate();
+
         Date current = new Date();
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
         try {
@@ -159,7 +156,7 @@ public class PlayerEvents implements Listener {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if(!current.after(date)){
+        if (!current.after(date)) {
             event.setCancelled(true);
             return;
         }
@@ -179,6 +176,7 @@ public class PlayerEvents implements Listener {
         }
 
         if (EXPContainer.gainEXP(TasksEnum.BlockBreak)) {
+            event.setCancelled(true);
             PlayerContainer container = AsyncEvents.getPlayerContainer(player);
             if (EXPContainer.getRequiredLevel(event.getBlock().getType(), SettingsEnum.Break) <= container.getLevel()) {
 
@@ -410,6 +408,7 @@ public class PlayerEvents implements Listener {
         }
         AsyncEvents.giveReward(player, level, RewardsType.valueOf(FileCache.getConfig("rewardsConfig")
                 .getString("Settings.Method")));
+        SQL.RunSQLUpload(player);
     }
 
 }

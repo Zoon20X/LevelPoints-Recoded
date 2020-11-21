@@ -54,14 +54,18 @@ public class PlayerContainer {
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
         playerCache.get(player).put("BoosterDate", format.format(Formatting.formatDate(time)));
     }
-    public Date getBoosterDate() throws ParseException {
+    public Date getBoosterDate()  {
         if(!playerCache.get(player).containsKey("BoosterDate")){
             playerCache.get(player).put("BoosterDate", FileCache.getConfig(player.getUniqueId().toString()).getString("BoosterOff"));
         }
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
-
-
-        return format.parse(String.valueOf(playerCache.get(player).get("BoosterDate")));
+        Date d = null;
+        try {
+            d = format.parse(String.valueOf(playerCache.get(player).get("BoosterDate")));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return d;
     }
     public void setBoosters(String value){
         if(boostersCache.containsKey(playerCache)) {

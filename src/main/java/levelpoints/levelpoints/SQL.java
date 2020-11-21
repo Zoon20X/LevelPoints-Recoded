@@ -12,6 +12,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -62,13 +64,16 @@ public class SQL {
                 results.next();
                 PlayerContainer container = AsyncEvents.getPlayerContainer(Bukkit.getPlayer(uuid));
                 if (playerExists(uuid) != true) {
-                    PreparedStatement insert = connection.prepareStatement("INSERT INTO " + getCacheData("table") + " (UUID,NAME,LEVEL,EXP,PRESTIGE,BOOSTERS) VALUE (?,?,?,?,?,?)");
+                    PreparedStatement insert = connection.prepareStatement("INSERT INTO " + getCacheData("table") + " (UUID,NAME,LEVEL,EXP,PRESTIGE,ACTIVEBOOSTER,BOOSTEROFF,BOOSTERS) VALUE (?,?,?,?,?,?,?,?)");
                     insert.setString(1, uuid.toString());
                     insert.setString(2, name);
                     insert.setString(3, String.valueOf(container.getLevel()));
                     insert.setString(4, String.valueOf(container.getEXP()));
                     insert.setString(5, String.valueOf(container.getPrestige()));
-                    insert.setString(6, AsyncEvents.getPlayerContainer(Bukkit.getPlayer(uuid)).getBoosterString());
+                    insert.setString(6, String.valueOf(AsyncEvents.getPlayerContainer(Bukkit.getPlayer(uuid)).getMultiplier()));
+                    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
+                    insert.setString(7, format.format(AsyncEvents.getPlayerContainer(Bukkit.getPlayer(uuid)).getBoosterDate()));
+                    insert.setString(8, AsyncEvents.getPlayerContainer(Bukkit.getPlayer(uuid)).getBoosterString());
                     insert.executeUpdate();
 
                     System.out.println(ChatColor.DARK_AQUA + "Player Added to Database");
@@ -92,6 +97,8 @@ public class SQL {
                 container.setEXP(results.getDouble("EXP"));
                 container.setPrestige(results.getInt("PRESTIGE"));
                 container.setLevel(results.getInt("LEVEL"));
+                container.setMultiplier(results.getDouble("ACTIVEBOOSTER"));
+                container.setBoosterDate(results.getString("BOOSTEROFF"));
                 container.setBoosters(results.getString("BOOSTERS"));
                 File TopFile = new File(LevelPoints.getInstance().getDataFolder(), "TopList.yml");
                 FileConfiguration TopConfig = YamlConfiguration.loadConfiguration(TopFile);
@@ -127,6 +134,13 @@ public class SQL {
             statement.setString(1, String.valueOf(container.getEXP()));
             statement.setString(2, player.getUniqueId().toString());
             statement.executeUpdate();
+            statement = getConnection().prepareStatement("UPDATE " + getCacheData("table") + " SET ACTIVEBOOSTER=? WHERE UUID=?");
+            statement.setString(1, String.valueOf(container.getMultiplier()));
+            statement.setString(2, player.getUniqueId().toString());
+            statement = getConnection().prepareStatement("UPDATE " + getCacheData("table") + " SET BOOSTEROFF=? WHERE UUID=?");
+            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
+            statement.setString(1, format.format(container.getBoosterDate()));
+            statement.setString(2, player.getUniqueId().toString());
             statement = getConnection().prepareStatement("UPDATE " + getCacheData("table") + " SET BOOSTERS=? WHERE UUID=?");
             statement.setString(1, String.valueOf(container.getBoosterString()));
             statement.setString(2, player.getUniqueId().toString());
@@ -189,7 +203,7 @@ public class SQL {
                 LevelPoints.getInstance().getLogger().info("About to connect to database");
                 setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, password));
                 statment = connection.createStatement();
-                statment.executeUpdate("CREATE TABLE IF NOT EXISTS `"+ table +"` (`UUID` varchar(200), `NAME` varchar(200), `LEVEL` INT(10), EXP DOUBLE(10,2), PRESTIGE INT(10), BOOSTERS TEXT(60000))");
+                statment.executeUpdate("CREATE TABLE IF NOT EXISTS `"+ table +"` (`UUID` varchar(200), `NAME` varchar(200), `LEVEL` INT(10), EXP DOUBLE(10,2), PRESTIGE INT(10), ACTIVEBOOSTER DOUBLE(10,2), BOOSTEROFF varchar(200), BOOSTERS TEXT(60000))");
                 System.out.println(ChatColor.DARK_GREEN + "MySQL Connected");
                 connection.close();
 

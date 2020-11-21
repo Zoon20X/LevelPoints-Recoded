@@ -85,25 +85,21 @@ public class Formatting {
         return "";
     }
 
-    public static String formatInfoTags(Player player, String msg){
+    public static String formatInfoTags(Player player, String msg) {
         PlayerContainer playerContainer = AsyncEvents.getPlayerContainer(player);
-        if(LevelPoints.getInstance().getConfig().getBoolean("Lang.PlaceholderAPI")){
+        if (LevelPoints.getInstance().getConfig().getBoolean("Lang.PlaceholderAPI")) {
             msg = PlaceholderAPI.setPlaceholders(player, msg);
         }
 
-        try {
-            msg = msg.replace("{lp_player}", player.getName())
-                    .replace("{lp_level}", valueOf(playerContainer.getLevel()))
-                    .replace("{lp_exp}", valueOf(playerContainer.getEXP()))
-                    .replace("{lp_Required_EXP}", valueOf(playerContainer.getRequiredEXP()))
-                    .replace("{lp_progress}", getPercentage(player))
-                    .replace("{lp_Progress_Bar}", AsyncEvents.getProgressBar(player))
-                    .replace("{lp_prestige}", valueOf(playerContainer.getPrestige()))
-                    .replace("{Booster_Active}", valueOf(playerContainer.getMultiplier()))
-                    .replace("{Booster_Date}", valueOf(playerContainer.getBoosterDate()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        msg = msg.replace("{lp_player}", player.getName())
+                .replace("{lp_level}", valueOf(playerContainer.getLevel()))
+                .replace("{lp_exp}", valueOf(playerContainer.getEXP()))
+                .replace("{lp_Required_EXP}", valueOf(playerContainer.getRequiredEXP()))
+                .replace("{lp_progress}", getPercentage(player))
+                .replace("{lp_Progress_Bar}", AsyncEvents.getProgressBar(player))
+                .replace("{lp_prestige}", valueOf(playerContainer.getPrestige()))
+                .replace("{Booster_Active}", valueOf(playerContainer.getMultiplier()))
+                .replace("{Booster_Date}", valueOf(playerContainer.getBoosterDate()));
         msg = basicColor(msg);
         return msg;
 
