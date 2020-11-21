@@ -85,12 +85,7 @@ public class lpsCommand implements CommandExecutor {
             case "reload":
                 if (sender.hasPermission("lp.admin.reload")) {
 
-
-                    for (Player x : Bukkit.getOnlinePlayers()) {
-                        PlayerContainer container = AsyncEvents.getPlayerContainer(x);
-                        container.saveCacheToFile();
-                        container.clearPlayerCache();
-                    }
+                    AsyncEvents.MassSaveCache();
                     EXPContainer.clearCache(EXPCache.ALL);
                     LevelsContainer.clearCache();
                     LangCache.clearCache();

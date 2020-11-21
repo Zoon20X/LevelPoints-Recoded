@@ -301,6 +301,11 @@ public class AsyncEvents {
                     playerContainer.removeBooster(multiplier, time);
                     playerContainer.setBoosterDate(time);
                     playerContainer.setMultiplier(multiplier);
+                    if(FileCache.getConfig("langConfig").getBoolean("Booster.Enabled")) {
+                        for (String x : FileCache.getConfig("langConfig").getStringList("Booster.ActivateMessage")) {
+                            player.sendMessage(Formatting.basicColor(x).replace("{lp_booster_multiplier}", String.valueOf(multiplier)).replace("{lp_booster_time}", time));
+                        }
+                    }
                 }
             }
         }.runTaskAsynchronously(LevelPoints.getInstance());
