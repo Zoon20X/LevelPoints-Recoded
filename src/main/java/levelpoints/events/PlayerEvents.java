@@ -312,7 +312,7 @@ public class PlayerEvents implements Listener {
                     AsyncEvents.updateLevelInCache(event.getPlayer(), AsyncEvents.getPlayerContainer(event.getPlayer()).getLevel());
                 }
             }
-        }.runTaskLater(LevelPoints.getInstance(), (20) * 5);
+        }.runTaskLaterAsynchronously(LevelPoints.getInstance(), (20) * 5);
 
     }
 
@@ -413,7 +413,9 @@ public class PlayerEvents implements Listener {
         if(LevelsContainer.hasLevelBonus("Health", level)) {
             player.setMaxHealth(player.getMaxHealth() + LevelsContainer.getLevelBonus("Health", level));
         }else{
-            player.setMaxHealth(20);
+            if(FileCache.getConfig("levelConfig").getBoolean("LevelBonus.Enabled")) {
+                player.setMaxHealth(20);
+            }
         }
         try {
             TopConfig.save(TopFile);
