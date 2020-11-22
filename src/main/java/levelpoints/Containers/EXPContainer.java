@@ -44,6 +44,11 @@ public class EXPContainer {
                     values.put("expFromMobs", FileCache.getConfig("expConfig").getBoolean("MobsEXP.Enabled"));
                 }
                 return Boolean.valueOf(values.get("expFromMobs").toString());
+            case Farming:
+                if(!values.containsKey("expFromFarming")){
+                    values.put("expFromFarming", FileCache.getConfig("expConfig").getBoolean("FarmingEXP.Enabled"));
+                }
+                return Boolean.valueOf(values.get("expFromFarming").toString());
         }
         return false;
     }

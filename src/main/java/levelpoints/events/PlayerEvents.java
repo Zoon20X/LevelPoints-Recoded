@@ -183,9 +183,8 @@ public class PlayerEvents implements Listener {
             AsyncEvents.addPlayerToContainerCache(event.getPlayer());
 
         }
-
+        PlayerContainer container = AsyncEvents.getPlayerContainer(player);
         if (EXPContainer.gainEXP(TasksEnum.BlockBreak)) {
-            PlayerContainer container = AsyncEvents.getPlayerContainer(player);
             if (EXPContainer.getRequiredLevel(event.getBlock().getType(), SettingsEnum.Break) <= container.getLevel()) {
 
                 if (EXPContainer.getEXP(event.getBlock(), false, false) > 0) {
@@ -206,22 +205,22 @@ public class PlayerEvents implements Listener {
                     event.setCancelled(true);
                 }
             }
-
-            if(FileCache.getConfig("expConfig").getBoolean("FarmingEXP.Enabled")){
-                 if(FileCache.getConfig("expConfig").getConfigurationSection("FarmingEXP.Items").getKeys(false).contains(event.getBlock().getType().toString())) {
+        }
+        if(EXPContainer.gainEXP(TasksEnum.Farming)) {
+            if (FileCache.getConfig("expConfig").getBoolean("FarmingEXP.Enabled")) {
+                if (FileCache.getConfig("expConfig").getConfigurationSection("FarmingEXP.Items").getKeys(false).contains(event.getBlock().getType().toString())) {
                     Crops crops = new Crops();
                     crops.setData(event.getBlock().getData());
-                    if(crops.getData() == FileCache.getConfig("expConfig").getInt("FarmingEXP.Items." + event.getBlock().getType().toString() + ".Age")) {
+                    if (crops.getData() == FileCache.getConfig("expConfig").getInt("FarmingEXP.Items." + event.getBlock().getType().toString() + ".Age")) {
                         AsyncEvents.triggerEarnEXPEvent(TasksEnum.BlockBreak, event, EXPContainer.getEXP(event.getBlock(), true, true), event.getPlayer());
                     }
-                 }
+                }
             }
+        }
 
 
-            if(container.isBoosterDone()){
-                container.setMultiplier(1.0);
-            }
-
+        if (container.isBoosterDone()) {
+            container.setMultiplier(1.0);
         }
     }
 
