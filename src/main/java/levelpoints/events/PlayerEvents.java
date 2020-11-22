@@ -1,5 +1,7 @@
 package levelpoints.events;
 
+import com.cryptomorin.xseries.XBlock;
+import com.cryptomorin.xseries.XMaterial;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import levelpoints.Cache.FileCache;
@@ -18,6 +20,7 @@ import levelpoints.levelpoints.LevelPoints;
 
 import levelpoints.levelpoints.SQL;
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
+import org.bukkit.CropState;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -185,9 +188,9 @@ public class PlayerEvents implements Listener {
             PlayerContainer container = AsyncEvents.getPlayerContainer(player);
             if (EXPContainer.getRequiredLevel(event.getBlock().getType(), SettingsEnum.Break) <= container.getLevel()) {
 
-                if (EXPContainer.getEXP(event.getBlock(), false) > 0) {
+                if (EXPContainer.getEXP(event.getBlock(), false, false) > 0) {
 
-                    AsyncEvents.triggerEarnEXPEvent(TasksEnum.BlockBreak, event, EXPContainer.getEXP(event.getBlock(), true), event.getPlayer());
+                    AsyncEvents.triggerEarnEXPEvent(TasksEnum.BlockBreak, event, EXPContainer.getEXP(event.getBlock(), true, false), event.getPlayer());
                 }
             } else {
                 if (FileCache.getConfig("langConfig").getBoolean("RequiredLevelOre.Enabled")) {
@@ -203,6 +206,18 @@ public class PlayerEvents implements Listener {
                     event.setCancelled(true);
                 }
             }
+
+            if(FileCache.getConfig("expConfig").getBoolean("FarmingEXP.Enabled")){
+                 if(FileCache.getConfig("expConfig").getConfigurationSection("FarmingEXP.Items").getKeys(false).contains(event.getBlock().getType().toString())) {
+                    Crops crops = new Crops();
+                    crops.setData(event.getBlock().getData());
+                    if(crops.getData() == FileCache.getConfig("expConfig").getInt("FarmingEXP.Items." + event.getBlock().getType().toString() + ".Age")) {
+                        AsyncEvents.triggerEarnEXPEvent(TasksEnum.BlockBreak, event, EXPContainer.getEXP(event.getBlock(), true, true), event.getPlayer());
+                    }
+                 }
+            }
+
+
             if(container.isBoosterDone()){
                 container.setMultiplier(1.0);
             }
@@ -355,7 +370,7 @@ public class PlayerEvents implements Listener {
             if (EXPContainer.getRequiredLevel(event.getBlock().getType(), SettingsEnum.Place) > container.getLevel()) {
                 event.setCancelled(true);
             }
-            if (EXPContainer.getEXP(block, false) > 0) {
+            if (EXPContainer.getEXP(block, false, false) > 0) {
                 AntiAbuseSystem.addBlockToLocation(block.getLocation());
             }
         }

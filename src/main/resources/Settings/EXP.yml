@@ -108,9 +108,19 @@ CraftingEXP:
   Items:
     DIAMOND_SWORD:
       EXP: 5
+FarmingEXP:
+  Enabled: false
+  Items:
+    CROPS: #wheat
+      Random: false
+      EXP:
+        Min: 0
+        Max: 0
+      Age: 7
 #------------#
 #Global Timed EXP
 TimedEXP:
   Enabled: false #Set to true if you want to use, must reboot server when enabling
   Amount: 1.0 #Amount of exp you want to give players when it hits the time
   Delay: 60 #Delay (in seconds) between every exp give
+  Message: '&bYou gained &3{lp_timed_amount} &bfor playing, earn another amount in &3{lp_timed_delay}'

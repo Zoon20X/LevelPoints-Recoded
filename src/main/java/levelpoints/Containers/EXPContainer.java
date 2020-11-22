@@ -47,7 +47,21 @@ public class EXPContainer {
         }
         return false;
     }
-    public static Double getMinEXP(Block block){
+    public static Double getMinEXP(Block block, Boolean isCrops){
+        if(isCrops){
+            if (FileCache.getConfig("expConfig").getInt("FarmingEXP.Items." + block.getType().toString() + ".EXP.Min") > 0) {
+                if (!minExp.containsKey(block.getType().toString())) {
+                    minExp.put(block.getType().toString(), new HashMap<Integer, Object>());
+                    minExp.get(block.getType().toString()).put(0, FileCache.getConfig("expConfig").getInt("FarmingEXP.Items." + block.getType().toString() + ".EXP.Min"));
+                } else {
+                    if (!minExp.get(block.getType().toString()).containsKey(0)) {
+                        minExp.get(block.getType().toString()).put(0, FileCache.getConfig("expConfig").getInt("FarmingEXP.Items." + block.getType().toString() + ".EXP.Min"));
+                    }
+                }
+                return Double.valueOf(minExp.get(block.getType().toString()).get(0).toString());
+            }
+        }
+
         if(FileCache.getConfig("expConfig").getBoolean("BlockEXP.Blocks." + block.getType().toString() + ".Data")){
             int value = block.getData();
             if(value == block.getData()) {
@@ -111,29 +125,62 @@ public class EXPContainer {
             }
         }
     }
-    public static Double getEXP(Block value, Boolean showRandomDebugMessage) {
+    public static Double getEXP(Block value, Boolean showRandomDebugMessage, Boolean isCrop) {
         Material val = value.getType();
-        if (!getIsRandom(val)) {
-            return getMinEXP(value);
+        if(isCrop){
+            if (!getIsRandom(value.getType(), true)) {
+                return getMinEXP(value, true);
+            }else {
+                if (getMinEXP(value, true) > 0) {
+                    if (getMaxEXP(value, true) > getMinEXP(value, true)) {
+                        double random = ThreadLocalRandom.current().nextDouble(getMinEXP(value, true), getMaxEXP(value, true));
+
+                        return random;
+                    } else {
+                        if(showRandomDebugMessage) {
+                            System.out.println(Formatting.basicColor("&3LevelPoints>> &4Your max value is lower or equal to min, random will not occur this time"));
+                        }
+                        return getMinEXP(value, true);
+                    }
+                }else{
+                    return 0.0;
+                }
+            }
+        }
+        if (!getIsRandom(value.getType(), false)) {
+            return getMinEXP(value, false);
         }else {
 
-            if (getMinEXP(value) > 0) {
-                if (getMaxEXP(value) > getMinEXP(value)) {
-                    double random = ThreadLocalRandom.current().nextDouble(getMinEXP(value), getMaxEXP(value));
+            if (getMinEXP(value, false) > 0) {
+                if (getMaxEXP(value, false) > getMinEXP(value, false)) {
+                    double random = ThreadLocalRandom.current().nextDouble(getMinEXP(value, false), getMaxEXP(value, false));
 
                     return random;
                 } else {
                     if(showRandomDebugMessage) {
                         System.out.println(Formatting.basicColor("&3LevelPoints>> &4Your max value is lower or equal to min, random will not occur this time"));
                     }
-                    return getMinEXP(value);
+                    return getMinEXP(value, false);
                 }
             }else{
                 return 0.0;
             }
         }
     }
-    public static Double getMaxEXP(Block block) {
+    public static Double getMaxEXP(Block block, Boolean isCrops) {
+        if(isCrops){
+            if (FileCache.getConfig("expConfig").getInt("FarmingEXP.Items." + block.getType().toString() + ".EXP.Min") > 0) {
+                if (!maxExp.containsKey(block.getType().toString())) {
+                    maxExp.put(block.getType().toString(), new HashMap<Integer, Object>());
+                    maxExp.get(block.getType().toString()).put(0, FileCache.getConfig("expConfig").getInt("FarmingEXP.Items." + block.getType().toString() + ".EXP.Min"));
+                } else {
+                    if (!maxExp.get(block.getType().toString()).containsKey(0)) {
+                        maxExp.get(block.getType().toString()).put(0, FileCache.getConfig("expConfig").getInt("FarmingEXP.Items." + block.getType().toString() + ".EXP.Min"));
+                    }
+                }
+                return Double.valueOf(maxExp.get(block.getType().toString()).get(0).toString());
+            }
+        }
         if (FileCache.getConfig("expConfig").getBoolean("BlockEXP.Blocks." + block.getType().toString() + ".Data")) {
             int value = block.getData();
 
@@ -176,9 +223,15 @@ public class EXPContainer {
         }
         return 0.0;
     }
-    public static Boolean getIsRandom(Material value){
-        if(!random.containsKey(value.toString())){
-            random.put(value.toString(), FileCache.getConfig("expConfig").getBoolean("BlockEXP.Blocks."+ value.toString() +".Random"));
+    public static Boolean getIsRandom(Material value, Boolean isCrop){
+        if(isCrop){
+            if (!random.containsKey(value.toString())) {
+                random.put(value.toString(), FileCache.getConfig("expConfig").getBoolean("FarmingEXP.Items." + value.toString() + ".Random"));
+            }
+        }else {
+            if (!random.containsKey(value.toString())) {
+                random.put(value.toString(), FileCache.getConfig("expConfig").getBoolean("BlockEXP.Blocks." + value.toString() + ".Random"));
+            }
         }
 
         return (Boolean) random.get(value.toString());
