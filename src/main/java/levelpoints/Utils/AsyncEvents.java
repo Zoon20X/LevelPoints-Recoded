@@ -330,7 +330,7 @@ public class AsyncEvents {
         if (!checkSet.getRegions().isEmpty()) {
             for (ProtectedRegion regions : checkSet) {
                 if (FileCache.getConfig("expConfig").getConfigurationSection("Anti-Abuse.WorldGuard.LevelRegions").getKeys(false).contains(regions.getId())) {
-                    if(getPlayerContainer(player).getLevel() >= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions"+regions.getId()+".Level.Min") &&getPlayerContainer(player).getLevel() <= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions"+regions.getId()+".Level.Max"))
+                    if(getPlayerContainer(player).getLevel() >= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions."+regions.getId()+".Level.Min") &&getPlayerContainer(player).getLevel() <= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions."+regions.getId()+".Level.Max"))
                     value = true;
 
 

@@ -38,10 +38,17 @@ Leveling:
 Crafting:
   RequiredLevel:
     Enabled: false
-    IRON_BLOCK: 5
+    IRON_BLOCK:
+      Message:
+        Enabled: false
+        Text: '&bYou need to be &3{lp_Crafting_Level} &bto craft &3{lp_Crafting_Item}'
+      Level: 5
 Fishing:
   RequiredLevel:
     Enabled: false
+    Message:
+      Enabled: false
+      Text: '&bYou must be level &35 &bto go fishing'
     Level: 5
 
 

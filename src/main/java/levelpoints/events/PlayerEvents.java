@@ -346,10 +346,17 @@ public class PlayerEvents implements Listener {
     public void onCraft(CraftItemEvent event){
         ItemStack item = event.getCurrentItem();
         PlayerContainer container = AsyncEvents.getPlayerContainer((Player) event.getWhoClicked());
-        if(!FileCache.getConfig("levelConfig").getBoolean("Crafting.Enabled")){
+        if(!FileCache.getConfig("levelConfig").getBoolean("Crafting.RequiredLevel.Enabled")){
             return;
         }
-        if(FileCache.getConfig("levelConfig").getInt("Crafting.RequiredLevel." + item.getType()) > container.getLevel()){
+
+        if(FileCache.getConfig("levelConfig").getInt("Crafting.RequiredLevel." + item.getType() + ".Level") > container.getLevel()){
+            if(FileCache.getConfig("levelConfig").getBoolean("Crafting.RequiredLevel." + item.getType() + ".Message.Enabled")){
+                String x = FileCache.getConfig("levelConfig").getString("Crafting.RequiredLevel." + item.getType() + ".Message.Text");
+                event.getWhoClicked().sendMessage(Formatting.basicColor(x
+                        .replace("{lp_Crafting_Level}", String.valueOf(FileCache.getConfig("levelConfig").getInt("Crafting.RequiredLevel." + item.getType() + ".Level")))
+                        .replace("{lp_Crafting_Item}", item.getType().toString())));
+            }
             event.setCancelled(true);
             return;
         }
@@ -382,6 +389,10 @@ public class PlayerEvents implements Listener {
                 if(AsyncEvents.getPlayerContainer(event.getPlayer()).getLevel() >= FileCache.getConfig("levelConfig").getInt("Fishing.RequiredLevel.Level")){
                     return;
                 }else{
+                    if(FileCache.getConfig("levelConfig").getBoolean("Fishing.RequiredLevel.Message.Enabled")){
+                        String x = FileCache.getConfig("levelConfig").getString("Fishing.RequiredLevel.Message.Text");
+                        event.getPlayer().sendMessage(Formatting.basicColor(x));
+                    }
                     event.setCancelled(true);
                 }
             }else{

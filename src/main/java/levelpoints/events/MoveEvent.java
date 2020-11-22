@@ -24,7 +24,7 @@ public class MoveEvent implements Listener {
         if(!AsyncEvents.canEnterRegion(event.getPlayer(), event.getTo().getBlock())){
             player.teleport(player.getLocation().add(event.getFrom().toVector().subtract(event.getTo().toVector()).normalize().multiply(2)));
             if(FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.WorldGuard.LevelRegions.UseMessage")){
-                Formatting.basicColor(FileCache.getConfig("expConfig").getString("Anti-Abuse.WorldGuard.LevelRegions.Message"));
+                player.sendMessage(Formatting.basicColor(FileCache.getConfig("expConfig").getString("Anti-Abuse.WorldGuard.LevelRegions.Message")));
             }
         }
     }
