@@ -39,6 +39,22 @@ public class PlayerContainer {
         playerCache.put(player, new HashMap<>());
         boostersCache.put(player, new HashMap<>());
     }
+    public Boolean isBoosterDone(){
+        Date date = null;
+        date = getBoosterDate();
+
+        Date current = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
+        try {
+            current = format.parse(format.format(current));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (!current.after(date)) {
+            return false;
+        }
+        return true;
+    }
 
     public double getMultiplier(){
         if(!playerCache.get(player).containsKey("Multiplier")){
@@ -116,6 +132,7 @@ public class PlayerContainer {
         playerCache.get(player).put("Prestige", value + getPrestige());
     }
     public void giveBooster(double multiplier, String time, int amount) {
+
         if (boostersCache.get(player).isEmpty()) {
             boostersCache.get(player).put(new BoostersContainer(multiplier, time, AsyncEvents.getIds(player), amount), amount);
             //System.out.println("new");
@@ -163,7 +180,7 @@ public class PlayerContainer {
                 int i = boostersCache.get(player).get(x);
                 if(i == 1){
                    boostersCache.get(player).remove(x);
-                    System.out.println(Formatting.basicColor("&3LevelPoints>> &bNo booster (" + multiplier + ") remaining"));
+                    //System.out.println(Formatting.basicColor("&3LevelPoints>> &bNo booster (" + multiplier + ") remaining"));
                     break;
                 }
                 x.setAmount(getBoosterAmount(x.getId()) - 1);

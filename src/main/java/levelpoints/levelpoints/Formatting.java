@@ -31,7 +31,7 @@ public class Formatting {
         Matcher matcher = pattern.matcher(msg);
         while (matcher.find()){
             String color = msg.substring(matcher.start(), matcher.end());
-            msg = msg.replace(color, net.md_5.bungee.api.ChatColor.valueOf(color) + "");
+            msg = msg.replace(color, net.md_5.bungee.api.ChatColor.of(color) + "");
         }
         return net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', msg);
     }

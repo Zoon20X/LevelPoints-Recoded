@@ -135,7 +135,13 @@ public class PlayerEvents implements Listener {
                         PlayerContainer container = AsyncEvents.getPlayerContainer((Player) event.getWhoClicked());
                         AsyncEvents.triggerBoosterActivation(Double.parseDouble(multiplier), time, (Player) event.getWhoClicked());
                         //container.removeBooster(Double.parseDouble(multiplier), time);
-                        event.getWhoClicked().closeInventory();
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                event.getWhoClicked().closeInventory();
+                            }
+                        }.runTask(LevelPoints.getInstance());
+
                     }
                 }
             }.runTaskAsynchronously(LevelPoints.getInstance());
@@ -176,7 +182,6 @@ public class PlayerEvents implements Listener {
         }
 
         if (EXPContainer.gainEXP(TasksEnum.BlockBreak)) {
-            event.setCancelled(true);
             PlayerContainer container = AsyncEvents.getPlayerContainer(player);
             if (EXPContainer.getRequiredLevel(event.getBlock().getType(), SettingsEnum.Break) <= container.getLevel()) {
 
@@ -198,6 +203,10 @@ public class PlayerEvents implements Listener {
                     event.setCancelled(true);
                 }
             }
+            if(container.isBoosterDone()){
+                container.setMultiplier(1.0);
+            }
+
         }
     }
 
@@ -213,7 +222,11 @@ public class PlayerEvents implements Listener {
                 return;
             }
             if (!AntiAbuseSystem.canEarnEXP(event1.getBlock().getLocation())) {
-                AntiAbuseSystem.removeBlockFromLocation(event1.getBlock().getLocation());
+                if(AntiAbuseSystem.canBreakBlock(event1.getBlock().getLocation())) {
+                    AntiAbuseSystem.removeBlockFromLocation(event1.getBlock().getLocation());
+                }else{
+                    event1.setCancelled(true);
+                }
                 event.setCancelled(true);
                 return;
             }
@@ -408,7 +421,9 @@ public class PlayerEvents implements Listener {
         }
         AsyncEvents.giveReward(player, level, RewardsType.valueOf(FileCache.getConfig("rewardsConfig")
                 .getString("Settings.Method")));
-        SQL.RunSQLUpload(player);
+        if(LevelPoints.getInstance().getConfig().getBoolean("UseSQL")) {
+            SQL.RunSQLUpload(player);
+        }
     }
 
 }

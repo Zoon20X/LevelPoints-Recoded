@@ -455,10 +455,14 @@ public class AsyncEvents {
                 break;
             case Title:
                 String top = FileCache.getConfig("langConfig")
-                        .getString("Formats.Rewards." + type.toString() + ".Top").replace("{lp_Reward}", String.valueOf(value));
+                        .getString("Formats.Rewards." + type.toString() + ".Top")
+                        .replace("{lp_Reward}", String.valueOf(value))
+                        .replace("{lp_player}", player.getName());
                 String bottom = FileCache.getConfig("langConfig")
-                        .getString("Formats.Rewards." + type.toString() + ".Bottom").replace("{lp_Reward}", String.valueOf(value));
-                runMessage(player, type, top, bottom);
+                        .getString("Formats.Rewards." + type.toString() + ".Bottom")
+                        .replace("{lp_Reward}", String.valueOf(value))
+                        .replace("{lp_player}", player.getName());
+                runMessage(player, type, Formatting.basicColor(top), Formatting.basicColor(bottom));
                 break;
             case Bossbar:
                 message = FileCache.getConfig("langConfig")

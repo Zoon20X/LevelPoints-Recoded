@@ -3,7 +3,6 @@
 #     Created By Zoon20X/cchippy18          #
 #############################################
 CheckUpdates: true
-
 #Use this to enable hex colors for 1.16+ this will not work in 1.15 and below
 1.16: false
 

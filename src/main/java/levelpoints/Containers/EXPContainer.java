@@ -236,7 +236,7 @@ public class EXPContainer {
     }
     public static Boolean isRunningAntiAbuse(){
         if(!values.containsKey("antiAbuse")){
-            values.put("antiAbuse", FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.Place"));
+            values.put("antiAbuse", FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.Place.Enabled"));
         }
         return Boolean.valueOf(values.get("antiAbuse").toString());
     }
