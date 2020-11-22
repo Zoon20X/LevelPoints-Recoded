@@ -137,8 +137,11 @@ public class AsyncEvents {
                 }
             }
 
-        }
 
+        }
+        if(Multipliers.isEmpty() || !Multipliers.containsKey(player)){
+            Multipliers.put(player, 1);
+        }
         return Multipliers.get(player);
     }
 
