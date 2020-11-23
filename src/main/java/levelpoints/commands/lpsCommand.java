@@ -68,6 +68,14 @@ public class lpsCommand implements CommandExecutor {
                 }
             }.runTaskAsynchronously(LevelPoints.getInstance());
         }
+        if(args.length == 4){
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    args4(sender, args);
+                }
+            }.runTaskAsynchronously(LevelPoints.getInstance());
+        }
         if(args.length == 6){
             new BukkitRunnable() {
                 @Override
@@ -80,7 +88,6 @@ public class lpsCommand implements CommandExecutor {
 
     }
     private void args1(CommandSender sender, String args){
-
         switch(args) {
             case "reload":
                 if (sender.hasPermission("lp.admin.reload")) {
@@ -261,6 +268,30 @@ public class lpsCommand implements CommandExecutor {
         }
 
     }
+    private void args4(CommandSender sender, String[] args){
+        switch (args[0]){
+            case "booster":
+                switch (args[1]){
+                    case "use":
+                        if(sender instanceof Player){
+                            Player player = (Player) sender;
+                            PlayerContainer container = AsyncEvents.getPlayerContainer(player);
+
+                            if(container.hasBooster(Double.valueOf(args[2]), args[3])){
+                                AsyncEvents.triggerBoosterActivation(Double.valueOf(args[2]), args[3], player);
+                            }else{
+                                for (String x : FileCache.getConfig("langConfig").getStringList("Booster.DoNotOwn")) {
+                                    sender.sendMessage(Formatting.basicColor(x));
+                                }
+                            }
+                        }else{
+                            sender.sendMessage(Formatting.basicColor("&4LevelPoints>> &cYou must be a player to use this command"));
+                        }
+
+                }
+                break;
+        }
+    }
     private void args6(CommandSender sender, String[] args){
         switch (args[0]){
             case "booster":
@@ -277,6 +308,9 @@ public class lpsCommand implements CommandExecutor {
                             return;
                         }
                         container.giveBooster(Double.valueOf(args[3]), args[4], Integer.valueOf(args[5]));
+                        for (String x : FileCache.getConfig("langConfig").getStringList("Booster.Give.Player")) {
+                            player.sendMessage(Formatting.basicColor(x).replace("{lp_booster_multiplier}", String.valueOf(Double.valueOf(args[3]))).replace("{lp_booster_time}", args[4]).replace("{lp_booster_amount}", args[5]));
+                        };
                         break;
                 }
                 break;

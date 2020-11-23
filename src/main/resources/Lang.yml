@@ -79,7 +79,13 @@ Booster:
   Enabled: true
   ActivateBooster:
     - 'Activated booster {lp_booster_multiplier} for {lp_booster_time}'
-
+  AlreadyInUse:
+    - 'You already have another booster in use'
+  DoNotOwn:
+    - 'You do not own this selected booster'
+  Give:
+    Player:
+      - 'given booster {lp_booster_amount} {lp_booster_multiplier} for {lp_booster_time}'
 Formats:
   Rewards:
     Chat: '&bYou received {lp_level} reward'

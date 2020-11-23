@@ -305,9 +305,13 @@ public class AsyncEvents {
                     playerContainer.setBoosterDate(time);
                     playerContainer.setMultiplier(multiplier);
                     if(FileCache.getConfig("langConfig").getBoolean("Booster.Enabled")) {
-                        for (String x : FileCache.getConfig("langConfig").getStringList("Booster.ActivateMessage")) {
+                        for (String x : FileCache.getConfig("langConfig").getStringList("Booster.ActivateBooster")) {
                             player.sendMessage(Formatting.basicColor(x).replace("{lp_booster_multiplier}", String.valueOf(multiplier)).replace("{lp_booster_time}", time));
                         }
+                    }
+                }else{
+                    for (String x : FileCache.getConfig("langConfig").getStringList("Booster.AlreadyInUse")) {
+                        player.sendMessage(Formatting.basicColor(x));
                     }
                 }
             }
@@ -331,15 +335,13 @@ public class AsyncEvents {
         ApplicableRegionSet checkSet = worldGuardAPI.getRegionSet(block.getLocation());
 
         if (!checkSet.getRegions().isEmpty()) {
-            for (ProtectedRegion regions : checkSet) {
-                if (FileCache.getConfig("expConfig").getConfigurationSection("Anti-Abuse.WorldGuard.LevelRegions").getKeys(false).contains(regions.getId())) {
-                    if(getPlayerContainer(player).getLevel() >= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions."+regions.getId()+".Level.Min") &&getPlayerContainer(player).getLevel() <= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions."+regions.getId()+".Level.Max"))
+            for(ProtectedRegion x : UtilCollector.getRegionsInCache()) {
+                if (checkSet.getRegions().contains(x)){
+                    if(getPlayerContainer(player).getLevel() >= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions."+x.getId()+".Level.Min") &&getPlayerContainer(player).getLevel() <= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions."+x.getId()+".Level.Max")){
+                        value = true;
+                    }
+                }else{
                     value = true;
-
-
-                } else {
-                    value = true;
-
                 }
             }
         } else {

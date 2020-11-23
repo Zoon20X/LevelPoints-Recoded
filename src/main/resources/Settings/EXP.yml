@@ -18,20 +18,24 @@ Anti-Abuse:
       Whitelist: #Whitelist what worldguard regions are blocked for exp
         Enabled: false #if this is true blacklist will not world even if enabled
         List:
-          - spawn
-          - pvp
+        - lazzy
+        - pvp
+        - arcania
+        - arcania_island
       Blacklist: #Blacklist what worldguard regions are allowed for exp
         Enabled: false #all regions in this list will be allowed to earn exp in, and the rest will be disabled
         List:
           - spawn
           - pvp
     LevelRegions:
+      Enabled: false
       UseMessage: false
       Message: 'Hello'
-      spiderTrap: #name of the region
-        Level:  #Levels required to enter certain region
-          Min: 5
-          Max: 10
+      Regions:
+        spiderTrap: #name of the region
+          Level:  #Levels required to enter certain region
+            Min: 5
+            Max: 10
   PreciousStones:
     Enabled: false
 

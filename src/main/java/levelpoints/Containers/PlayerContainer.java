@@ -199,6 +199,15 @@ public class PlayerContainer {
         }
         return null;
     }
+    public Boolean hasBooster(Double multiplier, String time){
+        for(BoostersContainer x : boostersCache.get(player).keySet()) {
+
+            if (x.getMultiplier() == multiplier && x.getTime().equalsIgnoreCase(time)) {
+                return true;
+            }
+        }
+        return false;
+    }
     public HashMap<BoostersContainer, Integer> getBoosters(){
         return boostersCache.get(player);
     }

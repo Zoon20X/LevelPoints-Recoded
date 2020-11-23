@@ -133,7 +133,7 @@ public class PlayerEvents implements Listener {
                         String multiplier = Formatting.stripColor(meta.getDisplayName().replace("x", ""));
                         String time = Formatting.stripColor(meta.getLore().get(0).replace("Time: ", ""));
                         String amount = Formatting.stripColor(meta.getLore().get(1));
-                        event.getWhoClicked().sendMessage(String.valueOf(Formatting.formatDate(time)));
+                        //event.getWhoClicked().sendMessage(String.valueOf(Formatting.formatDate(time)));
 
                         PlayerContainer container = AsyncEvents.getPlayerContainer((Player) event.getWhoClicked());
                         AsyncEvents.triggerBoosterActivation(Double.parseDouble(multiplier), time, (Player) event.getWhoClicked());
@@ -244,7 +244,7 @@ public class PlayerEvents implements Listener {
                 event.setCancelled(true);
                 return;
             }
-            if(FileCache.getConfig("expConfig").getBoolean("PreciousStones.Enabled")) {
+            if(FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.PreciousStones.Enabled")) {
                 if (!PreciousStones.API().canBreak(event.getPlayer(), event1.getBlock().getLocation())) {
                     event.setCancelled(true);
                     return;
@@ -410,12 +410,12 @@ public class PlayerEvents implements Listener {
         FileConfiguration TopConfig = YamlConfiguration.loadConfiguration(TopFile);
         TopConfig.set(player.getUniqueId() + ".Name", player.getName());
         TopConfig.set(player.getUniqueId() + ".Level", level);
+        if(FileCache.getConfig("levelConfig").getBoolean("LevelBonus.Enabled")) {
         if(LevelsContainer.hasLevelBonus("Health", level)) {
             player.setMaxHealth(player.getMaxHealth() + LevelsContainer.getLevelBonus("Health", level));
-        }else{
-            if(FileCache.getConfig("levelConfig").getBoolean("LevelBonus.Enabled")) {
-                player.setMaxHealth(20);
-            }
+        }else {
+            player.setMaxHealth(20);
+        }
         }
         try {
             TopConfig.save(TopFile);

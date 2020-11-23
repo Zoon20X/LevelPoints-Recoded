@@ -19,12 +19,14 @@ public class MoveEvent implements Listener {
     }
 
     @EventHandler
-    public void onWalk(PlayerMoveEvent event){
+    public void onWalk(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if(!AsyncEvents.canEnterRegion(event.getPlayer(), event.getTo().getBlock())){
-            player.teleport(player.getLocation().add(event.getFrom().toVector().subtract(event.getTo().toVector()).normalize().multiply(2)));
-            if(FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.WorldGuard.LevelRegions.UseMessage")){
-                player.sendMessage(Formatting.basicColor(FileCache.getConfig("expConfig").getString("Anti-Abuse.WorldGuard.LevelRegions.Message")));
+        if (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getZ() != event.getTo().getZ()) {
+            if (!AsyncEvents.canEnterRegion(event.getPlayer(), event.getTo().getBlock())) {
+                player.teleport(player.getLocation().add(event.getFrom().toVector().subtract(event.getTo().toVector()).normalize().multiply(2)));
+                if (FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.WorldGuard.LevelRegions.UseMessage")) {
+                    player.sendMessage(Formatting.basicColor(FileCache.getConfig("expConfig").getString("Anti-Abuse.WorldGuard.LevelRegions.Message")));
+                }
             }
         }
     }
