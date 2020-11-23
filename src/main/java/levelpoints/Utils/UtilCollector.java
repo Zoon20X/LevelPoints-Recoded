@@ -11,20 +11,14 @@ import levelpoints.events.PlayerEvents;
 import levelpoints.events.WildStackerEvent;
 import levelpoints.levelpoints.Formatting;
 import levelpoints.levelpoints.LevelPoints;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
+
+
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.configuration.file.FileConfiguration;
+
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
+
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.UUID;
 

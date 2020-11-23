@@ -13,9 +13,18 @@ Anti-Abuse:
   #stopping players from earning ore from that location until it's broken
   Silk: false #Won't give exp to users who use silktouch on a block
   WorldGuard: #to use this make sure it's set to true in config.yml
+    #Worldguard still needs to be enabled in config
     RestrictedRegions:
-      - spawn
-      - pvp
+      Whitelist: #Whitelist what worldguard regions are blocked for exp
+        Enabled: false #if this is true blacklist will not world even if enabled
+        List:
+          - spawn
+          - pvp
+      Blacklist: #Blacklist what worldguard regions are allowed for exp
+        Enabled: false #all regions in this list will be allowed to earn exp in, and the rest will be disabled
+        List:
+          - spawn
+          - pvp
     LevelRegions:
       UseMessage: false
       Message: 'Hello'

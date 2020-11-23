@@ -356,13 +356,21 @@ public class AsyncEvents {
 
         if (!checkSet.getRegions().isEmpty()) {
             for (ProtectedRegion regions : checkSet) {
-                if (FileCache.getConfig("expConfig").getStringList("Anti-Abuse.WorldGuard.RestrictedRegions").contains(regions.getId())) {
-                    value = true;
+                if (FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.WorldGuard.RestrictedRegions.Whitelist.Enabled")) {
+                    if (FileCache.getConfig("expConfig").getStringList("Anti-Abuse.WorldGuard.RestrictedRegions.Whitelist.List").contains(regions.getId())) {
+                        value = true;
 
 
-                } else {
-                    value = false;
+                    } else {
+                        value = false;
 
+                    }
+                } else if (FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.WorldGuard.RestrictedRegions.Blacklist.Enabled")){
+                    if (FileCache.getConfig("expConfig").getStringList("Anti-Abuse.WorldGuard.RestrictedRegions.Blacklist.List").contains(regions.getId())) {
+                        value = false;
+                    } else {
+                        value = true;
+                    }
                 }
             }
         } else {
