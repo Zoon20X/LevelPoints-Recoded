@@ -1,5 +1,18 @@
 package levelpoints.Utils;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.Set;
+import java.util.logging.Level;
+
+
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.domains.Association;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -7,15 +20,6 @@ import com.sk89q.worldguard.protection.association.Associables;
 import com.sk89q.worldguard.protection.association.RegionAssociable;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.util.logging.Level;
 
 public class WorldGuardAPI {
     private final Plugin owningPlugin;
@@ -105,7 +109,7 @@ public class WorldGuardAPI {
                     return;
                 }
             } else {
-                regionContainer = regionContainerGetMethod;
+                regionContainer = worldGuardPlugin.getRegionContainer();
                 try {
                     createQueryMethod = regionContainer.getClass().getMethod("createQuery");
                     regionContainerGetMethod = regionContainer.getClass().getMethod("get", World.class);
@@ -122,6 +126,8 @@ public class WorldGuardAPI {
                     return;
                 }
             }
+
+            // Ugh guys, API much?
             try {
                 Class<?> vectorClass = Class.forName("com.sk89q.worldedit.Vector");
                 vectorConstructor = vectorClass.getConstructor(Double.TYPE, Double.TYPE, Double.TYPE);
