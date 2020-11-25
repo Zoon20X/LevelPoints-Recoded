@@ -176,7 +176,7 @@ public class PlayerEvents implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-
+        System.out.println(event.getBlock().getType());
         if (!AsyncEvents.isPlayerInCache(event.getPlayer())) {
             cachedBlocks.put(event.getPlayer(), event.getBlock().getType());
             AsyncEvents.LoadPlayerData(event.getPlayer());

@@ -91,25 +91,28 @@ public class UtilCollector {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if(ExternalCache.isRunningWorldGuard()){
-                    FileConfiguration config = AsyncFileCache.runConfig("/Settings/EXP.yml");
-                    if(config.getBoolean("Anti-Abuse.WorldGuard.LevelRegions.Enabled")) {
-                        plugin.getServer().getPluginManager().registerEvents(new MoveEvent(plugin), plugin);
-                        RegionContainer container = WorldGuardPlugin.inst().getRegionContainer();
-                        RegionManager region;
-                        for(World world : Bukkit.getWorlds()){
-                            region = container.get(world);
-                            for(String x : config.getConfigurationSection("Anti-Abuse.WorldGuard.LevelRegions.Regions").getKeys(false)) {
-                                if (region.hasRegion(x)){
-                                    System.out.println(Formatting.basicColor("&b"+x + "&3 was added to regions cache"));
-                                    regionsInCache.add(region.getRegion(x));
+                if (!Bukkit.getVersion().contains("1.16")) {
+                    if (ExternalCache.isRunningWorldGuard()) {
+                        FileConfiguration config = AsyncFileCache.runConfig("/Settings/EXP.yml");
+                        if (config.getBoolean("Anti-Abuse.WorldGuard.LevelRegions.Enabled")) {
+                            RegionContainer container = WorldGuardPlugin.inst().getRegionContainer();
+                            RegionManager region;
+                            for (World world : Bukkit.getWorlds()) {
+                                region = container.get(world);
+                                for (String x : config.getConfigurationSection("Anti-Abuse.WorldGuard.LevelRegions.Regions").getKeys(false)) {
+                                    if (region.hasRegion(x)) {
+                                        System.out.println(Formatting.basicColor("&b" + x + "&3 was added to regions cache"));
+                                        regionsInCache.add(region.getRegion(x));
+                                    }
                                 }
                             }
                         }
-                    }
-                    System.out.println(Formatting.basicColor("&3Loading Method>>> &bWorldGuard"));
 
+
+                    }
                 }
+                plugin.getServer().getPluginManager().registerEvents(new MoveEvent(plugin), plugin);
+                System.out.println(Formatting.basicColor("&3Loading Method>>> &bWorldGuard"));
             }
         }.runTaskAsynchronously(LevelPoints.getInstance());
     }

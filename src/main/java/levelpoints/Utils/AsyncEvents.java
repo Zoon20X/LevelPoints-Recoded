@@ -335,13 +335,25 @@ public class AsyncEvents {
         ApplicableRegionSet checkSet = worldGuardAPI.getRegionSet(block.getLocation());
 
         if (!checkSet.getRegions().isEmpty()) {
-            for(ProtectedRegion x : UtilCollector.getRegionsInCache()) {
-                if (checkSet.getRegions().contains(x)){
-                    if(getPlayerContainer(player).getLevel() >= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions."+x.getId()+".Level.Min") &&getPlayerContainer(player).getLevel() <= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions."+x.getId()+".Level.Max")){
+            if(!UtilCollector.getRegionsInCache().isEmpty()) {
+                for (ProtectedRegion x : UtilCollector.getRegionsInCache()) {
+                    if (checkSet.getRegions().contains(x)) {
+                        if (getPlayerContainer(player).getLevel() >= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Level.Min") && getPlayerContainer(player).getLevel() <= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Level.Max")) {
+                            value = true;
+                        }
+                    } else {
                         value = true;
                     }
-                }else{
-                    value = true;
+                }
+            }else{
+                for (ProtectedRegion x : checkSet.getRegions()) {
+                    if (checkSet.getRegions().contains(x)) {
+                        if (getPlayerContainer(player).getLevel() >= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Level.Min") && getPlayerContainer(player).getLevel() <= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Level.Max")) {
+                            value = true;
+                        }
+                    } else {
+                        value = true;
+                    }
                 }
             }
         } else {
