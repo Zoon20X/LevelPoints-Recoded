@@ -3,6 +3,9 @@ package levelpoints.Utils;
 import levelpoints.Cache.ExternalCache;
 import levelpoints.Cache.FileCache;
 import levelpoints.Containers.EXPContainer;
+import me.ryanhamshire.GriefPrevention.Claim;
+import me.ryanhamshire.GriefPrevention.DataStore;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -68,6 +71,20 @@ public class AntiAbuseSystem {
         Integer ticks = FileCache.getConfig("expConfig").getInt("Anti-Abuse.Place.Cooldown.Time");
         Date tomorrow = new Date(cDate.getTime() + ticks);
         return format.format(tomorrow);
+    }
+
+    public static Boolean canEarnEXPGP(Player player, Location loc){
+        DataStore dataStore = GriefPrevention.instance.dataStore;
+        Claim claim = dataStore.getClaimAt(loc, true, null);
+        if(claim != null){
+            if(claim.getOwnerID().equals(player.getUniqueId())){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return true;
+        }
     }
     public static void addBlockToLocation(Location loc){
         if(FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.Place.Cooldown.Enabled")){

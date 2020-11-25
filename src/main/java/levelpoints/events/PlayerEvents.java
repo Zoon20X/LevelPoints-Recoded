@@ -231,6 +231,12 @@ public class PlayerEvents implements Listener {
         if (event.getTaskEvent() instanceof BlockBreakEvent) {
             tasksEnum = TasksEnum.BlockBreak;
             BlockBreakEvent event1 = (BlockBreakEvent) event.getTaskEvent();
+            if(LevelPoints.getInstance().getConfig().getBoolean("GriefPrevention")){
+                if(!AntiAbuseSystem.canEarnEXPGP(event.getPlayer(), event1.getBlock().getLocation())){
+                    event.setCancelled(true);
+                    return;
+                }
+            }
             if (AntiAbuseSystem.denyWorldGuard(event1.getBlock())) {
                 event.setCancelled(true);
                 return;

@@ -9,6 +9,7 @@ import levelpoints.events.CustomEvents.SettingsEnum;
 import levelpoints.events.CustomEvents.TasksEnum;
 import levelpoints.levelpoints.Formatting;
 import levelpoints.levelpoints.LevelPoints;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
@@ -295,10 +296,8 @@ public class EXPContainer {
     public static Boolean isRunningAntiAbuse(){
         if(!values.containsKey("antiAbuse")){
             values.put("antiAbuse", FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.Place.Enabled"));
-        }
-        return Boolean.valueOf(values.get("antiAbuse").toString());
+        }return Boolean.valueOf(values.get("antiAbuse").toString());
     }
-
     public static void clearCache(EXPCache cache){
         switch(cache){
             case ALL:

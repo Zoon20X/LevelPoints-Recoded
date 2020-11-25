@@ -150,6 +150,13 @@
             <systemPath>${basedir}/libs/worldguard.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>me.ryanhamshire.GriefPrevention</groupId>
+            <artifactId>GriefPrevention</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/GriefPrevention.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>com.github.OmerBenGera</groupId>
             <artifactId>WildStackerAPI</artifactId>
             <version>b20</version>
