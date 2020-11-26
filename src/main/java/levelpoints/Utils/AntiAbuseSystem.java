@@ -24,9 +24,9 @@ public class AntiAbuseSystem {
     public static void clearBlocksCache(){
         blocks.clear();
     }
-    public static Boolean denyWorldGuard(Block block){
+    public static Boolean denyWorldGuard(Player player, Block block){
         if(ExternalCache.isRunningWorldGuard()){
-            return AsyncEvents.isInRegion(block);
+            return AsyncEvents.isInRegion(player, block);
         }
         return false;
     }

@@ -176,7 +176,6 @@ public class PlayerEvents implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        System.out.println(event.getBlock().getType());
         if (!AsyncEvents.isPlayerInCache(event.getPlayer())) {
             cachedBlocks.put(event.getPlayer(), event.getBlock().getType());
             AsyncEvents.LoadPlayerData(event.getPlayer());
@@ -237,7 +236,7 @@ public class PlayerEvents implements Listener {
                     return;
                 }
             }
-            if (AntiAbuseSystem.denyWorldGuard(event1.getBlock())) {
+            if (AntiAbuseSystem.denyWorldGuard(event.getPlayer(), event1.getBlock())) {
                 event.setCancelled(true);
                 return;
             }

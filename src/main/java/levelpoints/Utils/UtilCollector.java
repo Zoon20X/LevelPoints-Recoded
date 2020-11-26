@@ -42,18 +42,17 @@ public class UtilCollector {
         LevelPoints lps = LevelPoints.getPlugin(LevelPoints.class);
 
 
-
         usersConfig.clear();
         plugin.saveDefaultConfig();
         plugin.getServer().getPluginManager().registerEvents(new PlayerEvents(plugin), plugin);
-        if(ExternalCache.isRunningWildStacker()){
+        if (ExternalCache.isRunningWildStacker()) {
             plugin.getServer().getPluginManager().registerEvents(new WildStackerEvent(plugin), plugin);
         }
-        if(ExternalCache.isRunningWorldGuard()){
+        if (ExternalCache.isRunningWorldGuard()) {
             System.out.println(Formatting.basicColor("&3Loading Method>>> &bWorldGuard"));
             plugin.getServer().getPluginManager().registerEvents(new MoveEvent(plugin), plugin);
         }
-        if(ExternalCache.isRunningChatFormat()){
+        if (ExternalCache.isRunningChatFormat()) {
             AsyncFileCache.createFormatsFile();
 
             LevelsContainer.generateFormats();
@@ -67,7 +66,6 @@ public class UtilCollector {
         plugin.getServer().getConsoleSender().sendMessage(Formatting.basicColor("&3Loaded Modules>>> &bEvents"));
 
 
-
         lps.getCommand("lps").setExecutor((CommandExecutor) new lpsCommand(plugin));
         plugin.getServer().getConsoleSender().sendMessage(Formatting.basicColor("&3Loaded Modules>>> &bCommands"));
 
@@ -78,46 +76,22 @@ public class UtilCollector {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if(FileCache.getConfig("levelConfig").getBoolean("LevelBonus.Enabled")) {
+                if (FileCache.getConfig("levelConfig").getBoolean("LevelBonus.Enabled")) {
                     LevelsContainer.generateLevelBonus();
                 }
-                if(FileCache.getConfig("levelConfig").getBoolean("Leveling.CustomLeveling.Enabled")){
+                if (FileCache.getConfig("levelConfig").getBoolean("Leveling.CustomLeveling.Enabled")) {
                     LevelsContainer.generateCustomLevels();
                 }
 
 
             }
-        }.runTaskLaterAsynchronously(LevelPoints.getInstance(), 3*10);
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (!Bukkit.getVersion().contains("1.16")) {
-                    if (ExternalCache.isRunningWorldGuard()) {
-                        FileConfiguration config = AsyncFileCache.runConfig("/Settings/EXP.yml");
-                        if (config.getBoolean("Anti-Abuse.WorldGuard.LevelRegions.Enabled")) {
-                            RegionContainer container = WorldGuardPlugin.inst().getRegionContainer();
-                            RegionManager region;
-                            for (World world : Bukkit.getWorlds()) {
-                                region = container.get(world);
-                                for (String x : config.getConfigurationSection("Anti-Abuse.WorldGuard.LevelRegions.Regions").getKeys(false)) {
-                                    if (region.hasRegion(x)) {
-                                        System.out.println(Formatting.basicColor("&b" + x + "&3 was added to regions cache"));
-                                        regionsInCache.add(region.getRegion(x));
-                                    }
-                                }
-                            }
-                        }
-
-
-                    }
-                }
+        }.runTaskLaterAsynchronously(LevelPoints.getInstance(), 3 * 10);
+        if (ExternalCache.isRunningWorldGuard()) {
+            FileConfiguration config = AsyncFileCache.runConfig("/Settings/EXP.yml");
+            if (config.getBoolean("Anti-Abuse.WorldGuard.LevelRegions.Enabled")) {
                 plugin.getServer().getPluginManager().registerEvents(new MoveEvent(plugin), plugin);
-                System.out.println(Formatting.basicColor("&3Loading Method>>> &bWorldGuard"));
             }
-        }.runTaskAsynchronously(LevelPoints.getInstance());
-    }
-
-    public static HashSet<ProtectedRegion> getRegionsInCache(){
-        return regionsInCache;
+            System.out.println(Formatting.basicColor("&3Loading Method>>> &bWorldGuard"));
+        }
     }
 }

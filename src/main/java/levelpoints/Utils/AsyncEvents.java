@@ -329,31 +329,19 @@ public class AsyncEvents {
 
     }
 
-    public static Boolean canEnterRegion(Player player, Block block){
+    public static Boolean canEnterRegion(Player player, Block block) {
         boolean value = false;
         WorldGuardAPI worldGuardAPI = new WorldGuardAPI(LevelPoints.getInstance().getServer().getPluginManager().getPlugin("WorldGuard"), LevelPoints.getInstance());
         ApplicableRegionSet checkSet = worldGuardAPI.getRegionSet(block.getLocation());
 
         if (!checkSet.getRegions().isEmpty()) {
-            if(!UtilCollector.getRegionsInCache().isEmpty()) {
-                for (ProtectedRegion x : UtilCollector.getRegionsInCache()) {
-                    if (checkSet.getRegions().contains(x)) {
-                        if (getPlayerContainer(player).getLevel() >= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Level.Min") && getPlayerContainer(player).getLevel() <= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Level.Max")) {
-                            value = true;
-                        }
-                    } else {
+            for (ProtectedRegion x : checkSet.getRegions()) {
+                if (FileCache.getConfig("expConfig").getConfigurationSection("Anti-Abuse.WorldGuard.LevelRegions").getKeys(false).contains(x)) {
+                    if (getPlayerContainer(player).getLevel() >= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Level.Min") && getPlayerContainer(player).getLevel() <= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Level.Max")) {
                         value = true;
                     }
-                }
-            }else{
-                for (ProtectedRegion x : checkSet.getRegions()) {
-                    if (checkSet.getRegions().contains(x)) {
-                        if (getPlayerContainer(player).getLevel() >= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Level.Min") && getPlayerContainer(player).getLevel() <= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Level.Max")) {
-                            value = true;
-                        }
-                    } else {
-                        value = true;
-                    }
+                } else {
+                    value = true;
                 }
             }
         } else {
@@ -363,13 +351,24 @@ public class AsyncEvents {
         return value;
     }
 
-    public static Boolean isInRegion(Block block) {
+    public static Boolean isInRegion(Player player, Block block) {
         boolean value = false;
         WorldGuardAPI worldGuardAPI = new WorldGuardAPI(LevelPoints.getInstance().getServer().getPluginManager().getPlugin("WorldGuard"), LevelPoints.getInstance());
         ApplicableRegionSet checkSet = worldGuardAPI.getRegionSet(block.getLocation());
-
         if (!checkSet.getRegions().isEmpty()) {
             for (ProtectedRegion regions : checkSet) {
+                if(FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.WorldGuard.RestrictedRegions.WorldSupport.Enabled")) {
+                    if (FileCache.getConfig("expConfig").getStringList("Anti-Abuse.WorldGuard.RestrictedRegions.WorldSupport.List").contains(block.getWorld().getName())) {
+                        if(regions.getOwners().contains(player.getUniqueId())){
+                            value = false;
+                        }else {
+                            value = true;
+                        }
+                    } else {
+                        value = false;
+
+                    }
+                }
                 if (FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.WorldGuard.RestrictedRegions.Whitelist.Enabled")) {
                     if (FileCache.getConfig("expConfig").getStringList("Anti-Abuse.WorldGuard.RestrictedRegions.Whitelist.List").contains(regions.getId())) {
                         value = true;

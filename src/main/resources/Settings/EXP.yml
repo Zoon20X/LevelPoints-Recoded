@@ -15,13 +15,15 @@ Anti-Abuse:
   WorldGuard: #to use this make sure it's set to true in config.yml
     #Worldguard still needs to be enabled in config
     RestrictedRegions:
+      WorldSupport:
+        Enabled: false #WorldSupport will only allow owners of regions to earn exp
+        List:
+          - pvp
+          - minigames
       Whitelist: #Whitelist what worldguard regions are blocked for exp
         Enabled: false #if this is true blacklist will not world even if enabled
         List:
-        - lazzy
-        - pvp
-        - arcania
-        - arcania_island
+          - yeet
       Blacklist: #Blacklist what worldguard regions are allowed for exp
         Enabled: false #all regions in this list will be allowed to earn exp in, and the rest will be disabled
         List:
