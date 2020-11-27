@@ -6,6 +6,7 @@ import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import levelpoints.Cache.FileCache;
 import levelpoints.Cache.LangCache;
+import levelpoints.Cache.SettingsCache;
 import levelpoints.Containers.BoostersContainer;
 import levelpoints.Containers.EXPContainer;
 import levelpoints.Containers.LevelsContainer;
@@ -58,6 +59,7 @@ public class PlayerEvents implements Listener {
 
     static HashMap<Player, Material> cachedBlocks = new HashMap<>();
     static HashMap<Player, Location> cachedLocations = new HashMap<>();
+
     public PlayerEvents(Plugin plugin) {
     }
 
@@ -81,8 +83,9 @@ public class PlayerEvents implements Listener {
                     if (LevelPoints.getInstance().getConfig().getBoolean("MythicMobs")) {
                         if (MythicMobs.inst().getAPIHelper().isMythicMob(entity)) {
                             ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity);
-                            int Level = FileCache.getConfig("mmConfig").getInt(mob.getType().getInternalName() + ".Level");
-                            if (Level > container.getLevel()) {
+                            int min = FileCache.getConfig("mmConfig").getInt(mob.getType().getInternalName() + ".Level.Min");
+                            int max = FileCache.getConfig("mmConfig").getInt(mob.getType().getInternalName() + ".Level.Max");
+                            if (min > container.getLevel() || max < container.getLevel()) {
                                 event.setCancelled(true);
                             }
                             return;
@@ -151,6 +154,28 @@ public class PlayerEvents implements Listener {
         }
     }
 
+    @EventHandler
+    public void onXP(PlayerExpChangeEvent event){
+        if(SettingsCache.isBooleansEmpty() || !SettingsCache.isInCache("LpsToXpBar")) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    SettingsCache.cacheBoolean("LpsToXpBar", LevelPoints.getInstance().getConfig().getBoolean("LpsToXpBar"));
+                    if (LevelPoints.getInstance().getConfig().getBoolean("LpsToXpBar")) {
+                        event.setAmount(0);
+                    }
+                }
+            }.runTaskAsynchronously(LevelPoints.getInstance());
+        }else{
+           if(SettingsCache.getBoolean("LpsToXpBar")){
+               event.setAmount(0);
+           }
+        }
+
+        //PlayerContainer container = AsyncEvents.getPlayerContainer(player);
+
+
+    }
     @EventHandler
     public void boosterActivationEvent(BoosterActivationEvent event) {
         Player player = event.getPlayer();
@@ -259,6 +284,7 @@ public class PlayerEvents implements Listener {
                 MessagesUtil.sendActionBar(event.getPlayer(), LevelPoints.getInstance().getConfig().getString("Actionbar.Details.Text"));
             }
         }
+        AsyncEvents.getPlayerContainer(event.getPlayer()).setXpBar();
         if (event.getTaskEvent() instanceof EntityDeathEvent) {
             tasksEnum = TasksEnum.MobDeath;
             if (LevelPoints.getInstance().getConfig().getBoolean("Actionbar.Enabled")) {
@@ -409,6 +435,7 @@ public class PlayerEvents implements Listener {
     @EventHandler
     public void onLevelUp(LevelUpEvent event){
         Player player = event.getPlayer();
+        AsyncEvents.getPlayerContainer(player).setXpBar();
         int level = event.getLevel();
         AsyncEvents.updateLevelInCache(player, level);
         File TopFile = new File(LevelPoints.getInstance().getDataFolder(), "TopList.yml");

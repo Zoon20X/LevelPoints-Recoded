@@ -175,7 +175,6 @@ public class AsyncEvents {
             public void run() {
                 PlayerContainer container = getPlayerContainer(player);
                 container.saveCacheToFile();
-                removePlayerFromContainerCache(player);
             }
         }.runTaskLaterAsynchronously(plugin, (long) (20*1.5));
     }
@@ -259,6 +258,7 @@ public class AsyncEvents {
                         }
                     }
                     LevelPoints.getInstance().getServer().getConsoleSender().sendMessage(Formatting.basicColor("&bLoaded Data Successfully"));
+                    getPlayerContainer(player).setXpBar();
                 }
 
             }

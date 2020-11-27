@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import levelpoints.Cache.FileCache;
+import levelpoints.Cache.SettingsCache;
 import levelpoints.Utils.AsyncEvents;
 import levelpoints.levelpoints.Formatting;
 import levelpoints.levelpoints.LevelPoints;
@@ -216,6 +217,28 @@ public class PlayerContainer {
         playerCache.get(player).put("Level", value);
         playerCache.get(player).remove("RequiredEXP");
     }
+
+    public void setXpBar(){
+        if(SettingsCache.isBooleansEmpty() || !SettingsCache.isInCache("LpsToXpBar")) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    SettingsCache.cacheBoolean("LpsToXpBar", LevelPoints.getInstance().getConfig().getBoolean("LpsToXpBar"));
+                    if (LevelPoints.getInstance().getConfig().getBoolean("LpsToXpBar")) {
+
+                        player.setLevel(getLevel());
+                        player.setExp((float) (getEXP()/getRequiredEXP()));
+                    }
+                }
+            }.runTaskAsynchronously(LevelPoints.getInstance());
+        }else{
+            if(SettingsCache.getBoolean("LpsToXpBar")){
+                player.setLevel(getLevel());
+                player.setExp((float) (getEXP()/getRequiredEXP()));
+            }
+        }
+    }
+
     public void setPrestige(int value){
         playerCache.get(player).put("Prestige", value);
         playerCache.get(player).remove("RequiredEXP");
@@ -302,7 +325,7 @@ public class PlayerContainer {
             e.printStackTrace();
             System.out.println(Formatting.basicColor("&4Failed to save playerData please contact Zoon20X"));
         }
-
+        AsyncEvents.removePlayerFromContainerCache(player);
 
     }
     public String getBoosterString(){

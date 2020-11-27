@@ -110,8 +110,7 @@ public class SQL {
                     e.printStackTrace();
                 }
             }
-
-
+            container.setXpBar();
         } catch (SQLException e) {
             e.printStackTrace();
         }

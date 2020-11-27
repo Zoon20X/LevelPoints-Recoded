@@ -41,6 +41,9 @@ public class FileCache {
             }
         }
     }
+    public static Boolean containsFile(String x){
+        return cache.containsKey(x);
+    }
 
     public static void clearCache(){
         cache.clear();

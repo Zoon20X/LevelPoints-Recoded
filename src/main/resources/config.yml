@@ -29,6 +29,7 @@ username: "root"
 database: ""
 password: ""
 table: "lpsPlayer"
+
 #-----------------#
 #Connected plugins#
 WildStacker: false #used for required level for mining spawners
@@ -71,6 +72,8 @@ Actionbar:
   PlaceholderAPI: false #use of placeholderapi in the actionbar
 
 
+
+
 #---------------#
 #LPS CHAT
 #this setting is for users whom are using essentials chat
@@ -93,6 +96,11 @@ RankMultipliers: false
 RequiredItemLore: false #Set weather or not you need a certain level to use x item
 
 #-------------#
+
+#---------------#
+#XP bar support
+LpsToXpBar: false #this will disable any form of exp earning and will allow lps to force the update/ change of the xp bar to match xp and level
+#---------------#
 #saving more data
 #this will create more data in the player files this data can be shown using tags from lps
 #but no placeholders yet added

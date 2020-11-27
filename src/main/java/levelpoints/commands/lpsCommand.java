@@ -2,6 +2,7 @@ package levelpoints.commands;
 
 import levelpoints.Cache.FileCache;
 import levelpoints.Cache.LangCache;
+import levelpoints.Cache.SettingsCache;
 import levelpoints.Containers.*;
 import levelpoints.Utils.AsyncEvents;
 import levelpoints.Utils.AsyncFileCache;
@@ -80,7 +81,9 @@ public class lpsCommand implements CommandExecutor {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    args6(sender, args);
+                    if(sender.hasPermission("lp.admin.*")) {
+                        args6(sender, args);
+                    }
                 }
             }.runTaskAsynchronously(LevelPoints.getInstance());
         }
@@ -93,6 +96,7 @@ public class lpsCommand implements CommandExecutor {
                 if (sender.hasPermission("lp.admin.reload")) {
 
                     AsyncEvents.MassSaveCache();
+                    sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.Files")));
                     EXPContainer.clearCache(EXPCache.ALL);
                     LevelsContainer.clearCache();
                     LangCache.clearCache();
@@ -105,6 +109,7 @@ public class lpsCommand implements CommandExecutor {
                     }
                     sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.Complete")));
                     FileCache.clearCache();
+                    SettingsCache.clearBooleanCache();
 
                 }
                 break;
@@ -201,6 +206,65 @@ public class lpsCommand implements CommandExecutor {
                     OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
                     for (String x : LangCache.getInfoMessage()) {
                         sender.sendMessage(Formatting.formatInfoTags(player, x));
+                    }
+                }
+                break;
+            case "reload":
+                if (sender.hasPermission("lp.admin.reload")) {
+
+                    switch (args[1]) {
+                        case "files":
+                            sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.Files")));
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    EXPContainer.clearCache(EXPCache.ALL);
+                                    LevelsContainer.clearCache();
+                                    LangCache.clearCache();
+                                    LevelPoints.getInstance().reloadConfig();
+                                    AsyncFileCache.startAsyncCache();
+                                    FileCache.clearCache();
+                                    SettingsCache.clearBooleanCache();
+                                }
+                            }.runTaskAsynchronously(LevelPoints.getInstance());
+
+                            sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.Complete")));
+                            break;
+                        case "players":
+                            sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.PlayerData")));
+
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    AsyncEvents.MassSaveCache();
+
+
+                                    for (Player player : Bukkit.getOnlinePlayers()) {
+                                        AsyncEvents.LoadPlayerData(player);
+                                        AsyncEvents.addPlayerToContainerCache(player);
+                                    }
+                                }
+                            }.runTaskAsynchronously(LevelPoints.getInstance());
+                            sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.Complete")));
+
+                            break;
+                        case "all":
+                            sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.Files")));
+                            AsyncEvents.MassSaveCache();
+                            EXPContainer.clearCache(EXPCache.ALL);
+                            LevelsContainer.clearCache();
+                            LangCache.clearCache();
+                            LevelPoints.getInstance().reloadConfig();
+                            AsyncFileCache.startAsyncCache();
+                            sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.PlayerData")));
+                            for (Player player : Bukkit.getOnlinePlayers()) {
+                                AsyncEvents.LoadPlayerData(player);
+                                AsyncEvents.addPlayerToContainerCache(player);
+                            }
+                            sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.Complete")));
+                            FileCache.clearCache();
+                            SettingsCache.clearBooleanCache();
+                            break;
                     }
                 }
                 break;

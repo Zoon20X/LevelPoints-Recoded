@@ -10,4 +10,6 @@
 
 SkeletalMinion:
   EXP: 1 #EXP it will give when you kill it
-  Level: 2 #Level you must be to deal damage to the mob
+  Level:
+    Min: 2 #Level you must be to deal damage to the mob
+    Max: 10 #limit the level you want to be able to damage the mob, if you want it to work for any set to max level

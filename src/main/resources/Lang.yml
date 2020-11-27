@@ -39,6 +39,7 @@ RequiredLevelOre:
 
 
 LpsReload:
+  Files: '&3LevelPoints>> &bReloading File data'
   PlayerData: '&3LevelPoints>> &bReloading online players data'
   Complete: '&3LevelPoints>> &bReload Complete'
 
@@ -113,3 +114,5 @@ Formats:
 ProgressBar:
   Complete: '&3|'
   Required: '&7|'
+  PlaceholderAPI:
+    Size: 8
