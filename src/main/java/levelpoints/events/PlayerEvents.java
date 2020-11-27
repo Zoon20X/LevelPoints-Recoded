@@ -1,5 +1,7 @@
 package levelpoints.events;
 
+import com.bekvon.bukkit.residence.Residence;
+import com.bekvon.bukkit.residence.containers.ResidencePlayer;
 import com.cryptomorin.xseries.XBlock;
 import com.cryptomorin.xseries.XMaterial;
 import io.lumine.xikage.mythicmobs.MythicMobs;
@@ -255,8 +257,8 @@ public class PlayerEvents implements Listener {
         if (event.getTaskEvent() instanceof BlockBreakEvent) {
             tasksEnum = TasksEnum.BlockBreak;
             BlockBreakEvent event1 = (BlockBreakEvent) event.getTaskEvent();
-            if(LevelPoints.getInstance().getConfig().getBoolean("GriefPrevention")){
-                if(!AntiAbuseSystem.canEarnEXPGP(event.getPlayer(), event1.getBlock().getLocation())){
+            if (LevelPoints.getInstance().getConfig().getBoolean("GriefPrevention")) {
+                if (!AntiAbuseSystem.canEarnEXPGP(event.getPlayer(), event1.getBlock().getLocation())) {
                     event.setCancelled(true);
                     return;
                 }
@@ -266,20 +268,27 @@ public class PlayerEvents implements Listener {
                 return;
             }
             if (!AntiAbuseSystem.canEarnEXP(event1.getBlock().getLocation())) {
-                if(AntiAbuseSystem.canBreakBlock(event1.getBlock().getLocation())) {
+                if (AntiAbuseSystem.canBreakBlock(event1.getBlock().getLocation())) {
                     AntiAbuseSystem.removeBlockFromLocation(event1.getBlock().getLocation());
-                }else{
+                } else {
                     event1.setCancelled(true);
                 }
                 event.setCancelled(true);
                 return;
             }
-            if(FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.PreciousStones.Enabled")) {
+            if(AntiAbuseSystem.cancelPreciousStones()){
                 if (!PreciousStones.API().canBreak(event.getPlayer(), event1.getBlock().getLocation())) {
                     event.setCancelled(true);
                     return;
                 }
             }
+            if(AntiAbuseSystem.cancelResidence()){
+                ResidencePlayer rPlayer = Residence.getInstance().getPlayerManager().getResidencePlayer(event.getPlayer());
+                boolean canBreak = rPlayer.canBreakBlock(event1.getBlock(), false);
+                event.setCancelled(!canBreak);
+                return;
+            }
+
             if (LevelPoints.getInstance().getConfig().getBoolean("Actionbar.Enabled")) {
                 MessagesUtil.sendActionBar(event.getPlayer(), LevelPoints.getInstance().getConfig().getString("Actionbar.Details.Text"));
             }

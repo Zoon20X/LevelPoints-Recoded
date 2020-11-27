@@ -38,6 +38,7 @@ GriefPrevention: false #used for stopping players abusing block break in others 
 bSkyblock: false #used for stopping players abusing block break in others islands
 BlockRegen: false #used for level requirement to stop the block event when using blockregen
 WorldGuard: false
+Residence: false
 #-----------------#
 #Boss Bar Settings#
 #warning boss bar will only work for 1.9+

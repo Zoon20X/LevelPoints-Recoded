@@ -1,9 +1,10 @@
 package levelpoints.levelpoints;
 
+import com.bekvon.bukkit.residence.Residence;
+import com.bekvon.bukkit.residence.api.ResidenceApi;
 import levelpoints.Containers.PlayerContainer;
 import levelpoints.Utils.AsyncEvents;
-import levelpoints.Utils.ItemRestrictionMMO;
-import net.Indyuce.mmoitems.MMOItems;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -24,7 +25,6 @@ public final class LevelPoints extends JavaPlugin {
         this.instance = this;
         userFolder = new File(getDataFolder(), "Players");
         userFolder.mkdirs();
-
         AsyncEvents.RunPlugin();
         MetricsLite lite = new MetricsLite(this);
         SQL.cacheSQL();
@@ -58,8 +58,9 @@ public final class LevelPoints extends JavaPlugin {
     }
     @Override
     public void onDisable() {
-
-        AsyncEvents.MassSaveCache();
+        if(!AsyncEvents.isPlayersCacheEmpty()) {
+            AsyncEvents.MassSaveCache();
+        }
 
         // Plugin shutdown logic
     }

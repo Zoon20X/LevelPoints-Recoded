@@ -105,9 +105,11 @@ public class AsyncEvents {
     public static void removePlayerFromContainerCache(Player player){
         playersInCache.remove(player);
     }
-
+    public static Boolean isPlayersCacheEmpty(){
+        return playersInCache.isEmpty();
+    }
     public static void MassSaveCache() {
-        for (Player player : playersInCache) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
             if(LevelPoints.getInstance().getConfig().getBoolean("UseSQL")) {
                 SQL.RunSQLDownload(player);
             }

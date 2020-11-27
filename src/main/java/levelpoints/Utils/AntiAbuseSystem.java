@@ -1,11 +1,16 @@
 package levelpoints.Utils;
 
+import com.bekvon.bukkit.residence.Residence;
+import com.bekvon.bukkit.residence.containers.ResidencePlayer;
 import levelpoints.Cache.ExternalCache;
 import levelpoints.Cache.FileCache;
+import levelpoints.Cache.SettingsCache;
 import levelpoints.Containers.EXPContainer;
+import levelpoints.levelpoints.LevelPoints;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.DataStore;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
+import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -47,6 +52,27 @@ public class AntiAbuseSystem {
             e.printStackTrace();
         }
         if (!current.after(date)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static Boolean cancelPreciousStones(){
+        if (SettingsCache.isBooleansEmpty() || !SettingsCache.isInCache("PreciousStones")) {
+            SettingsCache.cacheBoolean("PreciousStones", FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.PreciousStones.Enabled"));
+        }
+
+        if (SettingsCache.getBoolean("PreciousStones")) {
+            return true;
+        }
+
+        return false;
+    }
+    public static Boolean cancelResidence(){
+        if (SettingsCache.isBooleansEmpty() || !SettingsCache.isInCache("Residence")) {
+            SettingsCache.cacheBoolean("Residence", LevelPoints.getInstance().getConfig().getBoolean("Residence"));
+        }
+        if (SettingsCache.getBoolean("Residence")) {
             return true;
         }
         return false;
