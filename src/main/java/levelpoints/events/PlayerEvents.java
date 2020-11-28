@@ -85,12 +85,14 @@ public class PlayerEvents implements Listener {
                     if (LevelPoints.getInstance().getConfig().getBoolean("MythicMobs")) {
                         if (MythicMobs.inst().getAPIHelper().isMythicMob(entity)) {
                             ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity);
-                            int min = FileCache.getConfig("mmConfig").getInt(mob.getType().getInternalName() + ".Level.Min");
-                            int max = FileCache.getConfig("mmConfig").getInt(mob.getType().getInternalName() + ".Level.Max");
-                            if (min > container.getLevel() || max < container.getLevel()) {
-                                event.setCancelled(true);
+                            if (FileCache.getConfig("mmConfig").getConfigurationSection("").getKeys(false).contains(mob.getType().getInternalName())) {
+                                int min = FileCache.getConfig("mmConfig").getInt(mob.getType().getInternalName() + ".Level.Min");
+                                int max = FileCache.getConfig("mmConfig").getInt(mob.getType().getInternalName() + ".Level.Max");
+                                if (min > container.getLevel() || max < container.getLevel()) {
+                                    event.setCancelled(true);
+                                }
+                                return;
                             }
-                            return;
                         }
                     }
                     if (EXPContainer.getRequiredLevel(entity.getType(), SettingsEnum.Damage) > container.getLevel()) {

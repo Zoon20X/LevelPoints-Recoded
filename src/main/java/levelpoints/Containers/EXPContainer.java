@@ -117,7 +117,7 @@ public class EXPContainer {
 
             if (getMinEXP(value) > 0) {
                 if (getMaxEXP(value) > getMinEXP(value)) {
-                    double random = ThreadLocalRandom.current().nextDouble(getMinEXP(value), getMaxEXP(value));
+                    double random = ThreadLocalRandom.current().nextInt(Integer.getInteger(String.valueOf(getMinEXP(value))), Integer.getInteger(String.valueOf(getMaxEXP(value))));
 
                     return random;
                 } else {
@@ -139,7 +139,7 @@ public class EXPContainer {
             }else {
                 if (getMinEXP(value, true) > 0) {
                     if (getMaxEXP(value, true) > getMinEXP(value, true)) {
-                        double random = ThreadLocalRandom.current().nextDouble(getMinEXP(value, true), getMaxEXP(value, true));
+                        double random = ThreadLocalRandom.current().nextInt(Integer.getInteger(String.valueOf(getMinEXP(value, true))), Integer.getInteger(String.valueOf(getMaxEXP(value, true))));
 
                         return random;
                     } else {
@@ -159,7 +159,7 @@ public class EXPContainer {
 
             if (getMinEXP(value, false) > 0) {
                 if (getMaxEXP(value, false) > getMinEXP(value, false)) {
-                    double random = ThreadLocalRandom.current().nextDouble(getMinEXP(value, false), getMaxEXP(value, false));
+                    double random = ThreadLocalRandom.current().nextInt(Integer.getInteger(String.valueOf(getMinEXP(value, false))), Integer.getInteger(String.valueOf(getMaxEXP(value, false))));
 
                     return random;
                 } else {
@@ -220,10 +220,10 @@ public class EXPContainer {
     }
     public static Double getMaxEXP(EntityType value){
 
-        if (FileCache.getConfig("expConfig").getInt("MobsEXP.Mobs." + value.toString() + ".EXP.Min") > 0) {
+        if (FileCache.getConfig("expConfig").getInt("MobsEXP.Mobs." + value.toString() + ".EXP.Max") > 0) {
             if (!maxExp.containsKey(value.toString())) {
                 maxExp.put(value.toString(), new HashMap<Integer, Object>());
-                maxExp.get(value.toString()).put(0,FileCache.getConfig("expConfig").getInt("MobsEXP.Mobs." + value.toString() + ".EXP.Min"));
+                maxExp.get(value.toString()).put(0,FileCache.getConfig("expConfig").getInt("MobsEXP.Mobs." + value.toString() + ".EXP.Max"));
             }
             return Double.valueOf(maxExp.get(value.toString()).get(0).toString());
         }
