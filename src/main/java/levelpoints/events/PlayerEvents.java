@@ -286,7 +286,9 @@ public class PlayerEvents implements Listener {
                 ResidencePlayer rPlayer = Residence.getInstance().getPlayerManager().getResidencePlayer(event.getPlayer());
                 boolean canBreak = rPlayer.canBreakBlock(event1.getBlock(), false);
                 event.setCancelled(!canBreak);
-                return;
+                if(event.isCancelled()) {
+                    return;
+                }
             }
 
             if (LevelPoints.getInstance().getConfig().getBoolean("Actionbar.Enabled")) {

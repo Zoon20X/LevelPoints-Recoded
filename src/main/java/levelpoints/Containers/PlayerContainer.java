@@ -216,6 +216,7 @@ public class PlayerContainer {
     public void setLevel(int value){
         playerCache.get(player).put("Level", value);
         playerCache.get(player).remove("RequiredEXP");
+        setXpBar();
     }
 
     public void setXpBar(){
@@ -264,7 +265,9 @@ public class PlayerContainer {
                 }
             } else {
                 //System.out.println(Formatting.basicColor("&3Added"));
+
             }
+            setXpBar();
         }else{
             if(getRequiredEXP() >= getEXP()){
 
@@ -276,6 +279,7 @@ public class PlayerContainer {
                     playerCache.get(player).put("EXP", has);
                 }
                 //System.out.println(Formatting.basicColor("&3Added " + value + " EXP to " + player.getName()));
+                setXpBar();
             }
         }
     }
@@ -285,7 +289,7 @@ public class PlayerContainer {
             double has = getEXP();
             has = has - value;
             playerCache.get(player).put("EXP", has);
-
+            setXpBar();
         }else{
             //System.out.println(Formatting.basicColor("&cCannot remove &4" + amount + "&c of EXP as player only has &4" + getEXP()));
         }
