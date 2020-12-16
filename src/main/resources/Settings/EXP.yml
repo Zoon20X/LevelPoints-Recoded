@@ -35,11 +35,24 @@ Anti-Abuse:
       Message: 'Hello'
       Regions:
         spiderTrap: #name of the region
+          Teleport: #setlocation teleport
+            Enabled: true
+            Location:
+              x: 0
+              y: 0
+              z: 0
           Level:  #Levels required to enter certain region
             Min: 5
             Max: 10
   PreciousStones:
     Enabled: false
+  PerWorldSupport:
+    Whitelist:
+      Enabled: false
+      List: #list of worlds that CAN'T earn exp
+        - world
+        - pvp
+        - mining
 
 #------------#
 #Pvp Solutions

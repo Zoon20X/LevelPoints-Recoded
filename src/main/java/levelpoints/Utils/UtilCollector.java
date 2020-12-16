@@ -48,10 +48,6 @@ public class UtilCollector {
         if (ExternalCache.isRunningWildStacker()) {
             plugin.getServer().getPluginManager().registerEvents(new WildStackerEvent(plugin), plugin);
         }
-        if (ExternalCache.isRunningWorldGuard()) {
-            System.out.println(Formatting.basicColor("&3Loading Method>>> &bWorldGuard"));
-            plugin.getServer().getPluginManager().registerEvents(new MoveEvent(plugin), plugin);
-        }
         if (ExternalCache.isRunningChatFormat()) {
             AsyncFileCache.createFormatsFile();
 

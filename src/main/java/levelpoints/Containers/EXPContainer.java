@@ -117,7 +117,7 @@ public class EXPContainer {
 
             if (getMinEXP(value) > 0) {
                 if (getMaxEXP(value) > getMinEXP(value)) {
-                    double random = ThreadLocalRandom.current().nextInt(Integer.getInteger(String.valueOf(getMinEXP(value))), Integer.getInteger(String.valueOf(getMaxEXP(value))));
+                    double random = ThreadLocalRandom.current().nextInt(getMinEXP(value).intValue(),getMaxEXP(value).intValue());
 
                     return random;
                 } else {
@@ -139,7 +139,7 @@ public class EXPContainer {
             }else {
                 if (getMinEXP(value, true) > 0) {
                     if (getMaxEXP(value, true) > getMinEXP(value, true)) {
-                        double random = ThreadLocalRandom.current().nextInt(Integer.getInteger(String.valueOf(getMinEXP(value, true))), Integer.getInteger(String.valueOf(getMaxEXP(value, true))));
+                        double random = ThreadLocalRandom.current().nextInt(getMinEXP(value, true).intValue(), getMaxEXP(value, true).intValue());
 
                         return random;
                     } else {
@@ -159,7 +159,7 @@ public class EXPContainer {
 
             if (getMinEXP(value, false) > 0) {
                 if (getMaxEXP(value, false) > getMinEXP(value, false)) {
-                    double random = ThreadLocalRandom.current().nextInt(Integer.getInteger(String.valueOf(getMinEXP(value, false))), Integer.getInteger(String.valueOf(getMaxEXP(value, false))));
+                    double random = ThreadLocalRandom.current().nextInt(getMinEXP(value, false).intValue(), getMaxEXP(value, false).intValue());
 
                     return random;
                 } else {

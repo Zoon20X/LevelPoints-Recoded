@@ -12,6 +12,7 @@ import me.ryanhamshire.GriefPrevention.DataStore;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -54,6 +55,16 @@ public class AntiAbuseSystem {
         if (!current.after(date)) {
             return true;
         }
+        return false;
+    }
+
+    public static Boolean denyWorldSupport(Player player){
+         World world = player.getWorld();
+         if(FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.PerWorldSupport.Whitelist.Enabled")) {
+             if (FileCache.getConfig("expConfig").getStringList("Anti-Abuse.PerWorldSupport.Whitelist.List").contains(world.getName())) {
+                 return true;
+             }
+         }
         return false;
     }
 

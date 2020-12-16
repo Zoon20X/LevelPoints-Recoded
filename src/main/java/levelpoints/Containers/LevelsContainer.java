@@ -136,15 +136,25 @@ public class LevelsContainer {
         }
     }
     public static Double getLevelBonus(String type, Integer Level){
-        switch (type){
+
+            switch (type){
             case "Health":
+                if(FileCache.getConfig("levelConfig").getBoolean("LevelBonus.StaticIncrease")) {
+                    return FileCache.getConfig("levelConfig").getDouble("LevelBonus.StaticIncrease.Amount.Health") * Level;
+                }
                 return healthCache.get(Level);
             case "Damage":
+                if(FileCache.getConfig("levelConfig").getBoolean("LevelBonus.StaticIncrease")) {
+                    return FileCache.getConfig("levelConfig").getDouble("LevelBonus.StaticIncrease.Amount.Damage") * Level;
+                }
                 return damageCache.get(Level);
         }
         return null;
     }
     public static boolean hasLevelBonus(String type, Integer Level){
+        if(FileCache.getConfig("levelConfig").getBoolean("StaticIncrease")){
+         return true;
+        }
         switch (type){
             case "Health":
                 return healthCache.containsKey(Level);

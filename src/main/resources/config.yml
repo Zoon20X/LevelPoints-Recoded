@@ -39,6 +39,7 @@ bSkyblock: false #used for stopping players abusing block break in others island
 BlockRegen: false #used for level requirement to stop the block event when using blockregen
 WorldGuard: false
 Residence: false
+MMOItems: false
 #-----------------#
 #Boss Bar Settings#
 #warning boss bar will only work for 1.9+

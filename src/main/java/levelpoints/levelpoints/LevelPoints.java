@@ -1,10 +1,10 @@
 package levelpoints.levelpoints;
 
-import com.bekvon.bukkit.residence.Residence;
-import com.bekvon.bukkit.residence.api.ResidenceApi;
+import levelpoints.Cache.ExternalCache;
 import levelpoints.Containers.PlayerContainer;
 import levelpoints.Utils.AsyncEvents;
 
+import net.Indyuce.mmoitems.MMOItems;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -12,7 +12,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public final class LevelPoints extends JavaPlugin {
 
@@ -38,6 +37,16 @@ public final class LevelPoints extends JavaPlugin {
         if(getConfig().getBoolean("UseSQL")) {
             SQL.loadSQL();
         }
+        if(getConfig().getBoolean("MMOItems")) {
+            MMOLPS mmoLPS = new MMOLPS();
+            try {
+                MMOItems.plugin.getStats().getItemRestrictionStats().add(mmoLPS);
+                System.out.println("Loaded MAYBE WORKING ITEMS");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(ExternalCache.isRunningWorldGuard());
     }
     public static Plugin getInstance(){
         return instance;

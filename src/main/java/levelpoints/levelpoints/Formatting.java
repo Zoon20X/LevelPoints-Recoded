@@ -24,6 +24,23 @@ public class Formatting {
         }
         return msg;
     }
+    public static String basicColor(String msg, Player player){
+        if(LevelPoints.getInstance().getConfig().getBoolean("1.16")){
+
+                msg = formatRGB(msg);
+        }else {
+            msg = ChatColor.translateAlternateColorCodes('&', msg);
+        }
+        msg = FormatPlaceholder(msg, player);
+        return msg;
+    }
+    public static String FormatPlaceholder(String msg, Player player){
+        if(LevelPoints.getInstance().getConfig().getBoolean("Lang.PlaceholderAPI")){
+            msg = PlaceholderAPI.setPlaceholders(player, msg);
+        }
+
+        return msg;
+    }
 
 
     public static String formatRGB(String msg){

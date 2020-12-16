@@ -181,7 +181,7 @@ public class SQL {
                 }
                 SQLReconnect();
             }
-        }.runTaskLaterAsynchronously(LevelPoints.getInstance(), 300 * 20);
+        }.runTaskLaterAsynchronously(LevelPoints.getInstance(), 600 * 20);
     }
     public static void loadSQL() {
         String host = (String) getCacheData("host");

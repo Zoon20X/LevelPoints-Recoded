@@ -381,7 +381,10 @@ public class PlayerContainer {
     }
 
     public void addLevel(int value, Boolean removeEXP){
-
+        if(LevelsContainer.getMaxLevel() == getLevel()){
+            setEXP(getRequiredEXP());
+            return;
+        }
         if(removeEXP) {
             removeEXP(getRequiredEXP());
         }

@@ -13,6 +13,7 @@ import levelpoints.levelpoints.LevelPoints;
 import levelpoints.levelpoints.SQL;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
@@ -31,10 +32,7 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 public class AsyncEvents {
@@ -338,9 +336,11 @@ public class AsyncEvents {
 
         if (!checkSet.getRegions().isEmpty()) {
             for (ProtectedRegion x : checkSet.getRegions()) {
-                if (FileCache.getConfig("expConfig").getConfigurationSection("Anti-Abuse.WorldGuard.LevelRegions.Regions").getKeys(false).contains(x)) {
+                if (FileCache.getConfig("expConfig").getConfigurationSection("Anti-Abuse.WorldGuard.LevelRegions.Regions").getKeys(false).contains(x.getId())) {
                     if (getPlayerContainer(player).getLevel() >= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Level.Min") && getPlayerContainer(player).getLevel() <= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Level.Max")) {
                         value = true;
+                    }else{
+                        value = false;
                     }
                 } else {
                     value = true;
@@ -349,8 +349,33 @@ public class AsyncEvents {
         } else {
             value = true;
         }
-
         return value;
+    }
+
+    public static Location getTeleportLocation(Player player) {
+        WorldGuardAPI worldGuardAPI = new WorldGuardAPI(LevelPoints.getInstance().getServer().getPluginManager().getPlugin("WorldGuard"), LevelPoints.getInstance());
+        ApplicableRegionSet checkSet = worldGuardAPI.getRegionSet(player.getLocation());
+
+        if (!checkSet.getRegions().isEmpty()) {
+            for (ProtectedRegion x : checkSet.getRegions()) {
+                if (FileCache.getConfig("expConfig").getConfigurationSection("Anti-Abuse.WorldGuard.LevelRegions.Regions").getKeys(false).contains(x.getId())) {
+                    if (FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Teleport.Enabled")) {
+
+                        Location loc = new Location(player.getWorld(),
+                                FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Teleport.Location.x"),
+                                FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Teleport.Location.y"),
+                                FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Teleport.Location.z"),
+                                player.getLocation().getYaw(),
+                                player.getLocation().getPitch());
+
+
+                        return loc;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     public static Boolean isInRegion(Player player, Block block) {
@@ -361,37 +386,23 @@ public class AsyncEvents {
             for (ProtectedRegion regions : checkSet) {
                 if(FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.WorldGuard.RestrictedRegions.WorldSupport.Enabled")) {
                     if (FileCache.getConfig("expConfig").getStringList("Anti-Abuse.WorldGuard.RestrictedRegions.WorldSupport.List").contains(block.getWorld().getName())) {
-                        if(regions.getOwners().contains(player.getUniqueId())){
-                            value = false;
-                        }else {
+                        if(!regions.getOwners().contains(player.getUniqueId())){
                             value = true;
                         }
-                    } else {
-                        value = false;
-
                     }
                 }
                 if (FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.WorldGuard.RestrictedRegions.Whitelist.Enabled")) {
                     if (FileCache.getConfig("expConfig").getStringList("Anti-Abuse.WorldGuard.RestrictedRegions.Whitelist.List").contains(regions.getId())) {
                         value = true;
-
-
-                    } else {
-                        value = false;
-
                     }
                 } else if (FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.WorldGuard.RestrictedRegions.Blacklist.Enabled")){
+                    value = true;
                     if (FileCache.getConfig("expConfig").getStringList("Anti-Abuse.WorldGuard.RestrictedRegions.Blacklist.List").contains(regions.getId())) {
-                        value = false;
-                    } else {
-                        value = true;
+                        return false;
                     }
                 }
             }
-        } else {
-            value = false;
         }
-
         return value;
     }
     public static void giveTimedEXP() {
@@ -441,13 +452,13 @@ public class AsyncEvents {
                         break;
                     case Regular:
 
-                        ConfigurationSection configuration = FileCache.getConfig("rewardsConfig").getConfigurationSection("Rewards.Prestige-" + container.getPrestige() + ".Level-" + container.getLevel());
+                        ConfigurationSection configuration = FileCache.getConfig("rewardsConfig").getConfigurationSection("Rewards.Prestige-" + container.getPrestige() + ".Level-" + value);
 
                         if (configuration == null) {
                             break;
                         }
 
-                        List<String> cm = FileCache.getConfig("rewardsConfig").getStringList("Rewards.Prestige-" + container.getPrestige() + ".Level-" + container.getLevel() + ".cmds");
+                        List<String> cm = FileCache.getConfig("rewardsConfig").getStringList("Rewards.Prestige-" + container.getPrestige() + ".Level-" + value + ".cmds");
                         for (String x : cm) {
 
                             runReward(x.replace("%player%", player.getName()));

@@ -225,8 +225,8 @@ public class PlayerEvents implements Listener {
                         @Override
                         public void run() {
                             for (String x : LangCache.getRequiredLevel()) {
-                                player.sendMessage(Formatting.basicColor(x.replace("{lp_Required_Level}",
-                                        String.valueOf(EXPContainer.getRequiredLevel(event.getBlock().getType(), SettingsEnum.Break)))));
+                                player.sendMessage(Formatting.basicColor(x, player).replace("{lp_Required_Level}",
+                                        String.valueOf(EXPContainer.getRequiredLevel(event.getBlock().getType(), SettingsEnum.Break))));
                             }
                         }
                     }.runTaskAsynchronously(LevelPoints.getInstance());
@@ -284,24 +284,35 @@ public class PlayerEvents implements Listener {
                     return;
                 }
             }
-            if(AntiAbuseSystem.cancelResidence()){
-                ResidencePlayer rPlayer = Residence.getInstance().getPlayerManager().getResidencePlayer(event.getPlayer());
-                boolean canBreak = rPlayer.canBreakBlock(event1.getBlock(), false);
-                event.setCancelled(!canBreak);
-                if(event.isCancelled()) {
-                    return;
-                }
+            if(AntiAbuseSystem.denyWorldSupport(event.getPlayer())){
+                event.setCancelled(true);
+                return;
             }
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if(AntiAbuseSystem.cancelResidence()){
+                        ResidencePlayer rPlayer = Residence.getInstance().getPlayerManager().getResidencePlayer(event.getPlayer());
+                        boolean canBreak = rPlayer.canBreakBlock(event1.getBlock(), false);
+                        event.setCancelled(!canBreak);
+                        if(event.isCancelled()) {
+                            return;
+                        }
+                    }
+                }
+            }.runTask(LevelPoints.getInstance());
+
+
 
             if (LevelPoints.getInstance().getConfig().getBoolean("Actionbar.Enabled")) {
-                MessagesUtil.sendActionBar(event.getPlayer(), LevelPoints.getInstance().getConfig().getString("Actionbar.Details.Text"));
+                MessagesUtil.sendActionBar(event.getPlayer(), LevelPoints.getInstance().getConfig().getString("Actionbar.Details.Text").replace("{EXP_Earn_Amount}", String.valueOf(event.getAmount())));
             }
         }
         AsyncEvents.getPlayerContainer(event.getPlayer()).setXpBar();
         if (event.getTaskEvent() instanceof EntityDeathEvent) {
             tasksEnum = TasksEnum.MobDeath;
             if (LevelPoints.getInstance().getConfig().getBoolean("Actionbar.Enabled")) {
-                MessagesUtil.sendActionBar(event.getPlayer(), LevelPoints.getInstance().getConfig().getString("Actionbar.Details.Text"));
+                MessagesUtil.sendActionBar(event.getPlayer(), LevelPoints.getInstance().getConfig().getString("Actionbar.Details.Text").replace("{EXP_Earn_Amount}", String.valueOf(event.getAmount())));
             }
         }
         TasksEnum finalTasksEnum = tasksEnum;
@@ -310,9 +321,9 @@ public class PlayerEvents implements Listener {
                 @Override
                 public void run() {
                     for (String x : LangCache.getEXPEarn()) {
-                        event.getPlayer().sendMessage(Formatting.basicColor(x
+                        event.getPlayer().sendMessage(Formatting.basicColor(x, event.getPlayer())
                                 .replace("{lp_Earn_Exp}", String.valueOf(event.getAmount()))
-                                .replace("{lp_Earn_Task}", finalTasksEnum.toString())));
+                                .replace("{lp_Earn_Task}", finalTasksEnum.toString()));
                     }
                 }
             }.runTaskAsynchronously(LevelPoints.getInstance());
@@ -397,9 +408,9 @@ public class PlayerEvents implements Listener {
         if(FileCache.getConfig("levelConfig").getInt("Crafting.RequiredLevel." + item.getType() + ".Level") > container.getLevel()){
             if(FileCache.getConfig("levelConfig").getBoolean("Crafting.RequiredLevel." + item.getType() + ".Message.Enabled")){
                 String x = FileCache.getConfig("levelConfig").getString("Crafting.RequiredLevel." + item.getType() + ".Message.Text");
-                event.getWhoClicked().sendMessage(Formatting.basicColor(x
+                event.getWhoClicked().sendMessage(Formatting.basicColor(x, (Player) event.getWhoClicked())
                         .replace("{lp_Crafting_Level}", String.valueOf(FileCache.getConfig("levelConfig").getInt("Crafting.RequiredLevel." + item.getType() + ".Level")))
-                        .replace("{lp_Crafting_Item}", item.getType().toString())));
+                        .replace("{lp_Crafting_Item}", item.getType().toString()));
             }
             event.setCancelled(true);
             return;
@@ -435,7 +446,7 @@ public class PlayerEvents implements Listener {
                 }else{
                     if(FileCache.getConfig("levelConfig").getBoolean("Fishing.RequiredLevel.Message.Enabled")){
                         String x = FileCache.getConfig("levelConfig").getString("Fishing.RequiredLevel.Message.Text");
-                        event.getPlayer().sendMessage(Formatting.basicColor(x));
+                        event.getPlayer().sendMessage(Formatting.basicColor(x, event.getPlayer()));
                     }
                     event.setCancelled(true);
                 }
@@ -469,26 +480,26 @@ public class PlayerEvents implements Listener {
         }
         if(FileCache.getConfig("langConfig").getBoolean("Formats.LevelUp.Chat.Enabled")){
             for(String x : FileCache.getConfig("langConfig").getStringList("Formats.LevelUp.Chat.Text")){
-                player.sendMessage(Formatting.basicColor(x)
+                player.sendMessage(Formatting.basicColor(x, player)
                         .replace("{level}", String.valueOf(level))
                         .replace("{player}", player.getName()));
             }
         }
         if(FileCache.getConfig("langConfig").getBoolean("Formats.LevelUp.ActionBar.Enabled")){
-            MessagesUtil.sendActionBar(player, Formatting.basicColor(FileCache.getConfig("langConfig").getString("Formats.LevelUp.ActionBar.Text"))
+            MessagesUtil.sendActionBar(player, Formatting.basicColor(FileCache.getConfig("langConfig").getString("Formats.LevelUp.ActionBar.Text"), player)
                     .replace("{level}", String.valueOf(level))
                     .replace("{player}", player.getName()));
         }
         if(FileCache.getConfig("langConfig").getBoolean("Formats.LevelUp.Title.Enabled")) {
             MessagesUtil.sendTitle(player,
                     Formatting.basicColor(
-                            FileCache.getConfig("langConfig").getString("Formats.LevelUp.Title.Text.Top")
+                            FileCache.getConfig("langConfig").getString("Formats.LevelUp.Title.Text.Top"), player)
                                     .replace("{level]", String.valueOf(level))
-                                    .replace("{player}", player.getName())),
+                                    .replace("{player}", player.getName()),
                     Formatting.basicColor(
-                            FileCache.getConfig("langConfig").getString("Formats.LevelUp.Title.Text.Bottom")
+                            FileCache.getConfig("langConfig").getString("Formats.LevelUp.Title.Text.Bottom"), player)
                                     .replace("{level}", String.valueOf(level))
-                                    .replace("{player}", player.getName()))
+                                    .replace("{player}", player.getName())
             );
         }
         AsyncEvents.giveReward(player, level, RewardsType.valueOf(FileCache.getConfig("rewardsConfig")

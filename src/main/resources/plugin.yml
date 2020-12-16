@@ -12,6 +12,8 @@ softdepend:
   - WorldGuard
   - PlaceholderAPI
   - MythicMobs
+  - MMOItems
+  - MMOLib
 
 
 commands:

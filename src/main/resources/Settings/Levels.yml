@@ -59,6 +59,12 @@ LevelBonus:
   #LEVEL - bonus only triggers when player is at that level
   #GLOBAL - bonus triggers globally to the user and the last bonus earned is the bonus the user will hold until triggered again
 
+  StaticIncrease:
+    Enabled: false #if enabled won't look at levels
+    Amounts:
+      Damage: 0
+      Health: 0.5
+
   #Bonus
   #Damage: can be anything with 2 decimal places, will also increase the damage dealt to the entity
   #Health: MUST be added in .5 iterations, a player can only have 1 heart or half which means values are scaring in .5

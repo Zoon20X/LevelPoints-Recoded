@@ -99,6 +99,10 @@
 
     <repositories>
         <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
@@ -111,19 +115,10 @@
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
         <repository>
-            <id>zz_lumine-repo</id>
-            <url>http://mvn.lumine.io/repository/maven-releases/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
+            <id>lumine-repo</id>
+            <url>http://mvn.lumine.io/repository/maven-public/</url>
         </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
+
         <repository>
             <id>sk89q-repo</id>
             <url>https://maven.enginehub.org/repo/</url>
@@ -145,23 +140,32 @@
         <dependency>
             <groupId>com.bekvon.bukkit.residence</groupId>
             <artifactId>residence</artifactId>
-            <version>1</version>
+            <version>1.56</version>
             <scope>system</scope>
-            <systemPath>${basedir}/libs/Res.jar</systemPath>
+            <systemPath>${project.basedir}/libs/Res.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>com.sk89q.worldguard</groupId>
-            <artifactId>worldguard-bukkit</artifactId>
-            <version>6.1.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/libs/worldguard.jar</systemPath>
+            <groupId>com.github.EngineHub.WorldGuard</groupId>
+            <artifactId>core</artifactId>
+            <version>7.0.4</version>
         </dependency>
         <dependency>
-            <groupId>me.ryanhamshire.GriefPrevention</groupId>
+            <groupId>com.github.TechFortress</groupId>
             <artifactId>GriefPrevention</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/libs/GriefPrevention.jar</systemPath>
+            <version>16.11.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.Indyuce</groupId>
+            <artifactId>MMOItems</artifactId>
+            <version>5.3.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.Indyuce</groupId>
+            <artifactId>MMOLib</artifactId>
+            <version>1.7.1</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.OmerBenGera</groupId>
