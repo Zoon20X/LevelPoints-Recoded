@@ -109,7 +109,7 @@ public class WorldGuardAPI {
                     return;
                 }
             } else {
-                regionContainer = worldGuardPlugin.getRegionContainer();
+                regionContainer = null;
                 try {
                     createQueryMethod = regionContainer.getClass().getMethod("createQuery");
                     regionContainerGetMethod = regionContainer.getClass().getMethod("get", World.class);
