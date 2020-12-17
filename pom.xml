@@ -183,7 +183,11 @@
             <artifactId>PreciousStones</artifactId>
             <version>15.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.Zoon20X</groupId>
+            <artifactId>LevelPoints-Recoded</artifactId>
+            <version>Tag</version>
+        </dependency>
         <dependency>
             <groupId>io.lumine.xikage</groupId>
             <artifactId>MythicMobs</artifactId>
