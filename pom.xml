@@ -99,6 +99,10 @@
 
     <repositories>
         <repository>
+            <id>localrepository</id>
+            <url>file://${project.basedir}/libs</url>
+        </repository>
+        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
@@ -122,10 +126,6 @@
             <id>elMakers-repo</id>
             <url>http://maven.elmakers.com/repository/</url>
         </repository>
-        <repository>
-            <id>sk89q-repo</id>
-            <url>https://maven.enginehub.org/repo/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -140,12 +140,12 @@
             <artifactId>residence</artifactId>
             <version>1.56</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/Res.jar</systemPath>
+            <systemPath>${basedir}/libs/Res.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-bukkit</artifactId>
-            <version>6.1.1-SNAPSHOT</version>
+            <version>1.1</version>
             <scope>system</scope>
             <systemPath>${basedir}/libs/worldguard.jar</systemPath>
         </dependency>
@@ -184,11 +184,6 @@
             <version>15.0</version>
         </dependency>
         <dependency>
-            <groupId>com.github.Zoon20X</groupId>
-            <artifactId>LevelPoints-Recoded</artifactId>
-            <version>Tag</version>
-        </dependency>
-        <dependency>
             <groupId>io.lumine.xikage</groupId>
             <artifactId>MythicMobs</artifactId>
             <version>4.9.1</version>
@@ -203,11 +198,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.16</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sk89q.worldguard</groupId>
-            <artifactId>worldguard-bukkit</artifactId>
-            <version>7.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

@@ -38,13 +38,13 @@ public final class LevelPoints extends JavaPlugin {
             SQL.loadSQL();
         }
         if(getConfig().getBoolean("MMOItems")) {
-            MMOLPS mmoLPS = new MMOLPS();
-            try {
-                MMOItems.plugin.getStats().getItemRestrictionStats().add(mmoLPS);
-                System.out.println("Loaded MAYBE WORKING ITEMS");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+//            MMOLPS mmoLPS = new MMOLPS();
+//            try {
+//                MMOItems.plugin.getStats().getItemRestrictionStats().add(mmoLPS);
+//                System.out.println("Loaded MAYBE WORKING ITEMS");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
         }
         System.out.println(ExternalCache.isRunningWorldGuard());
     }

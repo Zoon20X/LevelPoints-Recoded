@@ -114,7 +114,7 @@ public class AntiAbuseSystem {
         DataStore dataStore = GriefPrevention.instance.dataStore;
         Claim claim = dataStore.getClaimAt(loc, true, null);
         if(claim != null){
-            if(claim.getOwnerID().equals(player.getUniqueId())){
+            if(claim.getOwnerName().equals(player.getName())){
                 return true;
             }else{
                 return false;
