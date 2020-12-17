@@ -143,6 +143,13 @@
             <systemPath>${project.basedir}/libs/Res.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>com.sk89q.worldguard</groupId>
+            <artifactId>worldguard-bukkit</artifactId>
+            <version>6.1.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/worldguard.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>com.github.TechFortress</groupId>
             <artifactId>GriefPrevention</artifactId>
             <version>16.11.5</version>
