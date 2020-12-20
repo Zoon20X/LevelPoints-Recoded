@@ -3,7 +3,6 @@ package levelpoints.Utils;
 import levelpoints.Cache.ExternalCache;
 import levelpoints.Cache.FileCache;
 import levelpoints.levelpoints.LevelPoints;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -29,6 +28,8 @@ public class AsyncFileCache {
     static FileConfiguration LangConfig = YamlConfiguration.loadConfiguration(LangFile);
     static File MMFile = new File(plugin.getDataFolder(), "/OtherSettings/MythicMobs.yml");
     static FileConfiguration MMConfig = YamlConfiguration.loadConfiguration(MMFile);
+    static File rpgMobsFile = new File(plugin.getDataFolder(), "/OtherSettings/LorinthsRpgMobs.yml");
+    static FileConfiguration rpgMobsConfig = YamlConfiguration.loadConfiguration(rpgMobsFile);
     static File FormatsFile = new File(plugin.getDataFolder(), "/Settings/Formats.yml");
     static FileConfiguration FormatsConfig = YamlConfiguration.loadConfiguration(FormatsFile);
     static File RankMultiplierFile = new File(plugin.getDataFolder(), "/Settings/RankMultiplier.yml");
@@ -42,6 +43,7 @@ public class AsyncFileCache {
         FileCache.createFile(RewardsFile, RewardsConfig, "/Settings/Rewards.yml", "Settings/Rewards.yml", "Rewards");
         FileCache.createFile(WSFile, WSConfig, "/OtherSettings/WildStacker.yml", "OtherSettings/WildStacker.yml", "WildStacker");
         FileCache.createFile(MMFile, MMConfig, "/OtherSettings/MythicMobs.yml", "OtherSettings/MythicMobs.yml", "MythicMobs");
+        FileCache.createFile(rpgMobsFile, rpgMobsConfig, "/OtherSettings/LorinthsRpgMobs.yml", "OtherSettings/LorinthsRpgMobs.yml", "LorinthsRpgMobs");
         FileCache.createFile(LangFile, LangConfig, "Lang.yml", "Lang.yml", "Lang");
 
         startAsyncCache();
@@ -71,6 +73,7 @@ public class AsyncFileCache {
                 FileCache.addFileToCache("rewardsConfig", runConfig("/Settings/Rewards.yml"));
                 FileCache.addFileToCache("langConfig", runConfig("Lang.yml"));
                 FileCache.addFileToCache("mmConfig", runConfig("/OtherSettings/MythicMobs.yml"));
+                FileCache.addFileToCache("rpgMobsConfig", runConfig("/OtherSettings/LorinthsRpgMobs.yml"));
                 if(ExternalCache.isRunningWildStacker()) {
                     FileCache.addFileToCache("wildStacker", WSConfig);
                 }

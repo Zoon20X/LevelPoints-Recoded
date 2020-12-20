@@ -1,0 +1,11 @@
+Zombie:
+  Levels:
+    1:
+      EXP: 10
+      Required: 3
+    2:
+      EXP: 10
+      Required: 3
+    3:
+      EXP: 15
+      Required: 3

@@ -331,11 +331,43 @@ public class AsyncEvents {
 
     }
 
+    public static double getLevelEXP(String name, int level, FileConfiguration configuration){
+
+        for(String x : configuration.getConfigurationSection("").getKeys(false)){
+            if(x.equalsIgnoreCase(name)){
+                for(String xx : configuration.getConfigurationSection(x + ".Levels").getKeys(false)){
+                    if(Integer.parseInt(xx) == level){
+                        return configuration.getDouble(x + ".Levels." + level + ".EXP");
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+    public static Integer getLevelRequired(String name, int level, FileConfiguration configuration){
+
+        for(String x : configuration.getConfigurationSection("").getKeys(false)){
+            System.out.println(x);
+            if(x.equalsIgnoreCase(name)){
+                for(String xx : configuration.getConfigurationSection(x + ".Levels").getKeys(false)){
+                    System.out.println(xx);
+                    if(Integer.parseInt(xx) == level){
+                        return configuration.getInt(x + ".Levels." + level + ".Required");
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+
     public static Boolean canEnterRegion(Player player, Block block) {
         boolean value = false;
         WorldGuardAPI worldGuardAPI = new WorldGuardAPI(LevelPoints.getInstance().getServer().getPluginManager().getPlugin("WorldGuard"), LevelPoints.getInstance());
         ApplicableRegionSet checkSet = worldGuardAPI.getRegionSet(block.getLocation());
-
+        if(checkSet == null || worldGuardAPI == null){
+            return false;
+        }
         if (!checkSet.getRegions().isEmpty()) {
             for (ProtectedRegion x : checkSet.getRegions()) {
                 if (FileCache.getConfig("expConfig").getConfigurationSection("Anti-Abuse.WorldGuard.LevelRegions.Regions").getKeys(false).contains(x.getId())) {

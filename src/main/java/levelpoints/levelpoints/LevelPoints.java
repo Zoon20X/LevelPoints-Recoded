@@ -5,6 +5,7 @@ import levelpoints.Containers.PlayerContainer;
 import levelpoints.Utils.AsyncEvents;
 
 import net.Indyuce.mmoitems.MMOItems;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -47,6 +48,9 @@ public final class LevelPoints extends JavaPlugin {
 //            }
         }
         System.out.println(ExternalCache.isRunningWorldGuard());
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new LevelPointsExpansion().register();
+        }
     }
     public static Plugin getInstance(){
         return instance;

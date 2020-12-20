@@ -22,10 +22,9 @@ import levelpoints.levelpoints.Formatting;
 import levelpoints.levelpoints.LevelPoints;
 
 import levelpoints.levelpoints.SQL;
+import me.lorinth.rpgmobs.LorinthsRpgMobs;
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
-import org.bukkit.CropState;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -72,6 +71,45 @@ public class PlayerEvents implements Listener {
             Player target = (Player) event.getEntity();
 
         }
+        if (event.getDamager() instanceof Arrow) {
+            final Arrow arrow = (Arrow) event.getDamager();
+
+            if (arrow.getShooter() instanceof Player) {
+                Player Attacker = (Player) arrow.getShooter();
+                PlayerContainer con = AsyncEvents.getPlayerContainer(Attacker);
+                Entity ent = null;
+                if (!(event.getEntity() instanceof Player)) {
+                    ent = event.getEntity();
+                }
+                if (ent != null) {
+                    if (LevelPoints.getInstance().getConfig().getBoolean("MythicMobs")) {
+                        if (MythicMobs.inst().getAPIHelper().isMythicMob(ent)) {
+                            ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(ent);
+                            if (FileCache.getConfig("mmConfig").getConfigurationSection("").getKeys(false).contains(mob.getType().getInternalName())) {
+                                int min = FileCache.getConfig("mmConfig").getInt(mob.getType().getInternalName() + ".Level.Min");
+                                int max = FileCache.getConfig("mmConfig").getInt(mob.getType().getInternalName() + ".Level.Max");
+                                if (min > con.getLevel() || max < con.getLevel()) {
+                                    event.setCancelled(true);
+                                }
+                                return;
+                            }
+                        }
+                    }
+                    if (LevelPoints.getInstance().getConfig().getBoolean("LorinthsRpgMobs")) {
+                        if (LorinthsRpgMobs.GetLevelOfEntity(ent) != null) {
+                            int level = LorinthsRpgMobs.GetLevelOfEntity(ent);
+                            FileConfiguration configuration = FileCache.getConfig("rgbMobsConfig");
+                            int rl = AsyncEvents.getLevelRequired(ent.getType().toString(), level, configuration);
+                            if (con.getLevel() < rl) {
+                                event.setCancelled(true);
+                                return;
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
         if(event.getDamager() instanceof Player){
             Player attacker = (Player) event.getDamager();
             if(event.getEntity() instanceof LivingEntity) {
@@ -95,6 +133,18 @@ public class PlayerEvents implements Listener {
                             }
                         }
                     }
+                    if (LevelPoints.getInstance().getConfig().getBoolean("LorinthsRpgMobs")) {
+                        if (LorinthsRpgMobs.GetLevelOfEntity(entity) != null) {
+                            int level = LorinthsRpgMobs.GetLevelOfEntity(entity);
+                            FileConfiguration configuration = FileCache.getConfig("rgbMobsConfig");
+                            int rl = AsyncEvents.getLevelRequired(entity.getType().toString(), level, configuration);
+                            if(container.getLevel() < rl){
+                                event.setCancelled(true);
+                                return;
+
+                            }
+                        }
+                    }
                     if (EXPContainer.getRequiredLevel(entity.getType(), SettingsEnum.Damage) > container.getLevel()) {
                         event.setCancelled(true);
                     }
@@ -114,6 +164,21 @@ public class PlayerEvents implements Listener {
                         ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity);
                         double exp = FileCache.getConfig("mmConfig").getDouble(mob.getType().getInternalName() + ".EXP");
                         AsyncEvents.triggerEarnEXPEvent(TasksEnum.MobDeath, event, exp, player);
+                        return;
+                    }
+                }
+                if (LevelPoints.getInstance().getConfig().getBoolean("LorinthsRpgMobs")) {
+                    if (LorinthsRpgMobs.GetLevelOfEntity(entity) != null) {
+                        int level = LorinthsRpgMobs.GetLevelOfEntity(entity);
+                        FileConfiguration configuration = FileCache.getConfig("rgbMobsConfig");
+
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                double exp = AsyncEvents.getLevelEXP(entity.getType().toString(), level, configuration);
+                                AsyncEvents.triggerEarnEXPEvent(TasksEnum.MobDeath, event, exp, player);
+                            }
+                        }.runTaskAsynchronously(LevelPoints.getInstance());
                         return;
                     }
                 }
