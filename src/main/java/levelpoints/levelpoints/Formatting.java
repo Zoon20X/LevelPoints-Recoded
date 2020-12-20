@@ -107,7 +107,6 @@ public class Formatting {
         if (LevelPoints.getInstance().getConfig().getBoolean("Lang.PlaceholderAPI")) {
             msg = PlaceholderAPI.setPlaceholders(player, msg);
         }
-
         msg = msg.replace("{lp_player}", player.getName())
                 .replace("{lp_level}", valueOf(playerContainer.getLevel()))
                 .replace("{lp_exp}", valueOf(playerContainer.getEXP()))

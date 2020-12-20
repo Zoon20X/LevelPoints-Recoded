@@ -281,6 +281,7 @@ public class AsyncEvents {
         return playerContainers.get(player);
     }
     public static void triggerEarnEXPEvent(TasksEnum task, Event event, double amount, Player player) {
+
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -298,6 +299,7 @@ public class AsyncEvents {
             @Override
             public void run() {
                 BoosterActivationEvent boosterEvent = new BoosterActivationEvent(multiplier, time, player);
+
                 Bukkit.getPluginManager().callEvent(boosterEvent);
                 if (!boosterEvent.isCancelled()) {
                     PlayerContainer playerContainer = getPlayerContainer(player);

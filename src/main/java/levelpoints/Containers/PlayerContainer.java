@@ -107,8 +107,8 @@ public class PlayerContainer {
         if(!playerCache.get(player).containsKey("EXP")){
             playerCache.get(player).put("EXP", FileCache.getConfig(player.getUniqueId().toString()).getDouble("EXP.Amount"));
         }
-        df.setRoundingMode(RoundingMode.DOWN);
-        return Double.valueOf(df.format(playerCache.get(player).get("EXP"))) * 10 / 10.0;
+
+        return Double.valueOf(String.valueOf(playerCache.get(player).get("EXP")));
     }
     public double getRequiredEXP(){
         if(FileCache.getConfig("levelConfig").getBoolean("Leveling.CustomLeveling.Enabled")){
@@ -120,8 +120,9 @@ public class PlayerContainer {
                 playerCache.get(player).put("RequiredEXP", LevelsContainer.generateFormula(player, LevelsContainer.getFormula()));
             }
         }
-        df.setRoundingMode(RoundingMode.DOWN);
-        return Double.parseDouble(df.format(playerCache.get(player).get("RequiredEXP"))) * 10 / 10.0;
+
+
+        return Double.parseDouble(String.valueOf(playerCache.get(player).get("RequiredEXP")));
     }
     public int getPrestige(){
         if(!playerCache.get(player).containsKey("Prestige")){
@@ -285,13 +286,17 @@ public class PlayerContainer {
     }
     public void removeEXP(double value){
         BigDecimal amount = BigDecimal.valueOf(value);
-        if(getEXP() >= value){
-            double has = getEXP();
-            has = has - value;
-            playerCache.get(player).put("EXP", has);
-            setXpBar();
+        if(value <= getRequiredEXP()) {
+            if (getEXP() >= value) {
+                double has = getEXP();
+                has = has - value;
+                playerCache.get(player).put("EXP", has);
+                setXpBar();
+            } else {
+                //System.out.println(Formatting.basicColor("&cCannot remove &4" + amount + "&c of EXP as player only has &4" + getEXP()));
+            }
         }else{
-            //System.out.println(Formatting.basicColor("&cCannot remove &4" + amount + "&c of EXP as player only has &4" + getEXP()));
+            removeEXP(getRequiredEXP());
         }
 
     }
@@ -385,6 +390,7 @@ public class PlayerContainer {
             setEXP(getRequiredEXP());
             return;
         }
+        System.out.println(value +"-" +getEXP() + "-" + getLevel());
         if(removeEXP) {
             removeEXP(getRequiredEXP());
         }
