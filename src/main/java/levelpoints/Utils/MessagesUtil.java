@@ -26,7 +26,6 @@ public class MessagesUtil {
 
     public static void sendBossBar(Player player, String msg, BarColor color){
         if(!bossBars.containsKey(player)){
-            System.out.println("a");
             BossBar bar = Bukkit.createBossBar(msg, color, BarStyle.SOLID);
             bossBars.put(player, bar);
             bossBarRemove(player);
@@ -36,11 +35,9 @@ public class MessagesUtil {
         BossBar bar = bossBars.get(player);
 
         bar.setTitle(Formatting.formatInfoTags(player, msg));
-        PlayerContainer container = AsyncEvents.getPlayerContainer(player);
-        double value = container.getEXP();
-        double valueRequired = container.getRequiredEXP();
-
-        double val = Math.round((value / valueRequired));
+        float percentage = (float) AsyncEvents.getPlayerContainer(player).getEXP();
+        double val =(percentage / AsyncEvents.getPlayerContainer(player).getRequiredEXP());
+        System.out.println(val);
         bar.setProgress(val);
 
     }

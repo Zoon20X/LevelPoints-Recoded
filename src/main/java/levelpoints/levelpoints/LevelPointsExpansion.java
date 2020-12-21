@@ -1,11 +1,9 @@
 package levelpoints.levelpoints;
 
 
-import levelpoints.Cache.FileCache;
 import levelpoints.Utils.AsyncEvents;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemorySection;
@@ -83,6 +81,7 @@ public class LevelPointsExpansion extends PlaceholderExpansion {
             }
             if (identifier.contains("Top")) {
 
+
                 ArrayList<String> name = new ArrayList<>();
                 ArrayList<Integer> level = new ArrayList<>();
                 File TopFile = new File(LevelPoints.getInstance().getDataFolder(), "TopList.yml");
@@ -150,43 +149,7 @@ public class LevelPointsExpansion extends PlaceholderExpansion {
             if (identifier.equals("progress_bar")) {
                 if (AsyncEvents.isPlayerInCache(player)) {
                     if (String.valueOf(AsyncEvents.getPlayerContainer(player)) != null) {
-                        double required_progress = AsyncEvents.getPlayerContainer(player).getRequiredEXP();
-                        double current_progress = AsyncEvents.getPlayerContainer(player).getEXP();
-                        double progress_percentage = current_progress / required_progress;
-                        StringBuilder sb = new StringBuilder();
-                        int bar_length;
-                        if (FileCache.containsFile("langConfig")) {
-                            bar_length = FileCache.getConfig("langConfig").getInt("ProgressBar.PlaceholderAPI.Size");
-                        } else {
-                            bar_length = 8;
-                        }
-
-                        String completed;
-                        String needed;
-                        boolean complete = false;
-                        boolean need = false;
-                        for (int i = 0; i < bar_length; i++) {
-                            if (i < bar_length * progress_percentage) {
-                                if (complete) {
-                                    completed = ChatColor.stripColor(FileCache.getConfig("langConfig").getString("ProgressBar.Complete"));
-                                } else {
-                                    completed = Formatting.basicColor(FileCache.getConfig("langConfig").getString("ProgressBar.Complete"));
-                                    complete = true;
-                                }
-                                sb.append(completed);
-                            } else {
-
-                                if (need) {
-                                    needed = ChatColor.stripColor(Formatting.basicColor(FileCache.getConfig("langConfig").getString("ProgressBar.Required")));
-                                } else {
-                                    needed = Formatting.basicColor(FileCache.getConfig("langConfig").getString("ProgressBar.Required"));
-                                    need = true;
-                                }
-                                sb.append(needed);
-                            }
-                        }
-
-                        return sb.toString();
+                        return AsyncEvents.getProgressBar(player);
                     }
                 }
                 return "Loading...";
@@ -195,7 +158,6 @@ public class LevelPointsExpansion extends PlaceholderExpansion {
                 if (AsyncEvents.isPlayerInCache(player)) {
                     if (String.valueOf(AsyncEvents.getPlayerContainer(player)) != null) {
                         float percentage = (float) AsyncEvents.getPlayerContainer(player).getEXP();
-
                         return String.valueOf(Math.round((percentage / AsyncEvents.getPlayerContainer(player).getRequiredEXP()) * 100));
                     }
                 }
@@ -208,6 +170,12 @@ public class LevelPointsExpansion extends PlaceholderExpansion {
             if (player == null) {
                 return "";
             }
+
+            if(identifier.equals("rank_multiplier")){
+                return String.valueOf(AsyncEvents.getRankMultiplier(player));
+            }
+
+
             int prestigelevel = AsyncEvents.getPlayerContainer(player).getPrestige();
 
             if (!(prestigelevel == 0)) {

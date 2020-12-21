@@ -8,6 +8,7 @@ import levelpoints.Utils.AsyncEvents;
 import levelpoints.Utils.AsyncFileCache;
 import levelpoints.Utils.CommandChecks;
 import levelpoints.Utils.InventoryHolders.BoosterHolder;
+import levelpoints.events.CustomEvents.MessageType;
 import levelpoints.events.CustomEvents.TopEnums;
 import levelpoints.levelpoints.Formatting;
 
