@@ -7,9 +7,13 @@ import com.google.gson.reflect.TypeToken;
 import levelpoints.Cache.FileCache;
 import levelpoints.Cache.SettingsCache;
 import levelpoints.Utils.AsyncEvents;
+import levelpoints.Utils.MessagesUtil;
 import levelpoints.levelpoints.Formatting;
 import levelpoints.levelpoints.LevelPoints;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -263,6 +267,15 @@ public class PlayerContainer {
                 //System.out.println(Formatting.basicColor("&3Added " + value + " EXP to " + player.getName()));
                 if (canLevelUp()) {
                     addLevel(1, true);
+                }
+                float percentage = (float) AsyncEvents.getPlayerContainer(player).getEXP();
+                double val = (percentage / AsyncEvents.getPlayerContainer(player).getRequiredEXP());
+                if (!Bukkit.getVersion().contains("1.8")) {
+                    MessagesUtil.sendBossBar(player,
+                            FileCache.getConfig("langConfig").getString("Formats.LevelUp.BossBar.Text"),
+                            BarColor.valueOf(LevelPoints.getInstance().getConfig().getString("BossBarColor")),
+                            BarStyle.SOLID,
+                            val);
                 }
             } else {
                 //System.out.println(Formatting.basicColor("&3Added"));

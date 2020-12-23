@@ -376,15 +376,7 @@ public class PlayerEvents implements Listener {
             if (LevelPoints.getInstance().getConfig().getBoolean("Actionbar.Enabled")) {
                 MessagesUtil.sendActionBar(event.getPlayer(), LevelPoints.getInstance().getConfig().getString("Actionbar.Details.Text").replace("{EXP_Earn_Amount}", String.valueOf(event.getAmount())));
             }
-            float percentage = (float) AsyncEvents.getPlayerContainer(event.getPlayer()).getEXP();
-            double val = (percentage / AsyncEvents.getPlayerContainer(event.getPlayer()).getRequiredEXP());
-            if (!Bukkit.getVersion().contains("1.8")) {
-                MessagesUtil.sendBossBar(event.getPlayer(),
-                        FileCache.getConfig("langConfig").getString("Formats.LevelUp.BossBar.Text"),
-                        BarColor.valueOf(LevelPoints.getInstance().getConfig().getString("BossBarColor")),
-                        BarStyle.SOLID,
-                        val);
-            }
+
         }
         AsyncEvents.getPlayerContainer(event.getPlayer()).setXpBar();
         if (event.getTaskEvent() instanceof EntityDeathEvent) {

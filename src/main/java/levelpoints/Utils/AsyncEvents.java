@@ -461,6 +461,7 @@ public class AsyncEvents {
                         x.sendMessage(Formatting.basicColor(FileCache.getConfig("expConfig").getString("TimedEXP.Message")
                                 .replace("{lp_timed_amount}", String.valueOf(FileCache.getConfig("expConfig").getDouble("TimedEXP.Amount")))
                                 .replace("{lp_timed_delay}", String.valueOf(FileCache.getConfig("expConfig").getInt("TimedEXP.Delay")))));
+
                     }
                 }
             }.runTaskTimerAsynchronously(LevelPoints.getInstance(),0, 20 * FileCache.getConfig("expConfig").getInt("TimedEXP.Delay"));
