@@ -6,6 +6,8 @@ import com.cryptomorin.xseries.XBlock;
 import com.cryptomorin.xseries.XMaterial;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
+import io.lumine.xikage.mythicmobs.utils.bossbar.BossBarColor;
+import io.lumine.xikage.mythicmobs.utils.bossbar.BossBarStyle;
 import levelpoints.Cache.FileCache;
 import levelpoints.Cache.LangCache;
 import levelpoints.Cache.SettingsCache;
@@ -27,6 +29,8 @@ import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
@@ -372,6 +376,15 @@ public class PlayerEvents implements Listener {
             if (LevelPoints.getInstance().getConfig().getBoolean("Actionbar.Enabled")) {
                 MessagesUtil.sendActionBar(event.getPlayer(), LevelPoints.getInstance().getConfig().getString("Actionbar.Details.Text").replace("{EXP_Earn_Amount}", String.valueOf(event.getAmount())));
             }
+            float percentage = (float) AsyncEvents.getPlayerContainer(event.getPlayer()).getEXP();
+            double val = (percentage / AsyncEvents.getPlayerContainer(event.getPlayer()).getRequiredEXP());
+            if (!Bukkit.getVersion().contains("1.8")) {
+                MessagesUtil.sendBossBar(event.getPlayer(),
+                        FileCache.getConfig("langConfig").getString("Formats.LevelUp.BossBar.Text"),
+                        BarColor.valueOf(LevelPoints.getInstance().getConfig().getString("BossBarColor")),
+                        BarStyle.SOLID,
+                        val);
+            }
         }
         AsyncEvents.getPlayerContainer(event.getPlayer()).setXpBar();
         if (event.getTaskEvent() instanceof EntityDeathEvent) {
@@ -522,7 +535,7 @@ public class PlayerEvents implements Listener {
     }
 
     @EventHandler
-    public void onLevelUp(LevelUpEvent event){
+    public void onLevelUp(LevelUpEvent event) {
         Player player = event.getPlayer();
         AsyncEvents.getPlayerContainer(player).setXpBar();
         int level = event.getLevel();
@@ -531,46 +544,55 @@ public class PlayerEvents implements Listener {
         FileConfiguration TopConfig = YamlConfiguration.loadConfiguration(TopFile);
         TopConfig.set(player.getUniqueId() + ".Name", player.getName());
         TopConfig.set(player.getUniqueId() + ".Level", level);
-        if(FileCache.getConfig("levelConfig").getBoolean("LevelBonus.Enabled")) {
-        if(LevelsContainer.hasLevelBonus("Health", level)) {
-            player.setMaxHealth(player.getMaxHealth() + LevelsContainer.getLevelBonus("Health", level));
-        }else {
-            player.setMaxHealth(20);
-        }
+        if (FileCache.getConfig("levelConfig").getBoolean("LevelBonus.Enabled")) {
+            if (LevelsContainer.hasLevelBonus("Health", level)) {
+                player.setMaxHealth(player.getMaxHealth() + LevelsContainer.getLevelBonus("Health", level));
+            } else {
+                player.setMaxHealth(20);
+            }
         }
         try {
             TopConfig.save(TopFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(FileCache.getConfig("langConfig").getBoolean("Formats.LevelUp.Chat.Enabled")){
-            for(String x : FileCache.getConfig("langConfig").getStringList("Formats.LevelUp.Chat.Text")){
+        if (FileCache.getConfig("langConfig").getBoolean("Formats.LevelUp.Chat.Enabled")) {
+            for (String x : FileCache.getConfig("langConfig").getStringList("Formats.LevelUp.Chat.Text")) {
                 player.sendMessage(Formatting.basicColor(x, player)
                         .replace("{level}", String.valueOf(level))
                         .replace("{player}", player.getName()));
             }
         }
-        if(FileCache.getConfig("langConfig").getBoolean("Formats.LevelUp.ActionBar.Enabled")){
+        if (FileCache.getConfig("langConfig").getBoolean("Formats.LevelUp.ActionBar.Enabled")) {
             MessagesUtil.sendActionBar(player, Formatting.basicColor(FileCache.getConfig("langConfig").getString("Formats.LevelUp.ActionBar.Text"), player)
                     .replace("{level}", String.valueOf(level))
                     .replace("{player}", player.getName()));
         }
-        if(FileCache.getConfig("langConfig").getBoolean("Formats.LevelUp.Title.Enabled")) {
+        if (FileCache.getConfig("langConfig").getBoolean("Formats.LevelUp.Title.Enabled")) {
             MessagesUtil.sendTitle(player,
                     Formatting.basicColor(
                             FileCache.getConfig("langConfig").getString("Formats.LevelUp.Title.Text.Top"), player)
-                                    .replace("{level]", String.valueOf(level))
-                                    .replace("{player}", player.getName()),
+                            .replace("{level]", String.valueOf(level))
+                            .replace("{player}", player.getName()),
                     Formatting.basicColor(
                             FileCache.getConfig("langConfig").getString("Formats.LevelUp.Title.Text.Bottom"), player)
-                                    .replace("{level}", String.valueOf(level))
-                                    .replace("{player}", player.getName())
+                            .replace("{level}", String.valueOf(level))
+                            .replace("{player}", player.getName())
             );
         }
         AsyncEvents.giveReward(player, level, RewardsType.valueOf(FileCache.getConfig("rewardsConfig")
                 .getString("Settings.Method")));
-        if(LevelPoints.getInstance().getConfig().getBoolean("UseSQL")) {
+        if (LevelPoints.getInstance().getConfig().getBoolean("UseSQL")) {
             SQL.RunSQLUpload(player);
+        }
+        float percentage = (float) AsyncEvents.getPlayerContainer(player).getEXP();
+        double val = (percentage / AsyncEvents.getPlayerContainer(player).getRequiredEXP());
+        if (!Bukkit.getVersion().contains("1.8")) {
+            MessagesUtil.sendBossBar(player,
+                    FileCache.getConfig("langConfig").getString("Formats.LevelUp.BossBar.Text"),
+                    BarColor.valueOf(LevelPoints.getInstance().getConfig().getString("BossBarColor")),
+                    BarStyle.SOLID,
+                    val);
         }
     }
 

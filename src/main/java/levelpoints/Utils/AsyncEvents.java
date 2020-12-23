@@ -17,6 +17,7 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -47,6 +48,15 @@ public class AsyncEvents {
 
     public static void updateLevelInCache(Player player, Integer value){
         LevelsCache.put(player, value);
+        float percentage = (float) AsyncEvents.getPlayerContainer(player).getEXP();
+        double val = (percentage / AsyncEvents.getPlayerContainer(player).getRequiredEXP());
+        if (!Bukkit.getVersion().contains("1.8")) {
+            MessagesUtil.sendBossBar(player,
+                    FileCache.getConfig("langConfig").getString("Formats.LevelUp.BossBar.Text"),
+                    BarColor.valueOf(LevelPoints.getInstance().getConfig().getString("BossBarColor")),
+                    BarStyle.SOLID,
+                    val);
+        }
 
     }
     public static Integer getLevelTopInCache(Player player){
@@ -440,26 +450,21 @@ public class AsyncEvents {
         return value;
     }
     public static void giveTimedEXP() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (FileCache.getConfig("expConfig").getBoolean("TimedEXP.Enabled")) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            for (Player x : Bukkit.getOnlinePlayers()) {
-                                PlayerContainer container = getPlayerContainer(x);
-                                container.addEXP(FileCache.getConfig("expConfig").getDouble("TimedEXP.Amount"));
-                                x.sendMessage(Formatting.basicColor(FileCache.getConfig("expConfig").getString("TimedEXP.Message")
-                                        .replace("{lp_timed_amount}", String.valueOf(FileCache.getConfig("expConfig").getDouble("TimedEXP.Amount")))
-                                        .replace("{lp_timed_delay}", String.valueOf(FileCache.getConfig("expConfig").getInt("TimedEXP.Delay")))));
-                                giveTimedEXP();
-                            }
-                        }
-                    }.runTaskLaterAsynchronously(LevelPoints.getInstance(), FileCache.getConfig("expConfig").getInt("TimedEXP.Delay"));
+        if (FileCache.getConfig("expConfig").getBoolean("TimedEXP.Enabled")) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    for (Player x : Bukkit.getOnlinePlayers()) {
+                        PlayerContainer container = getPlayerContainer(x);
+                        container.addEXP(FileCache.getConfig("expConfig").getDouble("TimedEXP.Amount"));
+
+                        x.sendMessage(Formatting.basicColor(FileCache.getConfig("expConfig").getString("TimedEXP.Message")
+                                .replace("{lp_timed_amount}", String.valueOf(FileCache.getConfig("expConfig").getDouble("TimedEXP.Amount")))
+                                .replace("{lp_timed_delay}", String.valueOf(FileCache.getConfig("expConfig").getInt("TimedEXP.Delay")))));
+                    }
                 }
-            }
-        }.runTaskLater(LevelPoints.getInstance(), 10*50);
+            }.runTaskTimerAsynchronously(LevelPoints.getInstance(),0, 20 * FileCache.getConfig("expConfig").getInt("TimedEXP.Delay"));
+        }
     }
     public static void giveReward(Player player, int value, RewardsType rewardsType) {
 
@@ -547,6 +552,8 @@ public class AsyncEvents {
     }
 
     public static void runMessage(Player player, MessageType type, String message){
+
+        double val = FileCache.getConfig("langConfig").getDouble("Formats.Rewards.BossBar.Length");
         switch (type){
             case Chat:
                 if(!message.equalsIgnoreCase("")) {
@@ -556,7 +563,10 @@ public class AsyncEvents {
             case Title:
                 break;
             case Bossbar:
-                MessagesUtil.sendBossBar(player, "&cLevel: {lp_level}", BarColor.RED);
+                MessagesUtil.sendBossBar(player,
+                        FileCache.getConfig("langConfig").getString("Formats.Rewards.BossBar.Message"),
+                        BarColor.valueOf(FileCache.getConfig("langConfig").getString("Formats.Rewards.BossBar.Color")),
+                        BarStyle.SOLID, val);
                 break;
             case Actionbar:
                 MessagesUtil.sendActionBar(player, message);
@@ -564,6 +574,7 @@ public class AsyncEvents {
         }
     }
     public static void runMessage(Player player, MessageType type, String message, String messageBottom){
+        double val = FileCache.getConfig("langConfig").getDouble("Formats.Rewards.BossBar.Length");
         switch (type){
             case Chat:
                 player.sendMessage(Formatting.formatInfoTags(player, message));
@@ -572,7 +583,10 @@ public class AsyncEvents {
                 MessagesUtil.sendTitle(player, message, messageBottom);
                 break;
             case Bossbar:
-                MessagesUtil.sendBossBar(player, "&cLevel: {lp_level}", BarColor.RED);
+                MessagesUtil.sendBossBar(player,
+                        FileCache.getConfig("langConfig").getString("Formats.Rewards.BossBar.Message"),
+                        BarColor.valueOf(FileCache.getConfig("langConfig").getString("Formats.Rewards.BossBar.Color")),
+                        BarStyle.SOLID, val);
                 break;
             case Actionbar:
                 MessagesUtil.sendActionBar(player, message);

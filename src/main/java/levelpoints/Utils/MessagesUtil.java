@@ -24,23 +24,26 @@ public class MessagesUtil {
     static HashMap<Player, BossBar> bossBars = new HashMap<>();
 
 
-    public static void sendBossBar(Player player, String msg, BarColor color){
-        if(!bossBars.containsKey(player)){
-            BossBar bar = Bukkit.createBossBar(msg, color, BarStyle.SOLID);
-            bossBars.put(player, bar);
-            bossBarRemove(player);
+    public static void sendBossBar(Player player, String msg, BarColor color, BarStyle style, double val) {
+        if (LevelPoints.getInstance().getConfig().getBoolean("BossBar")) {
+            if (!bossBars.containsKey(player)) {
+                BossBar bar = Bukkit.createBossBar(msg, color, style);
+                bossBars.put(player, bar);
+                if(LevelPoints.getInstance().getConfig().getBoolean("ShowOnEXPOnly")) {
+                    bossBarRemove(player);
+                }
+            }
+            getBossBar(player).addPlayer(player);
+
+            BossBar bar = bossBars.get(player);
+
+            bar.setTitle(Formatting.formatInfoTags(player, msg.replace("{level}", String.valueOf(AsyncEvents.getPlayerContainer(player).getLevel()))));
+
+            System.out.println(val);
+            bar.setProgress(val);
         }
-        getBossBar(player).addPlayer(player);
-
-        BossBar bar = bossBars.get(player);
-
-        bar.setTitle(Formatting.formatInfoTags(player, msg));
-        float percentage = (float) AsyncEvents.getPlayerContainer(player).getEXP();
-        double val =(percentage / AsyncEvents.getPlayerContainer(player).getRequiredEXP());
-        System.out.println(val);
-        bar.setProgress(val);
-
     }
+
     public static BossBar getBossBar(Player player){
         return bossBars.get(player);
     }
@@ -53,7 +56,7 @@ public class MessagesUtil {
                 getBossBar(player).removePlayer(player);
                 bossBars.remove(player);
             }
-        }.runTaskLaterAsynchronously(LevelPoints.getInstance(), 20 * 5);
+        }.runTaskLaterAsynchronously(LevelPoints.getInstance(), LevelPoints.getInstance().getConfig().getInt("ShowTime") * 20);
     }
 
     public static void sendActionBar(Player player, String msgs){

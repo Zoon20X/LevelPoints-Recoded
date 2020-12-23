@@ -81,6 +81,7 @@ public class AsyncFileCache {
                     createRankMultiplier();
                 }
 
+
             }
         }.runTaskAsynchronously(LevelPoints.getInstance());
     }

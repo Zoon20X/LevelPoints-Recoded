@@ -111,6 +111,8 @@ Formats:
     ActionBar:
       Enabled: false
       Text: '{level}'
+    BossBar:
+      Text: 'Level: {level} '
 ProgressBar:
   Complete: '&3|'
   Required: '&7|'

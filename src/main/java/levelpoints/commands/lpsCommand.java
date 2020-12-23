@@ -46,6 +46,26 @@ public class lpsCommand implements CommandExecutor {
                 }
             }.runTaskAsynchronously(LevelPoints.getInstance());
         }
+        if(sender.hasPermission("lp.admin")) {
+            if (args[0].equalsIgnoreCase("announce")) {
+                String Name = "";
+                for (int i = 2; i < args.length; i++) {
+                    Name += args[i] + " ";
+                }
+                if (Bukkit.getPlayer(args[1]) != null) {
+                    Player player = (Player) sender;
+                    PlayerContainer container = AsyncEvents.getPlayerContainer(player);
+                    Name = Name
+                            .replace("{lp_player}", player.getName())
+                            .replace("{lp_level}", String.valueOf(container.getLevel()))
+                            .replace("{lp_prestige}", String.valueOf(container.getPrestige()));
+
+                    LevelPoints.getInstance().getServer().broadcastMessage(Formatting.basicColor(Name));
+                }
+            }
+        }
+
+
         if(args.length == 1){
             new BukkitRunnable() {
                 @Override

@@ -70,7 +70,6 @@ public class UtilCollector {
         plugin.getServer().getConsoleSender().sendMessage(Formatting.basicColor("&3Running Files Check...."));
         AsyncFileCache.startAsyncCreate();
         AsyncEvents.startVersionCheck();
-        AsyncEvents.giveTimedEXP();
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -80,8 +79,7 @@ public class UtilCollector {
                 if (FileCache.getConfig("levelConfig").getBoolean("Leveling.CustomLeveling.Enabled")) {
                     LevelsContainer.generateCustomLevels();
                 }
-
-
+                AsyncEvents.giveTimedEXP();
             }
         }.runTaskLaterAsynchronously(LevelPoints.getInstance(), 3 * 10);
         if (ExternalCache.isRunningWorldGuard()) {

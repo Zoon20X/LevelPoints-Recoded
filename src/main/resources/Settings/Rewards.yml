@@ -14,7 +14,7 @@ Settings:
 
 Rewards:
   Prestige-0:
-    Level-1:
+    Level-100:
       Message: "&2Congratz you got reward {lp_Reward}" #this will only appear if global is set to false
       #Message formats
       #Message: "Yeet" use this for actionbar,bossbar,chat
@@ -22,4 +22,4 @@ Rewards:
       # Top: "Yeetus"
       # Bottom: "Deletus" #only use this for title
       cmds:
-        - say %player% diamond 1
+        - lps announce %player% {lp_player} has leveled up to level {lp_level}
