@@ -53,7 +53,7 @@ public class lpsCommand implements CommandExecutor {
                     Name += args[i] + " ";
                 }
                 if (Bukkit.getPlayer(args[1]) != null) {
-                    Player player = (Player) sender;
+                    Player player = Bukkit.getPlayer(args[1]);
                     PlayerContainer container = AsyncEvents.getPlayerContainer(player);
                     Name = Name
                             .replace("{lp_player}", player.getName())

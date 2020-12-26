@@ -58,12 +58,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerEvents implements Listener {
 
     static HashMap<Player, Material> cachedBlocks = new HashMap<>();
     static HashMap<Player, Location> cachedLocations = new HashMap<>();
+    static HashSet<Player> delayedPlayers = new HashSet<>();
 
     public PlayerEvents(Plugin plugin) {
     }
@@ -73,7 +75,9 @@ public class PlayerEvents implements Listener {
         if(event.getEntity() instanceof Player && event.getDamager() instanceof Player){
             Player attacker = (Player) event.getDamager();
             Player target = (Player) event.getEntity();
-
+            if(delayedPlayers.contains(attacker)){
+                event.setCancelled(true);
+            }
         }
         if (event.getDamager() instanceof Arrow) {
             final Arrow arrow = (Arrow) event.getDamager();
@@ -84,6 +88,10 @@ public class PlayerEvents implements Listener {
                 Entity ent = null;
                 if (!(event.getEntity() instanceof Player)) {
                     ent = event.getEntity();
+                }else{
+                    if(delayedPlayers.contains(event.getEntity())){
+                        event.setCancelled(true);
+                    }
                 }
                 if (ent != null) {
                     if (LevelPoints.getInstance().getConfig().getBoolean("MythicMobs")) {
@@ -156,12 +164,43 @@ public class PlayerEvents implements Listener {
             }
         }
     }
+
+    private void runDelay(Player player, int delay){
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                delayedPlayers.remove(player);
+            }
+        }.runTaskLater(LevelPoints.getInstance(), delay * 20);
+    }
+
+
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
-        if (event.getEntity().getKiller() instanceof Player) {
 
-            LivingEntity entity = event.getEntity();
+        if (event.getEntity().getKiller() instanceof Player) {
             Player player = event.getEntity().getKiller();
+            if(event.getEntity() instanceof Player){
+                Player target = (Player) event.getEntity();
+                if(EXPContainer.gainEXP(TasksEnum.PlayerDeath)){
+                    PlayerContainer tContainer = AsyncEvents.getPlayerContainer(target);
+                    PlayerContainer container = AsyncEvents.getPlayerContainer(player);
+                    double exp = FileCache.getConfig("expConfig").getDouble("Pvp.Amount");
+                    if(FileCache.getConfig("expConfig").getBoolean("Pvp.DeathAmount")) {
+                        if (tContainer.getRequiredEXP() >= exp) {
+                            tContainer.removeEXP(exp);
+                            container.addEXP(exp);
+                            return;
+                        }
+                        return;
+                    }
+                    container.addEXP(exp);
+                    if(FileCache.getConfig("expConfig").getBoolean("Pvp.Delay.Enabled")){
+                        runDelay(player, FileCache.getConfig("expConfig").getInt("Pvp.Delay.Time"));
+                    }
+                }
+            }
+            LivingEntity entity = event.getEntity();
             if (EXPContainer.gainEXP(TasksEnum.MobDeath)) {
                 if (LevelPoints.getInstance().getConfig().getBoolean("MythicMobs")) {
                     if (MythicMobs.inst().getAPIHelper().isMythicMob(entity)) {

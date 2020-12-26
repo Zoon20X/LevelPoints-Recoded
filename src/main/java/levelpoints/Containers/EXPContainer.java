@@ -50,6 +50,11 @@ public class EXPContainer {
                     values.put("expFromFarming", FileCache.getConfig("expConfig").getBoolean("FarmingEXP.Enabled"));
                 }
                 return Boolean.valueOf(values.get("expFromFarming").toString());
+            case PlayerDeath:
+                if(!values.containsKey("expFromPlayerDeath")){
+                    values.put("expFromPlayerDeath", FileCache.getConfig("expConfig").getBoolean("Pvp.Enabled"));
+                }
+                return Boolean.valueOf(values.get("expFromPlayerDeath").toString());
         }
         return false;
     }
