@@ -71,7 +71,8 @@ public class LevelPointsExpansion extends PlaceholderExpansion {
             Player player = players.getPlayer();
             if (identifier.equals("player_level")) {
                 if (AsyncEvents.isPlayerInCache(player)) {
-                    if (String.valueOf(AsyncEvents.getPlayerContainer(player)) != null) {
+
+                    if (String.valueOf(AsyncEvents.getPlayerContainer(player).getLevel()) != null) {
                         return String.valueOf(AsyncEvents.getPlayerContainer(player).getLevel());
                     }
 
@@ -129,7 +130,7 @@ public class LevelPointsExpansion extends PlaceholderExpansion {
             if (identifier.equals("exp_amount")) {
 
                 if (AsyncEvents.isPlayerInCache(player)) {
-                    if (String.valueOf(AsyncEvents.getPlayerContainer(player)) != null) {
+                    if (String.valueOf(AsyncEvents.getPlayerContainer(player).getEXP()) != null) {
                         double expamount = AsyncEvents.getPlayerContainer(player).getEXP();
                         return String.valueOf(expamount);
                     }
@@ -138,7 +139,7 @@ public class LevelPointsExpansion extends PlaceholderExpansion {
             }
             if (identifier.equals("exp_required")) {
                 if (AsyncEvents.isPlayerInCache(player)) {
-                    if (String.valueOf(AsyncEvents.getPlayerContainer(player)) != null) {
+                    if (String.valueOf(AsyncEvents.getPlayerContainer(player).getRequiredEXP()) != null) {
                         double needep = AsyncEvents.getPlayerContainer(player).getRequiredEXP();
                         return String.valueOf(needep);
                     }
@@ -156,11 +157,12 @@ public class LevelPointsExpansion extends PlaceholderExpansion {
             }
             if (identifier.equals("exp_progress")) {
                 if (AsyncEvents.isPlayerInCache(player)) {
-                    if (String.valueOf(AsyncEvents.getPlayerContainer(player)) != null) {
+                    if (String.valueOf(AsyncEvents.getPlayerContainer(player).getEXP()) != null) {
                         float percentage = (float) AsyncEvents.getPlayerContainer(player).getEXP();
                         return String.valueOf(Math.round((percentage / AsyncEvents.getPlayerContainer(player).getRequiredEXP()) * 100));
                     }
                 }
+                return "Loading...";
             }
             if (identifier.equals("booster_active")) {
 

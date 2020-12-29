@@ -32,6 +32,7 @@ public class lpsCommand implements CommandExecutor {
     public lpsCommand(Plugin plugin) {
     }
 
+    int posTop = 0;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -158,6 +159,7 @@ public class lpsCommand implements CommandExecutor {
                 break;
             case "top":
                 if (CommandChecks.isPlayer(sender)) {
+                    posTop = 0;
                     sender.sendMessage(Formatting.basicColor(LangCache.getLevelTopMessage(TopEnums.TopDisplay)));
                     File TopFile = new File(LevelPoints.getInstance().getDataFolder(), "TopList.yml");
                     FileConfiguration TopConfig = YamlConfiguration.loadConfiguration(TopFile);
@@ -171,7 +173,6 @@ public class lpsCommand implements CommandExecutor {
                             })
                             .limit(10) // Limit the number of 'results'
                             .forEach(f -> {
-                                int posTop = 0;
                                 posTop += 1;
 
                                 int points = ((MemorySection) f.getValue()).getInt("Level");

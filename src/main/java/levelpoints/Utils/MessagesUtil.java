@@ -38,8 +38,6 @@ public class MessagesUtil {
             BossBar bar = bossBars.get(player);
 
             bar.setTitle(Formatting.formatInfoTags(player, msg.replace("{level}", String.valueOf(AsyncEvents.getPlayerContainer(player).getLevel()))));
-
-            System.out.println(val);
             bar.setProgress(val);
         }
     }
