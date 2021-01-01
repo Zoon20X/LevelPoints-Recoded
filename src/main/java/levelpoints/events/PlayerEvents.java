@@ -33,6 +33,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -110,7 +111,7 @@ public class PlayerEvents implements Listener {
                     if (LevelPoints.getInstance().getConfig().getBoolean("LorinthsRpgMobs")) {
                         if (LorinthsRpgMobs.GetLevelOfEntity(ent) != null) {
                             int level = LorinthsRpgMobs.GetLevelOfEntity(ent);
-                            FileConfiguration configuration = FileCache.getConfig("rgbMobsConfig");
+                            FileConfiguration configuration = FileCache.getConfig("rpgMobsConfig");
                             int rl = AsyncEvents.getLevelRequired(ent.getType().toString(), level, configuration);
                             if (con.getLevel() < rl) {
                                 event.setCancelled(true);
@@ -148,7 +149,7 @@ public class PlayerEvents implements Listener {
                     if (LevelPoints.getInstance().getConfig().getBoolean("LorinthsRpgMobs")) {
                         if (LorinthsRpgMobs.GetLevelOfEntity(entity) != null) {
                             int level = LorinthsRpgMobs.GetLevelOfEntity(entity);
-                            FileConfiguration configuration = FileCache.getConfig("rgbMobsConfig");
+                            FileConfiguration configuration = FileCache.getConfig("rpgMobsConfig");
                             int rl = AsyncEvents.getLevelRequired(entity.getType().toString(), level, configuration);
                             if(container.getLevel() < rl){
                                 event.setCancelled(true);
@@ -324,7 +325,18 @@ public class PlayerEvents implements Listener {
             if (EXPContainer.getRequiredLevel(event.getBlock().getType(), SettingsEnum.Break) <= container.getLevel()) {
 
                 if (EXPContainer.getEXP(event.getBlock(), false, false) > 0) {
-
+                    if(FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.Silk")){
+                        if(player.getInventory().getItemInMainHand() != null){
+                            ItemStack item = player.getInventory().getItemInMainHand();
+                            if(item.hasItemMeta()) {
+                                if (item.getItemMeta().hasEnchants()) {
+                                    if (item.getItemMeta().getEnchants().containsKey(Enchantment.SILK_TOUCH)) {
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
                     AsyncEvents.triggerEarnEXPEvent(TasksEnum.BlockBreak, event, EXPContainer.getEXP(event.getBlock(), true, false), event.getPlayer());
                 }
             } else {

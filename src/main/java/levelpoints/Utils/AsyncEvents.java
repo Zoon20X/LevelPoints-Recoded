@@ -1,6 +1,7 @@
 package levelpoints.Utils;
 
 
+import com.sk89q.worldedit.internal.expression.runtime.For;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import levelpoints.Cache.FileCache;
@@ -508,10 +509,12 @@ public class AsyncEvents {
                                     .getString("Settings.Message.Type"));
                             runRewardsFormat(player, type, value);
                         } else {
+
                             runMessage(player, MessageType.valueOf(FileCache.getConfig("rewardsConfig")
                                     .getString("Settings.Message.Type")), FileCache.getConfig("rewardsConfig")
                                     .getString("Rewards.Prestige-" + container.getPrestige() +
                                             ".Level-" + container.getLevel() + ".Message").replace("{lp_Reward}", String.valueOf(value)));
+
                         }
                         break;
                     case FileChance:
