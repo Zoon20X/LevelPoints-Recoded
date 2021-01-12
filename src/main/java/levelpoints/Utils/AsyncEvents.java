@@ -358,10 +358,8 @@ public class AsyncEvents {
     public static Integer getLevelRequired(String name, int level, FileConfiguration configuration){
 
         for(String x : configuration.getConfigurationSection("").getKeys(false)){
-            System.out.println(x);
             if(x.equalsIgnoreCase(name)){
                 for(String xx : configuration.getConfigurationSection(x + ".Levels").getKeys(false)){
-                    System.out.println(xx);
                     if(Integer.parseInt(xx) == level){
                         return configuration.getInt(x + ".Levels." + level + ".Required");
                     }

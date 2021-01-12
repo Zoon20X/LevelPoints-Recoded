@@ -67,6 +67,7 @@ public class PlayerEvents implements Listener {
     static HashMap<Player, Material> cachedBlocks = new HashMap<>();
     static HashMap<Player, Location> cachedLocations = new HashMap<>();
     static HashSet<Player> delayedPlayers = new HashSet<>();
+    static HashSet<Entity> spawnerMobs = new HashSet<>();
 
     public PlayerEvents(Plugin plugin) {
     }
@@ -214,7 +215,7 @@ public class PlayerEvents implements Listener {
                 if (LevelPoints.getInstance().getConfig().getBoolean("LorinthsRpgMobs")) {
                     if (LorinthsRpgMobs.GetLevelOfEntity(entity) != null) {
                         int level = LorinthsRpgMobs.GetLevelOfEntity(entity);
-                        FileConfiguration configuration = FileCache.getConfig("rgbMobsConfig");
+                        FileConfiguration configuration = FileCache.getConfig("rpgMobsConfig");
 
                         new BukkitRunnable() {
                             @Override
@@ -228,7 +229,13 @@ public class PlayerEvents implements Listener {
                 }
                 if (EXPContainer.getEXP(entity.getType(), false) > 0) {
                     AsyncEvents.triggerEarnEXPEvent(TasksEnum.MobDeath, event, EXPContainer.getEXP(entity.getType(), true), player);
+                    return;
                 }
+            }
+        }
+        if(!spawnerMobs.isEmpty()){
+            if(spawnerMobs.contains(event.getEntity())){
+                spawnerMobs.remove(event.getEntity());
             }
         }
     }
@@ -350,8 +357,8 @@ public class PlayerEvents implements Listener {
                             }
                         }
                     }.runTaskAsynchronously(LevelPoints.getInstance());
-                    event.setCancelled(true);
                 }
+                event.setCancelled(true);
             }
         }
         if(EXPContainer.gainEXP(TasksEnum.Farming)) {
@@ -369,6 +376,13 @@ public class PlayerEvents implements Listener {
 
         if (container.isBoosterDone()) {
             container.setMultiplier(1.0);
+        }
+    }
+    @EventHandler
+    public void onSpawn(CreatureSpawnEvent event){
+        if(event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER)){
+            spawnerMobs.add(event.getEntity());
+            System.out.println(spawnerMobs.toString());
         }
     }
 
@@ -432,9 +446,19 @@ public class PlayerEvents implements Listener {
         AsyncEvents.getPlayerContainer(event.getPlayer()).setXpBar();
         if (event.getTaskEvent() instanceof EntityDeathEvent) {
             tasksEnum = TasksEnum.MobDeath;
+            if(!spawnerMobs.isEmpty()){
+                if(spawnerMobs.contains(((EntityDeathEvent) event.getTaskEvent()).getEntity())){
+                    event.setCancelled(true);
+                    spawnerMobs.remove(((EntityDeathEvent) event.getTaskEvent()).getEntity());
+                    return;
+                }
+            }
             if (LevelPoints.getInstance().getConfig().getBoolean("Actionbar.Enabled")) {
                 MessagesUtil.sendActionBar(event.getPlayer(), LevelPoints.getInstance().getConfig().getString("Actionbar.Details.Text").replace("{EXP_Earn_Amount}", String.valueOf(event.getAmount())));
             }
+        }
+        if (LevelPoints.getInstance().getConfig().getBoolean("UseSQL")) {
+            SQL.RunSQLUpload(event.getPlayer());
         }
         TasksEnum finalTasksEnum = tasksEnum;
         if (FileCache.getConfig("langConfig").getBoolean("EXPEarn.Enabled")) {

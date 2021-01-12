@@ -1,6 +1,8 @@
 #-----------#
 #Anti-Dupe Solutions
 Anti-Abuse:
+  Spawners:
+    Enabled: false #disable exp from spawners
   Place:
     Enabled: false
     Cooldown:

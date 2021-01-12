@@ -22,10 +22,13 @@ import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
+import java.util.ArrayList;
 
 
 public class lpsCommand implements CommandExecutor {
@@ -216,6 +219,39 @@ public class lpsCommand implements CommandExecutor {
 
     private void args2(CommandSender sender, String[] args) {
         switch (args[0]) {
+            case "setrequirement":
+                if(sender.hasPermission("lp.admin")){
+                    ItemStack item;
+                    if(!(sender instanceof Player)){
+                        return;
+                    }
+                    Player player = (Player) sender;
+                    if (!Bukkit.getVersion().contains("1.8")) {
+                        item = player.getInventory().getItemInMainHand();
+                    }else{
+                        item = player.getInventory().getItemInHand();
+                    }
+                    if(item !=null){
+                        ItemMeta im = item.getItemMeta();
+
+                        ArrayList<String> lore = new ArrayList<>();
+                        if(im == null){
+                            return;
+                        }
+                        if(im.hasLore()){
+                            for(String x : im.getLore()) {
+                                if(!x.contains(FileCache.getConfig("langConfig").getString("lpRequirement").replace("{Required_Level}", ""))) {
+                                    lore.add(x);
+                                }
+                            }
+                        }
+                        lore.add(Formatting.basicColor(FileCache.getConfig("langConfig").getString("lpRequirement").replace("{Required_Level}", args[1])));
+                        im.setLore(lore);
+                        item.setItemMeta(im);
+
+                    }
+                }
+                break;
             case "info":
                 if (Bukkit.getPlayer(args[1]) != null) {
                     Player player = Bukkit.getPlayer(args[1]);
@@ -325,7 +361,6 @@ public class lpsCommand implements CommandExecutor {
                                     .replace("{lp_exp_player}", Bukkit.getPlayer(args[1]).getName())
                                     .replace("{lp_exp_amount}", String.valueOf(Double.parseDouble(args[2])))));
                         }
-                    } else {
                     }
                 }
                 break;
@@ -337,6 +372,15 @@ public class lpsCommand implements CommandExecutor {
                         container.setLevel(Integer.parseInt(args[2]));
                     }else{
 
+                    }
+                }
+                break;
+            case "setprestige":
+                if (sender.hasPermission("lp.admin.level")) {
+                    if(Bukkit.getPlayer(args[1]) != null){
+                        AsyncEvents.getPlayerContainer(Bukkit.getPlayer(args[1]));
+                        PlayerContainer container = AsyncEvents.getPlayerContainer(Bukkit.getPlayer(args[1]));
+                        container.setPrestige(Integer.parseInt(args[2]));
                     }
                 }
                 break;
