@@ -39,18 +39,18 @@ public class lpsCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(args.length == 0){
+        if (args.length == 0) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
 
-                    for(String x : LangCache.getlpHelpMessage()){
+                    for (String x : LangCache.getlpHelpMessage()) {
                         sender.sendMessage(Formatting.basicColor(x));
                     }
                 }
             }.runTaskAsynchronously(LevelPoints.getInstance());
         }
-        if(sender.hasPermission("lp.admin")) {
+        if (sender.hasPermission("lp.admin")) {
             if (args[0].equalsIgnoreCase("announce")) {
                 String Name = "";
                 for (int i = 2; i < args.length; i++) {
@@ -70,7 +70,7 @@ public class lpsCommand implements CommandExecutor {
         }
 
 
-        if(args.length == 1){
+        if (args.length == 1) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -78,7 +78,7 @@ public class lpsCommand implements CommandExecutor {
                 }
             }.runTaskAsynchronously(LevelPoints.getInstance());
         }
-        if(args.length == 2){
+        if (args.length == 2) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -86,7 +86,7 @@ public class lpsCommand implements CommandExecutor {
                 }
             }.runTaskAsynchronously(LevelPoints.getInstance());
         }
-        if(args.length == 3){
+        if (args.length == 3) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -94,7 +94,7 @@ public class lpsCommand implements CommandExecutor {
                 }
             }.runTaskAsynchronously(LevelPoints.getInstance());
         }
-        if(args.length == 4){
+        if (args.length == 4) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -102,11 +102,11 @@ public class lpsCommand implements CommandExecutor {
                 }
             }.runTaskAsynchronously(LevelPoints.getInstance());
         }
-        if(args.length == 6){
+        if (args.length == 6) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if(sender.hasPermission("lp.admin.*")) {
+                    if (sender.hasPermission("lp.admin.*")) {
                         args6(sender, args);
                     }
                 }
@@ -115,12 +115,45 @@ public class lpsCommand implements CommandExecutor {
         return true;
 
     }
-    private void args1(CommandSender sender, String args){
-        switch(args) {
+
+    private void args1(CommandSender sender, String args) {
+        switch (args) {
+            case "removerequirement":
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    if (sender.hasPermission("lp.admin")) {
+                        ItemStack item;
+                        if (!Bukkit.getVersion().contains("1.8")) {
+                            item = player.getInventory().getItemInMainHand();
+                        } else {
+                            item = player.getInventory().getItemInHand();
+                        }
+                        if (item != null) {
+                            ItemMeta im = item.getItemMeta();
+                            ArrayList<String> lore = new ArrayList<>();
+                            if (im.hasLore()) {
+                                for (String x : im.getLore()) {
+                                    if (!x.contains(Formatting.basicColor(FileCache.getConfig("langConfig").getString("lpRequirement").replace("{Required_Level}", "")))) {
+                                        lore.add(x);
+                                    }
+                                }
+                            }
+                            im.setLore(lore);
+                            item.setItemMeta(im);
+
+                        }
+                    }
+                }
             case "reload":
                 if (sender.hasPermission("lp.admin.reload")) {
 
-                    AsyncEvents.MassSaveCache();
+                    if (!LevelPoints.getInstance().getConfig().getBoolean("UseSQL")) {
+                        AsyncEvents.MassSaveCache();
+                        for (Player player : Bukkit.getOnlinePlayers()) {
+                            AsyncEvents.LoadPlayerData(player);
+                            AsyncEvents.addPlayerToContainerCache(player);
+                        }
+                    }
                     sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.Files")));
                     EXPContainer.clearCache(EXPCache.ALL);
                     LevelsContainer.clearCache();
@@ -128,10 +161,6 @@ public class lpsCommand implements CommandExecutor {
                     LevelPoints.getInstance().reloadConfig();
                     AsyncFileCache.startAsyncCache();
                     sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.PlayerData")));
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        AsyncEvents.LoadPlayerData(player);
-                        AsyncEvents.addPlayerToContainerCache(player);
-                    }
                     sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.Complete")));
                     FileCache.clearCache();
                     SettingsCache.clearBooleanCache();

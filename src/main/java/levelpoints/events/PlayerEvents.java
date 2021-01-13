@@ -131,6 +131,36 @@ public class PlayerEvents implements Listener {
 
                 if (EXPContainer.gainEXP(TasksEnum.MobDeath)) {
                     PlayerContainer container = AsyncEvents.getPlayerContainer(attacker);
+                    if (LevelPoints.getInstance().getConfig().getBoolean("RequiredItemLore")) {
+                        ItemStack item = attacker.getItemInHand();
+                        ItemStack items;
+                        if (!Bukkit.getVersion().contains("1.8")) {
+                            items = attacker.getInventory().getItemInMainHand();
+                        } else {
+                            items = attacker.getInventory().getItemInHand();
+                        }
+
+                        if (items.hasItemMeta()) {
+                            ItemMeta im = item.getItemMeta();
+                            String Level = null;
+
+                            if (im.hasLore()) {
+                                for (String x : im.getLore()) {
+                                    if (x.contains(Formatting.basicColor(FileCache.getConfig("langConfig").getString("lpRequirement").replace("{Required_Level}", "")))) {
+                                        Level = x;
+                                    }
+                                }
+
+                                if (Level != null) {
+                                    Level = Level.replace(Formatting.basicColor(FileCache.getConfig("langConfig").getString("lpRequirement").replace("{Required_Level}", "")), "");
+                                    if (container.getLevel() < Integer.parseInt(Level)) {
+                                        event.setCancelled(true);
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
                     if(LevelsContainer.hasLevelBonus("Damage", container.getLevel())) {
                         event.setDamage(event.getDamage() + LevelsContainer.getLevelBonus("Damage", container.getLevel()));
                     }
@@ -329,6 +359,37 @@ public class PlayerEvents implements Listener {
         }
         PlayerContainer container = AsyncEvents.getPlayerContainer(player);
         if (EXPContainer.gainEXP(TasksEnum.BlockBreak)) {
+            if (LevelPoints.getInstance().getConfig().getBoolean("RequiredItemLore")) {
+                ItemStack item = player.getItemInHand();
+                ItemStack items;
+                if (!Bukkit.getVersion().contains("1.8")) {
+                    items = player.getInventory().getItemInMainHand();
+                } else {
+                    items = player.getInventory().getItemInHand();
+                }
+
+                if (items.hasItemMeta()) {
+                    ItemMeta im = item.getItemMeta();
+                    String Level = null;
+
+                    if (im.hasLore()) {
+                        for (String x : im.getLore()) {
+                            if (x.contains(Formatting.basicColor(FileCache.getConfig("langConfig").getString("lpRequirement").replace("{Required_Level}", "")))) {
+                                Level = x;
+                            }
+                        }
+
+                        if (Level != null) {
+                            Level = Level.replace(Formatting.basicColor(FileCache.getConfig("langConfig").getString("lpRequirement").replace("{Required_Level}", "")), "");
+                            if (container.getLevel() < Integer.parseInt(Level)) {
+                                event.setCancelled(true);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
             if (EXPContainer.getRequiredLevel(event.getBlock().getType(), SettingsEnum.Break) <= container.getLevel()) {
 
                 if (EXPContainer.getEXP(event.getBlock(), false, false) > 0) {
@@ -565,6 +626,7 @@ public class PlayerEvents implements Listener {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         Block block = event.getBlock();
+        Player player = event.getPlayer();
         if (!AsyncEvents.isPlayerInCache(event.getPlayer())) {
             cachedBlocks.put(event.getPlayer(), event.getBlock().getType());
             cachedLocations.put(event.getPlayer(), event.getBlock().getLocation());
@@ -573,6 +635,7 @@ public class PlayerEvents implements Listener {
         }
         if (EXPContainer.gainEXP(TasksEnum.BlockBreak)) {
             PlayerContainer container = AsyncEvents.getPlayerContainer(event.getPlayer());
+
             if (EXPContainer.getRequiredLevel(event.getBlock().getType(), SettingsEnum.Place) > container.getLevel()) {
                 event.setCancelled(true);
             }
