@@ -440,10 +440,12 @@ public class PlayerEvents implements Listener {
         }
     }
     @EventHandler
-    public void onSpawn(CreatureSpawnEvent event){
-        if(event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER)){
-            spawnerMobs.add(event.getEntity());
-            System.out.println(spawnerMobs.toString());
+    public void onSpawn(CreatureSpawnEvent event) {
+        if (FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.Spawners.Enabled")) {
+            if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER)) {
+                spawnerMobs.add(event.getEntity());
+                System.out.println(spawnerMobs.toString());
+            }
         }
     }
 
