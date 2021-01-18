@@ -39,6 +39,7 @@ public class PlayerContainer {
     private Double requiredEXP;
     private Integer prestige;
     private String chatFormat;
+    private Integer previousLevel;
 
 
 
@@ -56,6 +57,7 @@ public class PlayerContainer {
         this.boosterDate = boosterDate;
         this.requiredEXP = requiredEXP;
         this.prestige = prestige;
+        this.previousLevel = 0;
         boostersCache.put(uuid, new HashMap<>());
     }
     public PlayerContainer(Player player, Integer level, Double exp, Double multiplier, Date boosterDate, Double requiredEXP, Integer prestige){
@@ -66,6 +68,7 @@ public class PlayerContainer {
         this.boosterDate = boosterDate;
         this.requiredEXP = requiredEXP;
         this.prestige = prestige;
+        this.previousLevel = 0;
         boostersCache.put(uuid, new HashMap<>());
     }
     public Boolean isBoosterDone(){
@@ -209,6 +212,7 @@ public class PlayerContainer {
     }
 
     public void setLevel(int value){
+        previousLevel = level;
         level = value;
         requiredEXP = UtilCollector.registerRequiredEXP(value);
         setXpBar();
@@ -359,19 +363,16 @@ public class PlayerContainer {
         return save;
     }
     public String getChatFormat() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (FormatsContainer x : LevelsContainer.getFormats()) {
-                    if (getLevel() <= x.getMaxLevel()) {
-                        if (getLevel() >= x.getMinLevel()) {
-                            chatFormat = x.getFormat();
-                        }
+        if(previousLevel != level) {
+            for (FormatsContainer x : LevelsContainer.getFormats()) {
+                if (getLevel() <= x.getMaxLevel()) {
+                    if (getLevel() >= x.getMinLevel()) {
+                        previousLevel = level;
+                        chatFormat = x.getFormat();
                     }
                 }
             }
-        }.runTaskAsynchronously(LevelPoints.getInstance());
-
+        }
 
         return this.chatFormat;
     }
@@ -401,7 +402,6 @@ public class PlayerContainer {
             setEXP(getRequiredEXP());
             return;
         }
-        System.out.println(value +"-" +getEXP() + "-" + getLevel());
         if(removeEXP) {
             removeEXP(getRequiredEXP());
         }
@@ -409,6 +409,7 @@ public class PlayerContainer {
             Player player = Bukkit.getPlayer(uuid);
             AsyncEvents.triggerLevelUpEvent(player, getLevel() + value);
         }
+        previousLevel = level;
         level = level + value;
         requiredEXP = UtilCollector.registerRequiredEXP(getLevel());
         if(!canLevelUp()){

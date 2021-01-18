@@ -4,14 +4,11 @@ import levelpoints.Cache.ExternalCache;
 import levelpoints.Containers.PlayerContainer;
 import levelpoints.Utils.AsyncEvents;
 
-import levelpoints.Utils.UtilCollector;
-import net.Indyuce.mmoitems.MMOItems;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -53,14 +50,6 @@ public final class LevelPoints extends JavaPlugin {
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new LevelPointsExpansion().register();
         }
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for(int i=1;i<100;i++){
-                    System.out.println(i+">>" + UtilCollector.registerRequiredEXP(i));
-                }
-            }
-        }.runTaskLaterAsynchronously(this, 5*20);
     }
     public static Plugin getInstance(){
         return instance;

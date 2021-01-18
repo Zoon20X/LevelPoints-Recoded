@@ -149,13 +149,7 @@ public class lpsCommand implements CommandExecutor {
             case "reload":
                 if (sender.hasPermission("lp.admin.reload")) {
 
-                    if (!LevelPoints.getInstance().getConfig().getBoolean("UseSQL")) {
-                        AsyncEvents.MassSaveCache();
-                        for (Player player : Bukkit.getOnlinePlayers()) {
-                            AsyncEvents.LoadPlayerData(player.getUniqueId(), player.getName());
-                            AsyncEvents.addPlayerToContainerCache(player.getUniqueId());
-                        }
-                    }
+
                     sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.Files")));
                     EXPContainer.clearCache(EXPCache.ALL);
                     LevelsContainer.clearCache();
@@ -166,6 +160,19 @@ public class lpsCommand implements CommandExecutor {
                     sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.Complete")));
                     FileCache.clearCache();
                     SettingsCache.clearBooleanCache();
+                    if (!LevelPoints.getInstance().getConfig().getBoolean("UseSQL")) {
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                AsyncEvents.MassSaveCache();
+                                for (Player player : Bukkit.getOnlinePlayers()) {
+
+                                    AsyncEvents.LoadPlayerData(player.getUniqueId(), player.getName());
+                                    AsyncEvents.addPlayerToContainerCache(player.getUniqueId());
+                                }
+                            }
+                        }.runTaskLaterAsynchronously(LevelPoints.getInstance(), 10);
+                    }
 
                 }
                 break;

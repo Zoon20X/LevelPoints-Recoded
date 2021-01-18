@@ -28,6 +28,9 @@ public class ChatEvent implements Listener {
         PlayerContainer container = AsyncEvents.getPlayerContainer(player);
         String format = container.getChatFormat();
 
+        if(player == null){
+            return;
+        }
 
         format = format.replace("{name}", player.getName())
                 .replace("{message}", msg)
