@@ -150,22 +150,7 @@ public class LevelPointsExpansion extends PlaceholderExpansion {
 
 
             if (identifier.equals("prestige")) {
-                if (AsyncEvents.playerContainers.isEmpty()) {
-                    return String.valueOf(AsyncEvents.getOfflinePrestige(player.getName()));
-                }
-                int prestigelevel = AsyncEvents.getPlayerContainer(player).getPrestige();
-                if (!(prestigelevel == 0)) {
-
-                    return String.valueOf(AsyncEvents.getPlayerContainer(player).getPrestige());
-                }
-                if (player == null) {
-                    return "";
-                }
-            } else {
-                if (identifier.equals("prestige")) {
-                    return String.valueOf(0);
-                }
-
+                return String.valueOf(AsyncEvents.getPlayerContainer(player).getPrestige());
             }
 
         }
