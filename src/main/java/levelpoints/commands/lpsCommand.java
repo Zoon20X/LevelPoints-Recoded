@@ -49,6 +49,7 @@ public class lpsCommand implements CommandExecutor {
                     }
                 }
             }.runTaskAsynchronously(LevelPoints.getInstance());
+            return true;
         }
         if (sender.hasPermission("lp.admin")) {
             if (args[0].equalsIgnoreCase("announce")) {
@@ -144,14 +145,15 @@ public class lpsCommand implements CommandExecutor {
                         }
                     }
                 }
+                break;
             case "reload":
                 if (sender.hasPermission("lp.admin.reload")) {
 
                     if (!LevelPoints.getInstance().getConfig().getBoolean("UseSQL")) {
                         AsyncEvents.MassSaveCache();
                         for (Player player : Bukkit.getOnlinePlayers()) {
-                            AsyncEvents.LoadPlayerData(player);
-                            AsyncEvents.addPlayerToContainerCache(player);
+                            AsyncEvents.LoadPlayerData(player.getUniqueId(), player.getName());
+                            AsyncEvents.addPlayerToContainerCache(player.getUniqueId());
                         }
                     }
                     sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.Files")));
@@ -327,8 +329,8 @@ public class lpsCommand implements CommandExecutor {
 
 
                                     for (Player player : Bukkit.getOnlinePlayers()) {
-                                        AsyncEvents.LoadPlayerData(player);
-                                        AsyncEvents.addPlayerToContainerCache(player);
+                                        AsyncEvents.LoadPlayerData(player.getUniqueId(), player.getName());
+                                        AsyncEvents.addPlayerToContainerCache(player.getUniqueId());
                                     }
                                 }
                             }.runTaskAsynchronously(LevelPoints.getInstance());
@@ -345,8 +347,8 @@ public class lpsCommand implements CommandExecutor {
                             AsyncFileCache.startAsyncCache();
                             sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.PlayerData")));
                             for (Player player : Bukkit.getOnlinePlayers()) {
-                                AsyncEvents.LoadPlayerData(player);
-                                AsyncEvents.addPlayerToContainerCache(player);
+                                AsyncEvents.LoadPlayerData(player.getUniqueId(), player.getName());
+                                AsyncEvents.addPlayerToContainerCache(player.getUniqueId());
                             }
                             sender.sendMessage(Formatting.basicColor(FileCache.getConfig("langConfig").getString("LpsReload.Complete")));
                             FileCache.clearCache();

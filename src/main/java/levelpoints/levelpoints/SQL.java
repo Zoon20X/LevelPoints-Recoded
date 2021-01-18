@@ -75,7 +75,6 @@ public class SQL {
                     insert.setString(7, format.format(AsyncEvents.getPlayerContainer(Bukkit.getPlayer(uuid)).getBoosterDate()));
                     insert.setString(8, AsyncEvents.getPlayerContainer(Bukkit.getPlayer(uuid)).getBoosterString());
                     insert.executeUpdate();
-
                     System.out.println(ChatColor.DARK_AQUA + "Player Added to Database");
                 }else{
                     RunSQLDownload(Bukkit.getPlayer(uuid));

@@ -25,6 +25,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -91,5 +92,13 @@ public class UtilCollector {
         }
 
     }
+    public static Double registerRequiredEXP(Integer level) {
+        if (FileCache.getConfig("levelConfig").getBoolean("Leveling.CustomLeveling.Enabled")) {
 
+            return LevelsContainer.getCustomLevelsEXP(level);
+        } else {
+
+            return LevelsContainer.generateFormula(level, LevelsContainer.getFormula());
+        }
+    }
 }

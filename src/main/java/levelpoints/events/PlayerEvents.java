@@ -353,8 +353,6 @@ public class PlayerEvents implements Listener {
         Player player = event.getPlayer();
         if (!AsyncEvents.isPlayerInCache(event.getPlayer())) {
             cachedBlocks.put(event.getPlayer(), event.getBlock().getType());
-            AsyncEvents.LoadPlayerData(event.getPlayer());
-            AsyncEvents.addPlayerToContainerCache(event.getPlayer());
 
         }
         PlayerContainer container = AsyncEvents.getPlayerContainer(player);
@@ -441,10 +439,12 @@ public class PlayerEvents implements Listener {
     }
     @EventHandler
     public void onSpawn(CreatureSpawnEvent event) {
-        if (FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.Spawners.Enabled")) {
-            if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER)) {
-                spawnerMobs.add(event.getEntity());
-                System.out.println(spawnerMobs.toString());
+        if (FileCache.containsFile("expConfig")) {
+            if (FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.Spawners.Enabled")) {
+                if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER)) {
+                    spawnerMobs.add(event.getEntity());
+                    System.out.println(spawnerMobs.toString());
+                }
             }
         }
     }
@@ -540,21 +540,17 @@ public class PlayerEvents implements Listener {
     @EventHandler
     public void onPreJoinEvent(AsyncPlayerPreLoginEvent event){
         AsyncEvents.RunPlayerCache(event.getUniqueId(), event.getName());
+        AsyncEvents.LoadPlayerData(event.getUniqueId(), event.getName());
+        AsyncEvents.addPlayerToContainerCache(event.getUniqueId());
         if(LevelPoints.getInstance().getConfig().getBoolean("UseSQL")) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    try {
-                        if (SQL.getConnection().isClosed()) {
-                            SQL.SQLReconnect();
-                        }
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    }
                     SQL.createPlayer(event.getUniqueId(), event.getName());
                 }
-            }.runTaskLaterAsynchronously(LevelPoints.getInstance(), 10);
+            }.runTaskLaterAsynchronously(LevelPoints.getInstance(), 20);
         }
+
     }
     @EventHandler
     public void onPreCommand(PlayerCommandPreprocessEvent event){
@@ -563,40 +559,13 @@ public class PlayerEvents implements Listener {
         }
     }
 
-    @EventHandler
-    public void onJoinEvent(PlayerJoinEvent event){
-        AsyncEvents.LoadPlayerData(event.getPlayer());
-        AsyncEvents.addPlayerToContainerCache(event.getPlayer());
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (!AsyncEvents.isInTopCache(event.getPlayer())) {
-                    AsyncEvents.updateLevelInCache(event.getPlayer(), AsyncEvents.getPlayerContainer(event.getPlayer()).getLevel());
-                }
-            }
-        }.runTaskLaterAsynchronously(LevelPoints.getInstance(), (20) * 5);
-
-    }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         if (AsyncEvents.isPlayerInCache(event.getPlayer())) {
 
-            if(LevelPoints.getInstance().getConfig().getBoolean("UseSQL")) {
-                try {
-                    if (SQL.getConnection().isClosed()) {
-                        SQL.SQLReconnect();
-                    }
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        SQL.RunSQLUpload(event.getPlayer());
-                    }
-                }.runTaskAsynchronously(LevelPoints.getInstance());
+            if (LevelPoints.getInstance().getConfig().getBoolean("UseSQL")) {
+                SQL.RunSQLUpload(event.getPlayer());
             }
 
             AsyncEvents.RunSaveCache(event.getPlayer());
@@ -632,8 +601,7 @@ public class PlayerEvents implements Listener {
         if (!AsyncEvents.isPlayerInCache(event.getPlayer())) {
             cachedBlocks.put(event.getPlayer(), event.getBlock().getType());
             cachedLocations.put(event.getPlayer(), event.getBlock().getLocation());
-            AsyncEvents.LoadPlayerData(event.getPlayer());
-            AsyncEvents.addPlayerToContainerCache(event.getPlayer());
+
         }
         if (EXPContainer.gainEXP(TasksEnum.BlockBreak)) {
             PlayerContainer container = AsyncEvents.getPlayerContainer(event.getPlayer());
@@ -671,7 +639,7 @@ public class PlayerEvents implements Listener {
         Player player = event.getPlayer();
         AsyncEvents.getPlayerContainer(player).setXpBar();
         int level = event.getLevel();
-        AsyncEvents.updateLevelInCache(player, level);
+        AsyncEvents.updateLevelInCache(player.getUniqueId(), level);
         File TopFile = new File(LevelPoints.getInstance().getDataFolder(), "TopList.yml");
         FileConfiguration TopConfig = YamlConfiguration.loadConfiguration(TopFile);
         TopConfig.set(player.getUniqueId() + ".Name", player.getName());

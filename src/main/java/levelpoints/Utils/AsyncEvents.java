@@ -34,37 +34,41 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 
 public class AsyncEvents {
 
     static Plugin plugin = LevelPoints.getInstance();
-    static HashSet<Player> playersInCache = new HashSet<>();
-    static HashMap<Player, PlayerContainer> playerContainers = new HashMap<>();
-    static HashMap<Player, Integer> LevelsCache = new HashMap<>();
-    static HashMap<Player, Integer> ids = new HashMap<>();
+    static HashSet<UUID> playersInCache = new HashSet<>();
+    public static HashMap<UUID, PlayerContainer> playerContainers = new HashMap<>();
+    static HashMap<UUID, Integer> LevelsCache = new HashMap<>();
+    static HashMap<UUID, Integer> ids = new HashMap<>();
     static HashMap<Player, Integer> Multipliers = new HashMap<>();
 
 
-    public static void updateLevelInCache(Player player, Integer value){
-        LevelsCache.put(player, value);
-        float percentage = (float) AsyncEvents.getPlayerContainer(player).getEXP();
-        double val = (percentage / AsyncEvents.getPlayerContainer(player).getRequiredEXP());
+    public static void updateLevelInCache(UUID uuid, Integer value){
+        LevelsCache.put(uuid, value);
+        float percentage = (float) AsyncEvents.getPlayerContainer(uuid).getEXP();
+        double val = (percentage / AsyncEvents.getPlayerContainer(uuid).getRequiredEXP());
         if (!Bukkit.getVersion().contains("1.8")) {
-            MessagesUtil.sendBossBar(player,
-                    FileCache.getConfig("langConfig").getString("Formats.LevelUp.BossBar.Text"),
-                    BarColor.valueOf(LevelPoints.getInstance().getConfig().getString("BossBarColor")),
-                    BarStyle.SOLID,
-                    val);
+            if (Bukkit.getPlayer(uuid) != null) {
+                MessagesUtil.sendBossBar(Bukkit.getPlayer(uuid),
+                        FileCache.getConfig("langConfig").getString("Formats.LevelUp.BossBar.Text"),
+                        BarColor.valueOf(LevelPoints.getInstance().getConfig().getString("BossBarColor")),
+                        BarStyle.SOLID,
+                        val);
+            }
         }
 
     }
     public static Integer getLevelTopInCache(Player player){
         return LevelsCache.get(player);
     }
-    public static Boolean isInTopCache(Player player){
-        return LevelsCache.containsKey(player);
+    public static Boolean isInTopCache(UUID uuid){
+        return LevelsCache.containsKey(uuid);
     }
     public static void startVersionCheck() {
         new BukkitRunnable() {
@@ -108,11 +112,20 @@ public class AsyncEvents {
             }
         }.runTaskAsynchronously(plugin);
     }
-    public static void addPlayerToContainerCache(Player player){
+    public static void addPlayerToContainerCache(UUID player){
         playersInCache.add(player);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!AsyncEvents.isInTopCache(player)) {
+                    AsyncEvents.updateLevelInCache(player, AsyncEvents.getPlayerContainer(player).getLevel());
+                }
+            }
+        }.runTaskLaterAsynchronously(LevelPoints.getInstance(), 30);
+
     }
-    public static void removePlayerFromContainerCache(Player player){
-        playersInCache.remove(player);
+    public static void removePlayerFromContainerCache(UUID uuid){
+        playersInCache.remove(uuid);
     }
     public static Boolean isPlayersCacheEmpty(){
         return playersInCache.isEmpty();
@@ -123,7 +136,7 @@ public class AsyncEvents {
                 SQL.RunSQLDownload(player);
             }
 
-            PlayerContainer container = getPlayerContainer(player);
+            PlayerContainer container = getPlayerContainer(player.getUniqueId());
             container.saveCacheToFile();
         }
         playersInCache.clear();
@@ -157,7 +170,7 @@ public class AsyncEvents {
     }
 
     public static String getProgressBar(Player player) {
-        PlayerContainer container = AsyncEvents.getPlayerContainer(player);
+        PlayerContainer container = AsyncEvents.getPlayerContainer(player.getUniqueId());
 
         double  required_progress = container.getRequiredEXP();
         double current_progress = container.getEXP();
@@ -180,14 +193,9 @@ public class AsyncEvents {
         return playersInCache.contains(player);
     }
     public static void RunSaveCache(Player player) {
-        new BukkitRunnable() {
 
-            @Override
-            public void run() {
-                PlayerContainer container = getPlayerContainer(player);
-                container.saveCacheToFile();
-            }
-        }.runTaskLaterAsynchronously(plugin, (long) (20*1.5));
+        PlayerContainer container = getPlayerContainer(player.getUniqueId());
+        container.saveCacheToFile();
     }
     public static void RunPlayerCache(UUID uuid, String playerName) {
         new BukkitRunnable() {
@@ -210,9 +218,9 @@ public class AsyncEvents {
     }
 
 
-    public static void LoadPlayerData(Player player){
-        UUID UUID = player.getUniqueId();
-        File userdata = new File(LevelPoints.getUserFolder(), UUID + ".yml");
+    public static void LoadPlayerData(UUID uuid, String name){
+
+        File userdata = new File(LevelPoints.getUserFolder(), uuid + ".yml");
         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
 
         new BukkitRunnable(){
@@ -223,7 +231,7 @@ public class AsyncEvents {
                 if (!UsersConfig.contains("Name")) {
 
                     LevelPoints.getInstance().getServer().getConsoleSender().sendMessage(Formatting.basicColor("&3Creating Player Data within file"));
-                    UsersConfig.set("Name", player.getName());
+                    UsersConfig.set("Name", name);
 
                     UsersConfig.set("Level", LevelsContainer.getStartingLevel());
                     UsersConfig.set("EXP.Amount", LevelsContainer.getStartingEXP());
@@ -238,13 +246,13 @@ public class AsyncEvents {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    LoadPlayerData(player);
+                    LoadPlayerData(uuid, name);
 
                 } else {
                     LevelPoints.getInstance().getServer().getConsoleSender().sendMessage(Formatting.basicColor("&3Loading Player Data"));
-                    if (!UsersConfig.getString("Name").equals(player.getName())) {
+                    if (!UsersConfig.getString("Name").equals(name)) {
                         LevelPoints.getInstance().getServer().getConsoleSender().sendMessage(Formatting.basicColor("&4Found a new username"));
-                        UsersConfig.set("Name", player.getName());
+                        UsersConfig.set("Name", name);
                         try {
                             UsersConfig.save(userdata);
                         } catch (IOException e) {
@@ -252,11 +260,22 @@ public class AsyncEvents {
                         }
                     }
 
-                    FileCache.addFileToCache(player.getUniqueId().toString(), UsersConfig);
-
-                    playerContainers.put(player, new PlayerContainer(player));
-                    addPlayerToContainerCache(player);
-                    getPlayerContainer(player).setMultiplier(UsersConfig.getDouble("ActiveBooster"));
+                    FileCache.addFileToCache(uuid.toString(), UsersConfig);
+                    Integer level = FileCache.getConfig(uuid.toString()).getInt("Level");
+                    Double exp = FileCache.getConfig(uuid.toString()).getDouble("EXP.Amount");
+                    Integer prestige = FileCache.getConfig(uuid.toString()).getInt("Prestige");
+                    Double value = FileCache.getConfig(uuid.toString()).getDouble("ActiveBooster");
+                    String date = FileCache.getConfig(uuid.toString()).getString("BoosterOff");
+                    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
+                    Date finish = null;
+                    try {
+                         finish = format.parse(date);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    playerContainers.put(uuid, new PlayerContainer(uuid, level, exp, value, finish, UtilCollector.registerRequiredEXP(level), prestige));
+                    addPlayerToContainerCache(uuid);
+                    getPlayerContainer(uuid).setMultiplier(UsersConfig.getDouble("ActiveBooster"));
                     int i = 0;
                     if(UsersConfig.getConfigurationSection("").getKeys(false).contains("Boosters")) {
                         for (String x : UsersConfig.getConfigurationSection("Boosters").getKeys(false)) {
@@ -264,32 +283,32 @@ public class AsyncEvents {
                             String time = UsersConfig.getString("Boosters." + x + ".Time");
                             int amount = UsersConfig.getInt("Boosters." + x + ".Amount");
                             i++;
-                            ids.put(player, i);
-                            getPlayerContainer(player).giveBooster(multiplier, time, amount);
+                            ids.put(uuid, i);
+                            getPlayerContainer(uuid).giveBooster(multiplier, time, amount);
                         }
                     }
                     LevelPoints.getInstance().getServer().getConsoleSender().sendMessage(Formatting.basicColor("&bLoaded Data Successfully"));
-                    getPlayerContainer(player).setXpBar();
+                    getPlayerContainer(uuid).setXpBar();
                 }
 
             }
         }.runTaskAsynchronously(plugin);
     }
-    public static Integer getIds(Player player){
-        if(ids.isEmpty() || !ids.containsKey(player)){
-            ids.put(player, 0);
+    public static Integer getIds(UUID uuid){
+        if(ids.isEmpty() || !ids.containsKey(uuid)){
+            ids.put(uuid, 0);
         }
-        return ids.get(player);
+        return ids.get(uuid);
     }
-    public static void addIds(Player player){
-        ids.put(player, getIds(player) + 1);
+    public static void addIds(UUID uuid){
+        ids.put(uuid, getIds(uuid) + 1);
     }
-    public static PlayerContainer getPlayerContainer(Player player){
-        if(!isPlayerInCache(player)){
-           LoadPlayerData(player);
-            addPlayerToContainerCache(player);
-        }
-        return playerContainers.get(player);
+    public static PlayerContainer getPlayerContainer(UUID uuid){
+
+        return playerContainers.get(uuid);
+    }
+    public static PlayerContainer getPlayerContainer(Player uuid){
+        return playerContainers.get(uuid.getUniqueId());
     }
     public static void triggerEarnEXPEvent(TasksEnum task, Event event, double amount, Player player) {
 
@@ -299,7 +318,7 @@ public class AsyncEvents {
                 EarnExpEvent expEvent = new EarnExpEvent(task, event, amount, player);
                 Bukkit.getPluginManager().callEvent(expEvent);
                 if (!expEvent.isCancelled()) {
-                    PlayerContainer playerContainer = getPlayerContainer(player);
+                    PlayerContainer playerContainer = getPlayerContainer(player.getUniqueId());
                     playerContainer.addEXP(amount);
                 }
             }
@@ -313,7 +332,7 @@ public class AsyncEvents {
 
                 Bukkit.getPluginManager().callEvent(boosterEvent);
                 if (!boosterEvent.isCancelled()) {
-                    PlayerContainer playerContainer = getPlayerContainer(player);
+                    PlayerContainer playerContainer = getPlayerContainer(player.getUniqueId());
                     playerContainer.removeBooster(multiplier, time);
                     playerContainer.setBoosterDate(time);
                     playerContainer.setMultiplier(multiplier);
@@ -380,7 +399,7 @@ public class AsyncEvents {
         if (!checkSet.getRegions().isEmpty()) {
             for (ProtectedRegion x : checkSet.getRegions()) {
                 if (FileCache.getConfig("expConfig").getConfigurationSection("Anti-Abuse.WorldGuard.LevelRegions.Regions").getKeys(false).contains(x.getId())) {
-                    if (getPlayerContainer(player).getLevel() >= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Level.Min") && getPlayerContainer(player).getLevel() <= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Level.Max")) {
+                    if (getPlayerContainer(player.getUniqueId()).getLevel() >= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Level.Min") && getPlayerContainer(player.getUniqueId()).getLevel() <= FileCache.getConfig("expConfig").getInt("Anti-Abuse.WorldGuard.LevelRegions.Regions." + x.getId() + ".Level.Max")) {
                         value = true;
                     }else{
                         value = false;
@@ -454,7 +473,7 @@ public class AsyncEvents {
                 @Override
                 public void run() {
                     for (Player x : Bukkit.getOnlinePlayers()) {
-                        PlayerContainer container = getPlayerContainer(x);
+                        PlayerContainer container = getPlayerContainer(x.getUniqueId());
                         container.addEXP(FileCache.getConfig("expConfig").getDouble("TimedEXP.Amount"));
 
                         x.sendMessage(Formatting.basicColor(FileCache.getConfig("expConfig").getString("TimedEXP.Message")
@@ -468,7 +487,7 @@ public class AsyncEvents {
     }
     public static void giveReward(Player player, int value, RewardsType rewardsType) {
 
-        PlayerContainer container = getPlayerContainer(player);
+        PlayerContainer container = getPlayerContainer(player.getUniqueId());
         new BukkitRunnable() {
             @Override
             public void run() {

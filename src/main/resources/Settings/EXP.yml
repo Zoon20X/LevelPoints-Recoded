@@ -85,7 +85,7 @@ BlockEXP:
       Random: false
       0:
         EXP:
-          Min: 1
+          Min: 0
           Max: 0 #leave 0 if not using Random
         RequiredLevel:
           Break: 0

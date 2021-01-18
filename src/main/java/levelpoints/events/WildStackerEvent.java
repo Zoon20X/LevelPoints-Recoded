@@ -7,6 +7,7 @@ import com.bgsoftware.wildstacker.api.objects.StackedSpawner;
 import levelpoints.Cache.ExternalCache;
 import levelpoints.Cache.FileCache;
 import levelpoints.Containers.PlayerContainer;
+import levelpoints.Utils.AsyncEvents;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -31,7 +32,7 @@ public class WildStackerEvent implements Listener {
             player.sendMessage(spawner.getSpawner().getCreatureTypeName());
         }
 
-        if(!(new PlayerContainer(event.getPlayer()).getLevel() >= FileCache.getConfig("wildStacker").getInt(spawner.getSpawner().getCreatureTypeName().toString()))){
+        if(!(AsyncEvents.getPlayerContainer(player).getLevel() >= FileCache.getConfig("wildStacker").getInt(spawner.getSpawner().getCreatureTypeName().toString()))){
             event.setCancelled(true);
         }
 

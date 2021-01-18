@@ -70,14 +70,7 @@ public class LevelPointsExpansion extends PlaceholderExpansion {
         if (players instanceof Player) {
             Player player = players.getPlayer();
             if (identifier.equals("player_level")) {
-                if (AsyncEvents.getPlayerContainer(player) !=null) {
-
-                    if (String.valueOf(AsyncEvents.getPlayerContainer(player).getLevel()) != null) {
-                        return String.valueOf(AsyncEvents.getPlayerContainer(player).getLevel());
-                    }
-
-                }
-                return String.valueOf(AsyncEvents.getOfflineLevel(player.getName()));
+                return String.valueOf(AsyncEvents.getPlayerContainer(player).getLevel());
 
             }
             if (identifier.contains("Top")) {
@@ -128,42 +121,19 @@ public class LevelPointsExpansion extends PlaceholderExpansion {
 
             }
             if (identifier.equals("exp_amount")) {
-
-                if (AsyncEvents.getPlayerContainer(player) != null) {
-                    if (String.valueOf(AsyncEvents.getPlayerContainer(player).getEXP()) != null) {
-                        double expamount = AsyncEvents.getPlayerContainer(player).getEXP();
-                        return String.valueOf(expamount);
-                    }
-                }
-                return String.valueOf(AsyncEvents.getOfflineEXP(player.getName()));
+                return String.valueOf(AsyncEvents.getPlayerContainer(player).getEXP());
             }
             if (identifier.equals("exp_required")) {
-                if (AsyncEvents.getPlayerContainer(player) !=null) {
-                    if (String.valueOf(AsyncEvents.getPlayerContainer(player).getRequiredEXP()) != null) {
-                        double needep = AsyncEvents.getPlayerContainer(player).getRequiredEXP();
-                        return String.valueOf(needep);
-                    }
-                }
-                return String.valueOf(AsyncEvents.getOfflineRequiredEXP(player.getName()));
+
+                return String.valueOf(AsyncEvents.getPlayerContainer(player).getRequiredEXP());
             }
 
             if (identifier.equals("progress_bar")) {
-                if (AsyncEvents.getPlayerContainer(player) !=null) {
-                    if (String.valueOf(AsyncEvents.getPlayerContainer(player)) != null) {
-                        return AsyncEvents.getProgressBar(player);
-                    }
-                }
-                return "";
+                return AsyncEvents.getProgressBar(player);
             }
             if (identifier.equals("exp_progress")) {
-                if (AsyncEvents.getPlayerContainer(player) !=null) {
-                    if (String.valueOf(AsyncEvents.getPlayerContainer(player).getEXP()) != null) {
-                        float percentage = (float) AsyncEvents.getPlayerContainer(player).getEXP();
-                        return String.valueOf(Math.round((percentage / AsyncEvents.getPlayerContainer(player).getRequiredEXP()) * 100));
-                    }
-                }
-                float percentage = (float) AsyncEvents.getOfflineEXP(player.getName());
-                return String.valueOf(Math.round((percentage / AsyncEvents.getOfflineRequiredEXP(player.getName())) * 100));
+                float percentage = (float) AsyncEvents.getPlayerContainer(player).getEXP();
+                return String.valueOf(Math.round((percentage / AsyncEvents.getPlayerContainer(player).getRequiredEXP()) * 100));
             }
             if (identifier.equals("booster_active")) {
 
@@ -174,21 +144,19 @@ public class LevelPointsExpansion extends PlaceholderExpansion {
                 return "";
             }
 
-            if(identifier.equals("rank_multiplier")){
+            if (identifier.equals("rank_multiplier")) {
                 return String.valueOf(AsyncEvents.getRankMultiplier(player));
             }
 
 
-            int prestigelevel = AsyncEvents.getPlayerContainer(player).getPrestige();
+            if (identifier.equals("prestige")) {
+                if (AsyncEvents.playerContainers.isEmpty()) {
+                    return String.valueOf(AsyncEvents.getOfflinePrestige(player.getName()));
+                }
+                int prestigelevel = AsyncEvents.getPlayerContainer(player).getPrestige();
+                if (!(prestigelevel == 0)) {
 
-            if (!(prestigelevel == 0)) {
-                if (identifier.equals("prestige")) {
-                    if (AsyncEvents.isPlayerInCache(player)) {
-                        if (String.valueOf(AsyncEvents.getPlayerContainer(player)) != null) {
-                            return String.valueOf(prestigelevel);
-                        }
-                    }
-                    return "Loading...";
+                    return String.valueOf(AsyncEvents.getPlayerContainer(player).getPrestige());
                 }
                 if (player == null) {
                     return "";

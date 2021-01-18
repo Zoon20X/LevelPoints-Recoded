@@ -8,6 +8,7 @@ import levelpoints.Cache.FileCache;
 import levelpoints.Cache.SettingsCache;
 import levelpoints.Utils.AsyncEvents;
 import levelpoints.Utils.MessagesUtil;
+import levelpoints.Utils.UtilCollector;
 import levelpoints.levelpoints.Formatting;
 import levelpoints.levelpoints.LevelPoints;
 import org.bukkit.Bukkit;
@@ -30,19 +31,42 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class PlayerContainer {
-    private Player player;
+    private final UUID uuid;
+    private Integer level;
+    private Double exp;
+    private Double multiplier;
+    private Date boosterDate;
+    private Double requiredEXP;
+    private Integer prestige;
+    private String chatFormat;
 
-    private static HashMap<String, Object> DataCache = new HashMap<>();
-    private static HashMap<Player,HashMap<String, Object>> playerCache = new HashMap<>();
-    private static HashMap<Player,HashMap<BoostersContainer, Integer>> boostersCache = new HashMap<>();
+
+
+    private static HashMap<UUID,HashMap<BoostersContainer, Integer>> boostersCache = new HashMap<>();
     private static HashMap<String,String> cache = new HashMap<>();
     private static DecimalFormat df = new DecimalFormat("#.##");
 
 
-    public PlayerContainer(Player player){
-        this.player = player;
-        playerCache.put(player, new HashMap<>());
-        boostersCache.put(player, new HashMap<>());
+
+    public PlayerContainer(UUID uuid, Integer level, Double exp, Double multiplier, Date boosterDate, Double requiredEXP, Integer prestige){
+        this.uuid = uuid;
+        this.level = level;
+        this.exp = exp;
+        this.multiplier = multiplier;
+        this.boosterDate = boosterDate;
+        this.requiredEXP = requiredEXP;
+        this.prestige = prestige;
+        boostersCache.put(uuid, new HashMap<>());
+    }
+    public PlayerContainer(Player player, Integer level, Double exp, Double multiplier, Date boosterDate, Double requiredEXP, Integer prestige){
+        this.uuid = player.getUniqueId();
+        this.level = level;
+        this.exp = exp;
+        this.multiplier = multiplier;
+        this.boosterDate = boosterDate;
+        this.requiredEXP = requiredEXP;
+        this.prestige = prestige;
+        boostersCache.put(uuid, new HashMap<>());
     }
     public Boolean isBoosterDone(){
         Date date = null;
@@ -62,35 +86,23 @@ public class PlayerContainer {
     }
 
     public double getMultiplier(){
-        if(!playerCache.get(player).containsKey("Multiplier")){
-            playerCache.get(player).put("Multiplier", FileCache.getConfig(player.getUniqueId().toString()).getDouble("ActiveBooster"));
-        }
+
         df.setRoundingMode(RoundingMode.DOWN);
-        return Double.parseDouble(df.format(playerCache.get(player).get("Multiplier")));
+        return Double.parseDouble(df.format(multiplier));
     }
     public void setMultiplier(double multiplier){
-        playerCache.get(player).put("Multiplier", multiplier);
+        this.multiplier = multiplier;
     }
     public void setBoosterDate(String time){
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
-        playerCache.get(player).put("BoosterDate", format.format(Formatting.formatDate(time)));
+        this.boosterDate = Formatting.formatDate(time);
     }
     public Date getBoosterDate()  {
-        if(!playerCache.get(player).containsKey("BoosterDate")){
-            playerCache.get(player).put("BoosterDate", FileCache.getConfig(player.getUniqueId().toString()).getString("BoosterOff"));
-        }
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
-        Date d = null;
-        try {
-            d = format.parse(String.valueOf(playerCache.get(player).get("BoosterDate")));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return d;
+
+        return boosterDate;
     }
     public void setBoosters(String value){
-        if(boostersCache.containsKey(playerCache)) {
-            boostersCache.get(playerCache).clear();
+        if(boostersCache.containsKey(uuid)) {
+            boostersCache.get(uuid).clear();
         }
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<BoostersContainer>>() {}.getType();
@@ -101,63 +113,41 @@ public class PlayerContainer {
     }
 
     public int getLevel(){
-
-        if(!playerCache.get(player).containsKey("Level")){
-            playerCache.get(player).put("Level", FileCache.getConfig(player.getUniqueId().toString()).getInt("Level"));
-        }
-        return (int) playerCache.get(player).get("Level");
+        return this.level;
     }
     public double getEXP(){
-        if(!playerCache.get(player).containsKey("EXP")){
-            playerCache.get(player).put("EXP", FileCache.getConfig(player.getUniqueId().toString()).getDouble("EXP.Amount"));
-        }
-
-        return Double.valueOf(String.valueOf(playerCache.get(player).get("EXP")));
+        return this.exp;
     }
     public double getRequiredEXP(){
-        if(FileCache.getConfig("levelConfig").getBoolean("Leveling.CustomLeveling.Enabled")){
-            if(!playerCache.get(player).containsKey("RequiredEXP")){
-                playerCache.get(player).put("RequiredEXP", LevelsContainer.getCustomLevelsEXP(getLevel()));
-            }
-        }else {
-            if (!playerCache.get(player).containsKey("RequiredEXP")) {
-                playerCache.get(player).put("RequiredEXP", LevelsContainer.generateFormula(player, LevelsContainer.getFormula()));
-            }
-        }
-
-
-        return Double.parseDouble(String.valueOf(playerCache.get(player).get("RequiredEXP")));
+        return this.requiredEXP;
     }
     public int getPrestige(){
-        if(!playerCache.get(player).containsKey("Prestige")){
-            playerCache.get(player).put("Prestige", FileCache.getConfig(player.getUniqueId().toString()).getInt("Prestige"));
-        }
-        return (int) playerCache.get(player).get("Prestige");
+        return this.prestige;
     }
     public void addPrestige(int value){
-        playerCache.get(player).put("Prestige", value + getPrestige());
+        prestige = prestige + value;
     }
     public void giveBooster(double multiplier, String time, int amount) {
 
-        if (boostersCache.get(player).isEmpty()) {
-            boostersCache.get(player).put(new BoostersContainer(multiplier, time, AsyncEvents.getIds(player), amount), amount);
+        if (boostersCache.get(uuid).isEmpty()) {
+            boostersCache.get(uuid).put(new BoostersContainer(multiplier, time, AsyncEvents.getIds(uuid), amount), amount);
             //System.out.println("new");
             return;
         }
-        int size = boostersCache.get(player).size();
-        for(BoostersContainer x : boostersCache.get(player).keySet()){
+        int size = boostersCache.get(uuid).size();
+        for(BoostersContainer x : boostersCache.get(uuid).keySet()){
 
             if(x.getMultiplier() == multiplier && x.getTime().equalsIgnoreCase(time)){
-                int i = boostersCache.get(player).get(x);
-                boostersCache.get(player).put(x, amount + i);
+                int i = boostersCache.get(uuid).get(x);
+                boostersCache.get(uuid).put(x, amount + i);
                 System.out.println(Formatting.basicColor("&3LevelPoints>> &bAdded booster (" + multiplier + ")"));
                 break;
             }
             size--;
             if(size == 0){
 
-                boostersCache.get(player).put(new BoostersContainer(multiplier, time, AsyncEvents.getIds(player) + 1, amount), amount);
-                AsyncEvents.addIds(player);
+                boostersCache.get(uuid).put(new BoostersContainer(multiplier, time, AsyncEvents.getIds(uuid) + 1, amount), amount);
+                AsyncEvents.addIds(uuid);
                 System.out.println(Formatting.basicColor("&3LevelPoints>> &bAdded new booster (" + multiplier + ")"));
             }
 
@@ -170,9 +160,9 @@ public class PlayerContainer {
 //        }
     }
     public Integer getBoosterAmount(Integer id){
-        for(BoostersContainer x : boostersCache.get(player).keySet()){
+        for(BoostersContainer x : boostersCache.get(uuid).keySet()){
             if(x.getId() == id){
-                return boostersCache.get(player).get(x);
+                return boostersCache.get(uuid).get(x);
 
             }
         }
@@ -180,24 +170,24 @@ public class PlayerContainer {
     }
 
     public void removeBooster(double multiplier, String time){
-        for(BoostersContainer x : boostersCache.get(player).keySet()){
+        for(BoostersContainer x : boostersCache.get(uuid).keySet()){
 
             if(x.getMultiplier() == multiplier && x.getTime().equalsIgnoreCase(time)){
-                int i = boostersCache.get(player).get(x);
+                int i = boostersCache.get(uuid).get(x);
                 if(i == 1){
-                   boostersCache.get(player).remove(x);
+                   boostersCache.get(uuid).remove(x);
                     //System.out.println(Formatting.basicColor("&3LevelPoints>> &bNo booster (" + multiplier + ") remaining"));
                     break;
                 }
                 x.setAmount(getBoosterAmount(x.getId()) - 1);
-                boostersCache.get(player).put(x,  getBoosterAmount(x.getId()) - 1);
+                boostersCache.get(uuid).put(x,  getBoosterAmount(x.getId()) - 1);
                 break;
             }
         }
     }
 
     public BoostersContainer getBooster(Integer id){
-        for(BoostersContainer x : boostersCache.get(player).keySet()){
+        for(BoostersContainer x : boostersCache.get(uuid).keySet()){
             if(x.getId() == id){
                 return x;
 
@@ -206,7 +196,7 @@ public class PlayerContainer {
         return null;
     }
     public Boolean hasBooster(Double multiplier, String time){
-        for(BoostersContainer x : boostersCache.get(player).keySet()) {
+        for(BoostersContainer x : boostersCache.get(uuid).keySet()) {
 
             if (x.getMultiplier() == multiplier && x.getTime().equalsIgnoreCase(time)) {
                 return true;
@@ -215,12 +205,12 @@ public class PlayerContainer {
         return false;
     }
     public HashMap<BoostersContainer, Integer> getBoosters(){
-        return boostersCache.get(player);
+        return boostersCache.get(uuid);
     }
 
     public void setLevel(int value){
-        playerCache.get(player).put("Level", value);
-        playerCache.get(player).remove("RequiredEXP");
+        level = value;
+        requiredEXP = UtilCollector.registerRequiredEXP(value);
         setXpBar();
     }
 
@@ -231,27 +221,31 @@ public class PlayerContainer {
                 public void run() {
                     SettingsCache.cacheBoolean("LpsToXpBar", LevelPoints.getInstance().getConfig().getBoolean("LpsToXpBar"));
                     if (LevelPoints.getInstance().getConfig().getBoolean("LpsToXpBar")) {
-
-                        player.setLevel(getLevel());
-                        player.setExp((float) (getEXP()/getRequiredEXP()));
+                        if (Bukkit.getPlayer(uuid) != null) {
+                            Player player = Bukkit.getPlayer(uuid);
+                            player.setLevel(getLevel());
+                            player.setExp((float) (getEXP() / getRequiredEXP()));
+                        }
                     }
                 }
             }.runTaskAsynchronously(LevelPoints.getInstance());
         }else{
             if(SettingsCache.getBoolean("LpsToXpBar")){
-                player.setLevel(getLevel());
-                player.setExp((float) (getEXP()/getRequiredEXP()));
+                if (Bukkit.getPlayer(uuid) != null) {
+                    Player player = Bukkit.getPlayer(uuid);
+                    player.setLevel(getLevel());
+                    player.setExp((float) (getEXP() / getRequiredEXP()));
+                }
             }
         }
     }
 
     public void setPrestige(int value){
-        playerCache.get(player).put("Prestige", value);
-        playerCache.get(player).remove("RequiredEXP");
+        prestige = prestige;
     }
     public void setEXP(double value){
-        playerCache.get(player).put("EXP", value);
-        playerCache.get(player).remove("RequiredEXP");
+        exp = value;
+        requiredEXP = UtilCollector.registerRequiredEXP(getLevel());
     }
 
     public void addEXP(double value) {
@@ -260,22 +254,28 @@ public class PlayerContainer {
                 double has = getEXP();
                 double multi = getMultiplier();
                 if(LevelPoints.getInstance().getConfig().getBoolean("RankMultipliers")){
-                    multi = multi * AsyncEvents.getRankMultiplier(player);
+                    if (Bukkit.getPlayer(uuid) != null) {
+                        Player player = Bukkit.getPlayer(uuid);
+                        multi = multi * AsyncEvents.getRankMultiplier(player);
+                    }
                 }
                 has = has + (value * multi);
-                playerCache.get(player).put("EXP", has);
+                exp = has;
                 //System.out.println(Formatting.basicColor("&3Added " + value + " EXP to " + player.getName()));
                 if (canLevelUp()) {
                     addLevel(1, true);
                 }
-                float percentage = (float) AsyncEvents.getPlayerContainer(player).getEXP();
-                double val = (percentage / AsyncEvents.getPlayerContainer(player).getRequiredEXP());
+                float percentage = (float) getEXP();
+                double val = (percentage / getRequiredEXP());
                 if (!Bukkit.getVersion().contains("1.8")) {
-                    MessagesUtil.sendBossBar(player,
-                            FileCache.getConfig("langConfig").getString("Formats.LevelUp.BossBar.Text"),
-                            BarColor.valueOf(LevelPoints.getInstance().getConfig().getString("BossBarColor")),
-                            BarStyle.SOLID,
-                            val);
+                    if (Bukkit.getPlayer(uuid) != null) {
+                        Player player = Bukkit.getPlayer(uuid);
+                        MessagesUtil.sendBossBar(player,
+                                FileCache.getConfig("langConfig").getString("Formats.LevelUp.BossBar.Text"),
+                                BarColor.valueOf(LevelPoints.getInstance().getConfig().getString("BossBarColor")),
+                                BarStyle.SOLID,
+                                val);
+                    }
                 }
             } else {
                 //System.out.println(Formatting.basicColor("&3Added"));
@@ -288,9 +288,9 @@ public class PlayerContainer {
                 double has = getEXP();
                 has = has + value;
                 if(has > getRequiredEXP()){
-                    playerCache.get(player).put("EXP", getRequiredEXP());
+                    exp = getRequiredEXP();
                 }else {
-                    playerCache.get(player).put("EXP", has);
+                    exp = has;
                 }
                 //System.out.println(Formatting.basicColor("&3Added " + value + " EXP to " + player.getName()));
                 setXpBar();
@@ -303,7 +303,7 @@ public class PlayerContainer {
             if (getEXP() >= value) {
                 double has = getEXP();
                 has = has - value;
-                playerCache.get(player).put("EXP", has);
+                exp = has;
                 setXpBar();
             } else {
                 //System.out.println(Formatting.basicColor("&cCannot remove &4" + amount + "&c of EXP as player only has &4" + getEXP()));
@@ -317,7 +317,7 @@ public class PlayerContainer {
         System.out.println(Formatting.basicColor("&3Saving PlayerCache to file"));
 
 
-        File userdata = new File(LevelPoints.getUserFolder(), player.getUniqueId() + ".yml");
+        File userdata = new File(LevelPoints.getUserFolder(), uuid + ".yml");
         FileConfiguration UsersConfig = YamlConfiguration.loadConfiguration(userdata);
         UsersConfig.set("Level", getLevel());
         UsersConfig.set("EXP.Amount", getEXP());
@@ -325,12 +325,12 @@ public class PlayerContainer {
 
         int i = 0;
         ArrayList<BoostersContainer> boosters = new ArrayList<>();;
-        for(BoostersContainer x : boostersCache.get(player).keySet()){
+        for(BoostersContainer x : boostersCache.get(uuid).keySet()){
             boosters.add(x);
             i++;
             UsersConfig.set("Boosters." + i + ".Multiplier", x.getMultiplier());
             UsersConfig.set("Boosters." + i + ".Time", x.getTime());
-            UsersConfig.set("Boosters." + i + ".Amount", boostersCache.get(player).get(x));
+            UsersConfig.set("Boosters." + i + ".Amount", boostersCache.get(uuid).get(x));
 
         }
 //        Gson gson = new Gson();
@@ -341,36 +341,39 @@ public class PlayerContainer {
         try {
             UsersConfig.save(userdata);
             System.out.println(Formatting.basicColor("&bSaved PlayerCache to file"));
-            playerCache.get(player).clear();
-            FileCache.removeFileFromCache(player.getUniqueId().toString());
+            FileCache.removeFileFromCache(uuid.toString());
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println(Formatting.basicColor("&4Failed to save playerData please contact Zoon20X"));
         }
-        AsyncEvents.removePlayerFromContainerCache(player);
+        AsyncEvents.removePlayerFromContainerCache(uuid);
 
     }
     public String getBoosterString(){
         ArrayList<BoostersContainer> boosters = new ArrayList<>();
-        for(BoostersContainer x : boostersCache.get(player).keySet()){
+        for(BoostersContainer x : boostersCache.get(uuid).keySet()){
             boosters.add(x);
         }
         Gson gson = new Gson();
         String save = gson.toJson(boosters);
         return save;
     }
-    public String getChatFormat(){
-        if(!playerCache.get(player).containsKey("Format")){
-            for(FormatsContainer x : LevelsContainer.getFormats()){
-                if(getLevel() <= x.getMaxLevel()){
-                    if(getLevel() >= x.getMinLevel()){
-                        playerCache.get(player).put("Format", x.getFormat());
+    public String getChatFormat() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (FormatsContainer x : LevelsContainer.getFormats()) {
+                    if (getLevel() <= x.getMaxLevel()) {
+                        if (getLevel() >= x.getMinLevel()) {
+                            chatFormat = x.getFormat();
+                        }
                     }
                 }
             }
-        }
-        System.out.println(playerCache.get(player).get("Format"));
-        return String.valueOf(playerCache.get(player).get("Format"));
+        }.runTaskAsynchronously(LevelPoints.getInstance());
+
+
+        return this.chatFormat;
     }
 
     public Boolean canPrestige() {
@@ -389,11 +392,6 @@ public class PlayerContainer {
         }
     }
 
-
-    public void clearPlayerCache(){
-        playerCache.get(player).clear();
-    }
-
     public Boolean canLevelUp(){
         return getEXP() >= getRequiredEXP();
     }
@@ -407,10 +405,12 @@ public class PlayerContainer {
         if(removeEXP) {
             removeEXP(getRequiredEXP());
         }
-
-        AsyncEvents.triggerLevelUpEvent(player, getLevel() + value);
-        playerCache.get(player).put("Level", getLevel() + value);
-        playerCache.get(player).remove("RequiredEXP");
+        if(Bukkit.getPlayer(uuid) !=null) {
+            Player player = Bukkit.getPlayer(uuid);
+            AsyncEvents.triggerLevelUpEvent(player, getLevel() + value);
+        }
+        level = level + value;
+        requiredEXP = UtilCollector.registerRequiredEXP(getLevel());
         if(!canLevelUp()){
             return;
         }else{

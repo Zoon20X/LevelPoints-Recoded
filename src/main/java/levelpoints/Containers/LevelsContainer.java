@@ -67,17 +67,17 @@ public class LevelsContainer {
         values.clear();
     }
 
-    public static BigDecimal generateFormula(Player player, String formula){
+    public static Double generateFormula(Integer value, String formula){
         ScriptEngineManager scriptEngineManager = new ScriptEngineManager(null);
         ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("JavaScript");
         Object ob = null;
         try {
-            ob = scriptEngine.eval(formula.replace("{Level_Player}", String.valueOf(AsyncEvents.getPlayerContainer(player).getLevel())));
+            ob = scriptEngine.eval(formula.replace("{Level_Player}", String.valueOf(value)));
         } catch (ScriptException e) {
             e.printStackTrace();
         }
 
-        return BigDecimal.valueOf(Double.valueOf(ob.toString()));
+        return Double.valueOf(ob.toString());
     }
     public static BigDecimal generateFormula(OfflinePlayer player, String formula){
         ScriptEngineManager scriptEngineManager = new ScriptEngineManager();

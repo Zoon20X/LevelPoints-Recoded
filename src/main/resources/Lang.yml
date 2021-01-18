@@ -118,3 +118,5 @@ ProgressBar:
   Required: '&7|'
   PlaceholderAPI:
     Size: 8
+
+lpRequirement: '&7Level: {Required_Level}' #Must have {Required_Level}
