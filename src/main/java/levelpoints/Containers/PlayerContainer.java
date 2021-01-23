@@ -382,15 +382,10 @@ public class PlayerContainer {
             if (getLevel() >= LevelsContainer.getMaxLevel()) {
                 if (getEXP() == getRequiredEXP()) {
                     return true;
-                }else{
-                    return false;
                 }
-            }else{
-                return false;
             }
-        } else {
-            return false;
         }
+        return false;
     }
 
     public Boolean canLevelUp(){

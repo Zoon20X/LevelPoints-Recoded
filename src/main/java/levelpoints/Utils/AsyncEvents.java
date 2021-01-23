@@ -22,6 +22,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
@@ -126,6 +127,7 @@ public class AsyncEvents {
     }
     public static void removePlayerFromContainerCache(UUID uuid){
         playersInCache.remove(uuid);
+        playerContainers.remove(uuid);
     }
     public static Boolean isPlayersCacheEmpty(){
         return playersInCache.isEmpty();
@@ -190,10 +192,9 @@ public class AsyncEvents {
     }
 
     public static Boolean isPlayerInCache(Player player){
-        return playersInCache.contains(player);
+        return playersInCache.contains(player.getUniqueId());
     }
     public static void RunSaveCache(Player player) {
-
         PlayerContainer container = getPlayerContainer(player.getUniqueId());
         container.saveCacheToFile();
     }

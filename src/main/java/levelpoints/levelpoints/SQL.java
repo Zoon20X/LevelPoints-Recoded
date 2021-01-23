@@ -56,6 +56,7 @@ public class SQL {
     }
     public static void createPlayer(final UUID uuid, String name) {
         if (Bukkit.getPlayer(uuid) != null) {
+            SQLReconnect();
             try {
                 Connection connection = getConnection();
                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + getCacheData("table") + " WHERE UUID=?");
@@ -86,6 +87,12 @@ public class SQL {
     }
     public static void RunSQLDownload(Player player){
         try {
+            if(connection.isClosed())
+                SQLReconnect();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        try {
             connection = getConnection();
             PlayerContainer container = AsyncEvents.getPlayerContainer(player);
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + getCacheData("table") + " WHERE UUID=?");
@@ -115,6 +122,12 @@ public class SQL {
         }
     }
     public static void RunSQLUpload(Player player){
+        try {
+            if(connection.isClosed())
+                SQLReconnect();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         try {
             Connection connection = getConnection();
             PlayerContainer container = AsyncEvents.getPlayerContainer(player);
@@ -154,6 +167,7 @@ public class SQL {
         String database = (String) getCacheData("database");
         String password = (String) getCacheData("password");
         String table = (String) getCacheData("table");
+
         try {
             setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" +port + "/" + database, username, password));
         } catch (SQLException e) {
