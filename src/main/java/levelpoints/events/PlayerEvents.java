@@ -387,14 +387,14 @@ public class PlayerEvents implements Listener {
                     }
                 }
             }
+            if (EXPContainer.getEXP(event.getBlock(), false, false) > 0) {
+                if (EXPContainer.getRequiredLevel(event.getBlock().getType(), SettingsEnum.Break) <= container.getLevel()) {
 
-            if (EXPContainer.getRequiredLevel(event.getBlock().getType(), SettingsEnum.Break) <= container.getLevel()) {
 
-                if (EXPContainer.getEXP(event.getBlock(), false, false) > 0) {
-                    if(FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.Silk")){
-                        if(player.getInventory().getItemInMainHand() != null){
+                    if (FileCache.getConfig("expConfig").getBoolean("Anti-Abuse.Silk")) {
+                        if (player.getInventory().getItemInMainHand() != null) {
                             ItemStack item = player.getInventory().getItemInMainHand();
-                            if(item.hasItemMeta()) {
+                            if (item.hasItemMeta()) {
                                 if (item.getItemMeta().hasEnchants()) {
                                     if (item.getItemMeta().getEnchants().containsKey(Enchantment.SILK_TOUCH)) {
                                         return;
@@ -404,20 +404,20 @@ public class PlayerEvents implements Listener {
                         }
                     }
                     AsyncEvents.triggerEarnEXPEvent(TasksEnum.BlockBreak, event, EXPContainer.getEXP(event.getBlock(), true, false), event.getPlayer());
-                }
-            } else {
-                if (FileCache.getConfig("langConfig").getBoolean("RequiredLevelOre.Enabled")) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            for (String x : LangCache.getRequiredLevel()) {
-                                player.sendMessage(Formatting.basicColor(x, player).replace("{lp_Required_Level}",
-                                        String.valueOf(EXPContainer.getRequiredLevel(event.getBlock().getType(), SettingsEnum.Break))));
+                } else {
+                    if (FileCache.getConfig("langConfig").getBoolean("RequiredLevelOre.Enabled")) {
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                for (String x : LangCache.getRequiredLevel()) {
+                                    player.sendMessage(Formatting.basicColor(x, player).replace("{lp_Required_Level}",
+                                            String.valueOf(EXPContainer.getRequiredLevel(event.getBlock().getType(), SettingsEnum.Break))));
+                                }
                             }
-                        }
-                    }.runTaskAsynchronously(LevelPoints.getInstance());
+                        }.runTaskAsynchronously(LevelPoints.getInstance());
+                    }
+                    event.setCancelled(true);
                 }
-                event.setCancelled(true);
             }
         }
         if(EXPContainer.gainEXP(TasksEnum.Farming)) {
@@ -551,12 +551,6 @@ public class PlayerEvents implements Listener {
             }.runTaskLaterAsynchronously(LevelPoints.getInstance(), 20);
         }
 
-    }
-    @EventHandler
-    public void onPreCommand(PlayerCommandPreprocessEvent event){
-        if(event.getMessage().equalsIgnoreCase("/stop") || event.getMessage().equalsIgnoreCase("/restart")){
-            AsyncEvents.MassSaveCache();
-        }
     }
 
 

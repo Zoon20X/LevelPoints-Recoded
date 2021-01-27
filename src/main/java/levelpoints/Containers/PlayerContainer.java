@@ -245,7 +245,7 @@ public class PlayerContainer {
     }
 
     public void setPrestige(int value){
-        prestige = prestige;
+        prestige = value;
     }
     public void setEXP(double value){
         exp = value;
