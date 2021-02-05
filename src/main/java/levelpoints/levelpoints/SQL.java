@@ -169,7 +169,7 @@ public class SQL {
         String table = (String) getCacheData("table");
 
         try {
-            setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" +port + "/" + database, username, password));
+            setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" +port + "/" + database + "?autoReconnect=true&useSSL=false", username, password));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -213,7 +213,7 @@ public class SQL {
                 }
                 Class.forName("com.mysql.jdbc.Driver");
                 LevelPoints.getInstance().getLogger().info("About to connect to database");
-                setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, password));
+                setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true&useSSL=false", username, password));
                 statment = connection.createStatement();
                 statment.executeUpdate("CREATE TABLE IF NOT EXISTS `"+ table +"` (`UUID` varchar(200), `NAME` varchar(200), `LEVEL` INT(10), EXP DOUBLE(10,2), PRESTIGE INT(10), ACTIVEBOOSTER DOUBLE(10,2), BOOSTEROFF varchar(200), BOOSTERS TEXT(60000))");
                 System.out.println(ChatColor.DARK_GREEN + "MySQL Connected");
