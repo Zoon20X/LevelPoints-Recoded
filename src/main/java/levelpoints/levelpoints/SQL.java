@@ -29,6 +29,7 @@ public class SQL {
         sqlCache.put("database", LevelPoints.getInstance().getConfig().getString("database"));
         sqlCache.put("password", LevelPoints.getInstance().getConfig().getString("password"));
         sqlCache.put("table", LevelPoints.getInstance().getConfig().getString("table"));
+        sqlCache.put("ssl", LevelPoints.getInstance().getConfig().getBoolean("ssl"));
 
     }
 
@@ -167,9 +168,10 @@ public class SQL {
         String database = (String) getCacheData("database");
         String password = (String) getCacheData("password");
         String table = (String) getCacheData("table");
+        Boolean ssl = (Boolean) getCacheData("ssl");
 
         try {
-            setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" +port + "/" + database + "?autoReconnect=true&useSSL=false", username, password));
+            setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" +port + "/" + database + "?autoReconnect=true&useSSL=" + ssl, username, password));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -203,6 +205,7 @@ public class SQL {
         String database = (String) getCacheData("database");
         String password = (String) getCacheData("password");
         String table = (String) getCacheData("table");
+        Boolean ssl = (Boolean) getCacheData("ssl");
         try {
             synchronized (LevelPoints.getInstance()) {
                 if (getConnection() != null && !getConnection().isClosed()) {
@@ -213,7 +216,7 @@ public class SQL {
                 }
                 Class.forName("com.mysql.jdbc.Driver");
                 LevelPoints.getInstance().getLogger().info("About to connect to database");
-                setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true&useSSL=false", username, password));
+                setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true&useSSL=" + ssl, username, password));
                 statment = connection.createStatement();
                 statment.executeUpdate("CREATE TABLE IF NOT EXISTS `"+ table +"` (`UUID` varchar(200), `NAME` varchar(200), `LEVEL` INT(10), EXP DOUBLE(10,2), PRESTIGE INT(10), ACTIVEBOOSTER DOUBLE(10,2), BOOSTEROFF varchar(200), BOOSTERS TEXT(60000))");
                 System.out.println(ChatColor.DARK_GREEN + "MySQL Connected");
