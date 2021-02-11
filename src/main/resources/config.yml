@@ -29,7 +29,7 @@ username: "root"
 database: ""
 password: ""
 table: "lpsPlayer"
-ssl: false
+ssl: true
 
 #-----------------#
 #Connected plugins#
