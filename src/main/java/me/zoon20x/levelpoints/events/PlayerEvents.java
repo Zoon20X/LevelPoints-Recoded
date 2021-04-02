@@ -89,6 +89,7 @@ public class PlayerEvents implements Listener {
         if(Bukkit.getPlayer(event.getPlayerData().getUUID()) == null){
             return;
         }
+
         Player player = Bukkit.getPlayer(event.getPlayerData().getUUID());
         for (RewardData data : rewardSettings.getAllRewards()) {
             if (data.getType() == RewardTriggerType.LEVELUP) {

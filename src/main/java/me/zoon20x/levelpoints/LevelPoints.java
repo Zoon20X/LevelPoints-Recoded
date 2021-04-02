@@ -6,10 +6,7 @@ package me.zoon20x.levelpoints;
 import me.zoon20x.levelpoints.commands.adminLpsCommand;
 import me.zoon20x.levelpoints.commands.lpsCommand;
 import me.zoon20x.levelpoints.containers.Player.PlayerStorage;
-import me.zoon20x.levelpoints.containers.Settings.ExpSettings;
-import me.zoon20x.levelpoints.containers.Settings.LangSettings;
-import me.zoon20x.levelpoints.containers.Settings.LevelsSettings;
-import me.zoon20x.levelpoints.containers.Settings.RewardSettings;
+import me.zoon20x.levelpoints.containers.Settings.*;
 import me.zoon20x.levelpoints.events.ExpEarningEvents;
 import me.zoon20x.levelpoints.events.PlayerEvents;
 import me.zoon20x.levelpoints.files.FilesGenerator;
@@ -42,10 +39,11 @@ public final class LevelPoints extends JavaPlugin{
     private static LangSettings langSettings;
     private static ExpSettings expSettings;
     private static RewardSettings rewardSettings;
+    private static TopListSettings topListSettings;
     private static boolean isReloading;
     private static boolean isRunningSQL;
-    private int value;
     private static FileConfiguration configuration;
+
 
 
     private void generateFolders(){
@@ -57,7 +55,6 @@ public final class LevelPoints extends JavaPlugin{
     @Override
     public void onEnable() {
         // Plugin startup logic
-        value = 0;
         instance = this;
         isRunningSQL = false;
         generateFolders();
@@ -111,30 +108,7 @@ public final class LevelPoints extends JavaPlugin{
         langSettings = new LangSettings();
         expSettings = new ExpSettings();
         rewardSettings = new RewardSettings();
-
-    }
-    public void read(){
-        configuration.getConfigurationSection("").getKeys(false).forEach(x->{
-            value++;
-        });
-
-    }
-    public void generate(){
-        FilesStorage.removeFileFromCache("topListConfig");
-        File userFile = new File(getDataFolder(), "TopList.yml");
-        FileConfiguration config = YamlConfiguration.loadConfiguration(userFile);
-
-        for(int i =0; i!= 5000; i++){
-            int random = ThreadLocalRandom.current().nextInt(1, 100);
-            config.set(String.valueOf(UUID.randomUUID()), random);
-        }
-        try {
-            config.save(userFile);
-            //FilesStorage.addFileToCache("topListConfig", config);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        configuration = config;
+        topListSettings = new TopListSettings();
     }
     public void setReloading(boolean value){
         isReloading = value;
@@ -223,6 +197,10 @@ public final class LevelPoints extends JavaPlugin{
     public static RewardSettings getRewardSettings() {
         return rewardSettings;
     }
+    public static TopListSettings getTopListSettings() {
+        return topListSettings;
+    }
+
     public static FilesGenerator getFilesGenerator(){
         return new FilesGenerator();
     }

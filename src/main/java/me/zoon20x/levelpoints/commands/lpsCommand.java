@@ -81,7 +81,7 @@ public class lpsCommand implements CommandExecutor {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        LevelPoints.getLevelSettings().sendTopList(player);
+                        LevelPoints.getTopListSettings().sendTopList(player);
                     }
                 }.runTaskAsynchronously(LevelPoints.getInstance());
                 break;

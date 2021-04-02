@@ -154,27 +154,7 @@ public class LevelsSettings {
         return levelUpType;
     }
 
-    public void sendTopList(Player player){
-        topValue = 0;
-        for(String x : LevelPoints.getLangSettings().getTopMessageTopText()){
-            player.sendMessage(MessageUtils.getColor(x));
-        }
-        Collection<PlayerData> allLoaded = LevelPoints.getPlayerStorage().getAllLoaded();
-        allLoaded.stream().sorted((a1, a2)->{
-            int points1 = a1.getLevel();
-            int points2 = a2.getLevel();
-            return points2 - points1;
-        }).limit(10).forEach(f->{
-            topValue++;
-            Formatter formatter = new Formatter(f.getName(), f.getLevel(), f.getExp(), f.getRequiredExp(), f.getPrestige(), 0, f.getProgress());
-            for(String x : LevelPoints.getLangSettings().getTopMessageMiddleText()){
-                player.sendMessage(MessageUtils.getColor(MessageUtils.format(x.replace("{top_position}", String.valueOf(topValue)), formatter)));
-            }
-        });
-        for(String x : LevelPoints.getLangSettings().getTopMessageBottomText()){
-            player.sendMessage(MessageUtils.getColor(x));
-        }
-    }
+
 
     public double getStartingExp() {
         return startingXp;

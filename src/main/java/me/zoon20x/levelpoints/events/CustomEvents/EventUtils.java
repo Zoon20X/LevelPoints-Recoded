@@ -26,6 +26,7 @@ public class EventUtils {
 
         LevelUpEvent event = new LevelUpEvent(level, data);
         Bukkit.getPluginManager().callEvent(event);
+        LevelPoints.getTopListSettings().generateTopCache(50);
 
 
     }
