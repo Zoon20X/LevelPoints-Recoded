@@ -1,0 +1,41 @@
+Blocks:
+  Enabled: true
+  Settings:
+    DIRT:
+      Data: 0
+      Exp:
+        Min: 0
+        Max: 0
+      RequiredLevel:
+        Break: 0
+        Place: 0
+    Ores:
+      Blocks:
+        - COAL_ORE
+        - IRON_ORE
+        - GOLD_ORE
+      Exp:
+        Min: 0
+        Max: 0
+      RequiredLevel:
+        Break: 0
+        Place: 0
+Mobs:
+  Enabled: false
+  Settings:
+    ZOMBIE:
+      Exp:
+        Min: 0
+        Max: 0
+      RequiredLevel:
+        Damage: 0
+    Passive:
+      Mobs:
+        - PIG
+        - COW
+        - CHICKEN
+      Exp:
+        Min: 0
+        Max: 0
+      RequiredLevel:
+        Damage: 0

@@ -1,0 +1,138 @@
+Help:
+  Player:
+    - '&8--------------------'
+    - '&bLevelPoints'
+    - '&b/lps &fDisplays this menu'
+    - '&b/lps info <player> &fShows level info of a player'
+    - '&b/lps booster list &fShows the booster backpack'
+    - '&b/lps booster use <multiplier> &fUses a the current selected booster'
+    - '&b/lps prestige &fAllows you to prestige if requirements are met'
+    - '&b/lps top &fShows top 10 players'
+    - '&b/lps toggle &f Toggles The LevelPoints Actionbar, (Per Player Setting)'
+    - '&8--------------------'
+  Admin:
+    - '&8--------------------'
+    - '&bLevelPoints'
+    - '&8--------------------'
+Info:
+  Player:
+    - '&bPlayer&7> &3{player}'
+    - '&2Level&7> &a{level}'
+    - '&2EXP&7> &a{exp} / {required_exp}'
+    - '&2EXP Progress&7> &a{progress}'
+    - '&2Prestige&7> &a{prestige}'
+    - '&2Booster&7> &a{Booster_Active} + {Booster_Date}'
+
+
+TopList:
+  Top:
+    Enabled: true
+    Text:
+      - '&bLevels - top 10 players'
+      - '&3-------------------'
+  Middle:
+    Enabled: true
+    Text:
+      - '&b{top_position}. {player} - {level}'
+  Bottom:
+    Enabled: true
+    Text:
+      - '&3-------------------'
+
+Experience:
+  Earning:
+    Break:
+      Enabled: false
+      Message: ''
+    Mobs:
+      Enabled: false
+      Message: ''
+    Pvp:
+      Enabled: false
+      Message: ''
+    Command:
+      Sender:
+        Enabled: false
+        Message: '&3You gave {player} {exp} exp'
+      Receiver:
+        Enabled: false
+        Message: '&3{player} gave you {exp} exp'
+  Remove:
+    Command:
+      Sender:
+        Enabled: false
+        Message: '&3You removed &b{exp}&3 exp from {player}'
+      Receiver:
+        Enabled: false
+        Message: '&b{exp} &3exp was removed from you by {player}'
+RequiredLevels:
+  Break:
+    Enabled: false
+    Message: '&4You need to be level &c{required_level} &4to mine this block, you need &c{required_exp}&4 more exp before you can break'
+  Place:
+    Enabled: false
+    Message: '&4You need to be level &c{required_level} &4to place this block, you need &c{required_exp}&4 more exp before you can break'
+  Damage:
+    Enabled: false
+    Message: '&4You need to be level &c{required_level} &4to damage this mob, you need &c{required_exp}&4 more exp before you can break'
+  Pvp:
+    Enabled: false
+    Message: '&4You need to be level &c{required_level} &4to pvp this player, you need &c{required_exp}&4 more exp before you can break'
+
+Levels:
+  Add:
+    Command:
+      Sender:
+        Enabled: false
+        Message: '&3You gave {player} &b{level} &3levels'
+      Receiver:
+        Enabled: false
+        Message: '&3{player} gave you &b{level} &3levels'
+  Remove:
+    Command:
+      Sender:
+        Enabled: false
+        Message: '&3You removed &b{level} &3levels from {player}'
+      Receiver:
+        Enabled: false
+        Message: '&b{level} &3levels was removed from you by {player}'
+  Set:
+    Command:
+      Sender:
+        Enabled: false
+        Message: '&3You set {player} level to &b{level}'
+      Receiver:
+        Enabled: false
+        Message: '&3Your level was set to &b{level} &bby {player}'
+Prestige:
+  Command:
+    Denied:
+      Enabled: false
+      Message: '&4You failed to prestige, you need to be level {required_level}'
+    Approved:
+      Enabled: false
+      Message: '&3You prestiged to {prestige}'
+  Add:
+    Command:
+      Sender:
+        Enabled: false
+        Message: '&3You gave {player} &b{prestige} &3prestige'
+      Receiver:
+        Enabled: false
+        Message: '&3{player} gave you &b{prestige} &3prestige'
+  Remove:
+    Command:
+      Sender:
+        Enabled: false
+        Message: '&3You removed &b{prestige} &3prestige from {player}'
+      Receiver:
+        Enabled: false
+        Message: '&b{prestige} &3prestige was removed from you by {player}'
+  Set:
+    Command:
+      Sender:
+        Enabled: false
+        Message: '&3You set {player} prestige to &b{prestige}'
+      Receiver:
+        Enabled: false
+        Message: '&3Your prestige was set to &b{prestige} &bby {player}'

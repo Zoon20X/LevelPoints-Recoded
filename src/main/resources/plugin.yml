@@ -1,0 +1,24 @@
+name: LevelPoints
+version: 3.0.0
+main: me.zoon20x.levelpoints.LevelPoints
+api-version: 1.16
+authors: [ Zoon20X ]
+description: Leveling plugin with custom features
+depend:
+  - PlaceholderAPI
+commands:
+  adminlps:
+    description: Admin help command
+    usage: /<command>
+    aliases:
+      - adminLPS
+      - adminLps
+      - lpsAdmin
+      - lpsadmin
+  lps:
+    description: Player help command
+    usage: /<command>
+    aliases:
+      - levelPoints
+      - levelpoints
+      - lpsHelp

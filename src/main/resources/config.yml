@@ -1,0 +1,10 @@
+MySQL:
+  Enabled: false
+  Data:
+    host: "localhost"
+    port: 3306
+    database: ""
+    username: "root"
+    password: ""
+    table: ""
+    ssl: false

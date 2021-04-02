@@ -1,0 +1,22 @@
+Starting:
+  Level: 1
+  Experience: 0
+  Prestige: 0
+Max:
+  Level: 100
+  Prestige: 100
+
+Experience:
+  LevelUpType: FORMULA
+  Formula:
+    FormulaType: BASIC
+    FormulaString: '50*{level}'
+    CustomFormula:
+      Level-1: '50*{level}'
+      Level-2: '50*{level} + ({level} + 30}) - 10'
+      Level-3: '{level}^{previous_level} + 5)'
+  CustomLevel:
+    Level-1: 100
+    Level-2: 150
+    Level-3: 250
+    Level-4: 450
