@@ -16,20 +16,10 @@ public class PlayerStorage {
         if(!hasLoadedData(uuid)){
             LevelPoints.getPlayerGenerator().loadPlayerFile(new File(LevelPoints.getUserFolder(),uuid + ".yml"));
         }
-
-
         return loadedData.get(uuid);
     }
 
 
-    public void loadData(){
-        long startTime = System.nanoTime();
-        LevelPoints.getPlayerGenerator().loadAllPlayerFiles();
-        long endTime = System.nanoTime();
-        long duration = ((endTime - startTime) / 1000000);
-        LevelPoints.getDebug(DebugSeverity.NORMAL, "Player Data took " + duration + "ms, to load " + getAllLoaded().size() + " player files");
-
-    }
     public boolean hasPlayerFile(UUID uuid){
         File dir = new File(LevelPoints.getUserFolder(), uuid + ".yml");
         return dir.exists();
@@ -47,6 +37,9 @@ public class PlayerStorage {
     }
     public Integer getAmountLoaded(){
         return loadedData.size();
+    }
+    public void clearPlayerCache(){
+        loadedData.clear();
     }
     public Boolean removeData(UUID uuid){
         if(!loadedData.containsKey(uuid)){

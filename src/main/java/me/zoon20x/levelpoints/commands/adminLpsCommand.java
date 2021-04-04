@@ -14,6 +14,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.File;
+
 public class adminLpsCommand implements CommandExecutor {
     private LevelPoints lps;
 
@@ -62,12 +64,15 @@ public class adminLpsCommand implements CommandExecutor {
                         FilesStorage.clearCache();
                         LevelPoints.getFilesGenerator().generateFiles();
                         LevelPoints.getPlayerGenerator().saveAllData();
+                        LevelPoints.getPlayerStorage().clearPlayerCache();
                         LevelPoints.getRewardSettings().clearRewards();
                         LevelPoints.getInstance().reloadClass();
                         LevelPoints.getLevelSettings().generateRequired();
                         LevelPoints.getExpSettings().generateBlocks();
                         LevelPoints.getExpSettings().generateMobs();
-                        LevelPoints.getPlayerStorage().loadData();
+                        Bukkit.getOnlinePlayers().forEach(player -> {
+                            LevelPoints.getPlayerGenerator().loadPlayerFile(new File(LevelPoints.getUserFolder(), player.getUniqueId() + ".yml"));
+                        });
                         LevelPoints.getInstance().setReloading(false);
                     }
                 }.runTaskAsynchronously(LevelPoints.getInstance());
@@ -77,6 +82,10 @@ public class adminLpsCommand implements CommandExecutor {
     }
 
     private void args4(CommandSender sender, String[] args) {
+        if(!LevelPoints.getPlayerStorage().hasPlayerFile(Bukkit.getOfflinePlayer(args[2]).getUniqueId())){
+            sender.sendMessage(MessageUtils.getColor("Player data doesn't exist"));
+            return;
+        }
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(Bukkit.getOfflinePlayer(args[2]).getUniqueId());
         switch (args[0]) {
             case "exp":

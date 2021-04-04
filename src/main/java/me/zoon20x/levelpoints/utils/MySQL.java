@@ -133,6 +133,8 @@ public class MySQL {
         }catch (SQLException e){
             e.printStackTrace();
         }
+
+        LevelPoints.getTopListSettings().generateTopCache(50);
     }
 
 

@@ -41,7 +41,6 @@ public class RewardSettings {
     }
     private void generateRewards() {
         FileConfiguration config = FilesStorage.getConfig("rewardsConfig");
-        System.out.println(config.getConfigurationSection("Rewards").getKeys(false).toString());
         for (String x : config.getConfigurationSection("Rewards").getKeys(false)) {
             String id = x;
             RewardTriggerType type = RewardTriggerType.valueOf(config.getString("Rewards." + x + ".TriggerType"));

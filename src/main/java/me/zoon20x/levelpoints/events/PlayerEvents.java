@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -68,7 +69,13 @@ public class PlayerEvents implements Listener {
         }
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(event.getPlayer().getUniqueId());
         if(LevelPoints.isRunningSQL()){
-            LevelPoints.getSQL().updateSQLData(event.getPlayer().getUniqueId());
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    LevelPoints.getSQL().updateSQLData(event.getPlayer().getUniqueId());
+
+                }
+            }.runTaskAsynchronously(LevelPoints.getInstance());
             LevelPoints.getPlayerStorage().getLoadedData(event.getPlayer().getUniqueId()).setUpdateSQL(false);
         }
         LevelPoints.getPlayerGenerator().savePlayerData(data);

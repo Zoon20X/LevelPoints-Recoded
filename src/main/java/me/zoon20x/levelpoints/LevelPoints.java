@@ -67,7 +67,6 @@ public final class LevelPoints extends JavaPlugin{
         getLevelSettings().generateRequired();
         getExpSettings().generateBlocks();
         getExpSettings().generateMobs();
-        getPlayerStorage().loadData();
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new LpsExpansion().register();
             getDebug(DebugSeverity.NORMAL, "Loaded Placeholder expansion");
@@ -98,8 +97,6 @@ public final class LevelPoints extends JavaPlugin{
         System.out.println(ChatColor.DARK_AQUA + "=============================");
         sendLoadedData();
         //runGenerate(200);
-
-
     }
 
     public void reloadClass(){

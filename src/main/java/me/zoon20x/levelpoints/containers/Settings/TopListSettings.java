@@ -44,6 +44,7 @@ public class TopListSettings {
 
     public void generateTopCache(int topAmountSaved){
         topChecked = 0;
+        topCache.clear();
         config.getConfigurationSection("").getValues(false)
                 .entrySet()
                 .stream().sorted((a1, a2)->{

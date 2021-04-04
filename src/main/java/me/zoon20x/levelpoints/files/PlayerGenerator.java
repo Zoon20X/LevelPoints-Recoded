@@ -19,28 +19,12 @@ public class PlayerGenerator {
         return YamlConfiguration.loadConfiguration(file);
     }
 
-    public void loadAllPlayerFiles(){
-        File dir = LevelPoints.getUserFolder();
-        if(dir.list().length >= 0){
-            return;
-        }
-        for(String x : dir.list()){
-            File file = new File(LevelPoints.getUserFolder(), x);
-            FileConfiguration configuration = null;
-            if(file != null){
-                configuration = getConfig(file);
-            }
-            if(configuration !=null){
-                UUID uuid = UUID.fromString(x.replace(".yml", ""));
-                loadPlayerFile(file);
-            }
-        }
-    }
 
     public void saveAllData(){
         for(PlayerData data : LevelPoints.getPlayerStorage().getAllLoaded()){
             savePlayerData(data);
         }
+
         LevelPoints.getDebug(DebugSeverity.NORMAL, "Saved all data");
     }
 
@@ -101,6 +85,8 @@ public class PlayerGenerator {
 
     public Boolean deleteOldPlayer(UUID uuid){
         LevelPoints.getPlayerStorage().removeData(uuid);
+        File file = new File(LevelPoints.getUserFolder(), uuid + ".yml");
+        file.delete();
         return true;
     }
 

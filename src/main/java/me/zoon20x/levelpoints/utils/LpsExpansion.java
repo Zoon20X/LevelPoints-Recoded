@@ -48,7 +48,7 @@ public class LpsExpansion extends PlaceholderExpansion {
 
 
         UUID uuid = player.getUniqueId();
-        if(!LevelPoints.getPlayerStorage().hasLoadedData(uuid)){
+        if(!LevelPoints.getPlayerStorage().hasPlayerFile(uuid)){
             return "";
         }
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(uuid);

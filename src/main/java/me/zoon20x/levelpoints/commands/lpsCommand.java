@@ -47,8 +47,7 @@ public class lpsCommand implements CommandExecutor {
             args1(sender, args);
         }
         if(args.length == 2){
-
-
+            args2(sender, args);
         }
 
         return true;
@@ -57,6 +56,10 @@ public class lpsCommand implements CommandExecutor {
 
     private void args1(CommandSender sender, String[] args){
         Player player = (Player) sender;
+        if(!LevelPoints.getPlayerStorage().hasPlayerFile(player.getUniqueId())){
+            sender.sendMessage(MessageUtils.getColor("Player data doesn't exist"));
+            return;
+        }
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
         switch (args[0]){
             case "info":
@@ -92,19 +95,16 @@ public class lpsCommand implements CommandExecutor {
         switch (args[0]){
             case "info":
                 OfflinePlayer uuid = Bukkit.getOfflinePlayer(args[1]);
-                if (LevelPoints.getPlayerStorage().hasLoadedData(uuid.getUniqueId())) {
+                if(!LevelPoints.getPlayerStorage().hasPlayerFile(uuid.getUniqueId())){
+                    sender.sendMessage(MessageUtils.getColor("Player data doesn't exist"));
                     return;
                 }
                 PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(uuid.getUniqueId());
                 Formatter formatter = new Formatter(uuid.getName(), data.getLevel(), data.getExp(), data.getRequiredExp(), data.getPrestige(), 0, data.getProgress());
-
-
                 for(String x : LevelPoints.getLangSettings().getPlayerInfo()){
                     sender.sendMessage(MessageUtils.getColor(MessageUtils.format(x, formatter)));
                 }
                 break;
         }
-
-
     }
 }
