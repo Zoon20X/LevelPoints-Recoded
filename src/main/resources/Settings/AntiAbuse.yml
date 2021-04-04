@@ -1,52 +1,19 @@
-
-
-Anti-Abuse:
-  Spawners:
+WorldGuard:
+  LockedRegions:
     Enabled: false
-  Place:
-    Enabled: false
-    Cooldown:
-      Enabled: false
-      Time: 60
-      BlockBreak: false
-  Silk: false
-  WorldGuard:
-    RestrictedRegions:
-      WorldSupport:
-        Enabled: false
-        List:
-          - pvp
-          - minigames
-      Whitelist:
-        Enabled: false
-        List:
-          - yeet
-      Blacklist:
-        Enabled: false
-        List:
-          - spawn
-          - pvp
-    LevelRegions:
-      Enabled: false
-      UseMessage: false
-      Message: 'Hello'
-      Regions:
-        spiderTrap:
-          Teleport:
-            Enabled: true
-            Location:
-              x: 0
-              y: 0
-              z: 0
-          Level:
-            Min: 5
-            Max: 10
-  PreciousStones:
-    Enabled: false
-  PerWorldSupport:
-    Whitelist:
-      Enabled: false
-      List:
-        - world
-        - pvp
-        - mining
+    Regions:
+      BossArea:
+        Levels:
+          Min: 5
+          Max: 10
+        Teleport:
+          Enabled: false
+          Cords: 0,0,0
+        Message:
+          Enabled: false
+          Message:
+            - '&4---[&cRegion is locked&4]---'
+            - '&cYou need to be between level'
+            - '&cLevel:&45&c and Level:&410'
+            - '&cto enter this region'
+            - '&4----------------------------'

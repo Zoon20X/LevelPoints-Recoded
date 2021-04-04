@@ -134,6 +134,29 @@ public class DataLocation {
     public static String langRequiredPvpMessage = "RequiredLevels.Pvp.Message";
     public static String langRequiredPvpEnabled = "RequiredLevels.Pvp.Enabled";
 
+
+    public static String abuseRegionLockedEnabled = "WorldGuard.LockedRegions.Enabled";
+    public static String abuseRegionLockedRegions = "WorldGuard.LockedRegions.Regions";
+
+    public static String getAbuseRegionLevel(String type, String region){
+        if(type.equalsIgnoreCase("Min")){
+            return "WorldGuard.LockedRegions.Regions." + region + ".Levels.Min";
+        }
+        return "WorldGuard.LockedRegions.Regions." + region + ".Levels.Max";
+    }
+    public static String getAbuseRegionTeleportEnabled(String region){
+        return "WorldGuard.LockedRegions.Regions." + region + ".Teleport.Enabled";
+    }
+    public static String getAbuseRegionTeleportCords(String region){
+        return "WorldGuard.LockedRegions.Regions." + region + ".Teleport.Cords";
+    }
+    public static String getAbuseRegionMessageEnabled(String region){
+        return "WorldGuard.LockedRegions.Regions." + region + ".Message.Enabled";
+    }
+    public static String getAbuseRegionMessageText(String region){
+        return "WorldGuard.LockedRegions.Regions." + region + ".Message.Message";
+    }
+
     public static String getMinEXP(String x){
         return BlockSettings + "." + x + ".Exp.Min";
     }

@@ -8,6 +8,7 @@ import me.zoon20x.levelpoints.commands.lpsCommand;
 import me.zoon20x.levelpoints.containers.Player.PlayerStorage;
 import me.zoon20x.levelpoints.containers.Settings.*;
 import me.zoon20x.levelpoints.events.ExpEarningEvents;
+import me.zoon20x.levelpoints.events.MoveEvent;
 import me.zoon20x.levelpoints.events.PlayerEvents;
 import me.zoon20x.levelpoints.files.FilesGenerator;
 import me.zoon20x.levelpoints.files.FilesStorage;
@@ -40,6 +41,7 @@ public final class LevelPoints extends JavaPlugin{
     private static ExpSettings expSettings;
     private static RewardSettings rewardSettings;
     private static TopListSettings topListSettings;
+    private static AntiAbuseSettings antiAbuseSettings;
     private static boolean isReloading;
     private static boolean isRunningSQL;
     private static FileConfiguration configuration;
@@ -87,6 +89,10 @@ public final class LevelPoints extends JavaPlugin{
             }
         }
 
+        if(getAntiAbuseSettings().isRegionLocked()){
+            getServer().getPluginManager().registerEvents(new MoveEvent(), this);
+        }
+
 
         System.out.println(ChatColor.DARK_AQUA + "=============================");
         System.out.println(ChatColor.AQUA + "LevelPoints Plugin");
@@ -106,6 +112,7 @@ public final class LevelPoints extends JavaPlugin{
         expSettings = new ExpSettings();
         rewardSettings = new RewardSettings();
         topListSettings = new TopListSettings();
+        antiAbuseSettings = new AntiAbuseSettings();
     }
     public void setReloading(boolean value){
         isReloading = value;
@@ -126,6 +133,7 @@ public final class LevelPoints extends JavaPlugin{
         getDebug(DebugSeverity.WARNING, "LevelUp-Type:" + getLevelSettings().getLevelUpType());
         getDebug(DebugSeverity.WARNING, "Formula-Type:" + getLevelSettings().getFormulaType());
         getDebug(DebugSeverity.WARNING, "LoadedLevels:" + Arrays.asList(getLevelSettings().getLoadedLevels()));
+        getDebug(DebugSeverity.WARNING, "RegionLocked:" + getAntiAbuseSettings().isRegionLocked());
     }
 
 
@@ -152,6 +160,7 @@ public final class LevelPoints extends JavaPlugin{
     private void loadEvents(){
         getServer().getPluginManager().registerEvents(new PlayerEvents(), this);
         getServer().getPluginManager().registerEvents(new ExpEarningEvents(), this);
+
 
     }
 
@@ -205,6 +214,9 @@ public final class LevelPoints extends JavaPlugin{
         return langSettings;
     }
 
+    public static AntiAbuseSettings getAntiAbuseSettings() {
+        return antiAbuseSettings;
+    }
     public static MySQL getSQL(){
         return sql;
     }

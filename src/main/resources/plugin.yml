@@ -6,6 +6,8 @@ authors: [ Zoon20X ]
 description: Leveling plugin with custom features
 depend:
   - PlaceholderAPI
+softdepend:
+  - WorldGuard
 commands:
   adminlps:
     description: Admin help command
