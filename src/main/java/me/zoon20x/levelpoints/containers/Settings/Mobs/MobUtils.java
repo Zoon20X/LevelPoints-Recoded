@@ -10,7 +10,9 @@ import java.util.HashMap;
 public class MobUtils {
     private static HashMap<EntityType, MobData> mobData = new HashMap<>();
 
-
+    public static void clear(){
+        mobData.clear();
+    }
     public static Collection<MobData> getAllMobs(){
         return mobData.values();
     }

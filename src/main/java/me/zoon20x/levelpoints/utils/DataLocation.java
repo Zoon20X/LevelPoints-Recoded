@@ -21,7 +21,8 @@ public class DataLocation {
     public static String BlockSettings = "Blocks.Settings";
     public static String MobEnabled = "Mobs.Enabled";
     public static String MobSettings = "Mobs.Settings";
-
+    public static String CraftingEnabled = "Crafting.Enabled";
+    public static String CraftingSettings = "Crafting.Settings";
 
     public static String StartingLevel = "Starting.Level";
     public static String StartingExp = "Starting.Experience";
@@ -157,12 +158,26 @@ public class DataLocation {
         return "WorldGuard.LockedRegions.Regions." + region + ".Message.Message";
     }
 
-    public static String getMinEXP(String x){
+    public static String getBlockMinEXP(String x){
         return BlockSettings + "." + x + ".Exp.Min";
     }
-    public static String getMaxEXP(String x){
+    public static String getBlockMaxEXP(String x){
         return BlockSettings + "." + x + ".Exp.Max";
     }
+
+    public static String getMobsMinEXP(String x){
+        return MobSettings + "." + x + ".Exp.Min";
+    }
+    public static String getMobsMaxEXP(String x){
+        return MobSettings + "." + x + ".Exp.Max";
+    }
+    public static String getCraftMinEXP(String x){
+        return CraftingSettings + "." + x + ".Exp.Min";
+    }
+    public static String getCraftMaxEXP(String x){
+        return CraftingSettings + "." + x + ".Exp.Max";
+    }
+
     public static String getRequiredBreak(String x){
         return BlockSettings + "." + x + ".RequiredLevel.Break";
     }
@@ -171,6 +186,9 @@ public class DataLocation {
         return BlockSettings + "." + x + ".RequiredLevel.Place";
     }
 
+    public static String getRequiredCraft(String x){
+        return CraftingSettings + "." + x + ".RequiredLevel.Craft";
+    }
     public static String getRequiredDamage(String x){
         return MobSettings + "." + x + ".RequiredLevel.Damage";
     }

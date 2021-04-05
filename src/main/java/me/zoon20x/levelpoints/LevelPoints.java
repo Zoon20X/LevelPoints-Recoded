@@ -66,6 +66,7 @@ public final class LevelPoints extends JavaPlugin{
         getLevelSettings().generateRequired();
         getExpSettings().generateBlocks();
         getExpSettings().generateMobs();
+        getExpSettings().generateCrafting();
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new LpsExpansion().register();
             getDebug(DebugSeverity.NORMAL, "Loaded Placeholder expansion");

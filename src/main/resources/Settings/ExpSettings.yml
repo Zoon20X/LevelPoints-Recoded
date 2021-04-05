@@ -52,7 +52,7 @@ Crafting:
     SHOVELS:
       Items:
         - IRON_SHOVEL
-        - GOLD_SHOVEL
+        - STONE_SHOVEL
         - DIAMOND_SHOVEL
       Exp:
         Min: 0

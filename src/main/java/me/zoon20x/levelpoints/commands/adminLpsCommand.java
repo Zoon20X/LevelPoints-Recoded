@@ -70,6 +70,7 @@ public class adminLpsCommand implements CommandExecutor {
                         LevelPoints.getLevelSettings().generateRequired();
                         LevelPoints.getExpSettings().generateBlocks();
                         LevelPoints.getExpSettings().generateMobs();
+                        LevelPoints.getExpSettings().generateCrafting();
                         Bukkit.getOnlinePlayers().forEach(player -> {
                             LevelPoints.getPlayerGenerator().loadPlayerFile(new File(LevelPoints.getUserFolder(), player.getUniqueId() + ".yml"));
                         });

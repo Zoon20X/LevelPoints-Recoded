@@ -10,7 +10,9 @@ import java.util.HashMap;
 public class BlockUtils {
     private static HashMap<Material, HashMap<Byte, BlockData>> blocks = new HashMap<>();
 
-
+    public static void clear(){
+        blocks.clear();
+    }
     public static Collection<HashMap<Byte,BlockData>> getAllBlocks(){
         return blocks.values();
     }
