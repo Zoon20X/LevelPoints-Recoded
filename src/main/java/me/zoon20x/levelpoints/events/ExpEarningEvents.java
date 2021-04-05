@@ -5,6 +5,8 @@ import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockData;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockRequired;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockUtils;
+import me.zoon20x.levelpoints.containers.Settings.Crafting.CraftingData;
+import me.zoon20x.levelpoints.containers.Settings.Crafting.CraftingUtils;
 import me.zoon20x.levelpoints.events.CustomEvents.EarnTask;
 import me.zoon20x.levelpoints.events.CustomEvents.EventUtils;
 import me.zoon20x.levelpoints.utils.DebugSeverity;
@@ -19,6 +21,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class ExpEarningEvents implements Listener {
 
@@ -58,6 +62,22 @@ public class ExpEarningEvents implements Listener {
         }
     }
 
+
+    @EventHandler
+    public void onCraft(CraftItemEvent event){
+        Player player = (Player) event.getWhoClicked();
+        ItemStack item = event.getCurrentItem();
+        if(LevelPoints.getExpSettings().expType(item.getType().toString()).equalsIgnoreCase("none")){
+            return;
+        }
+        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
+        CraftingData craftingData = CraftingUtils.getCraftingData(item.getType());
+        if(data.getLevel() < craftingData.getCraftingRequired()){
+            event.setCancelled(true);
+            return;
+        }
+        EventUtils.triggerEarnExpEvent(data, event, craftingData.getExp(), player, EarnTask.Craft);
+    }
 
     @EventHandler
     public void onBreak(BlockBreakEvent event) {

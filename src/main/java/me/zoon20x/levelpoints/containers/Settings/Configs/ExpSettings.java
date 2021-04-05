@@ -37,6 +37,9 @@ public class ExpSettings {
         if(MobUtils.hasMob(x)){
             return "Mob";
         }
+        if(CraftingUtils.hasItem(x)){
+            return "Crafting";
+        }
         return "none";
     }
 
