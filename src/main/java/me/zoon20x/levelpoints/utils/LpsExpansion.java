@@ -4,9 +4,13 @@ package me.zoon20x.levelpoints.utils;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
+import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class LpsExpansion extends PlaceholderExpansion {
@@ -56,20 +60,20 @@ public class LpsExpansion extends PlaceholderExpansion {
             String color = MessageUtils.getLevelColor(data.getLevel());
             return MessageUtils.getColor(color + "" + data.getLevel());
         }
-//        if(identifier.contains("required_place_")){
-//            String id = identifier.replace("required_place_", "");
-//            List<String> dat = Arrays.asList(id.split(":"));
-//
-//            if(!BlockUtils.hasBlockData(Material.getMaterial(dat.get(0)))){
-//                return "0";
-//            }
-//            LevelPoints.getDebug(DebugSeverity.SEVER, dat.size());
-//            if(dat.size() == 2){
-//                return String.valueOf(BlockUtils.getBlockData(Material.getMaterial(dat.get(0)), Byte.valueOf(dat.get(1))).getPlaceRequired());
-//
-//            }
-//            return String.valueOf(BlockUtils.getBlockData(Material.getMaterial(id), (byte) 0).getPlaceRequired());
-//        }
+        if(identifier.contains("required_break_")){
+            String id = identifier.replace("required_break_", "");
+            List<String> dat = Arrays.asList(id.split(":"));
+
+            if(!BlockUtils.hasBlockData(Material.getMaterial(dat.get(0)))){
+                return "0";
+            }
+            LevelPoints.getDebug(DebugSeverity.SEVER, dat.size());
+            if(dat.size() == 2){
+                return String.valueOf(BlockUtils.getBlockData(Material.getMaterial(dat.get(0)), Byte.valueOf(dat.get(1))).getBreakRequired());
+
+            }
+            return String.valueOf(BlockUtils.getBlockData(Material.getMaterial(id), (byte) 0).getBreakRequired());
+        }
         if(identifier.equals("player_exp")){
             return String.valueOf(data.getExp());
         }

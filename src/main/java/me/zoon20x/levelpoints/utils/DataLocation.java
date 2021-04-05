@@ -139,6 +139,10 @@ public class DataLocation {
     public static String abuseRegionLockedEnabled = "WorldGuard.LockedRegions.Enabled";
     public static String abuseRegionLockedRegions = "WorldGuard.LockedRegions.Regions";
 
+    public static String abuseWorldGuardDisableEnabled = "WorldGuard.DisabledEarn.Enabled";
+    public static String abuseWorldGuardDisableRegions = "WorldGuard.DisabledEarn.Regions";
+    public static String abuseSilkTouchEnabled = "SilkTouch.Enabled";
+
     public static String getAbuseRegionLevel(String type, String region){
         if(type.equalsIgnoreCase("Min")){
             return "WorldGuard.LockedRegions.Regions." + region + ".Levels.Min";

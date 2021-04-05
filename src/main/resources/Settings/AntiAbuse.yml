@@ -1,4 +1,11 @@
+SilkTouch:
+  Enabled: false
 WorldGuard:
+  DisabledEarn:
+    Enabled: false
+    Regions:
+      - spawn
+      - pvp
   LockedRegions:
     Enabled: false
     Regions:
@@ -12,7 +19,7 @@ WorldGuard:
         Message:
           Enabled: false
           Message:
-            - '&4---[&cRegion is locked&4]---'
+            - '&4-----[&cRegion is locked&4]-----'
             - '&cYou need to be between level'
             - '&cLevel:&45&c and Level:&410'
             - '&cto enter this region'

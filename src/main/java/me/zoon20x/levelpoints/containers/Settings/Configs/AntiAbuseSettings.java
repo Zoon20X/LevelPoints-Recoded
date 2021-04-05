@@ -6,6 +6,7 @@ import me.zoon20x.levelpoints.utils.DataLocation;
 import me.zoon20x.levelpoints.utils.DebugSeverity;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,12 +14,21 @@ public class AntiAbuseSettings {
 
 
     private boolean regionLocked;
+    private boolean denyEarn;
+    private boolean silkEnabled;
+
+    private List<String> regionsDeny = new ArrayList<>();
 
     private HashMap<String, RegionData> regions = new HashMap<>();
 
     public AntiAbuseSettings(){
         FileConfiguration configuration = FilesStorage.getConfig("antiAbuseConfig");
         regionLocked = configuration.getBoolean(DataLocation.abuseRegionLockedEnabled);
+        denyEarn = configuration.getBoolean(DataLocation.abuseWorldGuardDisableEnabled);
+        silkEnabled = configuration.getBoolean(DataLocation.abuseSilkTouchEnabled);
+        if(denyEarn){
+            regionsDeny = configuration.getStringList(DataLocation.abuseWorldGuardDisableRegions);
+        }
         generateRegions(configuration);
     }
 
@@ -53,4 +63,15 @@ public class AntiAbuseSettings {
     }
 
 
+    public boolean isDenyEarnEnabled() {
+        return denyEarn;
+    }
+
+    public List<String> getRegionsDeny() {
+        return regionsDeny;
+    }
+
+    public boolean isSilkEnabled() {
+        return silkEnabled;
+    }
 }

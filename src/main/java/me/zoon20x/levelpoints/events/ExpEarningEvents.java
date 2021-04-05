@@ -1,5 +1,7 @@
 package me.zoon20x.levelpoints.events;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.bukkit.listener.WorldGuardPlayerListener;
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockData;
@@ -21,9 +23,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class ExpEarningEvents implements Listener {
@@ -96,6 +100,7 @@ public class ExpEarningEvents implements Listener {
 
         EventUtils.triggerEarnExpEvent(data, event, exp, player, EarnTask.Craft);
     }
+
 
     @EventHandler
     public void onBreak(BlockBreakEvent event) {

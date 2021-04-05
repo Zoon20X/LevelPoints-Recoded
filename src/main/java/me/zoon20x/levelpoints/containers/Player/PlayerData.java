@@ -50,6 +50,9 @@ public class PlayerData {
     public void setLevel(Integer level) {
         this.level = level;
         setRequiredExp(LevelPoints.getLevelSettings().getRequireExp(level));
+        if(this.requiredExp <= this.exp){
+            this.exp = 0.0;
+        }
     }
     public void addLevel(int value, boolean removeEXP) {
         LevelPoints.getDebug(DebugSeverity.SEVER, requiredExp);
