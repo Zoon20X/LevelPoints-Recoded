@@ -1,4 +1,4 @@
-package me.zoon20x.levelpoints.containers.Settings;
+package me.zoon20x.levelpoints.containers.Settings.Configs.Rewards;
 
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.files.FilesStorage;
@@ -6,7 +6,6 @@ import me.zoon20x.levelpoints.utils.DebugSeverity;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

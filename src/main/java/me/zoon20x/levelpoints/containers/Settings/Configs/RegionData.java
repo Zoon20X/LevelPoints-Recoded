@@ -1,4 +1,4 @@
-package me.zoon20x.levelpoints.containers.Settings;
+package me.zoon20x.levelpoints.containers.Settings.Configs;
 
 import java.util.List;
 

@@ -1,5 +1,9 @@
-package me.zoon20x.levelpoints.containers.Settings;
+package me.zoon20x.levelpoints.containers.Settings.Configs;
 
+import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockData;
+import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockUtils;
+import me.zoon20x.levelpoints.containers.Settings.Mobs.MobData;
+import me.zoon20x.levelpoints.containers.Settings.Mobs.MobUtils;
 import me.zoon20x.levelpoints.files.FilesStorage;
 import me.zoon20x.levelpoints.utils.DataLocation;
 import org.bukkit.Material;

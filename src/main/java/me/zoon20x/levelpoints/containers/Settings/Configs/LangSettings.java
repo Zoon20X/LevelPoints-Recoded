@@ -1,4 +1,4 @@
-package me.zoon20x.levelpoints.containers.Settings;
+package me.zoon20x.levelpoints.containers.Settings.Configs;
 
 import me.zoon20x.levelpoints.files.FilesStorage;
 import me.zoon20x.levelpoints.utils.DataLocation;

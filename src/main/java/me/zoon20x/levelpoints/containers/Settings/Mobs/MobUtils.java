@@ -1,4 +1,4 @@
-package me.zoon20x.levelpoints.containers.Settings;
+package me.zoon20x.levelpoints.containers.Settings.Mobs;
 
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.utils.DebugSeverity;

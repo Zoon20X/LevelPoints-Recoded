@@ -1,7 +1,8 @@
-package me.zoon20x.levelpoints.containers.Settings;
+package me.zoon20x.levelpoints.containers.Settings.Mobs;
 
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
+import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockRequired;
 import org.bukkit.entity.EntityType;
 
 public class MobData {

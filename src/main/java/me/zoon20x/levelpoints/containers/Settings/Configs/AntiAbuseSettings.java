@@ -1,4 +1,4 @@
-package me.zoon20x.levelpoints.containers.Settings;
+package me.zoon20x.levelpoints.containers.Settings.Configs;
 
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.files.FilesStorage;
@@ -7,7 +7,6 @@ import me.zoon20x.levelpoints.utils.DebugSeverity;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 public class AntiAbuseSettings {

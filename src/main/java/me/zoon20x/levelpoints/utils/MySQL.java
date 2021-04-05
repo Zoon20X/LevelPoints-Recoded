@@ -2,9 +2,6 @@ package me.zoon20x.levelpoints.utils;
 
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
-import me.zoon20x.levelpoints.containers.Settings.LevelsSettings;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;

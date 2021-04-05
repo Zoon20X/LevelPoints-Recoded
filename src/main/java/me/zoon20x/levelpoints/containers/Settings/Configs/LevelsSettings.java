@@ -1,18 +1,17 @@
-package me.zoon20x.levelpoints.containers.Settings;
+package me.zoon20x.levelpoints.containers.Settings.Configs;
 
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
+import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockData;
+import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockUtils;
 import me.zoon20x.levelpoints.files.FilesStorage;
 import me.zoon20x.levelpoints.utils.*;
 import me.zoon20x.levelpoints.utils.Formatter;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class LevelsSettings {
 

@@ -2,9 +2,9 @@ package me.zoon20x.levelpoints.events;
 
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
-import me.zoon20x.levelpoints.containers.Settings.RewardData;
-import me.zoon20x.levelpoints.containers.Settings.RewardSettings;
-import me.zoon20x.levelpoints.containers.Settings.RewardTriggerType;
+import me.zoon20x.levelpoints.containers.Settings.Configs.Rewards.RewardData;
+import me.zoon20x.levelpoints.containers.Settings.Configs.Rewards.RewardSettings;
+import me.zoon20x.levelpoints.containers.Settings.Configs.Rewards.RewardTriggerType;
 import me.zoon20x.levelpoints.events.CustomEvents.EarnExpEvent;
 import me.zoon20x.levelpoints.events.CustomEvents.LevelUpEvent;
 import me.zoon20x.levelpoints.events.CustomEvents.PrestigeEvent;
@@ -12,15 +12,11 @@ import me.zoon20x.levelpoints.utils.DebugSeverity;
 import me.zoon20x.levelpoints.utils.Formatter;
 import me.zoon20x.levelpoints.utils.MessageUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;

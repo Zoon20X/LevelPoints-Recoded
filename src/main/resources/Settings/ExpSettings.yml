@@ -39,3 +39,23 @@ Mobs:
         Max: 0
       RequiredLevel:
         Damage: 0
+
+Crafting:
+  Enabled: false
+  Settings:
+    IRON_BLOCK:
+      Exp:
+        Min: 0
+        Max: 0
+      RequiredLevel:
+        Craft: 0
+    SHOVELS:
+      Items:
+        - IRON_SHOVEL
+        - GOLD_SHOVEL
+        - DIAMOND_SHOVEL
+      Exp:
+        Min: 0
+        Max: 0
+      RequiredLevel:
+        Craft: 0
