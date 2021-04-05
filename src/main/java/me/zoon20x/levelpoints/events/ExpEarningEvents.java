@@ -13,6 +13,7 @@ import me.zoon20x.levelpoints.utils.DebugSeverity;
 import me.zoon20x.levelpoints.utils.Formatter;
 import me.zoon20x.levelpoints.utils.MessageUtils;
 import me.zoon20x.levelpoints.utils.Permissions.PermissionUtils;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -22,6 +23,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class ExpEarningEvents implements Listener {
@@ -70,13 +72,29 @@ public class ExpEarningEvents implements Listener {
         if(LevelPoints.getExpSettings().expType(item.getType().toString()).equalsIgnoreCase("none")){
             return;
         }
+        int itemsChecked = 0;
+        int possibleCreations = 1;
+        if (event.isShiftClick()) {
+            for (ItemStack items : event.getInventory().getMatrix()) {
+                if (items != null && !items.getType().equals(Material.AIR)) {
+                    if (itemsChecked == 0)
+                        possibleCreations = items.getAmount();
+                    else
+                        possibleCreations = Math.min(possibleCreations, items.getAmount());
+                    itemsChecked++;
+                }
+            }
+        }
+        int amountOfItems = event.getRecipe().getResult().getAmount() * possibleCreations;
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
         CraftingData craftingData = CraftingUtils.getCraftingData(item.getType());
-        if(data.getLevel() < craftingData.getCraftingRequired()){
+        if(data.getLevel() < craftingData.getCraftingRequired()) {
             event.setCancelled(true);
             return;
         }
-        EventUtils.triggerEarnExpEvent(data, event, craftingData.getExp(), player, EarnTask.Craft);
+        double exp = craftingData.getExp() * amountOfItems;
+
+        EventUtils.triggerEarnExpEvent(data, event, exp, player, EarnTask.Craft);
     }
 
     @EventHandler
