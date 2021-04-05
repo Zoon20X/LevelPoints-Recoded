@@ -99,7 +99,6 @@ public final class LevelPoints extends JavaPlugin{
         System.out.println(ChatColor.DARK_AQUA + "Enabled");
         System.out.println(ChatColor.DARK_AQUA + "=============================");
         sendLoadedData();
-        //runGenerate(200);
     }
 
     public void reloadClass(){
@@ -133,21 +132,6 @@ public final class LevelPoints extends JavaPlugin{
         getDebug(DebugSeverity.WARNING, "RegionLocked:" + getAntiAbuseSettings().isRegionLocked());
     }
 
-
-    private void runGenerate(int amount){
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for(int i = 0;i!=amount + 1; i++){
-                    UUID uuid = UUID.randomUUID();
-                    getPlayerGenerator().generateNewPlayer(uuid, "Tester-" + i);
-                    int random = ThreadLocalRandom.current().nextInt(1, 10);
-                    getPlayerStorage().getLoadedData(uuid).setLevel(random);
-
-                }
-            }
-        }.runTaskAsynchronously(this);
-    }
 
     private void loadCommands(){
         adminLpsCommand adminlps = new adminLpsCommand(this, "adminlps");
