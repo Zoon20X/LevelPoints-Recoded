@@ -60,20 +60,6 @@ public class LpsExpansion extends PlaceholderExpansion {
             String color = MessageUtils.getLevelColor(data.getLevel());
             return MessageUtils.getColor(color + "" + data.getLevel());
         }
-        if(identifier.contains("required_break_")){
-            String id = identifier.replace("required_break_", "");
-            List<String> dat = Arrays.asList(id.split(":"));
-
-            if(!BlockUtils.hasBlockData(Material.getMaterial(dat.get(0)))){
-                return "0";
-            }
-            LevelPoints.getDebug(DebugSeverity.SEVER, dat.size());
-            if(dat.size() == 2){
-                return String.valueOf(BlockUtils.getBlockData(Material.getMaterial(dat.get(0)), Byte.valueOf(dat.get(1))).getBreakRequired());
-
-            }
-            return String.valueOf(BlockUtils.getBlockData(Material.getMaterial(id), (byte) 0).getBreakRequired());
-        }
         if(identifier.equals("player_exp")){
             return String.valueOf(data.getExp());
         }
@@ -95,6 +81,21 @@ public class LpsExpansion extends PlaceholderExpansion {
                 return "true";
             }
             return String.valueOf(data.getBracketData().isPvpEnabled());
+        }
+
+        if(identifier.contains("required_break_")){
+            String id = identifier.replace("required_break_", "");
+            List<String> dat = Arrays.asList(id.split(":"));
+
+            if(!BlockUtils.hasBlockData(Material.getMaterial(dat.get(0)))){
+                return "0";
+            }
+            LevelPoints.getDebug(DebugSeverity.SEVER, dat.size());
+            if(dat.size() == 2){
+                return String.valueOf(BlockUtils.getBlockData(Material.getMaterial(dat.get(0)), Byte.valueOf(dat.get(1))).getBreakRequired());
+
+            }
+            return String.valueOf(BlockUtils.getBlockData(Material.getMaterial(id), (byte) 0).getBreakRequired());
         }
 
         return "";

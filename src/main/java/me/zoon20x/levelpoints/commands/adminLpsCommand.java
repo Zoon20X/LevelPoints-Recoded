@@ -60,6 +60,8 @@ public class adminLpsCommand implements CommandExecutor {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
+                        long startTime = System.nanoTime();
+
                         LevelPoints.getInstance().setReloading(true);
                         FilesStorage.clearCache();
                         LevelPoints.getFilesGenerator().generateFiles();
@@ -75,6 +77,9 @@ public class adminLpsCommand implements CommandExecutor {
                             LevelPoints.getPlayerGenerator().loadPlayerFile(new File(LevelPoints.getUserFolder(), player.getUniqueId() + ".yml"));
                         });
                         LevelPoints.getInstance().setReloading(false);
+                        long endTime = System.nanoTime();
+                        long duration = ((endTime - startTime) / 1000000);
+                        LevelPoints.getDebug(DebugSeverity.NORMAL, "reload took " + duration + "ms to complete");
                     }
                 }.runTaskAsynchronously(LevelPoints.getInstance());
                 break;

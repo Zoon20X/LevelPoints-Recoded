@@ -30,8 +30,6 @@ public class WorldGuardSettings {
         }
         return name;
     }
-
-
     public static Boolean canEnterRegion(Player player, String name) {
         RegionData regionData = LevelPoints.getAntiAbuseSettings().getRegionData(name);
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
