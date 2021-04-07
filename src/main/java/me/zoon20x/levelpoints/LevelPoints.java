@@ -6,6 +6,7 @@ package me.zoon20x.levelpoints;
 import me.zoon20x.levelpoints.commands.adminLpsCommand;
 import me.zoon20x.levelpoints.commands.lpsCommand;
 import me.zoon20x.levelpoints.containers.Player.PlayerStorage;
+import me.zoon20x.levelpoints.containers.Settings.Boosters.BoosterSettings;
 import me.zoon20x.levelpoints.containers.Settings.Configs.*;
 import me.zoon20x.levelpoints.containers.Settings.Configs.Rewards.RewardSettings;
 import me.zoon20x.levelpoints.events.ExpEarningEvents;
@@ -31,6 +32,7 @@ public final class LevelPoints extends JavaPlugin{
 
     private static LevelPoints instance;
     private static File userFolder;
+    private static File boostersFolder;
     private static MySQL sql;
     private static PlayerStorage storage;
     private static LevelsSettings levelsSettings;
@@ -39,6 +41,7 @@ public final class LevelPoints extends JavaPlugin{
     private static RewardSettings rewardSettings;
     private static TopListSettings topListSettings;
     private static AntiAbuseSettings antiAbuseSettings;
+    private static BoosterSettings boosterSettings;
     private static PvpSettings pvpSettings;
     private static boolean isReloading;
     private static boolean isRunningSQL;
@@ -51,6 +54,8 @@ public final class LevelPoints extends JavaPlugin{
         this.getDataFolder().mkdirs();
         userFolder = new File(getDataFolder(), "Players");
         userFolder.mkdirs();
+        boostersFolder = new File(getDataFolder(), "Boosters");
+        boostersFolder.mkdirs();
     }
     @Override
     public void onEnable() {
@@ -113,6 +118,7 @@ public final class LevelPoints extends JavaPlugin{
         topListSettings = new TopListSettings();
         antiAbuseSettings = new AntiAbuseSettings();
         pvpSettings = new PvpSettings();
+        boosterSettings = new BoosterSettings();
 
     }
     public void setReloading(boolean value){
@@ -171,6 +177,9 @@ public final class LevelPoints extends JavaPlugin{
     public static File getUserFolder(){
         return userFolder;
     }
+    public static File getBoostersFolder(){
+        return boostersFolder;
+    }
     public static LevelPoints getInstance(){
         return instance;
     }
@@ -202,6 +211,9 @@ public final class LevelPoints extends JavaPlugin{
 
     public static PvpSettings getPvpSettings() {
         return pvpSettings;
+    }
+    public static BoosterSettings getBoosterSettings() {
+        return boosterSettings;
     }
     public static AntiAbuseSettings getAntiAbuseSettings() {
         return antiAbuseSettings;

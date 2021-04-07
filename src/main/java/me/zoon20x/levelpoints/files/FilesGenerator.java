@@ -12,6 +12,9 @@ public class FilesGenerator {
     private File getSettingsFile(String id){
         return new File(LevelPoints.getInstance().getDataFolder(),  "/Settings/" + id);
     }
+    private File getBoostersFile(String id){
+        return new File(LevelPoints.getInstance().getDataFolder(),  "/Boosters/" + id);
+    }
     private File getFile(String id){
         return new File(LevelPoints.getInstance().getDataFolder(), id);
     }
@@ -24,6 +27,8 @@ public class FilesGenerator {
         FilesStorage.createFile(getSettingsFile("LevelSettings.yml"), "/Settings/LevelSettings.yml", "Settings/LevelSettings.yml", "LevelSettings");
         FilesStorage.createFile(getSettingsFile("RewardSettings.yml"), "/Settings/RewardSettings.yml", "Settings/RewardSettings.yml", "RewardSettings");
         FilesStorage.createFile(getFile("TopList.yml"), "TopList.yml", "TopList.yml", "TopList");
+        FilesStorage.createFile(getBoostersFile("BoosterData.yml"), "/Boosters/BoosterData.yml", "Boosters/BoosterData.yml", "BoosterData");
+        FilesStorage.createFile(getBoostersFile("BoosterSettings.yml"), "/Boosters/BoosterSettings.yml", "Boosters/BoosterSettings.yml", "BoostersSettings");
         FilesStorage.createFile(getSettingsFile("AntiAbuse.yml"), "/Settings/AntiAbuse.yml", "Settings/AntiAbuse.yml", "AntiAbuse");
         FilesStorage.createFile(getSettingsFile("PvpSettings.yml"), "/Settings/PvpSettings.yml", "Settings/PvpSettings.yml", "PvpSettings");
         saveGeneratedFiles();
@@ -37,6 +42,7 @@ public class FilesGenerator {
         FilesStorage.addFileToCache("rewardsConfig", getConfig(getSettingsFile("RewardSettings.yml")));
         FilesStorage.addFileToCache("antiAbuseConfig", getConfig(getSettingsFile("AntiAbuse.yml")));
         FilesStorage.addFileToCache("pvpConfig", getConfig(getSettingsFile("PvpSettings.yml")));
+        FilesStorage.addFileToCache("boosterConfig", getConfig(getBoostersFile("BoosterSettings.yml")));
     }
 
 }

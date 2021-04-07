@@ -19,7 +19,7 @@ public class FilesStorage {
         }
 
         if (!file.exists()) {
-                LevelPoints.getDebug(DebugSeverity.NORMAL, "Creating file " + Name + ".yml");
+            LevelPoints.getDebug(DebugSeverity.NORMAL, "Creating file " + Name + ".yml");
             LevelPoints.getInstance().saveResource(secLoc, false);
         } else {
             return;

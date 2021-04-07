@@ -14,4 +14,15 @@ public class BoosterData {
     }
 
 
+    public String getId() {
+        return id;
+    }
+
+    public double getMultiplier() {
+        return multiplier;
+    }
+
+    public String getTime() {
+        return time;
+    }
 }
