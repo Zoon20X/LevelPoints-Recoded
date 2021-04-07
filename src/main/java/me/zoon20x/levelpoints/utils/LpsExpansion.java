@@ -90,16 +90,12 @@ public class LpsExpansion extends PlaceholderExpansion {
             }
             return data.getBracketData().getId();
         }
-
-
-
-
-
-
-
-
-
-
+        if(identifier.equals("player_pvp_enabled")){
+            if(data.getBracketData() == null){
+                return "true";
+            }
+            return String.valueOf(data.getBracketData().isPvpEnabled());
+        }
 
         return "";
     }
