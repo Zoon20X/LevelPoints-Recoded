@@ -50,7 +50,10 @@ public class adminLpsCommand implements CommandExecutor {
         if (args.length == 4) {
             args4(sender, args);
         }
-        // booster delete <id>
+        if(args.length == 5){
+            args5(sender, args);
+        }
+        // booster create <id> <multiplier> <time>
         return true;
     }
 
@@ -269,6 +272,21 @@ public class adminLpsCommand implements CommandExecutor {
                         }
                         break;
                 }
+        }
+    }
+    private void args5(CommandSender sender, String[] args){
+        switch (args[0]){
+            case "booster":
+                if(args[1].equalsIgnoreCase("create")) {
+                    if(LevelPoints.getBoosterSettings().hasBooster(args[2])){
+                        sender.sendMessage(MessageUtils.getColor("&cBooster id in use"));
+                        return;
+                    }
+                    LevelPoints.getBoosterSettings().addBooster(new BoosterData(args[2], Double.valueOf(args[3]), args[4]));
+                    sender.sendMessage(MessageUtils.getColor("&bBooster Created"));
+                    return;
+                }
+                break;
         }
     }
 
