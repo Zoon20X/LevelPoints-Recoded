@@ -26,7 +26,8 @@ public class  adminLpsTabComplete implements TabCompleter {
     @Override
     public List<String> onTabComplete( CommandSender sender,  Command command,  String alias,  String[] args) {
         final List<String> completions = new ArrayList<>();
-
+        players.clear();
+        boosterID.clear();
         if (args.length == 1) {
             StringUtil.copyPartialMatches(args[0], args1, completions);
         }

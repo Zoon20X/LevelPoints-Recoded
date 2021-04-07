@@ -40,6 +40,13 @@ public class BoosterSettings {
     }
     public void removeBooster(String id){
         data.remove(id);
+        File boosterData = new File(LevelPoints.getBoostersFolder(), "BoosterData.yml");
+        dataConfig.set(id, null);
+        try {
+            dataConfig.save(boosterData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean hasBooster(String id){
@@ -50,7 +57,7 @@ public class BoosterSettings {
         File boosterData = new File(LevelPoints.getBoostersFolder(), "BoosterData.yml");
         data.keySet().forEach(x->{
             dataConfig.set(x + ".Multiplier", data.get(x).getMultiplier());
-            dataConfig.set(x + ".Time", data.get(x).getMultiplier());
+            dataConfig.set(x + ".Time", data.get(x).getTime());
         });
         try {
             dataConfig.save(boosterData);

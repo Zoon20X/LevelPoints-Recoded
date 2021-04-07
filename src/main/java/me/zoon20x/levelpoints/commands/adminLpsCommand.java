@@ -3,6 +3,7 @@ package me.zoon20x.levelpoints.commands;
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.commands.TabComplete.adminLpsTabComplete;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
+import me.zoon20x.levelpoints.containers.Settings.Boosters.BoosterData;
 import me.zoon20x.levelpoints.files.FilesStorage;
 import me.zoon20x.levelpoints.utils.DebugSeverity;
 import me.zoon20x.levelpoints.utils.Formatter;
@@ -43,10 +44,13 @@ public class adminLpsCommand implements CommandExecutor {
         if (args.length == 1) {
             args1(sender, args);
         }
+        if(args.length == 3){
+            args3(sender, args);
+        }
         if (args.length == 4) {
             args4(sender, args);
         }
-
+        // booster delete <id>
         return true;
     }
 
@@ -84,6 +88,21 @@ public class adminLpsCommand implements CommandExecutor {
                 }.runTaskAsynchronously(LevelPoints.getInstance());
                 break;
 
+        }
+    }
+
+    private void args3(CommandSender sender, String[] args){
+        switch (args[0]){
+            case "booster":
+                if(args[1].equalsIgnoreCase("delete")) {
+                    if (!LevelPoints.getBoosterSettings().hasBooster(args[2])) {
+                        sender.sendMessage(MessageUtils.getColor("&cBooster doesn't exist"));
+                        return;
+                    }
+                    LevelPoints.getBoosterSettings().removeBooster(args[2]);
+                    sender.sendMessage(MessageUtils.getColor("&bBooster Removed"));
+                }
+                break;
         }
     }
 

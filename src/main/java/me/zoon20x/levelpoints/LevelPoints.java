@@ -160,6 +160,7 @@ public final class LevelPoints extends JavaPlugin{
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        getBoosterSettings().saveBoosters();
         getPlayerGenerator().saveAllData();
         if(getSQL() != null) {
             getSQL().disconnect();
