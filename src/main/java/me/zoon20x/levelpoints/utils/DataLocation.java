@@ -143,6 +143,19 @@ public class DataLocation {
     public static String abuseWorldGuardDisableRegions = "WorldGuard.DisabledEarn.Regions";
     public static String abuseSilkTouchEnabled = "SilkTouch.Enabled";
 
+    public static String pvpBracketsEnabled = "Brackets.Enabled";
+    public static String bracketsMessagesDifferentEnabled = "BracketsMessages.DifferentBrackets.Enabled";
+    public static String bracketsMessagesDifferentText = "BracketsMessages.DifferentBrackets.Text";
+    public static String bracketsMessagesNoPvpEnabled = "BracketsMessages.NoPvp.Enabled";
+    public static String bracketsMessagesNoPvpText = "BracketsMessages.NoPvp.Text";
+
+    public static String getPvpLevelsIncluded(String x){
+        return "Brackets." + x + ".levelsIncluded";
+    }
+    public static String getPvpToggle(String x){
+        return "Brackets." + x + ".pvp";
+    }
+
     public static String getAbuseRegionLevel(String type, String region){
         if(type.equalsIgnoreCase("Min")){
             return "WorldGuard.LockedRegions.Regions." + region + ".Levels.Min";

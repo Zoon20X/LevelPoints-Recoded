@@ -1,7 +1,5 @@
 package me.zoon20x.levelpoints.events;
 
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.bukkit.listener.WorldGuardPlayerListener;
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockData;
@@ -23,11 +21,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class ExpEarningEvents implements Listener {
@@ -56,6 +51,7 @@ public class ExpEarningEvents implements Listener {
         Player player = event.getPlayer();
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
         Block block = event.getBlock();
+
         if(!LevelPoints.getLevelSettings().canPlace(block.getType(), block.getData(), data)){
             BlockData blockData = BlockUtils.getBlockData(block.getType(), block.getData());
             if(LevelPoints.getLangSettings().isRequiredPlaceEnabled()){
@@ -106,6 +102,9 @@ public class ExpEarningEvents implements Listener {
     public void onBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
+        if(data.getBracketData() != null){
+            LevelPoints.getDebug(DebugSeverity.SEVER, data.getBracketData().getId());
+        }
         Block block = event.getBlock();
         if(LevelPoints.getExpSettings().expType(block.getType().toString()).equals("none")){
             return;
@@ -124,7 +123,6 @@ public class ExpEarningEvents implements Listener {
         if(!player.hasPermission(PermissionUtils.getPlayerPermission().expBlock())){
             return;
         }
-        LevelPoints.getDebug(DebugSeverity.WARNING, block);
 
         EventUtils.triggerEarnExpEvent(data, event, LevelPoints.getExpSettings().getBlockEXP(block.getType(), block.getData()), player, EarnTask.Blocks);
     }

@@ -1,19 +1,15 @@
-Enabled: false
-bypassperm: 'lps.bypasspvplevels'
-message: '&cYou can't pvp with player {otherplayername} since they are in a difrent pvp level. /n &cYou are currently on level {Currentlevel} and {otherplayername} is level {othercurrentlevel}'
-
+BracketsMessages:
+    DifferentBrackets:
+        Enabled: false
+        Text: 'Player is in a different bracket and cannot be hurt'
+    NoPvp:
+        Enabled: false
+        Text: 'Either you are the player you are attacking is in a NOPVP bracket and bypassed damage'
 Brackets:
+    Enabled: false
     nopvp:
         levelsIncluded: '1,2,3'
-        prestigeIncluded: '1'
         pvp: false
-        pvpMessage:
-            Enabled: false
-            Text: '&cPvp between players is disabled you need to be in level 4 to be able to pvp'
     lowerTier:
         levelsIncluded: '4,5,6'
-        prestigeIncluded: '1'
         pvp: true
-        pvpMessage:
-            Enabled: false
-            Text: '&cYou can only pvp with people level 4-6'

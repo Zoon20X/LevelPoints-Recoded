@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class adminLpsTabComplete implements TabCompleter {
+public class  adminLpsTabComplete implements TabCompleter {
     private static final List<String> args1 = Arrays.asList(new String[]{"exp", "reload", "level", "prestige"});
     private static final List<String> expArgs1 = Arrays.asList(new String[]{"give", "remove"});
     private static final List<String> levelArgs1 = Arrays.asList(new String[]{"add", "set", "remove"});

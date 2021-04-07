@@ -1,9 +1,12 @@
 package me.zoon20x.levelpoints.containers.Player;
 
 import me.zoon20x.levelpoints.LevelPoints;
+import me.zoon20x.levelpoints.containers.Settings.Configs.PvpBracketData;
 import me.zoon20x.levelpoints.events.CustomEvents.EventUtils;
 import me.zoon20x.levelpoints.utils.DebugSeverity;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -17,6 +20,8 @@ public class PlayerData {
     private Double requiredExp;
     private Integer previousLevel;
     private boolean updateSQL;
+
+    private PvpBracketData bracketData;
 
 
     private ActiveBooster activeBooster;
@@ -36,6 +41,7 @@ public class PlayerData {
         this.requiredExp = requiredExp;
         this.updateSQL = false;
 
+        updateBrackets();
     }
 
 
@@ -53,6 +59,7 @@ public class PlayerData {
         if(this.requiredExp <= this.exp){
             this.exp = 0.0;
         }
+        updateBrackets();
     }
     public void addLevel(int value, boolean removeEXP) {
         LevelPoints.getDebug(DebugSeverity.SEVER, requiredExp);
@@ -68,6 +75,7 @@ public class PlayerData {
         requiredExp = LevelPoints.getLevelSettings().getRequireExp(level);
         EventUtils.triggerLevelUpEvent(this.level, this);
         if (!canLevelUp()) {
+            updateBrackets();
             return;
         } else {
             addLevel(1, removeEXP);
@@ -81,6 +89,7 @@ public class PlayerData {
 
         this.level -= level;
         setRequiredExp(LevelPoints.getLevelSettings().getRequireExp(this.level));
+        updateBrackets();
         return true;
     }
 
@@ -165,6 +174,23 @@ public class PlayerData {
         setRequiredExp(LevelPoints.getLevelSettings().getRequireExp(this.level));
         return true;
     }
+
+    public void updateBrackets(){
+        if(!LevelPoints.getPvpSettings().isPvpBracketsEnabled()){
+            return;
+        }
+        bracketData = null;
+        LevelPoints.getPvpSettings().getAllPvpBrackets().forEach(x->{
+            String pl = String.valueOf(level);
+            if(x.getLevelsIncluded().contains(pl)){
+                bracketData = x;
+                return;
+            }
+        });
+    }
+
+
+
     public Integer getPreviousLevel() {
         return previousLevel;
     }
@@ -203,5 +229,10 @@ public class PlayerData {
 
     public void setUpdateSQL(boolean updateSQL) {
         this.updateSQL = updateSQL;
+    }
+
+    @Nullable
+    public PvpBracketData getBracketData() {
+        return bracketData;
     }
 }

@@ -25,6 +25,7 @@ public class FilesGenerator {
         FilesStorage.createFile(getSettingsFile("RewardSettings.yml"), "/Settings/RewardSettings.yml", "Settings/RewardSettings.yml", "RewardSettings");
         FilesStorage.createFile(getFile("TopList.yml"), "TopList.yml", "TopList.yml", "TopList");
         FilesStorage.createFile(getSettingsFile("AntiAbuse.yml"), "/Settings/AntiAbuse.yml", "Settings/AntiAbuse.yml", "AntiAbuse");
+        FilesStorage.createFile(getSettingsFile("PvpSettings.yml"), "/Settings/PvpSettings.yml", "Settings/PvpSettings.yml", "PvpSettings");
         saveGeneratedFiles();
     }
 
@@ -35,6 +36,7 @@ public class FilesGenerator {
         FilesStorage.addFileToCache("levelsConfig", getConfig(getSettingsFile("LevelSettings.yml")));
         FilesStorage.addFileToCache("rewardsConfig", getConfig(getSettingsFile("RewardSettings.yml")));
         FilesStorage.addFileToCache("antiAbuseConfig", getConfig(getSettingsFile("AntiAbuse.yml")));
+        FilesStorage.addFileToCache("pvpConfig", getConfig(getSettingsFile("PvpSettings.yml")));
     }
 
 }

@@ -39,6 +39,7 @@ public final class LevelPoints extends JavaPlugin{
     private static RewardSettings rewardSettings;
     private static TopListSettings topListSettings;
     private static AntiAbuseSettings antiAbuseSettings;
+    private static PvpSettings pvpSettings;
     private static boolean isReloading;
     private static boolean isRunningSQL;
     private static FileConfiguration configuration;
@@ -71,6 +72,7 @@ public final class LevelPoints extends JavaPlugin{
             new LpsExpansion().register();
             getDebug(DebugSeverity.NORMAL, "Loaded Placeholder expansion");
         }
+
 
 
         if(getConfig().getBoolean("MySQL.Enabled")) {
@@ -110,6 +112,8 @@ public final class LevelPoints extends JavaPlugin{
         rewardSettings = new RewardSettings();
         topListSettings = new TopListSettings();
         antiAbuseSettings = new AntiAbuseSettings();
+        pvpSettings = new PvpSettings();
+
     }
     public void setReloading(boolean value){
         isReloading = value;
@@ -196,6 +200,9 @@ public final class LevelPoints extends JavaPlugin{
         return langSettings;
     }
 
+    public static PvpSettings getPvpSettings() {
+        return pvpSettings;
+    }
     public static AntiAbuseSettings getAntiAbuseSettings() {
         return antiAbuseSettings;
     }
