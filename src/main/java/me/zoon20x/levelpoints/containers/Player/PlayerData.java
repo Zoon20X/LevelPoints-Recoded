@@ -1,6 +1,7 @@
 package me.zoon20x.levelpoints.containers.Player;
 
 import me.zoon20x.levelpoints.LevelPoints;
+import me.zoon20x.levelpoints.containers.Settings.Boosters.BoosterData;
 import me.zoon20x.levelpoints.containers.Settings.Configs.PvpBracketData;
 import me.zoon20x.levelpoints.events.CustomEvents.EventUtils;
 import me.zoon20x.levelpoints.utils.DebugSeverity;
@@ -8,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
 
 public class PlayerData {
@@ -20,14 +22,11 @@ public class PlayerData {
     private Double requiredExp;
     private Integer previousLevel;
     private boolean updateSQL;
-
     private PvpBracketData bracketData;
-
-
     private ActiveBooster activeBooster;
 
+    private HashMap<String, Integer> boosterStorage = new HashMap<>();
 
-    private HashMap<UUID, HashMap<BoosterData, Integer>> boosters = new HashMap<>();
 
 
     public PlayerData(UUID uuid, String name, Integer level, Double exp, Double requiredExp, Integer prestige, Integer previousLevel, ActiveBooster activeBooster) {
@@ -191,6 +190,22 @@ public class PlayerData {
 
 
 
+    public Set<String> getAllBoosters(){
+        return boosterStorage.keySet();
+    }
+
+
+    public void setActiveBooster(BoosterData data){
+        activeBooster = new ActiveBooster(
+                data.getId(),
+                LevelPoints.getPlayerGenerator().formatBoosterTime(data.getTime()),
+                data.getMultiplier());
+    }
+    public void addBooster(BoosterData data, int amount){
+        boosterStorage.put(data.getId(), amount);
+    }
+
+
     public Integer getPreviousLevel() {
         return previousLevel;
     }
@@ -235,4 +250,5 @@ public class PlayerData {
     public PvpBracketData getBracketData() {
         return bracketData;
     }
+
 }

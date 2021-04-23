@@ -16,6 +16,9 @@ public class DataLocation {
     public static String Level = "Level";
     public static String EXP = "EXP.Amount";
     public static String Prestige = "Prestige";
+    public static String ActiveBoosterTime = "ActiveBooster.Time";
+    public static String ActiveBoosterMultiplier = "ActiveBooster.Multiplier";
+    public static String ActiveBoosterID = "ActiveBooster.ID";
 
     public static String BlockEnabled = "Blocks.Enabled";
     public static String BlockSettings = "Blocks.Settings";

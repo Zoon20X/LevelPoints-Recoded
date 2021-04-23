@@ -53,7 +53,6 @@ public class adminLpsCommand implements CommandExecutor {
         if(args.length == 5){
             args5(sender, args);
         }
-        // booster create <id> <multiplier> <time>
         return true;
     }
 
@@ -104,6 +103,7 @@ public class adminLpsCommand implements CommandExecutor {
                     }
                     LevelPoints.getBoosterSettings().removeBooster(args[2]);
                     sender.sendMessage(MessageUtils.getColor("&bBooster Removed"));
+                    return;
                 }
                 break;
         }
@@ -272,12 +272,29 @@ public class adminLpsCommand implements CommandExecutor {
                         }
                         break;
                 }
+            case "booster":
+                switch (args[1]){
+                    case "give":
+                        if(!sender.hasPermission(PermissionUtils.getAdminPermission().giveBooster())){
+                            return;
+                        }
+                        //booster give <player> <booster>
+                        if(!LevelPoints.getBoosterSettings().hasBooster(args[3])){
+                            return;
+                        }
+                        data.addBooster(LevelPoints.getBoosterSettings().getBooster(args[3]), 1);
+                        break;
+                }
+                break;
         }
     }
     private void args5(CommandSender sender, String[] args){
         switch (args[0]){
             case "booster":
                 if(args[1].equalsIgnoreCase("create")) {
+                    if(!sender.hasPermission(PermissionUtils.getAdminPermission().createBooster())){
+                        return;
+                    }
                     if(LevelPoints.getBoosterSettings().hasBooster(args[2])){
                         sender.sendMessage(MessageUtils.getColor("&cBooster id in use"));
                         return;
@@ -285,6 +302,21 @@ public class adminLpsCommand implements CommandExecutor {
                     LevelPoints.getBoosterSettings().addBooster(new BoosterData(args[2], Double.valueOf(args[3]), args[4]));
                     sender.sendMessage(MessageUtils.getColor("&bBooster Created"));
                     return;
+                }
+                if(args[1].equalsIgnoreCase("give")){
+                    if(!sender.hasPermission(PermissionUtils.getAdminPermission().giveBooster())){
+                        return;
+                    }
+                    if(!LevelPoints.getPlayerStorage().hasPlayerFile(Bukkit.getOfflinePlayer(args[2]).getUniqueId())){
+                        sender.sendMessage(MessageUtils.getColor("Player data doesn't exist"));
+                        return;
+                    }
+                    PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(Bukkit.getOfflinePlayer(args[2]).getUniqueId());
+                    if(!LevelPoints.getBoosterSettings().hasBooster(args[3])){
+                        return;
+                    }
+                    data.addBooster(LevelPoints.getBoosterSettings().getBooster(args[3]), Integer.valueOf(args[4]));
+                    break;
                 }
                 break;
         }

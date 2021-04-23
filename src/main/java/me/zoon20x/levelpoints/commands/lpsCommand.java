@@ -63,7 +63,7 @@ public class lpsCommand implements CommandExecutor {
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
         switch (args[0]){
             case "info":
-                Formatter info = new Formatter(player.getName(), data.getLevel(), data.getExp(), data.getRequiredExp(), data.getPrestige(), 0, data.getProgress());
+                Formatter info = new Formatter(player.getName(), data.getLevel(), data.getExp(), data.getRequiredExp(), data.getPrestige(), 0, data.getProgress(), data.getActiveBooster());
                 for(String x : LevelPoints.getLangSettings().getPlayerInfo()){
                     sender.sendMessage(MessageUtils.getColor(MessageUtils.format(x, info)));
                 }
@@ -100,7 +100,7 @@ public class lpsCommand implements CommandExecutor {
                     return;
                 }
                 PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(uuid.getUniqueId());
-                Formatter formatter = new Formatter(uuid.getName(), data.getLevel(), data.getExp(), data.getRequiredExp(), data.getPrestige(), 0, data.getProgress());
+                Formatter formatter = new Formatter(uuid.getName(), data.getLevel(), data.getExp(), data.getRequiredExp(), data.getPrestige(), 0, data.getProgress(), data.getActiveBooster());
                 for(String x : LevelPoints.getLangSettings().getPlayerInfo()){
                     sender.sendMessage(MessageUtils.getColor(MessageUtils.format(x, formatter)));
                 }

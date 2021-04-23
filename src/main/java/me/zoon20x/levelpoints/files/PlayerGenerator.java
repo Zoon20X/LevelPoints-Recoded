@@ -5,11 +5,15 @@ import me.zoon20x.levelpoints.containers.Player.ActiveBooster;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.utils.DataLocation;
 import me.zoon20x.levelpoints.utils.DebugSeverity;
+import org.apache.commons.lang.time.DateUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class PlayerGenerator {
@@ -34,6 +38,10 @@ public class PlayerGenerator {
         config.set(DataLocation.Level, data.getLevel());
         config.set(DataLocation.EXP, data.getExp());
         config.set(DataLocation.Prestige,data.getPrestige());
+        config.set(DataLocation.ActiveBoosterID, data.getActiveBooster().getID());
+        config.set(DataLocation.ActiveBoosterMultiplier, data.getActiveBooster().getMultiplier());
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
+        config.set(DataLocation.ActiveBoosterTime, format.format(data.getActiveBooster().getDateExpire()));
         try {
             config.save(userFile);
         } catch (IOException e) {
@@ -50,7 +58,11 @@ public class PlayerGenerator {
         Double exp = config.getDouble(DataLocation.EXP);
         Double requiredExp = LevelPoints.getLevelSettings().getRequireExp(level);
         Integer prestige = config.getInt(DataLocation.Prestige);
-        PlayerData data = new PlayerData(uuid, name, level, exp, requiredExp, prestige, 0, new ActiveBooster());
+        String id = config.getString(DataLocation.ActiveBoosterID);
+        double multiplier = config.getInt(DataLocation.ActiveBoosterMultiplier);
+        Date date = format(config.getString(DataLocation.ActiveBoosterTime));
+
+        PlayerData data = new PlayerData(uuid, name, level, exp, requiredExp, prestige, 0, new ActiveBooster(id, date, multiplier));
 
         LevelPoints.getPlayerStorage().addData(uuid, data);
     }
@@ -62,6 +74,9 @@ public class PlayerGenerator {
         configuration.set(DataLocation.Level, LevelPoints.getLevelSettings().getStartingLevel());
         configuration.set(DataLocation.EXP, LevelPoints.getLevelSettings().getStartingExp());
         configuration.set(DataLocation.Prestige, LevelPoints.getLevelSettings().getStartingPrestige());
+        configuration.set(DataLocation.ActiveBoosterID, "none");
+        configuration.set(DataLocation.ActiveBoosterMultiplier, 1.0);
+        configuration.set(DataLocation.ActiveBoosterTime, getCurrentDate());
         try {
             configuration.save(file);
             loadPlayerFile(file);
@@ -90,5 +105,56 @@ public class PlayerGenerator {
         return true;
     }
 
+    public Date formatBoosterTime(String x) {
+
+        switch (formatTime(x)) {
+            case "Minutes":
+                x = x.replace("m", "");
+                return DateUtils.addMinutes(new Date(), Integer.parseInt(x));
+            case "Hours":
+                x = x.replace("h", "");
+
+                return DateUtils.addHours(new Date(), Integer.parseInt(x));
+            case "Days":
+                x = x.replace("d", "");
+                return DateUtils.addDays(new Date(), Integer.parseInt(x));
+            case "Seconds":
+                x = x.replace("s", "");
+                return DateUtils.addSeconds(new Date(), Integer.parseInt(x));
+        }
+
+        return new Date();
+    }
+    private String formatTime(String value){
+        if(value.contains("m")){
+            return "Minutes";
+        }
+        if(value.contains("h")){
+            return "Hours";
+        }
+        if(value.contains("d")){
+            return "Days";
+        }
+        if(value.contains("s")){
+            return "Seconds";
+        }
+        return "";
+    }
+    public String getCurrentDate(){
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
+        Date cDate = new Date();
+        String cDateS = format.format(cDate);
+        return cDateS;
+    }
+    private Date format(String x){
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
+        Date finish = null;
+        try {
+            finish = format.parse(x);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return finish;
+    }
 
 }

@@ -41,7 +41,9 @@ public class MessageUtils {
     public static String previousLevelPlaceholder = "{previous_level}";
     public static String progressPlaceholder = "{progress}";
     public static String rewardPlaceholder = "{reward}";
-
+    public static String boosterPlaceholderId = "{booster_id}";
+    public static String boosterPlaceholderMultiplier = "{booster_multiplier}";
+    public static String boosterPlaceholderDate = "{booster_date}";
 
 
     public static void sendActionBar(Player player, String msgs){
@@ -117,6 +119,12 @@ public class MessageUtils {
     }
 
     public static String format(String x, Formatter formatter){
+        if(formatter.getBooster() !=null){
+            x = x.replace(boosterPlaceholderId, valueOf(formatter.getBooster().getID()))
+                    .replace(boosterPlaceholderMultiplier, valueOf(formatter.getBooster().getMultiplier()))
+                    .replace(boosterPlaceholderDate, valueOf(formatter.getBooster().getDateExpire()));
+        }
+
         if(formatter.getPlayer() !=null){
             x = x.replace(levelPlaceholder, valueOf(formatter.getLevel()))
                     .replace(expPlaceholder, valueOf(formatter.getExp()))

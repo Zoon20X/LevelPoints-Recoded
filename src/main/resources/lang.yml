@@ -21,9 +21,7 @@ Info:
     - '&2EXP&7> &a{exp} / {required_exp}'
     - '&2EXP Progress&7> &a{progress}'
     - '&2Prestige&7> &a{prestige}'
-    - '&2Booster&7> &a{Booster_Active} + {Booster_Date}'
-
-
+    - '&2Booster&7> &a{booster_id} + {booster_multiplier} + {booster_date}'
 TopList:
   Top:
     Enabled: true

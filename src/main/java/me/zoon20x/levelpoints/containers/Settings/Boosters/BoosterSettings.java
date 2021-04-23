@@ -38,6 +38,9 @@ public class BoosterSettings {
     public void addBooster(BoosterData boosterData){
         data.put(boosterData.getId(), boosterData);
     }
+    public BoosterData getBooster(String id){
+        return data.get(id);
+    }
     public void removeBooster(String id){
         data.remove(id);
         File boosterData = new File(LevelPoints.getBoostersFolder(), "BoosterData.yml");

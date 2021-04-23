@@ -33,4 +33,17 @@ public class AdminPermission {
         return "lps.admin.reload";
     }
 
+    public String giveBooster(){
+        return "lps.admin.booster.give";
+    }
+    public String createBooster(){
+        return "lps.admin.booster.create";
+    }
+    public String deleteBooster(){
+        return "lps.admin.booster.delete";
+    }
+    public String removeBooster(){
+        return "lps.admin.booster.remove";
+    }
+
 }
