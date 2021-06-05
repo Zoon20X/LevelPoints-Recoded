@@ -45,7 +45,8 @@ public class EventUtils {
                     }
                 }
             }
-            data.addEXP(amount);
+
+            data.addEXP(amount * data.getActiveBooster().getMultiplier());
         }
 
     }

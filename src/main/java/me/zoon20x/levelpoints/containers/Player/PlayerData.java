@@ -134,8 +134,8 @@ public class PlayerData {
     }
     public void prestige(){
         this.addPrestige(1);
-        this.setLevel(1);
-        this.setExp(0.0);
+        this.setLevel(LevelPoints.getLevelSettings().getStartingLevel());
+        this.setExp(LevelPoints.getLevelSettings().getStartingExp());
         return;
     }
 
@@ -204,7 +204,12 @@ public class PlayerData {
     public void addBooster(BoosterData data, int amount){
         boosterStorage.put(data.getId(), amount);
     }
-
+    public void removeBooster(BoosterData data){
+        boosterStorage.remove(data.getId());
+    }
+    public boolean hasBooster(String value){
+        return boosterStorage.containsKey(value);
+    }
 
     public Integer getPreviousLevel() {
         return previousLevel;

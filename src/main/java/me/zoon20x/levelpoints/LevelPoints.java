@@ -17,6 +17,9 @@ import me.zoon20x.levelpoints.files.PlayerGenerator;
 import me.zoon20x.levelpoints.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -24,7 +27,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -57,6 +62,8 @@ public final class LevelPoints extends JavaPlugin{
         boostersFolder = new File(getDataFolder(), "Boosters");
         boostersFolder.mkdirs();
     }
+
+
     @Override
     public void onEnable() {
         // Plugin startup logic

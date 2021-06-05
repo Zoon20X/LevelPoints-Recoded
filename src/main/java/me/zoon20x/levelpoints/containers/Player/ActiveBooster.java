@@ -19,6 +19,10 @@ public class ActiveBooster {
     }
 
     public double getMultiplier() {
+        Date date = new Date();
+        if(date.after(dateExpire)){
+            return 1.0;
+        }
         return multiplier;
     }
 
