@@ -109,6 +109,10 @@ public class lpsCommand implements CommandExecutor {
             case "booster":
                 switch (args[1]){
                     case "list":
+                        if(pData.getAllBoosters().isEmpty()){
+                            sender.sendMessage(MessageUtils.getColor("&cYou do not currently own any boosters"));
+                            break;
+                        }
                         pData.getAllBoosters().forEach(booster->{
                             sender.sendMessage(MessageUtils.getColor("&3" + booster));
                         });

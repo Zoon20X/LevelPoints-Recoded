@@ -17,7 +17,7 @@ public class  adminLpsTabComplete implements TabCompleter {
     private static final List<String> args1 = Arrays.asList(new String[]{"exp", "reload", "level", "prestige", "booster"});
     private static final List<String> expArgs1 = Arrays.asList(new String[]{"give", "remove"});
     private static final List<String> levelArgs1 = Arrays.asList(new String[]{"add", "set", "remove"});
-    private static final List<String> boosterArgs1 = Arrays.asList(new String[]{"delete","create"});
+    private static final List<String> boosterArgs1 = Arrays.asList(new String[]{"delete","create", "give"});
     private static final List<String> values = Arrays.asList(new String[]{"0.0", "1.0", "2.0", "3.0", "4.20", "5.0", "6.9", "7.0", "8.0", "9.0", "10.0"});
     private static final List<String> levels = Arrays.asList(new String[]{"1","2","3","4","5","6","7","8","9","10"});
     private static final ArrayList<String> players = new ArrayList<>();

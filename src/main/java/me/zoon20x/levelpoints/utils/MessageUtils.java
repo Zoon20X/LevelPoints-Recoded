@@ -14,6 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -120,9 +121,18 @@ public class MessageUtils {
 
     public static String format(String x, Formatter formatter){
         if(formatter.getBooster() !=null){
+            Date boosterDate = formatter.getBooster().getDateExpire();
+            Date current = new Date();
+            String boosterExpire;
+            if(current.after(boosterDate)){
+                boosterExpire = "&cExpired&r";
+            }else{
+                boosterExpire = valueOf(boosterDate);
+            }
+
             x = x.replace(boosterPlaceholderId, valueOf(formatter.getBooster().getID()))
                     .replace(boosterPlaceholderMultiplier, valueOf(formatter.getBooster().getMultiplier()))
-                    .replace(boosterPlaceholderDate, valueOf(formatter.getBooster().getDateExpire()));
+                    .replace(boosterPlaceholderDate, boosterExpire);
         }
 
         if(formatter.getPlayer() !=null){
