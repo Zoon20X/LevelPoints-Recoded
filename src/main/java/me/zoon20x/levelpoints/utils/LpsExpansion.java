@@ -73,6 +73,19 @@ public class LpsExpansion extends PlaceholderExpansion {
             return data.getProgress() + "%";
         }
 
+        if(identifier.equals("player_booster_id")){
+            return data.getActiveBooster().getID();
+        }
+        if(identifier.equals("player_booster_time")){
+            return MessageUtils.formatDate(data.getActiveBooster().getDateExpire());
+        }
+        if(identifier.equals("player_booster_date")){
+            return data.getActiveBooster().getDateExpire().toString();
+        }
+        if(identifier.equals("player_booster_multiplier")){
+            return String.valueOf(data.getActiveBooster().getMultiplier());
+        }
+
         if(identifier.equals("player_pvp_rank")){
             if(data.getBracketData() == null){
                 return "none";

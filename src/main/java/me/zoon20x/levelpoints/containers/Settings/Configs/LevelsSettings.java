@@ -33,7 +33,6 @@ public class LevelsSettings {
         this.startingPrestige = LevelPoints.getFilesGenerator().levelSettings.getConfig().getInt(DataLocation.StartingPrestige);
         this.maxLevel = LevelPoints.getFilesGenerator().levelSettings.getConfig().getInt(DataLocation.MaxLevel);
         this.maxPrestige = LevelPoints.getFilesGenerator().levelSettings.getConfig().getInt(DataLocation.MaxPrestige);
-        LevelPoints.getDebug(DebugSeverity.SEVER, LevelPoints.getFilesGenerator().levelSettings.getConfig().getString(DataLocation.FormulaType));
         this.formulaType = FormulaType.valueOf(LevelPoints.getFilesGenerator().levelSettings.getConfig().getString(DataLocation.FormulaType));
         this.levelUpType = LevelUpType.valueOf(LevelPoints.getFilesGenerator().levelSettings.getConfig().getString(DataLocation.LevelUpType));
     }
