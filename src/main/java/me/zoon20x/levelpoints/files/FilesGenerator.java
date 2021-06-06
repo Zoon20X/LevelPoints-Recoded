@@ -1,48 +1,35 @@
 package me.zoon20x.levelpoints.files;
 
 import me.zoon20x.levelpoints.LevelPoints;
-import me.zoon20x.levelpoints.utils.DebugSeverity;
+import me.zoon20x.levelpoints.utils.DataLocation;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
 public class FilesGenerator {
+    public Files lang;
+    public Files expSettings;
+    public Files levelSettings;
+    public Files rewardSettings;
+    public Files topList;
+    public Files boosterData;
+    public Files boosterSettings;
+    public Files antiAbuse;
+    public Files pvpSettings;
 
-    private File getSettingsFile(String id){
-        return new File(LevelPoints.getInstance().getDataFolder(),  "/Settings/" + id);
-    }
-    private File getBoostersFile(String id){
-        return new File(LevelPoints.getInstance().getDataFolder(),  "/Boosters/" + id);
-    }
-    private File getFile(String id){
-        return new File(LevelPoints.getInstance().getDataFolder(), id);
-    }
-    private FileConfiguration getConfig(File file){
-        return YamlConfiguration.loadConfiguration(file);
-    }
     public void generateFiles(){
-        FilesStorage.createFile(getFile("lang.yml"), "lang.yml", "lang.yml", "lang");
-        FilesStorage.createFile(getSettingsFile("ExpSettings.yml"), "/Settings/ExpSettings.yml", "Settings/ExpSettings.yml", "ExpSettings");
-        FilesStorage.createFile(getSettingsFile("LevelSettings.yml"), "/Settings/LevelSettings.yml", "Settings/LevelSettings.yml", "LevelSettings");
-        FilesStorage.createFile(getSettingsFile("RewardSettings.yml"), "/Settings/RewardSettings.yml", "Settings/RewardSettings.yml", "RewardSettings");
-        FilesStorage.createFile(getFile("TopList.yml"), "TopList.yml", "TopList.yml", "TopList");
-        FilesStorage.createFile(getBoostersFile("BoosterData.yml"), "/Boosters/BoosterData.yml", "Boosters/BoosterData.yml", "BoosterData");
-        FilesStorage.createFile(getBoostersFile("BoosterSettings.yml"), "/Boosters/BoosterSettings.yml", "Boosters/BoosterSettings.yml", "BoostersSettings");
-        FilesStorage.createFile(getSettingsFile("AntiAbuse.yml"), "/Settings/AntiAbuse.yml", "Settings/AntiAbuse.yml", "AntiAbuse");
-        FilesStorage.createFile(getSettingsFile("PvpSettings.yml"), "/Settings/PvpSettings.yml", "Settings/PvpSettings.yml", "PvpSettings");
-        saveGeneratedFiles();
-    }
+        this.lang = new Files("lang.yml").setLocation("").build();
+        this.expSettings = new Files("ExpSettings.yml").setLocation("Settings/").build();
+        this.levelSettings = new Files("LevelSettings.yml").setLocation("Settings/").build();
+        this.rewardSettings = new Files("RewardSettings.yml").setLocation("Settings/").build();
+        this.topList = new Files("TopList.yml").setLocation("").build();
+        this.boosterData = new Files("BoosterData.yml").setLocation("Boosters/").build();
+        this.boosterSettings = new Files("BoosterSettings.yml").setLocation("Boosters/").build();
+        this.antiAbuse = new Files("AntiAbuse.yml").setLocation("Settings/").build();
+        this.pvpSettings = new Files("PvpSettings.yml").setLocation("Settings/").build();
 
-    public void saveGeneratedFiles(){
-        FilesStorage.addFileToCache("langConfig", getConfig(getFile("lang.yml")));
-        FilesStorage.addFileToCache("expConfig", getConfig(getSettingsFile("ExpSettings.yml")));
-        FilesStorage.addFileToCache("levelsConfig", getConfig(getSettingsFile("LevelSettings.yml")));
-        FilesStorage.addFileToCache("levelsConfig", getConfig(getSettingsFile("LevelSettings.yml")));
-        FilesStorage.addFileToCache("rewardsConfig", getConfig(getSettingsFile("RewardSettings.yml")));
-        FilesStorage.addFileToCache("antiAbuseConfig", getConfig(getSettingsFile("AntiAbuse.yml")));
-        FilesStorage.addFileToCache("pvpConfig", getConfig(getSettingsFile("PvpSettings.yml")));
-        FilesStorage.addFileToCache("boosterConfig", getConfig(getBoostersFile("BoosterSettings.yml")));
+
     }
 
 }

@@ -4,7 +4,6 @@ import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.commands.TabComplete.adminLpsTabComplete;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.containers.Settings.Boosters.BoosterData;
-import me.zoon20x.levelpoints.files.FilesStorage;
 import me.zoon20x.levelpoints.utils.DebugSeverity;
 import me.zoon20x.levelpoints.utils.Formatter;
 import me.zoon20x.levelpoints.utils.MessageUtils;
@@ -69,7 +68,6 @@ public class adminLpsCommand implements CommandExecutor {
                         long startTime = System.nanoTime();
 
                         LevelPoints.getInstance().setReloading(true);
-                        FilesStorage.clearCache();
                         LevelPoints.getFilesGenerator().generateFiles();
                         LevelPoints.getPlayerGenerator().saveAllData();
                         LevelPoints.getPlayerStorage().clearPlayerCache();

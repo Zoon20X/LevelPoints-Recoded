@@ -1,6 +1,5 @@
 package me.zoon20x.levelpoints.events;
 
-import com.sun.org.apache.xml.internal.utils.NameSpace;
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.containers.Settings.Configs.PvpBracketData;
@@ -10,30 +9,20 @@ import me.zoon20x.levelpoints.containers.Settings.Configs.Rewards.RewardTriggerT
 import me.zoon20x.levelpoints.events.CustomEvents.EarnExpEvent;
 import me.zoon20x.levelpoints.events.CustomEvents.LevelUpEvent;
 import me.zoon20x.levelpoints.events.CustomEvents.PrestigeEvent;
-import me.zoon20x.levelpoints.files.FilesStorage;
 import me.zoon20x.levelpoints.utils.DebugSeverity;
 import me.zoon20x.levelpoints.utils.Formatter;
 import me.zoon20x.levelpoints.utils.MessageUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
-import java.nio.file.FileStore;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;

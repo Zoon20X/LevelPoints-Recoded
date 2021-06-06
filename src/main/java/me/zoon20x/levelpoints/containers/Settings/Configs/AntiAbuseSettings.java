@@ -1,7 +1,6 @@
 package me.zoon20x.levelpoints.containers.Settings.Configs;
 
 import me.zoon20x.levelpoints.LevelPoints;
-import me.zoon20x.levelpoints.files.FilesStorage;
 import me.zoon20x.levelpoints.utils.DataLocation;
 import me.zoon20x.levelpoints.utils.DebugSeverity;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -22,7 +21,7 @@ public class AntiAbuseSettings {
     private HashMap<String, RegionData> regions = new HashMap<>();
 
     public AntiAbuseSettings(){
-        FileConfiguration configuration = FilesStorage.getConfig("antiAbuseConfig");
+        FileConfiguration configuration = LevelPoints.getFilesGenerator().antiAbuse.getConfig();
         regionLocked = configuration.getBoolean(DataLocation.abuseRegionLockedEnabled);
         denyEarn = configuration.getBoolean(DataLocation.abuseWorldGuardDisableEnabled);
         silkEnabled = configuration.getBoolean(DataLocation.abuseSilkTouchEnabled);

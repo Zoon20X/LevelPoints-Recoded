@@ -21,7 +21,7 @@ Info:
     - '&2EXP&7> &a{exp} / {required_exp}'
     - '&2EXP Progress&7> &a{progress}'
     - '&2Prestige&7> &a{prestige}'
-    - '&2Booster&7> &a{booster_id} + {booster_multiplier} + {booster_date}'
+    - '&2Booster&7> &a{booster_id} + {booster_multiplier} + {booster_date_time}, {booster_date}'
 TopList:
   Top:
     Enabled: true
@@ -36,7 +36,9 @@ TopList:
     Enabled: true
     Text:
       - '&3-------------------'
-
+Boosters:
+  ExpiredText: 'Expired'
+  EmptyBoosters: '&cYou do not own any boosters'
 Experience:
   Earning:
     Break:

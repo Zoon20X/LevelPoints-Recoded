@@ -69,6 +69,9 @@ public class LpsExpansion extends PlaceholderExpansion {
         if(identifier.equals("player_prestige")){
             return String.valueOf(data.getPrestige());
         }
+        if(identifier.equals("player_progress")){
+            return data.getProgress() + "%";
+        }
 
         if(identifier.equals("player_pvp_rank")){
             if(data.getBracketData() == null){

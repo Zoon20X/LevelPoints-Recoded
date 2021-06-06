@@ -2,6 +2,7 @@ package me.zoon20x.levelpoints.events.CustomEvents;
 
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
+import me.zoon20x.levelpoints.containers.Settings.Configs.TopListSettings;
 import me.zoon20x.levelpoints.containers.Settings.WorldGuardSettings;
 import me.zoon20x.levelpoints.utils.DebugSeverity;
 import me.zoon20x.levelpoints.utils.Formatter;
@@ -55,8 +56,8 @@ public class EventUtils {
 
         LevelUpEvent event = new LevelUpEvent(level, data);
         Bukkit.getPluginManager().callEvent(event);
+        LevelPoints.getTopListSettings().modifyLevel(data);
         LevelPoints.getTopListSettings().generateTopCache(50);
-
 
     }
 

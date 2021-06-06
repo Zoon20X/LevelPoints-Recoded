@@ -1,12 +1,10 @@
 package me.zoon20x.levelpoints.containers.Settings.Configs;
 
 import me.zoon20x.levelpoints.LevelPoints;
-import me.zoon20x.levelpoints.files.FilesStorage;
 import me.zoon20x.levelpoints.utils.DataLocation;
 import me.zoon20x.levelpoints.utils.DebugSeverity;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import javax.xml.crypto.Data;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -22,7 +20,7 @@ public class PvpSettings {
 
 
     public PvpSettings(){
-        FileConfiguration configuration = FilesStorage.getConfig("pvpConfig");
+        FileConfiguration configuration = LevelPoints.getFilesGenerator().pvpSettings.getConfig();
         pvpBracketsEnabled = configuration.getBoolean(DataLocation.pvpBracketsEnabled);
         differentMessageEnabled = configuration.getBoolean(DataLocation.bracketsMessagesDifferentEnabled);
         differentMessageText = configuration.getString(DataLocation.bracketsMessagesDifferentText);
@@ -36,7 +34,7 @@ public class PvpSettings {
     }
 
     private void generatePvpBrackets(){
-        FileConfiguration configuration = FilesStorage.getConfig("pvpConfig");
+        FileConfiguration configuration = LevelPoints.getFilesGenerator().pvpSettings.getConfig();
         configuration.getConfigurationSection("Brackets").getKeys(false).forEach(x ->{
            if(!x.equalsIgnoreCase("Enabled")){
                PvpBracketData pvpData = new PvpBracketData(x,

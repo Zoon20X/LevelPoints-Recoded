@@ -1,6 +1,6 @@
 package me.zoon20x.levelpoints.containers.Settings.Configs;
 
-import me.zoon20x.levelpoints.files.FilesStorage;
+import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.utils.DataLocation;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -110,7 +110,7 @@ public class LangSettings {
 
 
     public LangSettings(){
-        FileConfiguration config = FilesStorage.getConfig("langConfig");
+        FileConfiguration config = LevelPoints.getFilesGenerator().lang.getConfig();
 
         this.playerHelp = config.getStringList("Help.Player");
         this.adminHelp = config.getStringList("Help.Admin");

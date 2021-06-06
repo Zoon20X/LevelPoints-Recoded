@@ -4,7 +4,6 @@ import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockData;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockUtils;
-import me.zoon20x.levelpoints.files.FilesStorage;
 import me.zoon20x.levelpoints.utils.*;
 import me.zoon20x.levelpoints.utils.Formatter;
 import net.objecthunter.exp4j.Expression;
@@ -28,13 +27,15 @@ public class LevelsSettings {
 
     public LevelsSettings() {
         requiredLeveledEXP.clear();
-        this.startingXp = FilesStorage.getConfig("levelsConfig").getDouble(DataLocation.StartingExp);
-        this.startingLevel = FilesStorage.getConfig("levelsConfig").getInt(DataLocation.StartingLevel);
-        this.startingPrestige = FilesStorage.getConfig("levelsConfig").getInt(DataLocation.StartingPrestige);
-        this.maxLevel = FilesStorage.getConfig("levelsConfig").getInt(DataLocation.MaxLevel);
-        this.maxPrestige = FilesStorage.getConfig("levelsConfig").getInt(DataLocation.MaxPrestige);
-        this.formulaType = FormulaType.valueOf(FilesStorage.getConfig("levelsConfig").getString(DataLocation.FormulaType));
-        this.levelUpType = LevelUpType.valueOf(FilesStorage.getConfig("levelsConfig").getString(DataLocation.LevelUpType));
+        this.startingXp = LevelPoints.getFilesGenerator().levelSettings.getConfig().getDouble(DataLocation.StartingExp);
+        this.startingXp = LevelPoints.getFilesGenerator().levelSettings.getConfig().getDouble(DataLocation.StartingExp);
+        this.startingLevel = LevelPoints.getFilesGenerator().levelSettings.getConfig().getInt(DataLocation.StartingLevel);
+        this.startingPrestige = LevelPoints.getFilesGenerator().levelSettings.getConfig().getInt(DataLocation.StartingPrestige);
+        this.maxLevel = LevelPoints.getFilesGenerator().levelSettings.getConfig().getInt(DataLocation.MaxLevel);
+        this.maxPrestige = LevelPoints.getFilesGenerator().levelSettings.getConfig().getInt(DataLocation.MaxPrestige);
+        LevelPoints.getDebug(DebugSeverity.SEVER, LevelPoints.getFilesGenerator().levelSettings.getConfig().getString(DataLocation.FormulaType));
+        this.formulaType = FormulaType.valueOf(LevelPoints.getFilesGenerator().levelSettings.getConfig().getString(DataLocation.FormulaType));
+        this.levelUpType = LevelUpType.valueOf(LevelPoints.getFilesGenerator().levelSettings.getConfig().getString(DataLocation.LevelUpType));
     }
 
 
@@ -51,15 +52,15 @@ public class LevelsSettings {
     }
 
     public String getBasicFormula() {
-        return FilesStorage.getConfig("levelsConfig").getString(DataLocation.BasicFormula);
+        return LevelPoints.getFilesGenerator().levelSettings.getConfig().getString(DataLocation.BasicFormula);
     }
 
     public String getAdvancedFormula(int level) {
-        return FilesStorage.getConfig("levelsConfig").getString(DataLocation.getAdvancedFormula(level));
+        return LevelPoints.getFilesGenerator().levelSettings.getConfig().getString(DataLocation.getAdvancedFormula(level));
     }
 
     public Double getCustomLevel(int level) {
-        return FilesStorage.getConfig("levelsConfig").getDouble(DataLocation.getCustomLeveling(level));
+        return LevelPoints.getFilesGenerator().levelSettings.getConfig().getDouble(DataLocation.getCustomLeveling(level));
     }
 
     public Set<Integer> getLoadedLevels() {
@@ -104,7 +105,7 @@ public class LevelsSettings {
         for (int i = getStartingLevel(); i != getMaxLevel() + 1; i++) {
             Formatter formatter = new Formatter(null, i, 0, 0, 0, 0, 0.0);
             if (getLevelUpType() == LevelUpType.CUSTOMLEVEL) {
-                if (FilesStorage.getConfig("levelsConfig").isSet(DataLocation.getCustomLeveling(i))) {
+                if (LevelPoints.getFilesGenerator().levelSettings.getConfig().isSet(DataLocation.getCustomLeveling(i))) {
 
                     requiredLeveledEXP.put(i, getCustomLevel(i));
                 } else {

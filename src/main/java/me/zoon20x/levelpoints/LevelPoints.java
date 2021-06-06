@@ -51,6 +51,7 @@ public final class LevelPoints extends JavaPlugin{
     private static boolean isReloading;
     private static boolean isRunningSQL;
     private static FileConfiguration configuration;
+    private static FilesGenerator generator;
 
 
 
@@ -63,6 +64,10 @@ public final class LevelPoints extends JavaPlugin{
         boostersFolder.mkdirs();
     }
 
+    @Override
+    public void onLoad(){
+
+    }
 
     @Override
     public void onEnable() {
@@ -72,6 +77,7 @@ public final class LevelPoints extends JavaPlugin{
         generateFolders();
         getDebug(DebugSeverity.NORMAL, "Initializing Data, this will take a second");
         Bukkit.getWorlds().get(0).getBlockAt(0, 0, 0).getData();
+        generator = new FilesGenerator();
         getFilesGenerator().generateFiles();
         reloadClass();
         loadEvents();
@@ -211,7 +217,7 @@ public final class LevelPoints extends JavaPlugin{
     }
 
     public static FilesGenerator getFilesGenerator(){
-        return new FilesGenerator();
+        return generator;
     }
     public static LangSettings getLangSettings(){
         return langSettings;

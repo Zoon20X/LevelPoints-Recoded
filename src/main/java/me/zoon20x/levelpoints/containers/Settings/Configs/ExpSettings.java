@@ -1,12 +1,12 @@
 package me.zoon20x.levelpoints.containers.Settings.Configs;
 
+import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockData;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockUtils;
 import me.zoon20x.levelpoints.containers.Settings.Crafting.CraftingData;
 import me.zoon20x.levelpoints.containers.Settings.Crafting.CraftingUtils;
 import me.zoon20x.levelpoints.containers.Settings.Mobs.MobData;
 import me.zoon20x.levelpoints.containers.Settings.Mobs.MobUtils;
-import me.zoon20x.levelpoints.files.FilesStorage;
 import me.zoon20x.levelpoints.utils.DataLocation;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -66,7 +66,7 @@ public class ExpSettings {
 
     public void generateBlocks(){
         BlockUtils.clear();
-        FileConfiguration config = FilesStorage.getConfig("expConfig");
+        FileConfiguration config = LevelPoints.getFilesGenerator().expSettings.getConfig();
         values.put("BlockEnabled", config.getBoolean(DataLocation.BlockEnabled));
         if (!config.getBoolean(DataLocation.BlockEnabled)) {
             return;
@@ -99,7 +99,7 @@ public class ExpSettings {
     }
     public void generateMobs(){
         MobUtils.clear();
-        FileConfiguration config = FilesStorage.getConfig("expConfig");
+        FileConfiguration config = LevelPoints.getFilesGenerator().expSettings.getConfig();
         values.put("MobEnabled", config.getBoolean(DataLocation.MobEnabled));
         if (!config.getBoolean(DataLocation.MobEnabled)) {
             return;
@@ -127,7 +127,7 @@ public class ExpSettings {
     }
     public void generateCrafting(){
         CraftingUtils.clear();
-        FileConfiguration config = FilesStorage.getConfig("expConfig");
+        FileConfiguration config = LevelPoints.getFilesGenerator().expSettings.getConfig();
         values.put("CraftingEnabled", config.getBoolean(DataLocation.CraftingEnabled));
         if (!config.getBoolean(DataLocation.CraftingEnabled)) {
             return;

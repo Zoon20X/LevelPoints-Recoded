@@ -1,7 +1,6 @@
 package me.zoon20x.levelpoints.containers.Settings.Configs.Rewards;
 
 import me.zoon20x.levelpoints.LevelPoints;
-import me.zoon20x.levelpoints.files.FilesStorage;
 import me.zoon20x.levelpoints.utils.DebugSeverity;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -39,7 +38,7 @@ public class RewardSettings {
         rewards.clear();
     }
     private void generateRewards() {
-        FileConfiguration config = FilesStorage.getConfig("rewardsConfig");
+        FileConfiguration config = LevelPoints.getFilesGenerator().rewardSettings.getConfig();
         for (String x : config.getConfigurationSection("Rewards").getKeys(false)) {
             String id = x;
             RewardTriggerType type = RewardTriggerType.valueOf(config.getString("Rewards." + x + ".TriggerType"));

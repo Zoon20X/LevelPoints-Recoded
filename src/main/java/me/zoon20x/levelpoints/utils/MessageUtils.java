@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+
 public class MessageUtils {
     private static final Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
 
@@ -45,6 +47,7 @@ public class MessageUtils {
     public static String boosterPlaceholderId = "{booster_id}";
     public static String boosterPlaceholderMultiplier = "{booster_multiplier}";
     public static String boosterPlaceholderDate = "{booster_date}";
+    public static String boosterPlaceholderDateTime = "{booster_date_time}";
 
 
     public static void sendActionBar(Player player, String msgs){
@@ -124,15 +127,21 @@ public class MessageUtils {
             Date boosterDate = formatter.getBooster().getDateExpire();
             Date current = new Date();
             String boosterExpire;
+            String boosterExpireTime;
+
             if(current.after(boosterDate)){
                 boosterExpire = "&cExpired&r";
+                boosterExpireTime = "&cExpired&r";
             }else{
                 boosterExpire = valueOf(boosterDate);
+                boosterExpireTime = valueOf(formatDate(boosterDate));
+
             }
 
             x = x.replace(boosterPlaceholderId, valueOf(formatter.getBooster().getID()))
                     .replace(boosterPlaceholderMultiplier, valueOf(formatter.getBooster().getMultiplier()))
-                    .replace(boosterPlaceholderDate, boosterExpire);
+                    .replace(boosterPlaceholderDate, boosterExpire)
+                    .replace(boosterPlaceholderDateTime, boosterExpireTime);
         }
 
         if(formatter.getPlayer() !=null){
@@ -181,5 +190,27 @@ public class MessageUtils {
     }
     public static String valueOf(Object x){
         return String.valueOf(x);
+    }
+
+    public static String formatDate(Date date){
+
+
+        long difference = date.getTime() - new Date().getTime();
+
+        long differenceSeconds = difference / 1000 % 60;
+        long differenceMinutes = difference / (60 * 1000) % 60;
+        long differenceHours = difference / (60 * 60 * 1000) % 24;
+        long differenceDays = difference / (24 * 60 * 60 * 1000);
+
+        if(differenceDays >= 1){
+            return differenceDays + " Day(s)";
+        }
+        if(differenceHours >= 1){
+            return differenceHours + " Hour(s)";
+        }
+        if(differenceMinutes >= 1){
+            return differenceMinutes + " Minute(s)";
+        }
+        return differenceSeconds + " Second(s)";
     }
 }
