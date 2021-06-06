@@ -8,9 +8,11 @@ import me.zoon20x.levelpoints.containers.Settings.Crafting.CraftingUtils;
 import me.zoon20x.levelpoints.containers.Settings.Mobs.MobData;
 import me.zoon20x.levelpoints.containers.Settings.Mobs.MobUtils;
 import me.zoon20x.levelpoints.utils.DataLocation;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 
@@ -152,5 +154,23 @@ public class ExpSettings {
                 }
             }
         }
+    }
+
+
+    public void startTimedEXP(){
+        if(!LevelPoints.getInstance().getConfig().getBoolean("TimedEXP.Global.Enabled")){
+            return;
+        }
+        double amount = LevelPoints.getInstance().getConfig().getDouble("TimedEXP.Global.Amount");
+        int time = LevelPoints.getInstance().getConfig().getInt("TimedEXP.Global.Time");
+
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                Bukkit.getOnlinePlayers().forEach(player ->{
+                    LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId()).addEXP(amount);
+                });
+            }
+        }.runTaskTimerAsynchronously(LevelPoints.getInstance(), 0, time);
     }
 }

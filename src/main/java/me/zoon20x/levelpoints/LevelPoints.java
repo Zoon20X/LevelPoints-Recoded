@@ -120,6 +120,7 @@ public final class LevelPoints extends JavaPlugin{
         System.out.println(ChatColor.DARK_AQUA + "Enabled");
         System.out.println(ChatColor.DARK_AQUA + "=============================");
         sendLoadedData();
+        getExpSettings().startTimedEXP();
     }
 
     public void reloadClass(){

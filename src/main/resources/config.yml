@@ -8,3 +8,10 @@ MySQL:
     password: ""
     table: ""
     ssl: false
+
+
+TimedEXP:
+  Global:
+    Enabled: false
+    Amount: 2.5
+    Time: 200
