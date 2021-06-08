@@ -77,9 +77,25 @@ public class  adminLpsTabComplete implements TabCompleter {
                     });
                     StringUtil.copyPartialMatches(args[2], boosterID, completions);
                 }
-            }
+                if(args[1].equalsIgnoreCase("give")){
+                    players.clear();
+                    Bukkit.getOnlinePlayers().forEach(player -> {
+                        players.add(player.getName());
+                    });
+                    StringUtil.copyPartialMatches(args[2], players, completions);
+                }
+            }//adminlps booster give <player>
         }
         if(args.length == 4){
+            if(args[0].equalsIgnoreCase("booster")){
+                if(args[1].equalsIgnoreCase("give")){
+                    LevelPoints.getBoosterSettings().getAllBoosters().forEach(boosterData -> {
+                        boosterID.add(boosterData.getId());
+                    });
+                    StringUtil.copyPartialMatches(args[3], boosterID, completions);
+                }
+            }
+
             if(args[0].equalsIgnoreCase("exp")){
                 if(expArgs1.contains(args[1])){
                     StringUtil.copyPartialMatches(args[3], values, completions);
@@ -93,6 +109,13 @@ public class  adminLpsTabComplete implements TabCompleter {
             if(args[0].equalsIgnoreCase("prestige")){
                 if(levelArgs1.contains(args[1])){
                     StringUtil.copyPartialMatches(args[3], levels, completions);
+                }
+            }
+        }
+        if(args.length == 5){
+            if(args[0].equalsIgnoreCase("booster")){
+                if(args[1].equalsIgnoreCase("give")){
+                    StringUtil.copyPartialMatches(args[4], levels, completions);
                 }
             }
         }
