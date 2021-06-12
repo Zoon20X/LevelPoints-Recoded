@@ -39,6 +39,7 @@ public final class LevelPoints extends JavaPlugin{
     private static File userFolder;
     private static File boostersFolder;
     private static MySQL sql;
+    private static ConfigSettings configSettings;
     private static PlayerStorage storage;
     private static LevelsSettings levelsSettings;
     private static LangSettings langSettings;
@@ -116,7 +117,7 @@ public final class LevelPoints extends JavaPlugin{
         System.out.println(ChatColor.AQUA + "LevelPoints Plugin");
         System.out.println(ChatColor.AQUA + "Developer: Zoon20X");
         System.out.println(ChatColor.AQUA + "Version: " + this.getDescription().getVersion());
-        System.out.println(ChatColor.AQUA + "MC-Compatible: 1.8-1.16.5");
+        System.out.println(ChatColor.AQUA + "MC-Compatible: 1.8-1.17*");
         System.out.println(ChatColor.DARK_AQUA + "Enabled");
         System.out.println(ChatColor.DARK_AQUA + "=============================");
         sendLoadedData();
@@ -124,6 +125,7 @@ public final class LevelPoints extends JavaPlugin{
     }
 
     public void reloadClass(){
+        configSettings = new ConfigSettings();
         storage = new PlayerStorage();
         levelsSettings = new LevelsSettings();
         langSettings = new LangSettings();
@@ -155,6 +157,8 @@ public final class LevelPoints extends JavaPlugin{
         getDebug(DebugSeverity.WARNING, "Formula-Type:" + getLevelSettings().getFormulaType());
         getDebug(DebugSeverity.WARNING, "LoadedLevels:" + Arrays.asList(getLevelSettings().getLoadedLevels()));
         getDebug(DebugSeverity.WARNING, "RegionLocked:" + getAntiAbuseSettings().isRegionLocked());
+        getDebug(DebugSeverity.WARNING, "OnEXPEnabled:" + getConfigSettings().getOnExpEnabled());
+        getDebug(DebugSeverity.WARNING, "OnEXPMessage:" + getConfigSettings().getOnExpMessage());
     }
 
 
@@ -199,6 +203,9 @@ public final class LevelPoints extends JavaPlugin{
         return instance;
     }
 
+    public static ConfigSettings getConfigSettings() {
+        return configSettings;
+    }
 
     public static PlayerGenerator getPlayerGenerator(){
         return new PlayerGenerator();

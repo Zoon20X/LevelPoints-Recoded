@@ -48,6 +48,10 @@ public class EventUtils {
             }
 
             data.addEXP(amount * data.getActiveBooster().getMultiplier());
+            if(LevelPoints.getConfigSettings().getOnExpEnabled()){
+                Formatter formatter = new Formatter(player.getName(), data.getLevel(), data.getExp(), data.getRequiredExp(), data.getPrestige(), 0, data.getProgress());
+                MessageUtils.sendActionBar(player, MessageUtils.format(LevelPoints.getConfigSettings().getOnExpMessage(), formatter));
+            }
         }
 
     }

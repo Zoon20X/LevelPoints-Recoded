@@ -1,5 +1,6 @@
 package me.zoon20x.levelpoints.events;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.containers.Settings.Configs.PvpBracketData;
@@ -13,12 +14,14 @@ import me.zoon20x.levelpoints.utils.DebugSeverity;
 import me.zoon20x.levelpoints.utils.Formatter;
 import me.zoon20x.levelpoints.utils.MessageUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -106,6 +109,8 @@ public class PlayerEvents implements Listener {
         if(result != AsyncPlayerPreLoginEvent.Result.ALLOWED){
             return;
         }
+
+
         if(!LevelPoints.getPlayerStorage().hasPlayerFile(uuid)){
             LevelPoints.getPlayerGenerator().generateNewPlayer(uuid, name);
             return;
@@ -126,7 +131,9 @@ public class PlayerEvents implements Listener {
             LevelPoints.getPlayerStorage().getLoadedData(uuid).setUpdateSQL(true);
             return;
         }
+
     }
+
 
 
     @EventHandler
@@ -152,6 +159,8 @@ public class PlayerEvents implements Listener {
     public void onExpEarn(EarnExpEvent event) {
         Player player = event.getPlayer();
         PlayerData data = event.getPlayerData();
+
+
     }
 
 

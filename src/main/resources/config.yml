@@ -10,6 +10,11 @@ MySQL:
     ssl: false
 
 
+Actionbar:
+  OnExp:
+    Enabled: true
+    Message: '&3Level: &b{level} &3|&b {exp}/{required_exp}'
+
 TimedEXP:
   Global:
     Enabled: false
