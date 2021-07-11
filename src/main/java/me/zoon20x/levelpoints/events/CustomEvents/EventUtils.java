@@ -53,6 +53,14 @@ public class EventUtils {
                 MessageUtils.sendActionBar(player, MessageUtils.format(LevelPoints.getConfigSettings().getOnExpMessage(), formatter));
             }
         }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                LevelPoints.getSQL().updateSQLData(data.getUUID());
+
+            }
+        }.runTaskAsynchronously(LevelPoints.getInstance());
+
 
     }
 
@@ -62,7 +70,13 @@ public class EventUtils {
         Bukkit.getPluginManager().callEvent(event);
         LevelPoints.getTopListSettings().modifyLevel(data);
         LevelPoints.getTopListSettings().generateTopCache(50);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                LevelPoints.getSQL().updateSQLData(data.getUUID());
 
+            }
+        }.runTaskAsynchronously(LevelPoints.getInstance());
     }
 
     public static void triggerPrestigeUpEvent(int prestige, PlayerData data) {

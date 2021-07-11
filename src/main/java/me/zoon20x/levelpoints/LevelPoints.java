@@ -5,6 +5,7 @@ package me.zoon20x.levelpoints;
 
 import me.zoon20x.levelpoints.commands.adminLpsCommand;
 import me.zoon20x.levelpoints.commands.lpsCommand;
+import me.zoon20x.levelpoints.containers.ExtraSupport.MythicMobsSettings;
 import me.zoon20x.levelpoints.containers.Player.PlayerStorage;
 import me.zoon20x.levelpoints.containers.Settings.Boosters.BoosterSettings;
 import me.zoon20x.levelpoints.containers.Settings.Configs.*;
@@ -38,6 +39,7 @@ public final class LevelPoints extends JavaPlugin{
     private static LevelPoints instance;
     private static File userFolder;
     private static File boostersFolder;
+    private static File extraSupportFolder;
     private static MySQL sql;
     private static ConfigSettings configSettings;
     private static PlayerStorage storage;
@@ -53,7 +55,16 @@ public final class LevelPoints extends JavaPlugin{
     private static boolean isRunningSQL;
     private static FileConfiguration configuration;
     private static FilesGenerator generator;
+    private static MythicMobsSettings mythicMobsSettings;
+    private static boolean mythicMobsEnabled;
 
+    public static MythicMobsSettings getMythicMobsSettings() {
+        return mythicMobsSettings;
+    }
+
+    public static boolean isMythicMobsEnabled() {
+        return mythicMobsEnabled;
+    }
 
 
     private void generateFolders(){
@@ -63,6 +74,8 @@ public final class LevelPoints extends JavaPlugin{
         userFolder.mkdirs();
         boostersFolder = new File(getDataFolder(), "Boosters");
         boostersFolder.mkdirs();
+        extraSupportFolder = new File(getDataFolder(), "ExtraSupport");
+        extraSupportFolder.mkdirs();
     }
 
     @Override
@@ -114,7 +127,7 @@ public final class LevelPoints extends JavaPlugin{
 
 
         System.out.println(ChatColor.DARK_AQUA + "=============================");
-        System.out.println(ChatColor.AQUA + "LevelPoints Plugin");
+        System.out.println(ChatColor.AQUA + "LevelPoints Plugin - LITE");
         System.out.println(ChatColor.AQUA + "Developer: Zoon20X");
         System.out.println(ChatColor.AQUA + "Version: " + this.getDescription().getVersion());
         System.out.println(ChatColor.AQUA + "MC-Compatible: 1.8-1.17*");
@@ -135,6 +148,12 @@ public final class LevelPoints extends JavaPlugin{
         antiAbuseSettings = new AntiAbuseSettings();
         pvpSettings = new PvpSettings();
         boosterSettings = new BoosterSettings();
+        if(Bukkit.getPluginManager().getPlugin("MythicMobs") !=null) {
+            if (Bukkit.getPluginManager().getPlugin("MythicMobs").isEnabled()) {
+                mythicMobsSettings = new MythicMobsSettings();
+                mythicMobsEnabled = true;
+            }
+        }
 
     }
     public void setReloading(boolean value){

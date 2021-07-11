@@ -4,10 +4,10 @@ main: me.zoon20x.levelpoints.LevelPoints
 api-version: 1.16
 authors: [ Zoon20X ]
 description: Leveling plugin with custom features
-depend:
-  - PlaceholderAPI
 softdepend:
   - WorldGuard
+  - PlaceholderAPI
+  - MythicMobs
 commands:
   adminlps:
     description: Admin help command

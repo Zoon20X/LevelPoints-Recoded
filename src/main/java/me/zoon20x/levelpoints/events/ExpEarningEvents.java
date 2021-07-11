@@ -1,6 +1,9 @@
 package me.zoon20x.levelpoints.events;
 
+import io.lumine.xikage.mythicmobs.MythicMobs;
+import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import me.zoon20x.levelpoints.LevelPoints;
+import me.zoon20x.levelpoints.containers.ExtraSupport.MythicMobsData;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockData;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockRequired;
@@ -37,16 +40,27 @@ public class ExpEarningEvents implements Listener {
             return;
         }
         EntityType entityType = event.getEntity().getType();
+        Player player = event.getEntity().getKiller();
+        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
+        if(MythicMobs.inst().getAPIHelper().isMythicMob(event.getEntity())){
+            ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(event.getEntity());
+            if(!LevelPoints.getMythicMobsSettings().hasMobData(mob.getType().getInternalName())){
+                return;
+            }
+            EventUtils.triggerEarnExpEvent(data, event, LevelPoints.getMythicMobsSettings().getMobData(mob.getType().getInternalName()).getExp(), player, EarnTask.Mobs);
+            return;
+        }
 
         if (LevelPoints.getExpSettings().expType(entityType.name()).equals("none")) {
             return;
         }
-        Player player = event.getEntity().getKiller();
-        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
+
         LevelPoints.getDebug(DebugSeverity.NORMAL, LevelPoints.getExpSettings().expType(entityType.name()));
         if(!player.hasPermission(PermissionUtils.getPlayerPermission().expMobs())){
             return;
         }
+
+
         EventUtils.triggerEarnExpEvent(data, event, LevelPoints.getExpSettings().getMobEXP(entityType), player, EarnTask.Mobs);
     }
 

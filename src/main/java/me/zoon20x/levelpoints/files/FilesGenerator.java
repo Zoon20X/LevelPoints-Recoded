@@ -17,6 +17,7 @@ public class FilesGenerator {
     public Files boosterSettings;
     public Files antiAbuse;
     public Files pvpSettings;
+    public Files mythicMobsConfig;
 
     public void generateFiles(){
         this.lang = new Files("lang.yml").setLocation("").build();
@@ -28,6 +29,8 @@ public class FilesGenerator {
         this.boosterSettings = new Files("BoosterSettings.yml").setLocation("Boosters/").build();
         this.antiAbuse = new Files("AntiAbuse.yml").setLocation("Settings/").build();
         this.pvpSettings = new Files("PvpSettings.yml").setLocation("Settings/").build();
+        this.mythicMobsConfig = new Files("MythicMobs.yml").setLocation("ExtraSupport/").build();
+
 
 
     }
