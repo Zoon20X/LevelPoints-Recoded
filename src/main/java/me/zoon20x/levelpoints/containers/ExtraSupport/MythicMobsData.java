@@ -1,10 +1,6 @@
 package me.zoon20x.levelpoints.containers.ExtraSupport;
 
 import me.zoon20x.levelpoints.LevelPoints;
-import me.zoon20x.levelpoints.files.Files;
-
-import java.rmi.dgc.Lease;
-
 public class MythicMobsData {
 
     private String name;

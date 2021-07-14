@@ -226,7 +226,10 @@ public class PlayerData {
     public Double getRequiredExp() {
         return LevelPoints.round(requiredExp, 2);
     }
-
+    public Double getRemainingExp() {
+        double remain = getRequiredExp() - getExp();
+        return LevelPoints.round(remain, 2);
+    }
     public void setRequiredExp(Double requiredExp) {
         this.requiredExp = requiredExp;
     }

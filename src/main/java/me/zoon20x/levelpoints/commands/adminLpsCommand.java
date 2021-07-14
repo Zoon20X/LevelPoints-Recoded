@@ -68,6 +68,7 @@ public class adminLpsCommand implements CommandExecutor {
                         long startTime = System.nanoTime();
 
                         LevelPoints.getInstance().setReloading(true);
+                        LevelPoints.getInstance().reloadConfig();
                         LevelPoints.getFilesGenerator().generateFiles();
                         LevelPoints.getPlayerGenerator().saveAllData();
                         LevelPoints.getPlayerStorage().clearPlayerCache();
@@ -87,7 +88,13 @@ public class adminLpsCommand implements CommandExecutor {
                     }
                 }.runTaskAsynchronously(LevelPoints.getInstance());
                 break;
-
+            case "output":
+                if(!sender.isOp()){
+                    LevelPoints.getDebug(DebugSeverity.SEVER, "You are not op, please only run this if you need data or Zoon20X asks");
+                    return;
+                }
+                LevelPoints.getInstance().sendLoadedData();
+                break;
         }
     }
 

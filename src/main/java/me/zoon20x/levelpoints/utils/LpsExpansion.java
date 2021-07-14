@@ -67,6 +67,9 @@ public class LpsExpansion extends PlaceholderExpansion {
         if(identifier.equals("player_required_exp")){
             return String.valueOf(data.getRequiredExp());
         }
+        if(identifier.equals("player_exp_remaining")){
+            return String.valueOf(data.getRemainingExp());
+        }
         if(identifier.equals("player_prestige")){
             return String.valueOf(data.getPrestige());
         }

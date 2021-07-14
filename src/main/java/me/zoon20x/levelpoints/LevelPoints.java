@@ -178,6 +178,7 @@ public final class LevelPoints extends JavaPlugin{
         getDebug(DebugSeverity.WARNING, "RegionLocked:" + getAntiAbuseSettings().isRegionLocked());
         getDebug(DebugSeverity.WARNING, "OnEXPEnabled:" + getConfigSettings().getOnExpEnabled());
         getDebug(DebugSeverity.WARNING, "OnEXPMessage:" + getConfigSettings().getOnExpMessage());
+        getDebug(DebugSeverity.WARNING, "LoadedPlayersAmount: " + getPlayerStorage().getAmountLoaded());
     }
 
 

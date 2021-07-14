@@ -53,11 +53,14 @@ public class EventUtils {
                 MessageUtils.sendActionBar(player, MessageUtils.format(LevelPoints.getConfigSettings().getOnExpMessage(), formatter));
             }
         }
+        if(!LevelPoints.isRunningSQL()) {
+            return;
+        }
         new BukkitRunnable() {
             @Override
             public void run() {
-                LevelPoints.getSQL().updateSQLData(data.getUUID());
 
+                LevelPoints.getSQL().updateSQLData(data.getUUID());
             }
         }.runTaskAsynchronously(LevelPoints.getInstance());
 
@@ -70,6 +73,9 @@ public class EventUtils {
         Bukkit.getPluginManager().callEvent(event);
         LevelPoints.getTopListSettings().modifyLevel(data);
         LevelPoints.getTopListSettings().generateTopCache(50);
+        if(!LevelPoints.isRunningSQL()) {
+            return;
+        }
         new BukkitRunnable() {
             @Override
             public void run() {
