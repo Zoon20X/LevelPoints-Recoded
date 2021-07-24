@@ -9,9 +9,13 @@ public class ConfigSettings {
     private boolean onExpEnabled;
     private String onExpMessage;
 
+    private boolean placeholderColorLevelEnabled;
+
+
     public ConfigSettings(){
         this.onExpEnabled = LevelPoints.getInstance().getConfig().getBoolean("Actionbar.OnExp.Enabled");
         this.onExpMessage = LevelPoints.getInstance().getConfig().getString("Actionbar.OnExp.Message");
+        this.placeholderColorLevelEnabled = LevelPoints.getInstance().getConfig().getBoolean("PlaceholderSettings.LevelColors.Enabled");
 
 
     }
@@ -25,5 +29,7 @@ public class ConfigSettings {
     }
 
 
-
+    public boolean isPlaceholderColorLevelEnabled() {
+        return placeholderColorLevelEnabled;
+    }
 }

@@ -46,6 +46,10 @@ public class DataLocation {
         return "Experience.Formula.CustomFormula.Level-" + level;
     }
 
+    public static String LevelColorsList = "PlaceholderSettings.LevelColors.Colors";
+    public static String getLevelColorsData(String x){
+        return LevelColorsList + "." +x;
+    }
 
     public static String langExperienceBreakMessage = "Experience.Earning.Break.Message";
     public static String langExperienceBreakEnabled = "Experience.Earning.Break.Enabled";

@@ -24,12 +24,13 @@ public class PlayerData {
     private boolean updateSQL;
     private PvpBracketData bracketData;
     private ActiveBooster activeBooster;
+    private String levelColor;
 
     private HashMap<String, Integer> boosterStorage = new HashMap<>();
 
 
 
-    public PlayerData(UUID uuid, String name, Integer level, Double exp, Double requiredExp, Integer prestige, Integer previousLevel, ActiveBooster activeBooster) {
+    public PlayerData(UUID uuid, String name, Integer level, Double exp, Double requiredExp, Integer prestige, Integer previousLevel, ActiveBooster activeBooster, String levelColor) {
         this.uuid = uuid;
         this.name = name;
         this.level = level;
@@ -39,6 +40,7 @@ public class PlayerData {
         this.activeBooster = activeBooster;
         this.requiredExp = requiredExp;
         this.updateSQL = false;
+        this.levelColor = levelColor;
 
         updateBrackets();
     }
@@ -59,6 +61,8 @@ public class PlayerData {
             this.exp = 0.0;
         }
         updateBrackets();
+        setLevelColor(LevelPoints.getLevelColorSettings().getLevelColor(level));
+
     }
     public void addLevel(int value, boolean removeEXP) {
         LevelPoints.getDebug(DebugSeverity.SEVER, requiredExp);
@@ -89,6 +93,8 @@ public class PlayerData {
         this.level -= level;
         setRequiredExp(LevelPoints.getLevelSettings().getRequireExp(this.level));
         updateBrackets();
+        setLevelColor(LevelPoints.getLevelColorSettings().getLevelColor(level));
+
         return true;
     }
 
@@ -261,4 +267,10 @@ public class PlayerData {
         return bracketData;
     }
 
+    public String getLevelColor() {
+        return levelColor;
+    }
+    public void setLevelColor(String color) {
+        levelColor = color;
+    }
 }

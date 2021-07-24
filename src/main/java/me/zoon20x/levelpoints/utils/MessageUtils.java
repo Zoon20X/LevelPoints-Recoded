@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -105,17 +106,16 @@ public class MessageUtils {
 
     }
 
-    public static String getLevelColor(Integer level){
-        if(level < 10) {
-            return "&8";
+    public static String getLevelColor(UUID uuid){
+        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(uuid);
+        if(!LevelPoints.getConfigSettings().isPlaceholderColorLevelEnabled()) {
+            return String.valueOf(data.getLevel());
         }
-        if(level < 20){
-            return "&a";
+        if(data.getLevelColor().equalsIgnoreCase("none")){
+            return String.valueOf(data.getLevel());
         }
-        if(level < 30){
-            return "&c";
-        }
-        return "&8";
+
+        return getColor(LevelPoints.getLevelColorSettings().getColorData(data.getLevelColor()).getColor() + "" + data.getLevel());
     }
 
     public static List<String> formatRewardMessages(String x){

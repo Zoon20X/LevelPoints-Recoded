@@ -47,6 +47,4 @@ public class MoveEvent implements Listener {
             }
         }
     }
-
-
 }

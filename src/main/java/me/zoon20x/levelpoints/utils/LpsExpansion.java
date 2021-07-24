@@ -57,9 +57,7 @@ public class LpsExpansion extends PlaceholderExpansion {
         }
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(uuid);
         if(identifier.equals("player_level")){
-            //String color = MessageUtils.getLevelColor(data.getLevel());
-            //return MessageUtils.getColor(color + "" + data.getLevel());
-            return String.valueOf(data.getLevel());
+            return MessageUtils.getLevelColor(uuid);
         }
         if(identifier.equals("player_exp")){
             return String.valueOf(data.getExp());

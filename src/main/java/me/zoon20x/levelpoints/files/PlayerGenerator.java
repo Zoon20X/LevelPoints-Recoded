@@ -64,7 +64,14 @@ public class PlayerGenerator {
         String id = config.getString(DataLocation.ActiveBoosterID);
         double multiplier = config.getInt(DataLocation.ActiveBoosterMultiplier);
         Date date = format(config.getString(DataLocation.ActiveBoosterTime));
-        PlayerData data = new PlayerData(uuid, name, level, exp, requiredExp, prestige, 0, new ActiveBooster(id, date, multiplier));
+        String levelColor = "none";
+        if(LevelPoints.getConfigSettings().isPlaceholderColorLevelEnabled()){
+            levelColor = LevelPoints.getLevelColorSettings().getLevelColor(level);
+        }
+        LevelPoints.getDebug(DebugSeverity.SEVER, levelColor);
+
+
+        PlayerData data = new PlayerData(uuid, name, level, exp, requiredExp, prestige, 0, new ActiveBooster(id, date, multiplier), levelColor);
         config.getConfigurationSection(DataLocation.BoosterList).getKeys(false).forEach(x->{
             if(LevelPoints.getBoosterSettings().hasBooster(x)){
                 data.addBooster(LevelPoints.getBoosterSettings().getBooster(x), config.getInt(DataLocation.getUserBoosterList(x)));

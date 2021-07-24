@@ -20,3 +20,16 @@ TimedEXP:
     Enabled: false
     Amount: 2.5
     Time: 200
+
+PlaceholderSettings:
+  LevelColors:
+    Enabled: false
+    Colors:
+      Red:
+        ID: '&c'
+        Levels:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5

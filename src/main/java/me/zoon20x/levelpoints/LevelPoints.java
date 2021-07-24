@@ -10,6 +10,7 @@ import me.zoon20x.levelpoints.containers.Player.PlayerStorage;
 import me.zoon20x.levelpoints.containers.Settings.Boosters.BoosterSettings;
 import me.zoon20x.levelpoints.containers.Settings.Configs.*;
 import me.zoon20x.levelpoints.containers.Settings.Configs.Rewards.RewardSettings;
+import me.zoon20x.levelpoints.containers.Settings.Placeholders.LevelColorSettings;
 import me.zoon20x.levelpoints.events.ExpEarningEvents;
 import me.zoon20x.levelpoints.events.MoveEvent;
 import me.zoon20x.levelpoints.events.PlayerEvents;
@@ -57,6 +58,8 @@ public final class LevelPoints extends JavaPlugin{
     private static FilesGenerator generator;
     private static MythicMobsSettings mythicMobsSettings;
     private static boolean mythicMobsEnabled;
+    private static LevelColorSettings levelColorSettings;
+
 
     public static MythicMobsSettings getMythicMobsSettings() {
         return mythicMobsSettings;
@@ -65,6 +68,12 @@ public final class LevelPoints extends JavaPlugin{
     public static boolean isMythicMobsEnabled() {
         return mythicMobsEnabled;
     }
+
+    public static boolean isLevelColorEnabled() {
+        return configSettings.isPlaceholderColorLevelEnabled();
+    }
+
+
 
 
     private void generateFolders(){
@@ -149,11 +158,16 @@ public final class LevelPoints extends JavaPlugin{
         antiAbuseSettings = new AntiAbuseSettings();
         pvpSettings = new PvpSettings();
         boosterSettings = new BoosterSettings();
+        levelColorSettings = null;
+        mythicMobsSettings = null;
         if(Bukkit.getPluginManager().getPlugin("MythicMobs") !=null) {
             if (Bukkit.getPluginManager().getPlugin("MythicMobs").isEnabled()) {
                 mythicMobsSettings = new MythicMobsSettings();
                 mythicMobsEnabled = true;
             }
+        }
+        if(configSettings.isPlaceholderColorLevelEnabled()){
+            levelColorSettings = new LevelColorSettings();
         }
 
     }
@@ -267,7 +281,9 @@ public final class LevelPoints extends JavaPlugin{
     public static boolean isRunningSQL() {
         return isRunningSQL;
     }
-
+    public static LevelColorSettings getLevelColorSettings() {
+        return levelColorSettings;
+    }
 
     public static Double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
