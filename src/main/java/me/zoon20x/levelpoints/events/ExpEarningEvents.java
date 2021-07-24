@@ -42,14 +42,17 @@ public class ExpEarningEvents implements Listener {
         EntityType entityType = event.getEntity().getType();
         Player player = event.getEntity().getKiller();
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
-        if(MythicMobs.inst().getAPIHelper().isMythicMob(event.getEntity())){
-            ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(event.getEntity());
-            if(!LevelPoints.getMythicMobsSettings().hasMobData(mob.getType().getInternalName())){
+        if(LevelPoints.isMythicMobsEnabled()){
+            if(MythicMobs.inst().getAPIHelper().isMythicMob(event.getEntity())){
+                ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(event.getEntity());
+                if(!LevelPoints.getMythicMobsSettings().hasMobData(mob.getType().getInternalName())){
+                    return;
+                }
+                EventUtils.triggerEarnExpEvent(data, event, LevelPoints.getMythicMobsSettings().getMobData(mob.getType().getInternalName()).getExp(), player, EarnTask.Mobs);
                 return;
             }
-            EventUtils.triggerEarnExpEvent(data, event, LevelPoints.getMythicMobsSettings().getMobData(mob.getType().getInternalName()).getExp(), player, EarnTask.Mobs);
-            return;
         }
+
 
         if (LevelPoints.getExpSettings().expType(entityType.name()).equals("none")) {
             return;

@@ -87,6 +87,7 @@ public final class LevelPoints extends JavaPlugin{
     public void onEnable() {
         // Plugin startup logic
         instance = this;
+        mythicMobsEnabled = false;
         isRunningSQL = false;
         generateFolders();
         getDebug(DebugSeverity.NORMAL, "Initializing Data, this will take a second");

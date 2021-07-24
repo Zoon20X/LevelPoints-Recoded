@@ -19,6 +19,8 @@ public class DataLocation {
     public static String ActiveBoosterTime = "ActiveBooster.Time";
     public static String ActiveBoosterMultiplier = "ActiveBooster.Multiplier";
     public static String ActiveBoosterID = "ActiveBooster.ID";
+    public static String BoosterList = "BoosterData";
+
 
     public static String BlockEnabled = "Blocks.Enabled";
     public static String BlockSettings = "Blocks.Settings";
@@ -211,5 +213,8 @@ public class DataLocation {
     }
     public static String getRequiredDamage(String x){
         return MobSettings + "." + x + ".RequiredLevel.Damage";
+    }
+    public static String getUserBoosterList(String x){
+        return "BoosterData." + x;
     }
 }

@@ -193,7 +193,9 @@ public class PlayerData {
     public Set<String> getAllBoosters(){
         return boosterStorage.keySet();
     }
-
+    public HashMap<String, Integer> getBoosterStorage(){
+        return boosterStorage;
+    }
 
     public void setActiveBooster(BoosterData data){
         activeBooster = new ActiveBooster(

@@ -42,6 +42,9 @@ public class PlayerGenerator {
         config.set(DataLocation.ActiveBoosterMultiplier, data.getActiveBooster().getMultiplier());
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
         config.set(DataLocation.ActiveBoosterTime, format.format(data.getActiveBooster().getDateExpire()));
+        data.getAllBoosters().forEach(x->{
+            config.set(DataLocation.getUserBoosterList(x), data.getBoosterStorage().get(x));
+        });
         try {
             config.save(userFile);
         } catch (IOException e) {
@@ -61,8 +64,13 @@ public class PlayerGenerator {
         String id = config.getString(DataLocation.ActiveBoosterID);
         double multiplier = config.getInt(DataLocation.ActiveBoosterMultiplier);
         Date date = format(config.getString(DataLocation.ActiveBoosterTime));
-
         PlayerData data = new PlayerData(uuid, name, level, exp, requiredExp, prestige, 0, new ActiveBooster(id, date, multiplier));
+        config.getConfigurationSection(DataLocation.BoosterList).getKeys(false).forEach(x->{
+            if(LevelPoints.getBoosterSettings().hasBooster(x)){
+                data.addBooster(LevelPoints.getBoosterSettings().getBooster(x), config.getInt(DataLocation.getUserBoosterList(x)));
+            }
+        });
+
 
         LevelPoints.getPlayerStorage().addData(uuid, data);
     }

@@ -20,26 +20,19 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
+import java.nio.file.FileStore;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 public class PlayerEvents implements Listener {
 
-
-    @EventHandler
-    public void onPickup(EntityPickupItemEvent event){
-        if (!(event.getEntity() instanceof Player)) {
-
-        }
-    }
 
     @EventHandler
     public void onPlayerDamage(EntityDamageByEntityEvent event){
@@ -100,6 +93,8 @@ public class PlayerEvents implements Listener {
             event.setCancelled(true);
             return;
         }
+
+
     }
 
     @EventHandler
@@ -116,6 +111,7 @@ public class PlayerEvents implements Listener {
             LevelPoints.getPlayerGenerator().generateNewPlayer(uuid, name);
             return;
         }
+
         if(!LevelPoints.getPlayerStorage().hasLoadedData(uuid)){
             LevelPoints.getDebug(DebugSeverity.NORMAL, "loading " + uuid);
             LevelPoints.getPlayerGenerator().loadPlayerFile(new File(LevelPoints.getUserFolder(), uuid + ".yml"));
