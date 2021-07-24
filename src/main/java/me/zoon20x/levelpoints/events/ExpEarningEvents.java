@@ -27,6 +27,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityBreedEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -35,6 +36,35 @@ import org.bukkit.util.Vector;
 
 
 public class ExpEarningEvents implements Listener {
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageByEntityEvent event){
+        if(!(event.getDamager() instanceof Player)){
+            return;
+        }
+        Player player = (Player) event.getDamager();
+        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
+        if(LevelPoints.isMythicMobsEnabled()){
+            if(MythicMobs.inst().getAPIHelper().isMythicMob(event.getEntity())){
+                ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(event.getEntity());
+                if(!LevelPoints.getMythicMobsSettings().hasMobData(mob.getType().getInternalName())){
+                    return;
+                }
+                if(!LevelPoints.getLevelSettings().canDamageMythicMobs(mob.getType().getInternalName(), data)){
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+        }
+        if (LevelPoints.getExpSettings().expType(event.getEntity().getType().name()).equals("none")) {
+            return;
+        }
+        if(!LevelPoints.getLevelSettings().canDamage(event.getEntity().getType(), data)){
+            event.setCancelled(true);
+            return;
+        }
+    }
+
 
     @EventHandler
     public void onKillMob(EntityDeathEvent event) {

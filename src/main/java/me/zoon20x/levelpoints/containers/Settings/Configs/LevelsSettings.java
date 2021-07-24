@@ -1,11 +1,16 @@
 package me.zoon20x.levelpoints.containers.Settings.Configs;
 
+import io.lumine.xikage.mythicmobs.MythicMobs;
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.containers.Breeding.BreedingData;
 import me.zoon20x.levelpoints.containers.Breeding.BreedingUtils;
+import me.zoon20x.levelpoints.containers.ExtraSupport.MythicMobsData;
+import me.zoon20x.levelpoints.containers.ExtraSupport.MythicMobsSettings;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockData;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockUtils;
+import me.zoon20x.levelpoints.containers.Settings.Mobs.MobData;
+import me.zoon20x.levelpoints.containers.Settings.Mobs.MobUtils;
 import me.zoon20x.levelpoints.utils.*;
 import me.zoon20x.levelpoints.utils.Formatter;
 import net.objecthunter.exp4j.Expression;
@@ -94,6 +99,26 @@ public class LevelsSettings {
 
         BreedingData a = BreedingUtils.getBreedData(type);
         if (data.getLevel() >= a.getBreedRequirement()) {
+            return true;
+        }
+        return false;
+    }
+    public Boolean canDamage(EntityType type, PlayerData data){
+        if(!MobUtils.hasMob(type)){
+            return true;
+        }
+        MobData a = MobUtils.getMobData(type);
+        if(data.getLevel() >= a.getDamageRequired()){
+            return true;
+        }
+        return false;
+    }
+    public Boolean canDamageMythicMobs(String type, PlayerData data){
+        if(!LevelPoints.getMythicMobsSettings().hasMobData(type)){
+            return true;
+        }
+        MythicMobsData a = LevelPoints.getMythicMobsSettings().getMobData(type);
+        if(data.getLevel() >= a.getLevelMin() && data.getLevel() <= a.getLevelMax()){
             return true;
         }
         return false;
