@@ -1,6 +1,8 @@
 package me.zoon20x.levelpoints.containers.Settings.Configs;
 
 import me.zoon20x.levelpoints.LevelPoints;
+import me.zoon20x.levelpoints.containers.Breeding.BreedingData;
+import me.zoon20x.levelpoints.containers.Breeding.BreedingUtils;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockData;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockUtils;
 import me.zoon20x.levelpoints.containers.Settings.Crafting.CraftingData;
@@ -54,6 +56,14 @@ public class ExpSettings {
 
         return MobUtils.getMobData(type).getExp();
     }
+    public Double getBreedEXP(EntityType type){
+
+        if(!BreedingUtils.hasBreed(type)){
+            return 0.0;
+        }
+
+        return BreedingUtils.getBreedData(type).getExp();
+    }
     public Boolean isBlockExpEnabled(){
         return (Boolean) values.get("BlockEnabled");
     }
@@ -62,6 +72,9 @@ public class ExpSettings {
     }
     public Boolean isCraftingExpEnabled(){
         return (Boolean) values.get("CraftingEnabled");
+    }
+    public Boolean isBreedingExpEnabled(){
+        return (Boolean) values.get("BreedEnabled");
     }
 
 
@@ -123,6 +136,34 @@ public class ExpSettings {
                     minXp = config.getDouble(DataLocation.getMobsMinEXP(x));
                     maxXp = config.getDouble(DataLocation.getMobsMaxEXP(x));
                     MobUtils.addMob(new MobData(EntityType.valueOf(xx), minXp, maxXp, RequiredDamage));
+                }
+            }
+        }
+    }
+    public void generateBreeds(){
+        BreedingUtils.clear();
+        FileConfiguration config = LevelPoints.getFilesGenerator().expSettings.getConfig();
+        values.put("BreedEnabled", config.getBoolean(DataLocation.BreedEnabled));
+        if (!config.getBoolean(DataLocation.BreedEnabled)) {
+            return;
+        }
+        for(String x : config.getConfigurationSection(DataLocation.BreedSettings).getKeys(false)){
+            boolean isGroup = config.getConfigurationSection(DataLocation.BreedSettings + "." + x).getKeys(false).contains("Mobs");
+            Integer RequiredBreed;
+            Double minXp;
+            Double maxXp;
+
+            if(!isGroup){
+                RequiredBreed = config.getInt(DataLocation.getRequiredBreed(x));
+                minXp = config.getDouble(DataLocation.getBreedMinEXP(x));
+                maxXp = config.getDouble(DataLocation.getBreedMaxEXP(x));
+                BreedingUtils.addBreed(new BreedingData(EntityType.valueOf(x), minXp, maxXp, RequiredBreed));
+            }else {
+                for (String xx : config.getStringList(DataLocation.BreedSettings + "." + x + ".Mobs")) {
+                    RequiredBreed = config.getInt(DataLocation.getRequiredBreed(x));
+                    minXp = config.getDouble(DataLocation.getBreedMinEXP(x));
+                    maxXp = config.getDouble(DataLocation.getBreedMaxEXP(x));
+                    BreedingUtils.addBreed(new BreedingData(EntityType.valueOf(xx), minXp, maxXp, RequiredBreed));
                 }
             }
         }

@@ -109,6 +109,7 @@ public final class LevelPoints extends JavaPlugin{
         getLevelSettings().generateRequired();
         getExpSettings().generateBlocks();
         getExpSettings().generateMobs();
+        getExpSettings().generateBreeds();
         getExpSettings().generateCrafting();
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new LpsExpansion().register();

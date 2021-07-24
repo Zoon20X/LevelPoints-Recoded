@@ -30,7 +30,7 @@ public class LevelColorSettings {
 
     public void addColorData(LevelColorData data){
         LevelPoints.getDebug(DebugSeverity.WARNING, data.getId());
-        LevelPoints.getDebug(DebugSeverity.WARNING, data.getColor());
+        LevelPoints.getDebug(DebugSeverity.WARNING, data.getColor() + "color");
         LevelPoints.getDebug(DebugSeverity.WARNING, data.getLevels());
         colorData.put(data.getId(), data);
     }

@@ -59,3 +59,21 @@ Crafting:
         Max: 0
       RequiredLevel:
         Craft: 0
+Breeding:
+  Enabled: false
+  Settings:
+    PIG:
+      Exp:
+        Min: 0
+        Max: 0
+      RequiredLevel:
+        Breed: 0
+    ANIMALS:
+      Mobs:
+        - COW
+        - SHEEP
+      Exp:
+        Min: 0
+        Max: 0
+      RequiredLevel:
+        Breed: 0

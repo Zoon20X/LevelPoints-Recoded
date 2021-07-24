@@ -6,8 +6,8 @@ import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.containers.ExtraSupport.MythicMobsData;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockData;
-import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockRequired;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockUtils;
+import me.zoon20x.levelpoints.containers.Settings.Blocks.Requirement;
 import me.zoon20x.levelpoints.containers.Settings.Crafting.CraftingData;
 import me.zoon20x.levelpoints.containers.Settings.Crafting.CraftingUtils;
 import me.zoon20x.levelpoints.events.CustomEvents.EarnTask;
@@ -20,11 +20,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -68,6 +70,26 @@ public class ExpEarningEvents implements Listener {
     }
 
     @EventHandler
+    public void onBreed(EntityBreedEvent event){
+        if(event.isCancelled()){
+            return;
+        }
+        LivingEntity livingEntity = event.getBreeder();
+        if(!(livingEntity instanceof Player)){
+            return;
+        }
+        Player player = (Player) event.getBreeder();
+        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
+        if(!LevelPoints.getLevelSettings().canBreed(event.getEntity().getType(), data)){
+            event.setCancelled(true);
+            return;
+        }
+        EventUtils.triggerEarnExpEvent(data, event, LevelPoints.getExpSettings().getBreedEXP(event.getEntity().getType()), player, EarnTask.Breeding);
+
+    }
+
+
+    @EventHandler
     public void onPlace(BlockPlaceEvent event){
         Player player = event.getPlayer();
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
@@ -76,7 +98,7 @@ public class ExpEarningEvents implements Listener {
         if(!LevelPoints.getLevelSettings().canPlace(block.getType(), block.getData(), data)){
             BlockData blockData = BlockUtils.getBlockData(block.getType(), block.getData());
             if(LevelPoints.getLangSettings().isRequiredPlaceEnabled()){
-                Formatter formatter = new Formatter(player.getName(), data.getLevel(), data.getExp(), blockData.getRequiredEXP(BlockRequired.PLACE, data), data.getPrestige(), blockData.getPlaceRequired(), data.getProgress());
+                Formatter formatter = new Formatter(player.getName(), data.getLevel(), data.getExp(), blockData.getRequiredEXP(Requirement.PLACE, data), data.getPrestige(), blockData.getPlaceRequired(), data.getProgress());
                 String message = MessageUtils.getColor(LevelPoints.getLangSettings().getRequiredPlace());
                 player.sendMessage(MessageUtils.format(message, formatter));
             }
@@ -133,7 +155,7 @@ public class ExpEarningEvents implements Listener {
         if(!LevelPoints.getLevelSettings().canBreak(block.getType(), block.getData(),  data)){
             BlockData blockData = BlockUtils.getBlockData(block.getType(), block.getData());
             if(LevelPoints.getLangSettings().isRequiredBreakEnabled()) {
-                Formatter formatter = new Formatter(player.getName(), data.getLevel(), data.getExp(), blockData.getRequiredEXP(BlockRequired.BREAK, data), data.getPrestige(), blockData.getBreakRequired(), data.getProgress());
+                Formatter formatter = new Formatter(player.getName(), data.getLevel(), data.getExp(), blockData.getRequiredEXP(Requirement.BREAK, data), data.getPrestige(), blockData.getBreakRequired(), data.getProgress());
                 String message = MessageUtils.getColor(LevelPoints.getLangSettings().getRequiredBreak());
                 player.sendMessage(MessageUtils.format(message, formatter));
             }

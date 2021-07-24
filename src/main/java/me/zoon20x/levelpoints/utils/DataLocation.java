@@ -26,6 +26,8 @@ public class DataLocation {
     public static String BlockSettings = "Blocks.Settings";
     public static String MobEnabled = "Mobs.Enabled";
     public static String MobSettings = "Mobs.Settings";
+    public static String BreedEnabled = "Breeding.Enabled";
+    public static String BreedSettings = "Breeding.Settings";
     public static String CraftingEnabled = "Crafting.Enabled";
     public static String CraftingSettings = "Crafting.Settings";
 
@@ -197,6 +199,12 @@ public class DataLocation {
     public static String getMobsMaxEXP(String x){
         return MobSettings + "." + x + ".Exp.Max";
     }
+    public static String getBreedMinEXP(String x){
+        return BreedSettings + "." + x + ".Exp.Min";
+    }
+    public static String getBreedMaxEXP(String x){
+        return BreedSettings + "." + x + ".Exp.Max";
+    }
     public static String getCraftMinEXP(String x){
         return CraftingSettings + "." + x + ".Exp.Min";
     }
@@ -217,6 +225,9 @@ public class DataLocation {
     }
     public static String getRequiredDamage(String x){
         return MobSettings + "." + x + ".RequiredLevel.Damage";
+    }
+    public static String getRequiredBreed(String x){
+        return BreedSettings + "." + x + ".RequiredLevel.Breed";
     }
     public static String getUserBoosterList(String x){
         return "BoosterData." + x;

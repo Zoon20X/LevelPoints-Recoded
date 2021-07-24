@@ -27,7 +27,7 @@ public class BlockData {
 
 
 
-    public Double getRequiredEXP(BlockRequired required, PlayerData data){
+    public Double getRequiredEXP(Requirement required, PlayerData data){
         Double exp = 0.0;
         switch (required){
             case BREAK:

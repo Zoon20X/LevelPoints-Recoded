@@ -1,6 +1,8 @@
 package me.zoon20x.levelpoints.containers.Settings.Configs;
 
 import me.zoon20x.levelpoints.LevelPoints;
+import me.zoon20x.levelpoints.containers.Breeding.BreedingData;
+import me.zoon20x.levelpoints.containers.Breeding.BreedingUtils;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockData;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockUtils;
@@ -9,6 +11,7 @@ import me.zoon20x.levelpoints.utils.Formatter;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 
 import java.util.*;
 
@@ -80,6 +83,17 @@ public class LevelsSettings {
 
         BlockData a = BlockUtils.getBlockData(material, x);
         if (data.getLevel() >= a.getBreakRequired()) {
+            return true;
+        }
+        return false;
+    }
+    public Boolean canBreed(EntityType type, PlayerData data) {
+        if (!BreedingUtils.hasBreed(type)) {
+            return true;
+        }
+
+        BreedingData a = BreedingUtils.getBreedData(type);
+        if (data.getLevel() >= a.getBreedRequirement()) {
             return true;
         }
         return false;
