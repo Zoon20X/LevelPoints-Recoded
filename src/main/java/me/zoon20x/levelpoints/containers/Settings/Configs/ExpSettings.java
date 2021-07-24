@@ -34,19 +34,6 @@ public class ExpSettings {
         return BlockUtils.getBlockData(material, x).getExp();
     }
 
-    public String expType(String x){
-        if(BlockUtils.hasBlockData(x)){
-            return "Block";
-        }
-        if(MobUtils.hasMob(x)){
-            return "Mob";
-        }
-        if(CraftingUtils.hasItem(x)){
-            return "Crafting";
-        }
-        return "none";
-    }
-
 
     public Double getMobEXP(EntityType type){
 

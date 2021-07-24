@@ -10,6 +10,7 @@ import me.zoon20x.levelpoints.containers.Settings.Blocks.BlockUtils;
 import me.zoon20x.levelpoints.containers.Settings.Blocks.Requirement;
 import me.zoon20x.levelpoints.containers.Settings.Crafting.CraftingData;
 import me.zoon20x.levelpoints.containers.Settings.Crafting.CraftingUtils;
+import me.zoon20x.levelpoints.containers.Settings.Mobs.MobUtils;
 import me.zoon20x.levelpoints.events.CustomEvents.EarnTask;
 import me.zoon20x.levelpoints.events.CustomEvents.EventUtils;
 import me.zoon20x.levelpoints.utils.DebugSeverity;
@@ -56,7 +57,7 @@ public class ExpEarningEvents implements Listener {
                 }
             }
         }
-        if (LevelPoints.getExpSettings().expType(event.getEntity().getType().name()).equals("none")) {
+        if(!MobUtils.hasMob(event.getEntity().getType())){
             return;
         }
         if(!LevelPoints.getLevelSettings().canDamage(event.getEntity().getType(), data)){
@@ -86,11 +87,10 @@ public class ExpEarningEvents implements Listener {
         }
 
 
-        if (LevelPoints.getExpSettings().expType(entityType.name()).equals("none")) {
+        if(!MobUtils.hasMob(entityType)){
             return;
         }
 
-        LevelPoints.getDebug(DebugSeverity.NORMAL, LevelPoints.getExpSettings().expType(entityType.name()));
         if(!player.hasPermission(PermissionUtils.getPlayerPermission().expMobs())){
             return;
         }
@@ -142,7 +142,7 @@ public class ExpEarningEvents implements Listener {
     public void onCraft(CraftItemEvent event){
         Player player = (Player) event.getWhoClicked();
         ItemStack item = event.getCurrentItem();
-        if(LevelPoints.getExpSettings().expType(item.getType().toString()).equalsIgnoreCase("none")){
+        if(!CraftingUtils.hasItem(item.getType())){
             return;
         }
         int itemsChecked = 0;
@@ -179,7 +179,7 @@ public class ExpEarningEvents implements Listener {
             LevelPoints.getDebug(DebugSeverity.SEVER, data.getBracketData().getId());
         }
         Block block = event.getBlock();
-        if(LevelPoints.getExpSettings().expType(block.getType().toString()).equals("none")){
+        if(!BlockUtils.hasBlockData(event.getBlock().getType())){
             return;
         }
         if(!LevelPoints.getLevelSettings().canBreak(block.getType(), block.getData(),  data)){
