@@ -61,6 +61,9 @@ public class PlayerData {
             this.exp = 0.0;
         }
         updateBrackets();
+        if(LevelPoints.getLevelColorSettings() == null){
+            return;
+        }
         setLevelColor(LevelPoints.getLevelColorSettings().getLevelColor(level));
 
     }
@@ -93,8 +96,10 @@ public class PlayerData {
         this.level -= level;
         setRequiredExp(LevelPoints.getLevelSettings().getRequireExp(this.level));
         updateBrackets();
+        if(LevelPoints.getLevelColorSettings() == null){
+            return true;
+        }
         setLevelColor(LevelPoints.getLevelColorSettings().getLevelColor(level));
-
         return true;
     }
 

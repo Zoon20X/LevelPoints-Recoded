@@ -174,9 +174,10 @@ public class PlayerEvents implements Listener {
             if (data.getType() == RewardTriggerType.LEVELUP) {
                 if (data.getTriggerValues().contains(String.valueOf(event.getPlayerData().getLevel()))) {
                     PlayerData playerData = event.getPlayerData();
-                    Formatter formatter = new Formatter(playerData.getName(), playerData.getLevel(), playerData.getExp(), playerData.getRequiredExp(), playerData.getPrestige(), 0, playerData.getProgress());
+                    Formatter formatter = new Formatter(player.getName(), playerData.getLevel(), playerData.getExp(), playerData.getRequiredExp(), playerData.getPrestige(), 0, playerData.getProgress());
                     for (String x : data.getCommands()) {
-                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), MessageUtils.format(x, formatter).replace(MessageUtils.rewardPlaceholder, data.getId()));
+                        String value =  MessageUtils.format(x, formatter).replace(MessageUtils.rewardPlaceholder, data.getId());
+                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), value);
                     }
                     if(data.isMessageEnabled()) {
                         for (String x : data.getMessageList()) {

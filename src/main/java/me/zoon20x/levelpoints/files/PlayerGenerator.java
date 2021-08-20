@@ -72,12 +72,13 @@ public class PlayerGenerator {
 
 
         PlayerData data = new PlayerData(uuid, name, level, exp, requiredExp, prestige, 0, new ActiveBooster(id, date, multiplier), levelColor);
-        config.getConfigurationSection(DataLocation.BoosterList).getKeys(false).forEach(x->{
-            if(LevelPoints.getBoosterSettings().hasBooster(x)){
-                data.addBooster(LevelPoints.getBoosterSettings().getBooster(x), config.getInt(DataLocation.getUserBoosterList(x)));
-            }
-        });
-
+        if(config.getConfigurationSection("").getKeys(false).contains("BoosterData")) {
+            config.getConfigurationSection(DataLocation.BoosterList).getKeys(false).forEach(x -> {
+                if (LevelPoints.getBoosterSettings().hasBooster(x)) {
+                    data.addBooster(LevelPoints.getBoosterSettings().getBooster(x), config.getInt(DataLocation.getUserBoosterList(x)));
+                }
+            });
+        }
 
         LevelPoints.getPlayerStorage().addData(uuid, data);
     }

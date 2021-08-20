@@ -99,6 +99,16 @@ public class adminLpsCommand implements CommandExecutor {
         }
     }
 
+    private void args2(CommandSender sender, String[] args){
+        switch (args[0]){
+            case "setrequirement":
+
+                break;
+        }
+
+
+    }
+
     private void args3(CommandSender sender, String[] args){
         switch (args[0]){
             case "booster":
