@@ -1,7 +1,7 @@
 name: LevelPoints
 version: 3.0.0
 main: me.zoon20x.levelpoints.LevelPoints
-api-version: 1.16
+api-version: 1.17
 authors: [ Zoon20X ]
 description: Leveling plugin with custom features
 softdepend:
