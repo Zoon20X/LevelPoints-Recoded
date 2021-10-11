@@ -50,11 +50,11 @@ public class LpsExpansion extends PlaceholderExpansion {
             return "Reloading";
         }
 
-
         UUID uuid = player.getUniqueId();
         if(!LevelPoints.getPlayerStorage().hasPlayerFile(uuid)){
             return "";
         }
+
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(uuid);
         if(identifier.equals("player_level")){
             return MessageUtils.getLevelColor(uuid);
@@ -73,6 +73,11 @@ public class LpsExpansion extends PlaceholderExpansion {
         }
         if(identifier.equals("player_progress")){
             return data.getProgress() + "%";
+        }
+        if(identifier.equals("player_progress_bar")){
+            return ProgressStatics.makeProgressBar(null,
+                    data.getExp(), data.getRequiredExp()
+            );
         }
 
         if(identifier.equals("player_booster_id")){

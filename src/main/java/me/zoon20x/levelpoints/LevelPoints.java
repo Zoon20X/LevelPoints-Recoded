@@ -116,8 +116,6 @@ public final class LevelPoints extends JavaPlugin{
             getDebug(DebugSeverity.NORMAL, "Loaded Placeholder expansion");
         }
 
-
-
         if(getConfig().getBoolean("MySQL.Enabled")) {
             sql = new MySQL(
                     getConfig().getString(DataLocation.sqlHost),
@@ -130,6 +128,21 @@ public final class LevelPoints extends JavaPlugin{
             if(sql.isConnected()) {
                 isRunningSQL = true;
             }
+        }
+
+        if(getConfig().isSet("Progressbar")) {
+            ProgressStatics.userConfiguredStyle.stepMin =
+                    getConfig().getInt("Progressbar.MinStep");
+            ProgressStatics.userConfiguredStyle.stepMax =
+                    getConfig().getInt("Progressbar.MaxStep");
+
+            ProgressStatics.userConfiguredStyle.visualBorder =
+                    getConfig().getString("Progressbar.VisualBorder");
+            ProgressStatics.userConfiguredStyle.visualCompletedStep =
+                    getConfig().getString("Progressbar.VisualCompletedStep");
+            ProgressStatics.userConfiguredStyle.visualUncompletedStep =
+                    getConfig().getString("Progressbar.VisualUncompletedStep");
+
         }
 
         if(getAntiAbuseSettings().isRegionLocked()){

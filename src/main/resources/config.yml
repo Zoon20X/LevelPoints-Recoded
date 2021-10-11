@@ -15,6 +15,13 @@ Actionbar:
     Enabled: true
     Message: '&3Level: &b{level} &3|&b {exp}/{required_exp}'
 
+Progressbar:
+  MinStep: 1
+  MaxStep: 5
+  VisualBorder: "§8┃"
+  VisualCompletedStep: "§a░"
+  VisualUncompletedStep: "§7░"
+
 TimedEXP:
   Global:
     Enabled: false
