@@ -109,13 +109,13 @@ public class MessageUtils {
     public static String getLevelColor(UUID uuid){
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(uuid);
         if(!LevelPoints.getConfigSettings().isPlaceholderColorLevelEnabled()) {
-            return String.valueOf(data.getLevel());
+            return FormatStatics.format(data.getLevel());
         }
         if(data.getLevelColor().equalsIgnoreCase("none")){
-            return String.valueOf(data.getLevel());
+            return FormatStatics.format(data.getLevel());
         }
 
-        return getColor(LevelPoints.getLevelColorSettings().getColorData(data.getLevelColor()).getColor() + "" + data.getLevel());
+        return getColor(LevelPoints.getLevelColorSettings().getColorData(data.getLevelColor()).getColor() + "" + FormatStatics.format(data.getLevel()));
     }
 
     public static List<String> formatRewardMessages(String x){
