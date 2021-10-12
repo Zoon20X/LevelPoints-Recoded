@@ -25,6 +25,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -295,7 +296,7 @@ public final class LevelPoints extends JavaPlugin{
     public static boolean isRunningSQL() {
         return isRunningSQL;
     }
-    public static LevelColorSettings getLevelColorSettings() {
+    public static @Nullable LevelColorSettings getLevelColorSettings() {
         return levelColorSettings;
     }
 
