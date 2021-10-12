@@ -73,7 +73,12 @@ public class EventUtils {
         Bukkit.getPluginManager().callEvent(event);
         LevelPoints.getTopListSettings().modifyLevel(data);
         LevelPoints.getTopListSettings().generateTopCache(50);
-        data.setLevelColor(LevelPoints.getLevelColorSettings().getLevelColor(level));
+
+        if(LevelPoints.getLevelColorSettings() != null)
+            data.setLevelColor(
+                    LevelPoints.getLevelColorSettings().getLevelColor(level)
+            );
+
         if(!LevelPoints.isRunningSQL()) {
             return;
         }
