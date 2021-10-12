@@ -220,8 +220,6 @@ public final class LevelPoints extends JavaPlugin{
     private void loadEvents(){
         getServer().getPluginManager().registerEvents(new PlayerEvents(), this);
         getServer().getPluginManager().registerEvents(new ExpEarningEvents(), this);
-
-
     }
 
 
