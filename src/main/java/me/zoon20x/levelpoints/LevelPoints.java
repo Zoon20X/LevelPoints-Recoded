@@ -25,6 +25,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -116,8 +117,6 @@ public final class LevelPoints extends JavaPlugin{
             getDebug(DebugSeverity.NORMAL, "Loaded Placeholder expansion");
         }
 
-
-
         if(getConfig().getBoolean("MySQL.Enabled")) {
             sql = new MySQL(
                     getConfig().getString(DataLocation.sqlHost),
@@ -130,6 +129,21 @@ public final class LevelPoints extends JavaPlugin{
             if(sql.isConnected()) {
                 isRunningSQL = true;
             }
+        }
+
+        if(getConfig().isSet("Progressbar")) {
+            ProgressStatics.userConfiguredStyle.stepMin =
+                    getConfig().getInt("Progressbar.MinStep");
+            ProgressStatics.userConfiguredStyle.stepMax =
+                    getConfig().getInt("Progressbar.MaxStep");
+
+            ProgressStatics.userConfiguredStyle.visualBorder =
+                    getConfig().getString("Progressbar.VisualBorder");
+            ProgressStatics.userConfiguredStyle.visualCompletedStep =
+                    getConfig().getString("Progressbar.VisualCompletedStep");
+            ProgressStatics.userConfiguredStyle.visualUncompletedStep =
+                    getConfig().getString("Progressbar.VisualUncompletedStep");
+
         }
 
         if(getAntiAbuseSettings().isRegionLocked()){
@@ -282,7 +296,7 @@ public final class LevelPoints extends JavaPlugin{
     public static boolean isRunningSQL() {
         return isRunningSQL;
     }
-    public static LevelColorSettings getLevelColorSettings() {
+    public static @Nullable LevelColorSettings getLevelColorSettings() {
         return levelColorSettings;
     }
 
