@@ -129,10 +129,9 @@ public class LevelsSettings {
             return true;
         }
         BlockData a = BlockUtils.getBlockData(material, x);
-        if (a != null && data.getLevel() >= a.getPlaceRequired()) {
+        if(a == null)
             return true;
-        }
-        return false;
+        return data.getLevel() >= a.getPlaceRequired();
     }
 
 
