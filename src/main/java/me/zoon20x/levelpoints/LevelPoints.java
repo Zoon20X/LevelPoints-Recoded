@@ -233,7 +233,7 @@ public final class LevelPoints extends JavaPlugin{
         }
     }
     public static void getDebug(DebugSeverity value, Object x){
-         System.out.println(MessageUtils.getColor(value+ "" + x));
+
     }
 
     public static PlayerStorage getPlayerStorage() {
