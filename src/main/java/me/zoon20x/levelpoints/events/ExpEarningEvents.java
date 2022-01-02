@@ -131,6 +131,7 @@ public class ExpEarningEvents implements Listener {
         Player player = event.getPlayer();
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
         Block block = event.getBlock();
+
         ArtificialBlockCache.addArtificialBlock(block);
 
         if(!LevelPoints.getLevelSettings().canPlace(block.getType(), block.getData(), data)){

@@ -36,7 +36,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public final class LevelPoints extends JavaPlugin{
+public final class LevelPoints
+        extends JavaPlugin {
 
     private static LevelPoints instance;
     private static File userFolder;
@@ -151,13 +152,13 @@ public final class LevelPoints extends JavaPlugin{
         }
 
 
-        System.out.println(ChatColor.DARK_AQUA + "=============================");
-        System.out.println(ChatColor.AQUA + "LevelPoints Plugin - LITE");
-        System.out.println(ChatColor.AQUA + "Developer: Zoon20X");
-        System.out.println(ChatColor.AQUA + "Version: " + this.getDescription().getVersion());
-        System.out.println(ChatColor.AQUA + "MC-Compatible: 1.8-1.17*");
-        System.out.println(ChatColor.DARK_AQUA + "Enabled");
-        System.out.println(ChatColor.DARK_AQUA + "=============================");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "=============================");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "LevelPoints Plugin - LITE");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Developer: Zoon20X and rgnter");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Version: " + this.getDescription().getVersion());
+        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "MC-Compatible: 1.8-1.17*");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "Enabled");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "=============================");
         sendLoadedData();
         getExpSettings().startTimedEXP();
     }
@@ -232,6 +233,7 @@ public final class LevelPoints extends JavaPlugin{
             getSQL().disconnect();
         }
     }
+
     public static void getDebug(DebugSeverity value, Object x){
 
     }
