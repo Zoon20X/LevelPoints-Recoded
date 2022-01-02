@@ -161,7 +161,7 @@ public class LevelsSettings {
                     form = MessageUtils.format(getAdvancedFormula(i), formatter);
                 }
 
-                //System.out.println(form);
+                //.println(form);
                 Double requiredEXP = 1.0;
                 try {
                     Expression expression = new ExpressionBuilder(form).build();
