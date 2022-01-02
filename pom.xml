@@ -6,7 +6,7 @@
 
     <groupId>me.zoon20x</groupId>
     <artifactId>LevelPoints</artifactId>
-    <version>1.0-release</version>
+    <version>1.1-dev</version>
     <packaging>jar</packaging>
 
     <name>LevelPoints</name>
@@ -75,6 +75,10 @@
             <name>Lumine Releases</name>
             <url>https://mvn.lumine.io/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>sonatype-oss-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -113,6 +117,11 @@
             <artifactId>worldguard</artifactId>
             <version>6.1.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-minimessage</artifactId>
+            <version>4.1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
