@@ -6,12 +6,12 @@
 
     <groupId>me.zoon20x</groupId>
     <artifactId>LevelPoints</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0-release</version>
     <packaging>jar</packaging>
 
     <name>LevelPoints</name>
-
     <description>Leveling plugin with custom features</description>
+
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
