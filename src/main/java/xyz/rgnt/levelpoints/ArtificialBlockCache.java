@@ -10,6 +10,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Artificial block-cache contains block keys of all blocks considered artificial(placed by player).
+ */
 @ThreadSafe
 public class ArtificialBlockCache {
 
@@ -17,10 +20,19 @@ public class ArtificialBlockCache {
             = new HashSet<>();
 
     /**
-     * @param block Block to log as artificial.
+     * Marks blocks as artificial block.
+     * @param block Block.
      */
     public static synchronized void addArtificialBlock(final Block block) {
         blockSet.add(block.getBlockKey());
+    }
+
+    /**
+     * Unmarks blocks as artificial block.
+     * @param block Block.
+     */
+    public static synchronized void remArtificialBlock(final Block block) {
+        blockSet.remove(block.getBlockKey());
     }
 
     /**
