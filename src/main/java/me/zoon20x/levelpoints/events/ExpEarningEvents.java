@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -135,6 +136,11 @@ public class ExpEarningEvents implements Listener {
             event.setCancelled(true);
             return;
         }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onGrow(BlockGrowEvent event) {
+        ArtificialBlockCache.remArtificialBlock(event.getBlock());
     }
 
 
