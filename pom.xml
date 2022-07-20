@@ -43,6 +43,9 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <outputFile>${dir}/${project.artifactId}-${project.version}.jar</outputFile>
+                </configuration>
             </plugin>
         </plugins>
         <resources>
