@@ -17,9 +17,9 @@ Actionbar:
 Progressbar:
     MinStep: 1
     MaxStep: 5
-    VisualBorder: "§8┃"
-    VisualCompletedStep: "§a░"
-    VisualUncompletedStep: "§7░"
+    VisualBorder: "&8┃"
+    VisualCompletedStep: "&a░"
+    VisualUncompletedStep: "&7░"
 
 TimedEXP:
   Global:

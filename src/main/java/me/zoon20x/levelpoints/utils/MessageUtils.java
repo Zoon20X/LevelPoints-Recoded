@@ -21,12 +21,8 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
 public class MessageUtils {
     private static final Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
-
-
 
     public static String getServerVersion(){
         String reformat = Bukkit.getBukkitVersion().replace("-R0.1-SNAPSHOT", "");
@@ -34,7 +30,6 @@ public class MessageUtils {
 
         return reformat;
     }
-
 
 
     public static String levelPlaceholder = "{level}";
