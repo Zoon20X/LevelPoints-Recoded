@@ -207,7 +207,7 @@ public final class LevelPoints
         getDebug(DebugSeverity.WARNING, "Formula-Type:" + getLevelSettings().getFormulaType());
         getDebug(DebugSeverity.WARNING, "LoadedLevels:" + Arrays.asList(getLevelSettings().getLoadedLevels()));
         getDebug(DebugSeverity.WARNING, "RegionLocked:" + getAntiAbuseSettings().isRegionLocked());
-        getDebug(DebugSeverity.WARNING, "OnEXPEnabled:" + getConfigSettings().getOnExpEnabled());
+        getDebug(DebugSeverity.WARNING, "OnEXPEnabled:" + getConfigSettings().isOnExpEnabled());
         getDebug(DebugSeverity.WARNING, "OnEXPMessage:" + getConfigSettings().getOnExpMessage());
         getDebug(DebugSeverity.WARNING, "LoadedPlayersAmount: " + getPlayerStorage().getAmountLoaded());
     }

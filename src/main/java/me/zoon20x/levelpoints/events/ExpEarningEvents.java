@@ -73,12 +73,14 @@ public class ExpEarningEvents implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onKillMob(EntityDeathEvent event) {
-        if (event.getEntity().getKiller() == null) {
+        if (event.getEntity().getKiller() == null)
             return;
-        }
+
         EntityType entityType = event.getEntity().getType();
         Player player = event.getEntity().getKiller();
-        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
+        PlayerData data = LevelPoints.getPlayerStorage()
+                .getLoadedData(player.getUniqueId());
+
         if(LevelPoints.isMythicMobsEnabled()){
             if(MythicMobs.inst().getAPIHelper().isMythicMob(event.getEntity())){
                 ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(event.getEntity());
@@ -90,15 +92,14 @@ public class ExpEarningEvents implements Listener {
             }
         }
 
-
-        if (LevelPoints.getExpSettings().expType(entityType.name()).equals("none")) {
+        if (LevelPoints.getExpSettings()
+                .expType(entityType.name()).equals("none"))
             return;
-        }
+
 
         LevelPoints.getDebug(DebugSeverity.NORMAL, LevelPoints.getExpSettings().expType(entityType.name()));
-        if(!player.hasPermission(PermissionUtils.getPlayerPermission().expMobs())){
+        if(!player.hasPermission(PermissionUtils.getPlayerPermission().expMobs()))
             return;
-        }
 
 
         EventUtils.triggerEarnExpEvent(data, event, LevelPoints.getExpSettings().getMobEXP(entityType), player, EarnTask.Mobs);

@@ -35,15 +35,13 @@ public class ExpSettings {
     }
 
     public String expType(String x){
-        if(BlockUtils.hasBlockData(x)){
+        if(BlockUtils.hasBlockData(x))
             return "Block";
-        }
-        if(MobUtils.hasMob(x)){
+        if(MobUtils.hasMob(x))
             return "Mob";
-        }
-        if(CraftingUtils.hasItem(x)){
+        if(CraftingUtils.hasItem(x))
             return "Crafting";
-        }
+
         return "none";
     }
 
