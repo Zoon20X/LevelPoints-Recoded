@@ -129,10 +129,9 @@ public class LevelsSettings {
             return true;
         }
         BlockData a = BlockUtils.getBlockData(material, x);
-        if (a != null && data.getLevel() >= a.getPlaceRequired()) {
+        if(a == null)
             return true;
-        }
-        return false;
+        return data.getLevel() >= a.getPlaceRequired();
     }
 
 
@@ -162,7 +161,7 @@ public class LevelsSettings {
                     form = MessageUtils.format(getAdvancedFormula(i), formatter);
                 }
 
-                //System.out.println(form);
+                //.println(form);
                 Double requiredEXP = 1.0;
                 try {
                     Expression expression = new ExpressionBuilder(form).build();

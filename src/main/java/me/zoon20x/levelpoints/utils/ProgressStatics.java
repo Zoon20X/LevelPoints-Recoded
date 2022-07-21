@@ -46,8 +46,8 @@ public class ProgressStatics {
         public int stepMin = 1;
         public int stepMax = 5;
 
-        public String visualBorder             = "§8┃";
-        public String visualCompletedStep      = "§a░";
-        public String visualUncompletedStep    = "§7░";
+        public String visualBorder             = "&8┃";
+        public String visualCompletedStep      = "&a░";
+        public String visualUncompletedStep    = "&7░";
     }
 }

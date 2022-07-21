@@ -23,8 +23,10 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -33,12 +35,15 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import xyz.rgnt.levelpoints.ArtificialBlockCache;
 
 
 public class ExpEarningEvents implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityDamage(EntityDamageByEntityEvent event){
+        if(event.isCancelled())
+            return;
         if(!(event.getDamager() instanceof Player)){
             return;
         }
@@ -66,14 +71,16 @@ public class ExpEarningEvents implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onKillMob(EntityDeathEvent event) {
-        if (event.getEntity().getKiller() == null) {
+        if (event.getEntity().getKiller() == null)
             return;
-        }
+
         EntityType entityType = event.getEntity().getType();
         Player player = event.getEntity().getKiller();
-        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
+        PlayerData data = LevelPoints.getPlayerStorage()
+                .getLoadedData(player.getUniqueId());
+
         if(LevelPoints.isMythicMobsEnabled()){
             if(MythicMobs.inst().getAPIHelper().isMythicMob(event.getEntity())){
                 ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(event.getEntity());
@@ -85,21 +92,20 @@ public class ExpEarningEvents implements Listener {
             }
         }
 
-
-        if (LevelPoints.getExpSettings().expType(entityType.name()).equals("none")) {
+        if (LevelPoints.getExpSettings()
+                .expType(entityType.name()).equals("none"))
             return;
-        }
+
 
         LevelPoints.getDebug(DebugSeverity.NORMAL, LevelPoints.getExpSettings().expType(entityType.name()));
-        if(!player.hasPermission(PermissionUtils.getPlayerPermission().expMobs())){
+        if(!player.hasPermission(PermissionUtils.getPlayerPermission().expMobs()))
             return;
-        }
 
 
         EventUtils.triggerEarnExpEvent(data, event, LevelPoints.getExpSettings().getMobEXP(entityType), player, EarnTask.Mobs);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onBreed(EntityBreedEvent event){
         if(event.isCancelled()){
             return;
@@ -119,11 +125,16 @@ public class ExpEarningEvents implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlace(BlockPlaceEvent event){
+        if(event.isCancelled())
+            return;
+
         Player player = event.getPlayer();
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
         Block block = event.getBlock();
+
+        ArtificialBlockCache.addArtificialBlock(block);
 
         if(!LevelPoints.getLevelSettings().canPlace(block.getType(), block.getData(), data)){
             BlockData blockData = BlockUtils.getBlockData(block.getType(), block.getData());
@@ -132,14 +143,23 @@ public class ExpEarningEvents implements Listener {
                 String message = MessageUtils.getColor(LevelPoints.getLangSettings().getRequiredPlace());
                 player.sendMessage(MessageUtils.format(message, formatter));
             }
+
             event.setCancelled(true);
             return;
         }
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onGrow(BlockGrowEvent event) {
+        ArtificialBlockCache.remArtificialBlock(event.getBlock());
+    }
 
-    @EventHandler
+
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onCraft(CraftItemEvent event){
+        if(event.isCancelled())
+            return;
+
         Player player = (Player) event.getWhoClicked();
         ItemStack item = event.getCurrentItem();
         if(LevelPoints.getExpSettings().expType(item.getType().toString()).equalsIgnoreCase("none")){
@@ -171,14 +191,20 @@ public class ExpEarningEvents implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onBreak(BlockBreakEvent event) {
+        if(event.isCancelled())
+            return;
         Player player = event.getPlayer();
         PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
         if(data.getBracketData() != null){
             LevelPoints.getDebug(DebugSeverity.SEVER, data.getBracketData().getId());
         }
         Block block = event.getBlock();
+
+        if(ArtificialBlockCache.isArtificialBlock(block))
+            return;
+
         if(LevelPoints.getExpSettings().expType(block.getType().toString()).equals("none")){
             return;
         }

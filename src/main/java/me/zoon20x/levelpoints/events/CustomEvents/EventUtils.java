@@ -7,6 +7,7 @@ import me.zoon20x.levelpoints.containers.Settings.WorldGuardSettings;
 import me.zoon20x.levelpoints.utils.DebugSeverity;
 import me.zoon20x.levelpoints.utils.Formatter;
 import me.zoon20x.levelpoints.utils.MessageUtils;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.enchantments.Enchantment;
@@ -48,9 +49,10 @@ public class EventUtils {
             }
 
             data.addEXP(amount * data.getActiveBooster().getMultiplier());
-            if(LevelPoints.getConfigSettings().getOnExpEnabled()){
+            if(LevelPoints.getConfigSettings().isOnExpEnabled()){
                 Formatter formatter = new Formatter(player.getName(), data.getLevel(), data.getExp(), data.getRequiredExp(), data.getPrestige(), 0, data.getProgress());
-                MessageUtils.sendActionBar(player, MessageUtils.format(LevelPoints.getConfigSettings().getOnExpMessage(), formatter));
+                player.sendActionBar(MiniMessage.miniMessage().deserialize(
+                        MessageUtils.format(LevelPoints.getConfigSettings().getOnExpMessage(), formatter)));
             }
         }
         if(!LevelPoints.isRunningSQL()) {
