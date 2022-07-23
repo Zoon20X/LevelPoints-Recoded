@@ -48,23 +48,23 @@ public class ExpEarningEvents implements Listener {
             return;
         }
         Player player = (Player) event.getDamager();
-        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
-        if(LevelPoints.isMythicMobsEnabled()){
+        PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(player.getUniqueId());
+        if(LevelPoints.getInstance().isMythicMobsEnabled()){
             if(MythicMobs.inst().getAPIHelper().isMythicMob(event.getEntity())){
                 ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(event.getEntity());
-                if(!LevelPoints.getMythicMobsSettings().hasMobData(mob.getType().getInternalName())){
+                if(!LevelPoints.getInstance().getMythicMobsSettings().hasMobData(mob.getType().getInternalName())){
                     return;
                 }
-                if(!LevelPoints.getLevelSettings().canDamageMythicMobs(mob.getType().getInternalName(), data)){
+                if(!LevelPoints.getInstance().getLevelSettings().canDamageMythicMobs(mob.getType().getInternalName(), data)){
                     event.setCancelled(true);
                     return;
                 }
             }
         }
-        if (LevelPoints.getExpSettings().expType(event.getEntity().getType().name()).equals("none")) {
+        if (LevelPoints.getInstance().getExpSettings().expType(event.getEntity().getType().name()).equals("none")) {
             return;
         }
-        if(!LevelPoints.getLevelSettings().canDamage(event.getEntity().getType(), data)){
+        if(!LevelPoints.getInstance().getLevelSettings().canDamage(event.getEntity().getType(), data)){
             event.setCancelled(true);
             return;
         }
@@ -78,31 +78,31 @@ public class ExpEarningEvents implements Listener {
 
         EntityType entityType = event.getEntity().getType();
         Player player = event.getEntity().getKiller();
-        PlayerData data = LevelPoints.getPlayerStorage()
+        PlayerData data = LevelPoints.getInstance().getPlayerStorage()
                 .getLoadedData(player.getUniqueId());
 
-        if(LevelPoints.isMythicMobsEnabled()){
+        if(LevelPoints.getInstance().isMythicMobsEnabled()){
             if(MythicMobs.inst().getAPIHelper().isMythicMob(event.getEntity())){
                 ActiveMob mob = MythicMobs.inst().getAPIHelper().getMythicMobInstance(event.getEntity());
-                if(!LevelPoints.getMythicMobsSettings().hasMobData(mob.getType().getInternalName())){
+                if(!LevelPoints.getInstance().getMythicMobsSettings().hasMobData(mob.getType().getInternalName())){
                     return;
                 }
-                EventUtils.triggerEarnExpEvent(data, event, LevelPoints.getMythicMobsSettings().getMobData(mob.getType().getInternalName()).getExp(), player, EarnTask.Mobs);
+                EventUtils.triggerEarnExpEvent(data, event, LevelPoints.getInstance().getMythicMobsSettings().getMobData(mob.getType().getInternalName()).getExp(), player, EarnTask.Mobs);
                 return;
             }
         }
 
-        if (LevelPoints.getExpSettings()
+        if (LevelPoints.getInstance().getExpSettings()
                 .expType(entityType.name()).equals("none"))
             return;
 
 
-        LevelPoints.getDebug(DebugSeverity.NORMAL, LevelPoints.getExpSettings().expType(entityType.name()));
+        LevelPoints.getDebug(DebugSeverity.NORMAL, LevelPoints.getInstance().getExpSettings().expType(entityType.name()));
         if(!player.hasPermission(PermissionUtils.getPlayerPermission().expMobs()))
             return;
 
 
-        EventUtils.triggerEarnExpEvent(data, event, LevelPoints.getExpSettings().getMobEXP(entityType), player, EarnTask.Mobs);
+        EventUtils.triggerEarnExpEvent(data, event, LevelPoints.getInstance().getExpSettings().getMobEXP(entityType), player, EarnTask.Mobs);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -115,12 +115,12 @@ public class ExpEarningEvents implements Listener {
             return;
         }
         Player player = (Player) event.getBreeder();
-        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
-        if(!LevelPoints.getLevelSettings().canBreed(event.getEntity().getType(), data)){
+        PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(player.getUniqueId());
+        if(!LevelPoints.getInstance().getLevelSettings().canBreed(event.getEntity().getType(), data)){
             event.setCancelled(true);
             return;
         }
-        EventUtils.triggerEarnExpEvent(data, event, LevelPoints.getExpSettings().getBreedEXP(event.getEntity().getType()), player, EarnTask.Breeding);
+        EventUtils.triggerEarnExpEvent(data, event, LevelPoints.getInstance().getExpSettings().getBreedEXP(event.getEntity().getType()), player, EarnTask.Breeding);
 
     }
 
@@ -131,16 +131,16 @@ public class ExpEarningEvents implements Listener {
             return;
 
         Player player = event.getPlayer();
-        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
+        PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(player.getUniqueId());
         Block block = event.getBlock();
 
         ArtificialBlockCache.addArtificialBlock(block);
 
-        if(!LevelPoints.getLevelSettings().canPlace(block.getType(), block.getData(), data)){
+        if(!LevelPoints.getInstance().getLevelSettings().canPlace(block.getType(), block.getData(), data)){
             BlockData blockData = BlockUtils.getBlockData(block.getType(), block.getData());
-            if(LevelPoints.getLangSettings().isRequiredPlaceEnabled()){
+            if(LevelPoints.getInstance().getLangSettings().isRequiredPlaceEnabled()){
                 Formatter formatter = new Formatter(player.getName(), data.getLevel(), data.getExp(), blockData.getRequiredEXP(Requirement.PLACE, data), data.getPrestige(), blockData.getPlaceRequired(), data.getProgress());
-                String message = MessageUtils.getColor(LevelPoints.getLangSettings().getRequiredPlace());
+                String message = MessageUtils.getColor(LevelPoints.getInstance().getLangSettings().getRequiredPlace());
                 player.sendMessage(MessageUtils.format(message, formatter));
             }
 
@@ -162,7 +162,7 @@ public class ExpEarningEvents implements Listener {
 
         Player player = (Player) event.getWhoClicked();
         ItemStack item = event.getCurrentItem();
-        if(LevelPoints.getExpSettings().expType(item.getType().toString()).equalsIgnoreCase("none")){
+        if(LevelPoints.getInstance().getExpSettings().expType(item.getType().toString()).equalsIgnoreCase("none")){
             return;
         }
         int itemsChecked = 0;
@@ -179,7 +179,7 @@ public class ExpEarningEvents implements Listener {
             }
         }
         int amountOfItems = event.getRecipe().getResult().getAmount() * possibleCreations;
-        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
+        PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(player.getUniqueId());
         CraftingData craftingData = CraftingUtils.getCraftingData(item.getType());
         if(data.getLevel() < craftingData.getCraftingRequired()) {
             event.setCancelled(true);
@@ -196,7 +196,7 @@ public class ExpEarningEvents implements Listener {
         if(event.isCancelled())
             return;
         Player player = event.getPlayer();
-        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
+        PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(player.getUniqueId());
         if(data.getBracketData() != null){
             LevelPoints.getDebug(DebugSeverity.SEVER, data.getBracketData().getId());
         }
@@ -205,14 +205,14 @@ public class ExpEarningEvents implements Listener {
         if(ArtificialBlockCache.isArtificialBlock(block))
             return;
 
-        if(LevelPoints.getExpSettings().expType(block.getType().toString()).equals("none")){
+        if(LevelPoints.getInstance().getExpSettings().expType(block.getType().toString()).equals("none")){
             return;
         }
-        if(!LevelPoints.getLevelSettings().canBreak(block.getType(), block.getData(),  data)){
+        if(!LevelPoints.getInstance().getLevelSettings().canBreak(block.getType(), block.getData(),  data)){
             BlockData blockData = BlockUtils.getBlockData(block.getType(), block.getData());
-            if(LevelPoints.getLangSettings().isRequiredBreakEnabled()) {
+            if(LevelPoints.getInstance().getLangSettings().isRequiredBreakEnabled()) {
                 Formatter formatter = new Formatter(player.getName(), data.getLevel(), data.getExp(), blockData.getRequiredEXP(Requirement.BREAK, data), data.getPrestige(), blockData.getBreakRequired(), data.getProgress());
-                String message = MessageUtils.getColor(LevelPoints.getLangSettings().getRequiredBreak());
+                String message = MessageUtils.getColor(LevelPoints.getInstance().getLangSettings().getRequiredBreak());
                 player.sendMessage(MessageUtils.format(message, formatter));
             }
             event.setCancelled(true);
@@ -223,6 +223,6 @@ public class ExpEarningEvents implements Listener {
             return;
         }
 
-        EventUtils.triggerEarnExpEvent(data, event, LevelPoints.getExpSettings().getBlockEXP(block.getType(), block.getData()), player, EarnTask.Blocks);
+        EventUtils.triggerEarnExpEvent(data, event, LevelPoints.getInstance().getExpSettings().getBlockEXP(block.getType(), block.getData()), player, EarnTask.Blocks);
     }
 }

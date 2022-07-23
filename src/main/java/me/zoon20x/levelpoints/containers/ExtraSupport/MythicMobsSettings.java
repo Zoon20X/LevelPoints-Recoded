@@ -12,7 +12,7 @@ public class MythicMobsSettings {
 
     public MythicMobsSettings(){
         LevelPoints.getDebug(DebugSeverity.NORMAL, "Loading MythicMobs data");
-        LevelPoints.getFilesGenerator().mythicMobsConfig.getConfig().getConfigurationSection("").getKeys(false).forEach(x->{
+        LevelPoints.getInstance().getFilesGenerator().mythicMobsConfig.getConfig().getConfigurationSection("").getKeys(false).forEach(x->{
             MythicMobsData value = new MythicMobsData(x);
             data.put(value.getName(), value);
         });

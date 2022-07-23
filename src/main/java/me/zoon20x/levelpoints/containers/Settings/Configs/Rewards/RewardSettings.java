@@ -38,7 +38,7 @@ public class RewardSettings {
         rewards.clear();
     }
     private void generateRewards() {
-        FileConfiguration config = LevelPoints.getFilesGenerator().rewardSettings.getConfig();
+        FileConfiguration config = LevelPoints.getInstance().getFilesGenerator().rewardSettings.getConfig();
         for (String x : config.getConfigurationSection("Rewards").getKeys(false)) {
             String id = x;
             RewardTriggerType type = RewardTriggerType.valueOf(config.getString("Rewards." + x + ".TriggerType"));

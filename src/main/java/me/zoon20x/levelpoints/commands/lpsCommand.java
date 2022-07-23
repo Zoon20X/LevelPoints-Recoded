@@ -33,7 +33,7 @@ public class lpsCommand implements CommandExecutor {
                 sender.sendMessage(MessageUtils.getColor(DebugSeverity.SEVER + "You do not have permission"));
                 return true;
             }
-            for(String x : LevelPoints.getLangSettings().getLpHelp()){
+            for(String x : LevelPoints.getInstance().getLangSettings().getLpHelp()){
                 sender.sendMessage(MessageUtils.getColor(x));
             }
         }
@@ -57,25 +57,25 @@ public class lpsCommand implements CommandExecutor {
 
     private void args1(CommandSender sender, String[] args){
         Player player = (Player) sender;
-        if(!LevelPoints.getPlayerStorage().hasPlayerFile(player.getUniqueId())){
+        if(!LevelPoints.getInstance().getPlayerStorage().hasPlayerFile(player.getUniqueId())){
             sender.sendMessage(MessageUtils.getColor("Player data doesn't exist"));
             return;
         }
-        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
+        PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(player.getUniqueId());
         switch (args[0]){
             case "info":
                 Formatter info = new Formatter(player.getName(), data.getLevel(), data.getExp(), data.getRequiredExp(), data.getPrestige(), 0, data.getProgress(), data.getActiveBooster());
-                for(String x : LevelPoints.getLangSettings().getPlayerInfo()){
+                for(String x : LevelPoints.getInstance().getLangSettings().getPlayerInfo()){
                     sender.sendMessage(MessageUtils.getColor(MessageUtils.format(x, info)));
                 }
                 break;
             case "prestige":
                 if(!data.canPrestige()){
-                    if(!LevelPoints.getLangSettings().isPrestigeCommandDeniedEnabled()){
+                    if(!LevelPoints.getInstance().getLangSettings().isPrestigeCommandDeniedEnabled()){
                         return;
                     }
-                    Formatter prestige = new Formatter(player.getName(), data.getLevel(), data.getExp(), data.getRequiredExp(), data.getPrestige(), LevelPoints.getLevelSettings().getMaxLevel(), data.getProgress());
-                    sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getPrestigeCommandDeniedMessage(), prestige)));
+                    Formatter prestige = new Formatter(player.getName(), data.getLevel(), data.getExp(), data.getRequiredExp(), data.getPrestige(), LevelPoints.getInstance().getLevelSettings().getMaxLevel(), data.getProgress());
+                    sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getPrestigeCommandDeniedMessage(), prestige)));
                     return;
                 }
                 data.prestige();
@@ -84,7 +84,7 @@ public class lpsCommand implements CommandExecutor {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        LevelPoints.getTopListSettings().sendTopList(player);
+                        LevelPoints.getInstance().getTopListSettings().sendTopList(player);
                     }
                 }.runTaskAsynchronously(LevelPoints.getInstance());
                 break;
@@ -92,17 +92,17 @@ public class lpsCommand implements CommandExecutor {
             return;
         }
     private void args2(CommandSender sender, String[] args){
-        PlayerData pData = LevelPoints.getPlayerStorage().getLoadedData(((Player) sender).getUniqueId());
+        PlayerData pData = LevelPoints.getInstance().getPlayerStorage().getLoadedData(((Player) sender).getUniqueId());
         switch (args[0]){
             case "info":
                 OfflinePlayer uuid = Bukkit.getOfflinePlayer(args[1]);
-                if(!LevelPoints.getPlayerStorage().hasPlayerFile(uuid.getUniqueId())){
+                if(!LevelPoints.getInstance().getPlayerStorage().hasPlayerFile(uuid.getUniqueId())){
                     sender.sendMessage(MessageUtils.getColor("Player data doesn't exist"));
                     return;
                 }
-                PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(uuid.getUniqueId());
+                PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(uuid.getUniqueId());
                 Formatter formatter = new Formatter(uuid.getName(), data.getLevel(), data.getExp(), data.getRequiredExp(), data.getPrestige(), 0, data.getProgress(), data.getActiveBooster());
-                for(String x : LevelPoints.getLangSettings().getPlayerInfo()){
+                for(String x : LevelPoints.getInstance().getLangSettings().getPlayerInfo()){
                     sender.sendMessage(MessageUtils.getColor(MessageUtils.format(x, formatter)));
                 }
                 break;
@@ -122,7 +122,7 @@ public class lpsCommand implements CommandExecutor {
         }
     }
     private void args3(CommandSender sender, String[] args){
-        PlayerData pData = LevelPoints.getPlayerStorage().getLoadedData(((Player) sender).getUniqueId());
+        PlayerData pData = LevelPoints.getInstance().getPlayerStorage().getLoadedData(((Player) sender).getUniqueId());
         switch (args[0]){
             case "booster":
                 if(args[1].equalsIgnoreCase("use")){
@@ -131,7 +131,7 @@ public class lpsCommand implements CommandExecutor {
                     if(!hasBooster){
                         return;
                     }
-                    BoosterData bd = LevelPoints.getBoosterSettings().getBooster(boosterID);
+                    BoosterData bd = LevelPoints.getInstance().getBoosterSettings().getBooster(boosterID);
                     pData.setActiveBooster(bd);
                     pData.removeBooster(bd);
                     return;

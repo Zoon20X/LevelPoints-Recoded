@@ -60,7 +60,7 @@ public class TopListSettings {
     }
     public void sendTopList(Player player){
         topChecked = 0;
-        for(String x : LevelPoints.getLangSettings().getTopMessageTopText()){
+        for(String x : LevelPoints.getInstance().getLangSettings().getTopMessageTopText()){
             player.sendMessage(MessageUtils.getColor(x));
         }
         topCache.keySet().stream().sorted((a1, a2)->{
@@ -69,13 +69,13 @@ public class TopListSettings {
             return points2 - points1;
         }).limit(10).forEach(f->{
             topChecked++;
-            for(String x : LevelPoints.getLangSettings().getTopMessageMiddleText()){
+            for(String x : LevelPoints.getInstance().getLangSettings().getTopMessageMiddleText()){
                 Formatter formatter = new Formatter(Bukkit.getOfflinePlayer(f).getName(), topCache.get(f),0, 0,0,0,0);
                 player.sendMessage(MessageUtils.getColor(MessageUtils.format(x.replace("{top_position}", String.valueOf(topChecked)), formatter)));
             }
 
         });
-        for(String x : LevelPoints.getLangSettings().getTopMessageBottomText()){
+        for(String x : LevelPoints.getInstance().getLangSettings().getTopMessageBottomText()){
             player.sendMessage(MessageUtils.getColor(x));
         }
     }

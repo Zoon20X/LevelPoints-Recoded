@@ -21,7 +21,7 @@ public class AntiAbuseSettings {
     private HashMap<String, RegionData> regions = new HashMap<>();
 
     public AntiAbuseSettings(){
-        FileConfiguration configuration = LevelPoints.getFilesGenerator().antiAbuse.getConfig();
+        FileConfiguration configuration = LevelPoints.getInstance().getFilesGenerator().antiAbuse.getConfig();
         regionLocked = configuration.getBoolean(DataLocation.abuseRegionLockedEnabled);
         denyEarn = configuration.getBoolean(DataLocation.abuseWorldGuardDisableEnabled);
         silkEnabled = configuration.getBoolean(DataLocation.abuseSilkTouchEnabled);

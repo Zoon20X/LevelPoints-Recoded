@@ -110,7 +110,7 @@ public class LangSettings {
 
 
     public LangSettings(){
-        FileConfiguration config = LevelPoints.getFilesGenerator().lang.getConfig();
+        FileConfiguration config = LevelPoints.getInstance().getFilesGenerator().lang.getConfig();
 
         this.playerHelp = config.getStringList("Help.Player");
         this.adminHelp = config.getStringList("Help.Admin");

@@ -79,7 +79,7 @@ public class ExpSettings {
 
     public void generateBlocks(){
         BlockUtils.clear();
-        FileConfiguration config = LevelPoints.getFilesGenerator().expSettings.getConfig();
+        FileConfiguration config = LevelPoints.getInstance().getFilesGenerator().expSettings.getConfig();
         values.put("BlockEnabled", config.getBoolean(DataLocation.BlockEnabled));
         if (!config.getBoolean(DataLocation.BlockEnabled)) {
             return;
@@ -112,7 +112,7 @@ public class ExpSettings {
     }
     public void generateMobs(){
         MobUtils.clear();
-        FileConfiguration config = LevelPoints.getFilesGenerator().expSettings.getConfig();
+        FileConfiguration config = LevelPoints.getInstance().getFilesGenerator().expSettings.getConfig();
         values.put("MobEnabled", config.getBoolean(DataLocation.MobEnabled));
         if (!config.getBoolean(DataLocation.MobEnabled)) {
             return;
@@ -140,7 +140,7 @@ public class ExpSettings {
     }
     public void generateBreeds(){
         BreedingUtils.clear();
-        FileConfiguration config = LevelPoints.getFilesGenerator().expSettings.getConfig();
+        FileConfiguration config = LevelPoints.getInstance().getFilesGenerator().expSettings.getConfig();
         values.put("BreedEnabled", config.getBoolean(DataLocation.BreedEnabled));
         if (!config.getBoolean(DataLocation.BreedEnabled)) {
             return;
@@ -168,7 +168,7 @@ public class ExpSettings {
     }
     public void generateCrafting(){
         CraftingUtils.clear();
-        FileConfiguration config = LevelPoints.getFilesGenerator().expSettings.getConfig();
+        FileConfiguration config = LevelPoints.getInstance().getFilesGenerator().expSettings.getConfig();
         values.put("CraftingEnabled", config.getBoolean(DataLocation.CraftingEnabled));
         if (!config.getBoolean(DataLocation.CraftingEnabled)) {
             return;
@@ -207,7 +207,7 @@ public class ExpSettings {
             @Override
             public void run() {
                 Bukkit.getOnlinePlayers().forEach(player ->{
-                    LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId()).addEXP(amount);
+                    LevelPoints.getInstance().getPlayerStorage().getLoadedData(player.getUniqueId()).addEXP(amount);
                 });
             }
         }.runTaskTimerAsynchronously(LevelPoints.getInstance(), 0, time);

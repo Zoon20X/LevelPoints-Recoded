@@ -25,7 +25,7 @@ public class PlayerGenerator {
 
 
     public void saveAllData(){
-        for(PlayerData data : LevelPoints.getPlayerStorage().getAllLoaded()){
+        for(PlayerData data : LevelPoints.getInstance().getPlayerStorage().getAllLoaded()){
             savePlayerData(data);
         }
 
@@ -33,7 +33,7 @@ public class PlayerGenerator {
     }
 
     public void savePlayerData(PlayerData data){
-        File userFile = new File(LevelPoints.getUserFolder(), data.getUUID() + ".yml");
+        File userFile = new File(LevelPoints.getInstance().getUserFolder(), data.getUUID() + ".yml");
         FileConfiguration config = YamlConfiguration.loadConfiguration(userFile);
         config.set(DataLocation.Level, data.getLevel());
         config.set(DataLocation.EXP, data.getExp());
@@ -59,14 +59,14 @@ public class PlayerGenerator {
         String name = config.getString(DataLocation.Name);
         Integer level = config.getInt(DataLocation.Level);
         Double exp = config.getDouble(DataLocation.EXP);
-        Double requiredExp = LevelPoints.getLevelSettings().getRequireExp(level);
+        Double requiredExp = LevelPoints.getInstance().getLevelSettings().getRequireExp(level);
         Integer prestige = config.getInt(DataLocation.Prestige);
         String id = config.getString(DataLocation.ActiveBoosterID);
         double multiplier = config.getInt(DataLocation.ActiveBoosterMultiplier);
         Date date = format(config.getString(DataLocation.ActiveBoosterTime));
         String levelColor = "none";
-        if(LevelPoints.getConfigSettings().isPlaceholderColorLevelEnabled()){
-            levelColor = LevelPoints.getLevelColorSettings().getLevelColor(level);
+        if(LevelPoints.getInstance().getConfigSettings().isPlaceholderColorLevelEnabled()){
+            levelColor = LevelPoints.getInstance().getLevelColorSettings().getLevelColor(level);
         }
         LevelPoints.getDebug(DebugSeverity.SEVER, levelColor);
 
@@ -74,22 +74,22 @@ public class PlayerGenerator {
         PlayerData data = new PlayerData(uuid, name, level, exp, requiredExp, prestige, 0, new ActiveBooster(id, date, multiplier), levelColor);
         if(config.contains(DataLocation.BoosterList))
             config.getConfigurationSection(DataLocation.BoosterList).getKeys(false).forEach(x->{
-                if(LevelPoints.getBoosterSettings().hasBooster(x)){
-                    data.addBooster(LevelPoints.getBoosterSettings().getBooster(x), config.getInt(DataLocation.getUserBoosterList(x)));
+                if(LevelPoints.getInstance().getBoosterSettings().hasBooster(x)){
+                    data.addBooster(LevelPoints.getInstance().getBoosterSettings().getBooster(x), config.getInt(DataLocation.getUserBoosterList(x)));
                 }
             });
 
 
-        LevelPoints.getPlayerStorage().addData(uuid, data);
+        LevelPoints.getInstance().getPlayerStorage().addData(uuid, data);
     }
 
     public void generateNewPlayer(UUID uuid, String name){
         File file = createNewPlayer(uuid);
         FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
         configuration.set(DataLocation.Name, name);
-        configuration.set(DataLocation.Level, LevelPoints.getLevelSettings().getStartingLevel());
-        configuration.set(DataLocation.EXP, LevelPoints.getLevelSettings().getStartingExp());
-        configuration.set(DataLocation.Prestige, LevelPoints.getLevelSettings().getStartingPrestige());
+        configuration.set(DataLocation.Level, LevelPoints.getInstance().getLevelSettings().getStartingLevel());
+        configuration.set(DataLocation.EXP, LevelPoints.getInstance().getLevelSettings().getStartingExp());
+        configuration.set(DataLocation.Prestige, LevelPoints.getInstance().getLevelSettings().getStartingPrestige());
         configuration.set(DataLocation.ActiveBoosterID, "none");
         configuration.set(DataLocation.ActiveBoosterMultiplier, 1.0);
         configuration.set(DataLocation.ActiveBoosterTime, getCurrentDate());
@@ -102,7 +102,7 @@ public class PlayerGenerator {
     }
 
     private File createNewPlayer(UUID uuid){
-        File userFile = new File(LevelPoints.getUserFolder(), uuid + ".yml");
+        File userFile = new File(LevelPoints.getInstance().getUserFolder(), uuid + ".yml");
         if (!userFile.exists()) {
             try {
                 userFile.createNewFile();
@@ -115,8 +115,8 @@ public class PlayerGenerator {
     }
 
     public Boolean deleteOldPlayer(UUID uuid){
-        LevelPoints.getPlayerStorage().removeData(uuid);
-        File file = new File(LevelPoints.getUserFolder(), uuid + ".yml");
+        LevelPoints.getInstance().getPlayerStorage().removeData(uuid);
+        File file = new File(LevelPoints.getInstance().getUserFolder(), uuid + ".yml");
         file.delete();
         return true;
     }

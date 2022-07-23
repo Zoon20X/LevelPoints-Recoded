@@ -27,7 +27,7 @@ public class MoveEvent implements Listener {
                 return;
             }
             if (!WorldGuardSettings.canEnterRegion(event.getPlayer(), regionName)) {
-                RegionData data = LevelPoints.getAntiAbuseSettings().getRegionData(regionName);
+                RegionData data = LevelPoints.getInstance().getAntiAbuseSettings().getRegionData(regionName);
                 if(data.isTeleportEnabled()){
                     String[] cords = data.getTeleportLocation().split(",");
                     World world = player.getWorld();

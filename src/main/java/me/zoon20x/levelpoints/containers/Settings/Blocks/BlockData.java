@@ -32,13 +32,13 @@ public class BlockData {
         switch (required){
             case BREAK:
                 for(int i = data.getLevel(); i<getBreakRequired() + 1; i++){
-                    double ex = LevelPoints.getLevelSettings().getRequireExp(i);
+                    double ex = LevelPoints.getInstance().getLevelSettings().getRequireExp(i);
                     exp += ex;
                 }
                 break;
             case PLACE:
                 for(int i = data.getLevel(); i<getPlaceRequired() + 1; i++){
-                    double ex = LevelPoints.getLevelSettings().getRequireExp(i);
+                    double ex = LevelPoints.getInstance().getLevelSettings().getRequireExp(i);
                     exp += ex;
                 }
                 break;

@@ -26,7 +26,7 @@ public class BreedingData {
     public Double getRequiredEXP(PlayerData data) {
         Double exp = 0.0;
         for (int i = data.getLevel(); i < getBreedRequirement() + 1; i++) {
-            double ex = LevelPoints.getLevelSettings().getRequireExp(i);
+            double ex = LevelPoints.getInstance().getLevelSettings().getRequireExp(i);
             exp += ex;
         }
 

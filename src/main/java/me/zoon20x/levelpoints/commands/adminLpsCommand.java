@@ -35,7 +35,7 @@ public class adminLpsCommand implements CommandExecutor {
                 sender.sendMessage(MessageUtils.getColor(DebugSeverity.SEVER + "You do not have permission"));
                 return true;
             }
-            for (String x : LevelPoints.getLangSettings().getAdminHelp()) {
+            for (String x : LevelPoints.getInstance().getLangSettings().getAdminHelp()) {
                 sender.sendMessage(MessageUtils.getColor(x));
             }
         }
@@ -69,18 +69,18 @@ public class adminLpsCommand implements CommandExecutor {
 
                         LevelPoints.getInstance().setReloading(true);
                         LevelPoints.getInstance().reloadConfig();
-                        LevelPoints.getFilesGenerator().generateFiles();
-                        LevelPoints.getPlayerGenerator().saveAllData();
-                        LevelPoints.getPlayerStorage().clearPlayerCache();
-                        LevelPoints.getRewardSettings().clearRewards();
+                        LevelPoints.getInstance().getFilesGenerator().generateFiles();
+                        LevelPoints.getInstance().getPlayerGenerator().saveAllData();
+                        LevelPoints.getInstance().getPlayerStorage().clearPlayerCache();
+                        LevelPoints.getInstance().getRewardSettings().clearRewards();
                         LevelPoints.getInstance().reloadClass();
-                        LevelPoints.getLevelSettings().generateRequired();
-                        LevelPoints.getExpSettings().generateBlocks();
-                        LevelPoints.getExpSettings().generateMobs();
-                        LevelPoints.getExpSettings().generateBreeds();
-                        LevelPoints.getExpSettings().generateCrafting();
+                        LevelPoints.getInstance().getLevelSettings().generateRequired();
+                        LevelPoints.getInstance().getExpSettings().generateBlocks();
+                        LevelPoints.getInstance().getExpSettings().generateMobs();
+                        LevelPoints.getInstance().getExpSettings().generateBreeds();
+                        LevelPoints.getInstance().getExpSettings().generateCrafting();
                         Bukkit.getOnlinePlayers().forEach(player -> {
-                            LevelPoints.getPlayerGenerator().loadPlayerFile(new File(LevelPoints.getUserFolder(), player.getUniqueId() + ".yml"));
+                            LevelPoints.getInstance().getPlayerGenerator().loadPlayerFile(new File(LevelPoints.getInstance().getUserFolder(), player.getUniqueId() + ".yml"));
                         });
                         LevelPoints.getInstance().setReloading(false);
                         long endTime = System.nanoTime();
@@ -103,11 +103,11 @@ public class adminLpsCommand implements CommandExecutor {
         switch (args[0]){
             case "booster":
                 if(args[1].equalsIgnoreCase("delete")) {
-                    if (!LevelPoints.getBoosterSettings().hasBooster(args[2])) {
+                    if (!LevelPoints.getInstance().getBoosterSettings().hasBooster(args[2])) {
                         sender.sendMessage(MessageUtils.getColor("&cBooster doesn't exist"));
                         return;
                     }
-                    LevelPoints.getBoosterSettings().removeBooster(args[2]);
+                    LevelPoints.getInstance().getBoosterSettings().removeBooster(args[2]);
                     sender.sendMessage(MessageUtils.getColor("&bBooster Removed"));
                     return;
                 }
@@ -116,11 +116,11 @@ public class adminLpsCommand implements CommandExecutor {
     }
 
     private void args4(CommandSender sender, String[] args) {
-        if(!LevelPoints.getPlayerStorage().hasPlayerFile(Bukkit.getOfflinePlayer(args[2]).getUniqueId())){
+        if(!LevelPoints.getInstance().getPlayerStorage().hasPlayerFile(Bukkit.getOfflinePlayer(args[2]).getUniqueId())){
             sender.sendMessage(MessageUtils.getColor("Player data doesn't exist"));
             return;
         }
-        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(Bukkit.getOfflinePlayer(args[2]).getUniqueId());
+        PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(Bukkit.getOfflinePlayer(args[2]).getUniqueId());
         switch (args[0]) {
             case "exp":
                 switch (args[1]) {
@@ -130,16 +130,16 @@ public class adminLpsCommand implements CommandExecutor {
                             return;
                         }
                         data.addEXP(Double.valueOf(args[3]));
-                        if (LevelPoints.getLangSettings().isExpCommandReceiverEnabled()) {
+                        if (LevelPoints.getInstance().getLangSettings().isExpCommandReceiverEnabled()) {
                             if (Bukkit.getPlayer(args[2]) != null) {
                                 Formatter formatter = new Formatter(sender.getName(), 0, Double.valueOf(args[3]), 0.0, 0, 0, 0);
-                                Bukkit.getPlayer(args[2]).sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getExperienceCommandReceiver(), formatter)));
+                                Bukkit.getPlayer(args[2]).sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getExperienceCommandReceiver(), formatter)));
                             }
                         }
 
-                        if (LevelPoints.getLangSettings().isExpCommandSenderEnabled()) {
+                        if (LevelPoints.getInstance().getLangSettings().isExpCommandSenderEnabled()) {
                             Formatter formatter = new Formatter(args[2], 0, Double.valueOf(args[3]), 0.0, 0, 0, 0);
-                            sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getExperienceCommandSender(), formatter)));
+                            sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getExperienceCommandSender(), formatter)));
                         }
                         break;
                     case "remove":
@@ -149,16 +149,16 @@ public class adminLpsCommand implements CommandExecutor {
                         }
                         data.removeEXP(Double.valueOf(args[3]));
 
-                        if (LevelPoints.getLangSettings().isRemoveCommandReceiverEnabled()) {
+                        if (LevelPoints.getInstance().getLangSettings().isRemoveCommandReceiverEnabled()) {
                             if (Bukkit.getPlayer(args[2]) != null) {
                                 Formatter formatter = new Formatter(sender.getName(), 0, Double.valueOf(args[3]), 0.0, 0, 0, 0);
-                                Bukkit.getPlayer(args[2]).sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getRemoveCommandReceiver(), formatter)));
+                                Bukkit.getPlayer(args[2]).sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getRemoveCommandReceiver(), formatter)));
                             }
                         }
 
-                        if (LevelPoints.getLangSettings().isRemoveCommandSenderEnabled()) {
+                        if (LevelPoints.getInstance().getLangSettings().isRemoveCommandSenderEnabled()) {
                             Formatter formatter = new Formatter(args[2], 0, Double.valueOf(args[3]), 0.0, 0, 0, 0);
-                            sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getRemoveCommandSender(), formatter)));
+                            sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getRemoveCommandSender(), formatter)));
                         }
                         break;
                 }
@@ -171,16 +171,16 @@ public class adminLpsCommand implements CommandExecutor {
                             return;
                         }
                         data.addLevel(Integer.valueOf(args[3]), false);
-                        if (LevelPoints.getLangSettings().isLevelsAddCommandReceiverEnabled()) {
+                        if (LevelPoints.getInstance().getLangSettings().isLevelsAddCommandReceiverEnabled()) {
                             if (Bukkit.getPlayer(args[2]) != null) {
                                 Formatter formatter = new Formatter(sender.getName(), Integer.valueOf(args[3]), 0, 0.0, 0, 0, 0);
-                                Bukkit.getPlayer(args[2]).sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getLevelsAddCommandReceiver(), formatter)));
+                                Bukkit.getPlayer(args[2]).sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getLevelsAddCommandReceiver(), formatter)));
                             }
                         }
 
-                        if (LevelPoints.getLangSettings().isLevelsAddCommandSenderEnabled()) {
+                        if (LevelPoints.getInstance().getLangSettings().isLevelsAddCommandSenderEnabled()) {
                             Formatter formatter = new Formatter(args[2], Integer.valueOf(args[3]), 0, 0.0, 0, 0, 0);
-                            sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getLevelsAddCommandSender(), formatter)));
+                            sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getLevelsAddCommandSender(), formatter)));
                         }
                         break;
                     case "remove":
@@ -189,16 +189,16 @@ public class adminLpsCommand implements CommandExecutor {
                             return;
                         }
                         data.removeLevel(Integer.valueOf(args[3]));
-                        if (LevelPoints.getLangSettings().isLevelsRemoveCommandReceiverEnabled()) {
+                        if (LevelPoints.getInstance().getLangSettings().isLevelsRemoveCommandReceiverEnabled()) {
                             if (Bukkit.getPlayer(args[2]) != null) {
                                 Formatter formatter = new Formatter(sender.getName(), Integer.valueOf(args[3]), 0, 0.0, 0, 0, 0);
-                                Bukkit.getPlayer(args[2]).sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getLevelsRemoveCommandReceiver(), formatter)));
+                                Bukkit.getPlayer(args[2]).sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getLevelsRemoveCommandReceiver(), formatter)));
                             }
                         }
 
-                        if (LevelPoints.getLangSettings().isLevelsRemoveCommandSenderEnabled()) {
+                        if (LevelPoints.getInstance().getLangSettings().isLevelsRemoveCommandSenderEnabled()) {
                             Formatter formatter = new Formatter(args[2], Integer.valueOf(args[3]), 0, 0.0, 0, 0, 0);
-                            sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getLevelsRemoveCommandSender(), formatter)));
+                            sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getLevelsRemoveCommandSender(), formatter)));
                         }
                         break;
                     case "set":
@@ -207,16 +207,16 @@ public class adminLpsCommand implements CommandExecutor {
                             return;
                         }
                         data.setLevel(Integer.valueOf(args[3]));
-                        if (LevelPoints.getLangSettings().isLevelsSetCommandReceiverEnabled()) {
+                        if (LevelPoints.getInstance().getLangSettings().isLevelsSetCommandReceiverEnabled()) {
                             if (Bukkit.getPlayer(args[2]) != null) {
                                 Formatter formatter = new Formatter(sender.getName(), Integer.valueOf(args[3]), 0, 0.0, 0, 0, 0);
-                                Bukkit.getPlayer(args[2]).sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getLevelsSetCommandReceiver(), formatter)));
+                                Bukkit.getPlayer(args[2]).sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getLevelsSetCommandReceiver(), formatter)));
                             }
                         }
 
-                        if (LevelPoints.getLangSettings().isLevelsSetCommandSenderEnabled()) {
+                        if (LevelPoints.getInstance().getLangSettings().isLevelsSetCommandSenderEnabled()) {
                             Formatter formatter = new Formatter(args[2], Integer.valueOf(args[3]), 0, 0.0, 0, 0, 0);
-                            sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getLevelsSetCommandSender(), formatter)));
+                            sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getLevelsSetCommandSender(), formatter)));
                         }
                         break;
                 }
@@ -229,16 +229,16 @@ public class adminLpsCommand implements CommandExecutor {
                             return;
                         }
                         data.addPrestige(Integer.valueOf(args[3]));
-                        if (LevelPoints.getLangSettings().isPrestigeAddCommandReceiverEnabled()) {
+                        if (LevelPoints.getInstance().getLangSettings().isPrestigeAddCommandReceiverEnabled()) {
                             if (Bukkit.getPlayer(args[2]) != null) {
                                 Formatter formatter = new Formatter(sender.getName(), 0, 0, 0.0, Integer.valueOf(args[3]), 0, 0);
-                                Bukkit.getPlayer(args[2]).sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getPrestigeAddCommandReceiver(), formatter)));
+                                Bukkit.getPlayer(args[2]).sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getPrestigeAddCommandReceiver(), formatter)));
                             }
                         }
 
-                        if (LevelPoints.getLangSettings().isPrestigeAddCommandSenderEnabled()) {
+                        if (LevelPoints.getInstance().getLangSettings().isPrestigeAddCommandSenderEnabled()) {
                             Formatter formatter = new Formatter(args[2], 0, 0, 0.0, Integer.valueOf(args[3]), 0, 0);
-                            sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getPrestigeAddCommandSender(), formatter)));
+                            sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getPrestigeAddCommandSender(), formatter)));
                         }
                         break;
                     case "remove":
@@ -247,16 +247,16 @@ public class adminLpsCommand implements CommandExecutor {
                             return;
                         }
                         data.removePrestige(Integer.valueOf(args[3]));
-                        if (LevelPoints.getLangSettings().isPrestigeRemoveCommandReceiverEnabled()) {
+                        if (LevelPoints.getInstance().getLangSettings().isPrestigeRemoveCommandReceiverEnabled()) {
                             if (Bukkit.getPlayer(args[2]) != null) {
                                 Formatter formatter = new Formatter(sender.getName(),0, 0, 0.0, Integer.valueOf(args[3]), 0, 0);
-                                Bukkit.getPlayer(args[2]).sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getPrestigeRemoveCommandReceiver(), formatter)));
+                                Bukkit.getPlayer(args[2]).sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getPrestigeRemoveCommandReceiver(), formatter)));
                             }
                         }
 
-                        if (LevelPoints.getLangSettings().isPrestigeRemoveCommandSenderEnabled()) {
+                        if (LevelPoints.getInstance().getLangSettings().isPrestigeRemoveCommandSenderEnabled()) {
                             Formatter formatter = new Formatter(args[2], 0, 0, 0.0, Integer.valueOf(args[3]), 0, 0);
-                            sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getPrestigeRemoveCommandSender(), formatter)));
+                            sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getPrestigeRemoveCommandSender(), formatter)));
                         }
                         break;
                     case "set":
@@ -265,16 +265,16 @@ public class adminLpsCommand implements CommandExecutor {
                             return;
                         }
                         data.setPrestige(Integer.valueOf(args[3]));
-                        if (LevelPoints.getLangSettings().isPrestigeSetCommandReceiverEnabled()) {
+                        if (LevelPoints.getInstance().getLangSettings().isPrestigeSetCommandReceiverEnabled()) {
                             if (Bukkit.getPlayer(args[2]) != null) {
                                 Formatter formatter = new Formatter(sender.getName(), 0, 0, 0.0, Integer.valueOf(args[3]), 0, 0);
-                                Bukkit.getPlayer(args[2]).sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getPrestigeSetCommandReceiver(), formatter)));
+                                Bukkit.getPlayer(args[2]).sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getPrestigeSetCommandReceiver(), formatter)));
                             }
                         }
 
-                        if (LevelPoints.getLangSettings().isPrestigeSetCommandSenderEnabled()) {
+                        if (LevelPoints.getInstance().getLangSettings().isPrestigeSetCommandSenderEnabled()) {
                             Formatter formatter = new Formatter(args[2], 0, 0, 0.0, Integer.valueOf(args[3]), 0, 0);
-                            sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getPrestigeSetCommandSender(), formatter)));
+                            sender.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getPrestigeSetCommandSender(), formatter)));
                         }
                         break;
                 }
@@ -285,10 +285,10 @@ public class adminLpsCommand implements CommandExecutor {
                             return;
                         }
                         //booster give <player> <booster>
-                        if(!LevelPoints.getBoosterSettings().hasBooster(args[3])){
+                        if(!LevelPoints.getInstance().getBoosterSettings().hasBooster(args[3])){
                             return;
                         }
-                        data.addBooster(LevelPoints.getBoosterSettings().getBooster(args[3]), 1);
+                        data.addBooster(LevelPoints.getInstance().getBoosterSettings().getBooster(args[3]), 1);
                         break;
                 }
                 break;
@@ -301,11 +301,11 @@ public class adminLpsCommand implements CommandExecutor {
                     if(!sender.hasPermission(PermissionUtils.getAdminPermission().createBooster())){
                         return;
                     }
-                    if(LevelPoints.getBoosterSettings().hasBooster(args[2])){
+                    if(LevelPoints.getInstance().getBoosterSettings().hasBooster(args[2])){
                         sender.sendMessage(MessageUtils.getColor("&cBooster id in use"));
                         return;
                     }
-                    LevelPoints.getBoosterSettings().addBooster(new BoosterData(args[2], Double.valueOf(args[3]), args[4]));
+                    LevelPoints.getInstance().getBoosterSettings().addBooster(new BoosterData(args[2], Double.valueOf(args[3]), args[4]));
                     sender.sendMessage(MessageUtils.getColor("&bBooster Created"));
                     return;
                 }
@@ -313,15 +313,15 @@ public class adminLpsCommand implements CommandExecutor {
                     if(!sender.hasPermission(PermissionUtils.getAdminPermission().giveBooster())){
                         return;
                     }
-                    if(!LevelPoints.getPlayerStorage().hasPlayerFile(Bukkit.getOfflinePlayer(args[2]).getUniqueId())){
+                    if(!LevelPoints.getInstance().getPlayerStorage().hasPlayerFile(Bukkit.getOfflinePlayer(args[2]).getUniqueId())){
                         sender.sendMessage(MessageUtils.getColor("Player data doesn't exist"));
                         return;
                     }
-                    PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(Bukkit.getOfflinePlayer(args[2]).getUniqueId());
-                    if(!LevelPoints.getBoosterSettings().hasBooster(args[3])){
+                    PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(Bukkit.getOfflinePlayer(args[2]).getUniqueId());
+                    if(!LevelPoints.getInstance().getBoosterSettings().hasBooster(args[3])){
                         return;
                     }
-                    data.addBooster(LevelPoints.getBoosterSettings().getBooster(args[3]), Integer.valueOf(args[4]));
+                    data.addBooster(LevelPoints.getInstance().getBoosterSettings().getBooster(args[3]), Integer.valueOf(args[4]));
                     break;
                 }
                 break;

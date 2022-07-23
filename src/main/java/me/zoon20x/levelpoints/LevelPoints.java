@@ -40,38 +40,41 @@ public final class LevelPoints
         extends JavaPlugin {
 
     private static LevelPoints instance;
-    private static File userFolder;
-    private static File boostersFolder;
-    private static File extraSupportFolder;
-    private static MySQL sql;
-    private static ConfigSettings configSettings;
-    private static PlayerStorage storage;
-    private static LevelsSettings levelsSettings;
-    private static LangSettings langSettings;
-    private static ExpSettings expSettings;
-    private static RewardSettings rewardSettings;
-    private static TopListSettings topListSettings;
-    private static AntiAbuseSettings antiAbuseSettings;
-    private static BoosterSettings boosterSettings;
-    private static PvpSettings pvpSettings;
-    private static boolean isReloading;
-    private static boolean isRunningSQL;
-    private static FileConfiguration configuration;
-    private static FilesGenerator generator;
-    private static MythicMobsSettings mythicMobsSettings;
-    private static boolean mythicMobsEnabled;
-    private static LevelColorSettings levelColorSettings;
+    private static LpsAPI lpsAPI;
 
 
-    public static MythicMobsSettings getMythicMobsSettings() {
+    private File userFolder;
+    private File boostersFolder;
+    private File extraSupportFolder;
+    private MySQL sql;
+    private ConfigSettings configSettings;
+    private PlayerStorage storage;
+    private LevelsSettings levelsSettings;
+    private LangSettings langSettings;
+    private ExpSettings expSettings;
+    private RewardSettings rewardSettings;
+    private TopListSettings topListSettings;
+    private AntiAbuseSettings antiAbuseSettings;
+    private BoosterSettings boosterSettings;
+    private PvpSettings pvpSettings;
+    private boolean isReloading;
+    private boolean isRunningSQL;
+    private FileConfiguration configuration;
+    private FilesGenerator generator;
+    private MythicMobsSettings mythicMobsSettings;
+    private boolean mythicMobsEnabled;
+    private LevelColorSettings levelColorSettings;
+
+
+    public MythicMobsSettings getMythicMobsSettings() {
         return mythicMobsSettings;
     }
 
-    public static boolean isMythicMobsEnabled() {
+    public boolean isMythicMobsEnabled() {
         return mythicMobsEnabled;
     }
 
-    public static boolean isLevelColorEnabled() {
+    public boolean isLevelColorEnabled() {
         return configSettings.isPlaceholderColorLevelEnabled();
     }
 
@@ -98,6 +101,7 @@ public final class LevelPoints
     public void onEnable() {
         // Plugin startup logic
         instance = this;
+        lpsAPI = new LpsAPI();
         mythicMobsEnabled = false;
         isRunningSQL = false;
         generateFolders();
@@ -238,65 +242,71 @@ public final class LevelPoints
 
     }
 
-    public static PlayerStorage getPlayerStorage() {
+
+
+    public PlayerStorage getPlayerStorage() {
         return storage;
     }
 
 
-    public static File getUserFolder(){
+    public File getUserFolder(){
         return userFolder;
     }
-    public static File getBoostersFolder(){
+    public File getBoostersFolder(){
         return boostersFolder;
     }
     public static LevelPoints getInstance(){
         return instance;
     }
 
-    public static ConfigSettings getConfigSettings() {
+    public static LpsAPI getAPI(){
+        return lpsAPI;
+    }
+
+    public ConfigSettings getConfigSettings() {
         return configSettings;
     }
 
-    public static PlayerGenerator getPlayerGenerator(){
+    public PlayerGenerator getPlayerGenerator(){
         return new PlayerGenerator();
     }
-    public static LevelsSettings getLevelSettings(){
+    public LevelsSettings getLevelSettings(){
         return levelsSettings;
     }
-    public static ExpSettings getExpSettings(){
+    public ExpSettings getExpSettings(){
         return expSettings;
     }
 
-    public static RewardSettings getRewardSettings() {
+    public RewardSettings getRewardSettings() {
         return rewardSettings;
     }
-    public static TopListSettings getTopListSettings() {
+    public TopListSettings getTopListSettings() {
         return topListSettings;
     }
 
-    public static FilesGenerator getFilesGenerator(){
+    public FilesGenerator getFilesGenerator(){
         return generator;
     }
-    public static LangSettings getLangSettings(){
+    public LangSettings getLangSettings(){
         return langSettings;
     }
 
-    public static PvpSettings getPvpSettings() {
+    public PvpSettings getPvpSettings() {
         return pvpSettings;
     }
-    public static BoosterSettings getBoosterSettings() {
+    public BoosterSettings getBoosterSettings() {
         return boosterSettings;
     }
-    public static AntiAbuseSettings getAntiAbuseSettings() {
+    public AntiAbuseSettings getAntiAbuseSettings() {
         return antiAbuseSettings;
     }
-    public static MySQL getSQL(){
+    public MySQL getSQL(){
         return sql;
     }
-    public static boolean isRunningSQL() {
+    public boolean isRunningSQL() {
         return isRunningSQL;
     }
-    public static @Nullable LevelColorSettings getLevelColorSettings() {
+    public @Nullable LevelColorSettings getLevelColorSettings() {
         return levelColorSettings;
     }
 

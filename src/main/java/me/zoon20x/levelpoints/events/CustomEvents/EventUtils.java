@@ -28,7 +28,7 @@ public class EventUtils {
             if(player != null) {
                 if (event instanceof BlockBreakEvent) {
                     location = ((BlockBreakEvent) event).getBlock().getLocation();
-                    if(LevelPoints.getAntiAbuseSettings().isSilkEnabled()) {
+                    if(LevelPoints.getInstance().getAntiAbuseSettings().isSilkEnabled()) {
                         if (player.getInventory().getItemInMainHand() != null) {
                             if (player.getInventory().getItemInMainHand().hasItemMeta()) {
                                 if (player.getInventory().getItemInMainHand().getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
@@ -39,9 +39,9 @@ public class EventUtils {
                     }
                 }
                 if (location != null) {
-                    if (LevelPoints.getAntiAbuseSettings().isDenyEarnEnabled()) {
+                    if (LevelPoints.getInstance().getAntiAbuseSettings().isDenyEarnEnabled()) {
                         String name = WorldGuardSettings.getRegionName(location);
-                        if (LevelPoints.getAntiAbuseSettings().getRegionsDeny().contains(name)) {
+                        if (LevelPoints.getInstance().getAntiAbuseSettings().getRegionsDeny().contains(name)) {
                             return;
                         }
                     }
@@ -49,20 +49,20 @@ public class EventUtils {
             }
 
             data.addEXP(amount * data.getActiveBooster().getMultiplier());
-            if(LevelPoints.getConfigSettings().isOnExpEnabled()){
+            if(LevelPoints.getInstance().getConfigSettings().isOnExpEnabled()){
                 Formatter formatter = new Formatter(player.getName(), data.getLevel(), data.getExp(), data.getRequiredExp(), data.getPrestige(), 0, data.getProgress());
                 player.sendActionBar(MiniMessage.miniMessage().deserialize(
-                        MessageUtils.format(LevelPoints.getConfigSettings().getOnExpMessage(), formatter)));
+                        MessageUtils.format(LevelPoints.getInstance().getConfigSettings().getOnExpMessage(), formatter)));
             }
         }
-        if(!LevelPoints.isRunningSQL()) {
+        if(!LevelPoints.getInstance().isRunningSQL()) {
             return;
         }
         new BukkitRunnable() {
             @Override
             public void run() {
 
-                LevelPoints.getSQL().updateSQLData(data.getUUID());
+                LevelPoints.getInstance().getSQL().updateSQLData(data.getUUID());
             }
         }.runTaskAsynchronously(LevelPoints.getInstance());
 
@@ -73,21 +73,21 @@ public class EventUtils {
 
         LevelUpEvent event = new LevelUpEvent(level, data);
         Bukkit.getPluginManager().callEvent(event);
-        LevelPoints.getTopListSettings().modifyLevel(data);
-        LevelPoints.getTopListSettings().generateTopCache(50);
+        LevelPoints.getInstance().getTopListSettings().modifyLevel(data);
+        LevelPoints.getInstance().getTopListSettings().generateTopCache(50);
 
-        if(LevelPoints.getLevelColorSettings() != null)
+        if(LevelPoints.getInstance().getLevelColorSettings() != null)
             data.setLevelColor(
-                    LevelPoints.getLevelColorSettings().getLevelColor(level)
+                    LevelPoints.getInstance().getLevelColorSettings().getLevelColor(level)
             );
 
-        if(!LevelPoints.isRunningSQL()) {
+        if(!LevelPoints.getInstance().isRunningSQL()) {
             return;
         }
         new BukkitRunnable() {
             @Override
             public void run() {
-                LevelPoints.getSQL().updateSQLData(data.getUUID());
+                LevelPoints.getInstance().getSQL().updateSQLData(data.getUUID());
 
             }
         }.runTaskAsynchronously(LevelPoints.getInstance());
@@ -101,11 +101,11 @@ public class EventUtils {
         if (Bukkit.getPlayer(data.getUUID()) == null) {
             return;
         }
-        if (!LevelPoints.getLangSettings().isPrestigeCommandApprovedEnabled()) {
+        if (!LevelPoints.getInstance().getLangSettings().isPrestigeCommandApprovedEnabled()) {
             return;
         }
         Player player = Bukkit.getPlayer(data.getUUID());
         Formatter formatter = new Formatter(data.getName(), data.getLevel(), data.getExp(), data.getRequiredExp(), data.getPrestige(), 0, data.getProgress());
-        player.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getLangSettings().getPrestigeCommandApprovedMessage(), formatter)));
+        player.sendMessage(MessageUtils.getColor(MessageUtils.format(LevelPoints.getInstance().getLangSettings().getPrestigeCommandApprovedMessage(), formatter)));
     }
 }

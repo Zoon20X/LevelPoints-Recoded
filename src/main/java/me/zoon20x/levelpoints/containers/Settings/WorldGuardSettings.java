@@ -22,7 +22,7 @@ public class WorldGuardSettings {
         }
         if (!checkSet.getRegions().isEmpty()) {
             for (ProtectedRegion x : checkSet.getRegions()) {
-                if(LevelPoints.getAntiAbuseSettings().hasRegionData(x.getId())){
+                if(LevelPoints.getInstance().getAntiAbuseSettings().hasRegionData(x.getId())){
                     name = x.getId();
                     break;
                 }
@@ -31,8 +31,8 @@ public class WorldGuardSettings {
         return name;
     }
     public static Boolean canEnterRegion(Player player, String name) {
-        RegionData regionData = LevelPoints.getAntiAbuseSettings().getRegionData(name);
-        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
+        RegionData regionData = LevelPoints.getInstance().getAntiAbuseSettings().getRegionData(name);
+        PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(player.getUniqueId());
         if(data.getLevel() >= regionData.getMinLevel() && data.getLevel() <= regionData.getMaxLevel()){
             return true;
         }

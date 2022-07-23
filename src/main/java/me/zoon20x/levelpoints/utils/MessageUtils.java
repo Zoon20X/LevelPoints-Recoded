@@ -52,7 +52,7 @@ public class MessageUtils {
         new BukkitRunnable() {
             @Override
             public void run() {
-                PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
+                PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(player.getUniqueId());
                 Formatter formatter = new Formatter(data.getName(), data.getLevel(), data.getExp(), data.getRequiredExp(), data.getPrestige(), 0, data.getProgress());
                 if (LevelPoints.getInstance().getConfig().getBoolean("Actionbar.PlaceholderAPI")) {
                     msg[0] = PlaceholderAPI.setPlaceholders(player, msg[0]);
@@ -103,15 +103,15 @@ public class MessageUtils {
     }
 
     public static String getLevelColor(UUID uuid){
-        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(uuid);
-        if(!LevelPoints.getConfigSettings().isPlaceholderColorLevelEnabled()) {
+        PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(uuid);
+        if(!LevelPoints.getInstance().getConfigSettings().isPlaceholderColorLevelEnabled()) {
             return FormatStatics.format(data.getLevel());
         }
         if(data.getLevelColor().equalsIgnoreCase("none")){
             return FormatStatics.format(data.getLevel());
         }
 
-        return getColor(LevelPoints.getLevelColorSettings().getColorData(data.getLevelColor()).getColor() + "" + FormatStatics.format(data.getLevel()));
+        return getColor(LevelPoints.getInstance().getLevelColorSettings().getColorData(data.getLevelColor()).getColor() + "" + FormatStatics.format(data.getLevel()));
     }
 
     public static List<String> formatRewardMessages(String x){

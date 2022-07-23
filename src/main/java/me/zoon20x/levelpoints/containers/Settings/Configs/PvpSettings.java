@@ -20,7 +20,7 @@ public class PvpSettings {
 
 
     public PvpSettings(){
-        FileConfiguration configuration = LevelPoints.getFilesGenerator().pvpSettings.getConfig();
+        FileConfiguration configuration = LevelPoints.getInstance().getFilesGenerator().pvpSettings.getConfig();
         pvpBracketsEnabled = configuration.getBoolean(DataLocation.pvpBracketsEnabled);
         differentMessageEnabled = configuration.getBoolean(DataLocation.bracketsMessagesDifferentEnabled);
         differentMessageText = configuration.getString(DataLocation.bracketsMessagesDifferentText);
@@ -34,7 +34,7 @@ public class PvpSettings {
     }
 
     private void generatePvpBrackets(){
-        FileConfiguration configuration = LevelPoints.getFilesGenerator().pvpSettings.getConfig();
+        FileConfiguration configuration = LevelPoints.getInstance().getFilesGenerator().pvpSettings.getConfig();
         configuration.getConfigurationSection("Brackets").getKeys(false).forEach(x ->{
            if(!x.equalsIgnoreCase("Enabled")){
                PvpBracketData pvpData = new PvpBracketData(x,

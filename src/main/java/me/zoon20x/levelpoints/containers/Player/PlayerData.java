@@ -12,15 +12,15 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
-public class PlayerData {
+public class PlayerData implements LpsPlayer{
 
     private final UUID uuid;
     private String name;
-    private Integer level;
+    private int level;
     private Double exp;
-    private Integer prestige;
+    private int prestige;
     private Double requiredExp;
-    private Integer previousLevel;
+    private int previousLevel;
     private boolean updateSQL;
     private PvpBracketData bracketData;
     private ActiveBooster activeBooster;
@@ -46,27 +46,30 @@ public class PlayerData {
     }
 
 
+    @Override
     public UUID getUUID() {
         return uuid;
     }
 
-    public Integer getLevel() {
+    @Override
+    public int getLevel() {
         return level;
     }
-
-    public void setLevel(Integer level) {
+    @Override
+    public void setLevel(int level) {
         this.level = level;
-        setRequiredExp(LevelPoints.getLevelSettings().getRequireExp(level));
+        setRequiredExp(LevelPoints.getInstance().getLevelSettings().getRequireExp(level));
         if(this.requiredExp <= this.exp){
             this.exp = 0.0;
         }
         updateBrackets();
-        setLevelColor(LevelPoints.getLevelColorSettings().getLevelColor(level));
+        setLevelColor(LevelPoints.getInstance().getLevelColorSettings().getLevelColor(level));
 
     }
+    @Override
     public void addLevel(int value, boolean removeEXP) {
         LevelPoints.getDebug(DebugSeverity.SEVER, requiredExp);
-        if (LevelPoints.getLevelSettings().getMaxLevel() == getLevel()) {
+        if (LevelPoints.getInstance().getLevelSettings().getMaxLevel() == getLevel()) {
             exp = requiredExp;
             return;
         }
@@ -75,7 +78,7 @@ public class PlayerData {
         }
         previousLevel = level;
         level += value;
-        requiredExp = LevelPoints.getLevelSettings().getRequireExp(level);
+        requiredExp = LevelPoints.getInstance().getLevelSettings().getRequireExp(level);
         EventUtils.triggerLevelUpEvent(this.level, this);
         if (!canLevelUp()) {
             updateBrackets();
@@ -85,30 +88,32 @@ public class PlayerData {
         }
 
     }
-    public Boolean removeLevel(Integer level) {
+    @Override
+    public boolean removeLevel(int level) {
         if(level > this.level){
             return false;
         }
 
         this.level -= level;
-        setRequiredExp(LevelPoints.getLevelSettings().getRequireExp(this.level));
+        setRequiredExp(LevelPoints.getInstance().getLevelSettings().getRequireExp(this.level));
         updateBrackets();
-        setLevelColor(LevelPoints.getLevelColorSettings().getLevelColor(level));
+        setLevelColor(LevelPoints.getInstance().getLevelColorSettings().getLevelColor(level));
 
         return true;
     }
-
-    public Double getExp() {
+    @Override
+    public double getExp() {
         return LevelPoints.round(exp, 2);
     }
 
-    public void setExp(Double exp) {
+    public void setExp(double exp) {
         this.exp = exp;
     }
-    public void addEXP(Double exp) {
+    @Override
+    public void addEXP(double exp) {
         Double xp = this.exp + exp;
 
-        if(level >= LevelPoints.getLevelSettings().getMaxLevel()){
+        if(level >= LevelPoints.getInstance().getLevelSettings().getMaxLevel()){
             if(xp >= this.getRequiredExp()){
                 this.exp = this.getRequiredExp();
                 return;
@@ -121,71 +126,77 @@ public class PlayerData {
             return;
         }
     }
-    public Boolean removeEXP(Double xp) {
+    @Override
+    public boolean removeEXP(double xp) {
         if(xp > this.exp) {
             return false;
         }
         this.exp-=xp;
         return true;
     }
+
     public double getProgress(){
         double value = getExp();
         double valueRequired = getRequiredExp();
 
         return Math.round((value / valueRequired) * 100);
     }
-    public Integer getPrestige() {
+    @Override
+    public int getPrestige() {
 
         return prestige;
     }
     public void prestige(){
         this.addPrestige(1);
-        this.setLevel(LevelPoints.getLevelSettings().getStartingLevel());
-        this.setExp(LevelPoints.getLevelSettings().getStartingExp());
+        this.setLevel(LevelPoints.getInstance().getLevelSettings().getStartingLevel());
+        this.setExp(LevelPoints.getInstance().getLevelSettings().getStartingExp());
         return;
     }
 
-    public void setPrestige(Integer prestige) {
+    @Override
+    public void setPrestige(int prestige) {
         this.prestige = prestige;
     }
+    @Override
     public void addPrestige(int value) {
-        if(LevelPoints.getLevelSettings().getMaxPrestige() <= value + this.prestige){
+        if(LevelPoints.getInstance().getLevelSettings().getMaxPrestige() <= value + this.prestige){
             return;
         }
         this.prestige+= value;
         EventUtils.triggerPrestigeUpEvent(this.prestige, this);
         return;
     }
+    @Override
     public boolean canPrestige(){
-        if(this.prestige == LevelPoints.getLevelSettings().getMaxPrestige()){
+        if(this.prestige == LevelPoints.getInstance().getLevelSettings().getMaxPrestige()){
             return false;
         }
-        if(this.level != LevelPoints.getLevelSettings().getMaxLevel()){
+        if(this.level != LevelPoints.getInstance().getLevelSettings().getMaxLevel()){
             return false;
         }
-        double max = LevelPoints.getLevelSettings().getRequireExp(LevelPoints.getLevelSettings().getMaxLevel());
+        double max = LevelPoints.getInstance().getLevelSettings().getRequireExp(LevelPoints.getInstance().getLevelSettings().getMaxLevel());
 
         if(this.exp != max){
             return false;
         }
         return true;
     }
-    public Boolean removePrestige(Integer prestige) {
+    public boolean removePrestige(int prestige) {
         if(prestige > this.prestige){
             return false;
         }
 
         this.prestige -= prestige;
-        setRequiredExp(LevelPoints.getLevelSettings().getRequireExp(this.level));
+        setRequiredExp(LevelPoints.getInstance().getLevelSettings().getRequireExp(this.level));
         return true;
     }
 
     public void updateBrackets(){
-        if(!LevelPoints.getPvpSettings().isPvpBracketsEnabled()){
+        if(!LevelPoints.getInstance().getPvpSettings().isPvpBracketsEnabled()){
             return;
         }
         bracketData = null;
-        LevelPoints.getPvpSettings().getAllPvpBrackets().forEach(x->{
+        LevelPoints.getInstance().getPvpSettings().getAllPvpBrackets().forEach(x->{
             String pl = String.valueOf(level);
             if(x.getLevelsIncluded().contains(pl)){
                 bracketData = x;
@@ -195,53 +206,58 @@ public class PlayerData {
     }
 
 
-
+    @Override
     public Set<String> getAllBoosters(){
         return boosterStorage.keySet();
     }
     public HashMap<String, Integer> getBoosterStorage(){
         return boosterStorage;
     }
-
+    @Override
     public void setActiveBooster(BoosterData data){
         activeBooster = new ActiveBooster(
                 data.getId(),
-                LevelPoints.getPlayerGenerator().formatBoosterTime(data.getTime()),
+                LevelPoints.getInstance().getPlayerGenerator().formatBoosterTime(data.getTime()),
                 data.getMultiplier());
     }
+    @Override
     public void addBooster(BoosterData data, int amount){
         boosterStorage.put(data.getId(), amount);
     }
+    @Override
     public void removeBooster(BoosterData data){
         boosterStorage.remove(data.getId());
     }
+    @Override
     public boolean hasBooster(String value){
         return boosterStorage.containsKey(value);
     }
 
-    public Integer getPreviousLevel() {
+    public int getPreviousLevel() {
         return previousLevel;
     }
 
     public void updatePreviousLevel(Integer previousLevel) {
         this.previousLevel = previousLevel;
     }
-
+    @Override
     public ActiveBooster getActiveBooster() {
         return activeBooster;
     }
 
-    public Double getRequiredExp() {
+    public double getRequiredExp() {
         return LevelPoints.round(requiredExp, 2);
     }
-    public Double getRemainingExp() {
+    @Override
+    public double getRemainingExp() {
         double remain = getRequiredExp() - getExp();
         return LevelPoints.round(remain, 2);
     }
-    public void setRequiredExp(Double requiredExp) {
+    public void setRequiredExp(double requiredExp) {
         this.requiredExp = requiredExp;
     }
-    public Boolean canLevelUp(){
+    @Override
+    public boolean canLevelUp(){
         return getExp() >= getRequiredExp();
     }
 

@@ -44,7 +44,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <outputFile>${dir}/${project.artifactId}-${project.version}.jar</outputFile>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+<!--                    <outputFile>${dir}/${project.artifactId}-${project.version}.jar</outputFile>-->
                 </configuration>
             </plugin>
         </plugins>
@@ -119,7 +120,6 @@
             <artifactId>exp4j</artifactId>
             <version>0.4.8</version>
         </dependency>
-
         <dependency>
             <groupId>com.sk89q</groupId>
             <artifactId>worldguard</artifactId>

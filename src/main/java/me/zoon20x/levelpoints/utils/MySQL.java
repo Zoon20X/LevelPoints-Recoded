@@ -96,7 +96,7 @@ public class MySQL {
     }
 
     public void updateSQLData(UUID uuid){
-        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(uuid);
+        PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(uuid);
         try {
             PreparedStatement statement = getConnection().prepareStatement("UPDATE " + table + " SET PRESTIGE=? WHERE UUID=?");
             statement.setString(1, String.valueOf(data.getPrestige()));
@@ -122,7 +122,7 @@ public class MySQL {
             statement.setString(1, uuid.toString());
             ResultSet results = statement.executeQuery();
             results.next();
-            PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(uuid);
+            PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(uuid);
             data.setLevel(results.getInt("LEVEL"));
             data.setExp(results.getDouble("EXP"));
             data.setPrestige(results.getInt("PRESTIGE"));
@@ -131,14 +131,14 @@ public class MySQL {
             e.printStackTrace();
         }
 
-        LevelPoints.getTopListSettings().generateTopCache(50);
+        LevelPoints.getInstance().getTopListSettings().generateTopCache(50);
     }
 
 
     public void createPlayer(UUID uuid){
         try{
             PreparedStatement insert = getConnection().prepareStatement("INSERT INTO " + table + " (UUID,NAME,LEVEL,EXP,PRESTIGE,ACTIVEBOOSTER,BOOSTEROFF,BOOSTERS) VALUE (?,?,?,?,?,?,?,?)");
-            PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(uuid);
+            PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(uuid);
 
             insert.setString(1, uuid.toString());
             insert.setString(2, data.getName());

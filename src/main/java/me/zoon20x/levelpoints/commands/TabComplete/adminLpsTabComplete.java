@@ -72,7 +72,7 @@ public class  adminLpsTabComplete implements TabCompleter {
             }
             if(args[0].equalsIgnoreCase("booster")){
                 if(args[1].equalsIgnoreCase("delete")){
-                    LevelPoints.getBoosterSettings().getAllBoosters().forEach(boosterData -> {
+                    LevelPoints.getInstance().getBoosterSettings().getAllBoosters().forEach(boosterData -> {
                         boosterID.add(boosterData.getId());
                     });
                     StringUtil.copyPartialMatches(args[2], boosterID, completions);
@@ -89,7 +89,7 @@ public class  adminLpsTabComplete implements TabCompleter {
         if(args.length == 4){
             if(args[0].equalsIgnoreCase("booster")){
                 if(args[1].equalsIgnoreCase("give")){
-                    LevelPoints.getBoosterSettings().getAllBoosters().forEach(boosterData -> {
+                    LevelPoints.getInstance().getBoosterSettings().getAllBoosters().forEach(boosterData -> {
                         boosterID.add(boosterData.getId());
                     });
                     StringUtil.copyPartialMatches(args[3], boosterID, completions);

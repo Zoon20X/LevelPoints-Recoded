@@ -42,26 +42,26 @@ public class PlayerEvents implements Listener {
         if(!(event.getEntity() instanceof Player)){
             return;
         }
-        if(!LevelPoints.getPvpSettings().isPvpBracketsEnabled()){
+        if(!LevelPoints.getInstance().getPvpSettings().isPvpBracketsEnabled()){
             return;
         }
         Player playera = (Player) event.getEntity();
-        PlayerData dataa = LevelPoints.getPlayerStorage().getLoadedData(playera.getUniqueId());
+        PlayerData dataa = LevelPoints.getInstance().getPlayerStorage().getLoadedData(playera.getUniqueId());
         Player playerb = (Player) event.getDamager();
-        PlayerData datab = LevelPoints.getPlayerStorage().getLoadedData(playerb.getUniqueId());
+        PlayerData datab = LevelPoints.getInstance().getPlayerStorage().getLoadedData(playerb.getUniqueId());
         if(datab.getBracketData() == null && dataa.getBracketData() == null){
             return;
         }
         if(datab.getBracketData() == null && dataa.getBracketData() != null){
-            if(LevelPoints.getPvpSettings().isDifferentMessageEnabled()){
-                playerb.sendMessage(MessageUtils.getColor(LevelPoints.getPvpSettings().getDifferentMessageText()));
+            if(LevelPoints.getInstance().getPvpSettings().isDifferentMessageEnabled()){
+                playerb.sendMessage(MessageUtils.getColor(LevelPoints.getInstance().getPvpSettings().getDifferentMessageText()));
             }
             event.setCancelled(true);
             return;
         }
         if(datab.getBracketData() != null && dataa.getBracketData() == null){
-            if(LevelPoints.getPvpSettings().isDifferentMessageEnabled()){
-                playerb.sendMessage(MessageUtils.getColor(LevelPoints.getPvpSettings().getDifferentMessageText()));
+            if(LevelPoints.getInstance().getPvpSettings().isDifferentMessageEnabled()){
+                playerb.sendMessage(MessageUtils.getColor(LevelPoints.getInstance().getPvpSettings().getDifferentMessageText()));
             }
             event.setCancelled(true);
             return;
@@ -71,24 +71,24 @@ public class PlayerEvents implements Listener {
         PvpBracketData pvpa = dataa.getBracketData();
         PvpBracketData pvpb = datab.getBracketData();
         if(!pvpb.isPvpEnabled()){
-            if(LevelPoints.getPvpSettings().isNoPvpMessageEnabled()){
-                playerb.sendMessage(MessageUtils.getColor(LevelPoints.getPvpSettings().getNoPvpMessageText()));
+            if(LevelPoints.getInstance().getPvpSettings().isNoPvpMessageEnabled()){
+                playerb.sendMessage(MessageUtils.getColor(LevelPoints.getInstance().getPvpSettings().getNoPvpMessageText()));
             }
 
             event.setCancelled(true);
             return;
         }
         if(!pvpa.isPvpEnabled()){
-            if(LevelPoints.getPvpSettings().isNoPvpMessageEnabled()){
-                playerb.sendMessage(MessageUtils.getColor(LevelPoints.getPvpSettings().getNoPvpMessageText()));
+            if(LevelPoints.getInstance().getPvpSettings().isNoPvpMessageEnabled()){
+                playerb.sendMessage(MessageUtils.getColor(LevelPoints.getInstance().getPvpSettings().getNoPvpMessageText()));
             }
             event.setCancelled(true);
 
             return;
         }
         if(!pvpb.getId().equalsIgnoreCase(pvpa.getId())){
-            if(LevelPoints.getPvpSettings().isDifferentMessageEnabled()){
-                playerb.sendMessage(MessageUtils.getColor(LevelPoints.getPvpSettings().getDifferentMessageText()));
+            if(LevelPoints.getInstance().getPvpSettings().isDifferentMessageEnabled()){
+                playerb.sendMessage(MessageUtils.getColor(LevelPoints.getInstance().getPvpSettings().getDifferentMessageText()));
             }
             event.setCancelled(true);
             return;
@@ -107,25 +107,25 @@ public class PlayerEvents implements Listener {
         }
 
 
-        if(!LevelPoints.getPlayerStorage().hasPlayerFile(uuid)){
-            LevelPoints.getPlayerGenerator().generateNewPlayer(uuid, name);
+        if(!LevelPoints.getInstance().getPlayerStorage().hasPlayerFile(uuid)){
+            LevelPoints.getInstance().getPlayerGenerator().generateNewPlayer(uuid, name);
             return;
         }
 
-        if(!LevelPoints.getPlayerStorage().hasLoadedData(uuid)){
+        if(!LevelPoints.getInstance().getPlayerStorage().hasLoadedData(uuid)){
             LevelPoints.getDebug(DebugSeverity.NORMAL, "loading " + uuid);
-            LevelPoints.getPlayerGenerator().loadPlayerFile(new File(LevelPoints.getUserFolder(), uuid + ".yml"));
+            LevelPoints.getInstance().getPlayerGenerator().loadPlayerFile(new File(LevelPoints.getInstance().getUserFolder(), uuid + ".yml"));
         }
 
-        if(LevelPoints.isRunningSQL()){
-            if(!LevelPoints.getSQL().playerExists(uuid)){
+        if(LevelPoints.getInstance().isRunningSQL()){
+            if(!LevelPoints.getInstance().getSQL().playerExists(uuid)){
                 LevelPoints.getDebug(DebugSeverity.WARNING, "player not found");
-                LevelPoints.getSQL().createPlayer(uuid);
-                LevelPoints.getPlayerStorage().getLoadedData(uuid).setUpdateSQL(true);
+                LevelPoints.getInstance().getSQL().createPlayer(uuid);
+                LevelPoints.getInstance().getPlayerStorage().getLoadedData(uuid).setUpdateSQL(true);
                 return;
             }
-            LevelPoints.getSQL().updateServerData(uuid);
-            LevelPoints.getPlayerStorage().getLoadedData(uuid).setUpdateSQL(true);
+            LevelPoints.getInstance().getSQL().updateServerData(uuid);
+            LevelPoints.getInstance().getPlayerStorage().getLoadedData(uuid).setUpdateSQL(true);
             return;
         }
 
@@ -135,21 +135,21 @@ public class PlayerEvents implements Listener {
 
     @EventHandler
     public void onLeave(PlayerQuitEvent event){
-        if(!LevelPoints.getPlayerStorage().hasLoadedData(event.getPlayer().getUniqueId())){
+        if(!LevelPoints.getInstance().getPlayerStorage().hasLoadedData(event.getPlayer().getUniqueId())){
             return;
         }
-        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(event.getPlayer().getUniqueId());
-        if(LevelPoints.isRunningSQL()){
+        PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(event.getPlayer().getUniqueId());
+        if(LevelPoints.getInstance().isRunningSQL()){
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    LevelPoints.getSQL().updateSQLData(event.getPlayer().getUniqueId());
+                    LevelPoints.getInstance().getSQL().updateSQLData(event.getPlayer().getUniqueId());
 
                 }
             }.runTaskAsynchronously(LevelPoints.getInstance());
-            LevelPoints.getPlayerStorage().getLoadedData(event.getPlayer().getUniqueId()).setUpdateSQL(false);
+            LevelPoints.getInstance().getPlayerStorage().getLoadedData(event.getPlayer().getUniqueId()).setUpdateSQL(false);
         }
-        LevelPoints.getPlayerGenerator().savePlayerData(data);
+        LevelPoints.getInstance().getPlayerGenerator().savePlayerData(data);
     }
 
     @EventHandler
@@ -164,7 +164,7 @@ public class PlayerEvents implements Listener {
 
     @EventHandler
     public void onLevelUP(LevelUpEvent event) {
-        RewardSettings rewardSettings = LevelPoints.getRewardSettings();
+        RewardSettings rewardSettings = LevelPoints.getInstance().getRewardSettings();
         if(Bukkit.getPlayer(event.getPlayerData().getUUID()) == null){
             return;
         }
@@ -235,7 +235,7 @@ public class PlayerEvents implements Listener {
     }
     @EventHandler
     public void onPrestige(PrestigeEvent event){
-        RewardSettings rewardSettings = LevelPoints.getRewardSettings();
+        RewardSettings rewardSettings = LevelPoints.getInstance().getRewardSettings();
         if(Bukkit.getPlayer(event.getPlayerData().getUUID()) == null){
             return;
         }

@@ -15,7 +15,7 @@ public class BoosterSettings {
     private HashMap<String, BoosterData> data = new HashMap<>();
 
     public BoosterSettings(){
-        File boosterData = new File(LevelPoints.getBoostersFolder(), "BoosterData.yml");
+        File boosterData = new File(LevelPoints.getInstance().getBoostersFolder(), "BoosterData.yml");
         dataConfig = YamlConfiguration.loadConfiguration(boosterData);
         generateBooster();
     }
@@ -43,7 +43,7 @@ public class BoosterSettings {
     }
     public void removeBooster(String id){
         data.remove(id);
-        File boosterData = new File(LevelPoints.getBoostersFolder(), "BoosterData.yml");
+        File boosterData = new File(LevelPoints.getInstance().getBoostersFolder(), "BoosterData.yml");
         dataConfig.set(id, null);
         try {
             dataConfig.save(boosterData);
@@ -57,7 +57,7 @@ public class BoosterSettings {
     }
 
     public void saveBoosters(){
-        File boosterData = new File(LevelPoints.getBoostersFolder(), "BoosterData.yml");
+        File boosterData = new File(LevelPoints.getInstance().getBoostersFolder(), "BoosterData.yml");
         data.keySet().forEach(x->{
             dataConfig.set(x + ".Multiplier", data.get(x).getMultiplier());
             dataConfig.set(x + ".Time", data.get(x).getTime());

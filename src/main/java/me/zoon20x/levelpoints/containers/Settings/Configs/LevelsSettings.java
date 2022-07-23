@@ -35,14 +35,14 @@ public class LevelsSettings {
 
     public LevelsSettings() {
         requiredLeveledEXP.clear();
-        this.startingXp = LevelPoints.getFilesGenerator().levelSettings.getConfig().getDouble(DataLocation.StartingExp);
-        this.startingXp = LevelPoints.getFilesGenerator().levelSettings.getConfig().getDouble(DataLocation.StartingExp);
-        this.startingLevel = LevelPoints.getFilesGenerator().levelSettings.getConfig().getInt(DataLocation.StartingLevel);
-        this.startingPrestige = LevelPoints.getFilesGenerator().levelSettings.getConfig().getInt(DataLocation.StartingPrestige);
-        this.maxLevel = LevelPoints.getFilesGenerator().levelSettings.getConfig().getInt(DataLocation.MaxLevel);
-        this.maxPrestige = LevelPoints.getFilesGenerator().levelSettings.getConfig().getInt(DataLocation.MaxPrestige);
-        this.formulaType = FormulaType.valueOf(LevelPoints.getFilesGenerator().levelSettings.getConfig().getString(DataLocation.FormulaType));
-        this.levelUpType = LevelUpType.valueOf(LevelPoints.getFilesGenerator().levelSettings.getConfig().getString(DataLocation.LevelUpType));
+        this.startingXp = LevelPoints.getInstance().getFilesGenerator().levelSettings.getConfig().getDouble(DataLocation.StartingExp);
+        this.startingXp = LevelPoints.getInstance().getFilesGenerator().levelSettings.getConfig().getDouble(DataLocation.StartingExp);
+        this.startingLevel = LevelPoints.getInstance().getFilesGenerator().levelSettings.getConfig().getInt(DataLocation.StartingLevel);
+        this.startingPrestige = LevelPoints.getInstance().getFilesGenerator().levelSettings.getConfig().getInt(DataLocation.StartingPrestige);
+        this.maxLevel = LevelPoints.getInstance().getFilesGenerator().levelSettings.getConfig().getInt(DataLocation.MaxLevel);
+        this.maxPrestige = LevelPoints.getInstance().getFilesGenerator().levelSettings.getConfig().getInt(DataLocation.MaxPrestige);
+        this.formulaType = FormulaType.valueOf(LevelPoints.getInstance().getFilesGenerator().levelSettings.getConfig().getString(DataLocation.FormulaType));
+        this.levelUpType = LevelUpType.valueOf(LevelPoints.getInstance().getFilesGenerator().levelSettings.getConfig().getString(DataLocation.LevelUpType));
     }
 
 
@@ -59,15 +59,15 @@ public class LevelsSettings {
     }
 
     public String getBasicFormula() {
-        return LevelPoints.getFilesGenerator().levelSettings.getConfig().getString(DataLocation.BasicFormula);
+        return LevelPoints.getInstance().getFilesGenerator().levelSettings.getConfig().getString(DataLocation.BasicFormula);
     }
 
     public String getAdvancedFormula(int level) {
-        return LevelPoints.getFilesGenerator().levelSettings.getConfig().getString(DataLocation.getAdvancedFormula(level));
+        return LevelPoints.getInstance().getFilesGenerator().levelSettings.getConfig().getString(DataLocation.getAdvancedFormula(level));
     }
 
     public Double getCustomLevel(int level) {
-        return LevelPoints.getFilesGenerator().levelSettings.getConfig().getDouble(DataLocation.getCustomLeveling(level));
+        return LevelPoints.getInstance().getFilesGenerator().levelSettings.getConfig().getDouble(DataLocation.getCustomLeveling(level));
     }
 
     public Set<Integer> getLoadedLevels() {
@@ -114,10 +114,10 @@ public class LevelsSettings {
         return false;
     }
     public Boolean canDamageMythicMobs(String type, PlayerData data){
-        if(!LevelPoints.getMythicMobsSettings().hasMobData(type)){
+        if(!LevelPoints.getInstance().getMythicMobsSettings().hasMobData(type)){
             return true;
         }
-        MythicMobsData a = LevelPoints.getMythicMobsSettings().getMobData(type);
+        MythicMobsData a = LevelPoints.getInstance().getMythicMobsSettings().getMobData(type);
         if(data.getLevel() >= a.getLevelMin() && data.getLevel() <= a.getLevelMax()){
             return true;
         }
@@ -142,7 +142,7 @@ public class LevelsSettings {
         for (int i = getStartingLevel(); i != getMaxLevel() + 1; i++) {
             Formatter formatter = new Formatter(null, i, 0, 0, 0, 0, 0.0);
             if (getLevelUpType() == LevelUpType.CUSTOMLEVEL) {
-                if (LevelPoints.getFilesGenerator().levelSettings.getConfig().isSet(DataLocation.getCustomLeveling(i))) {
+                if (LevelPoints.getInstance().getFilesGenerator().levelSettings.getConfig().isSet(DataLocation.getCustomLeveling(i))) {
 
                     requiredLeveledEXP.put(i, getCustomLevel(i));
                 } else {

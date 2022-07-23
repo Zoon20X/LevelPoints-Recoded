@@ -10,9 +10,9 @@ public class MythicMobsData {
 
     public MythicMobsData(String mob){
         name = mob;
-        levelMin = LevelPoints.getFilesGenerator().mythicMobsConfig.getConfig().getInt(mob + ".Level.Min");
-        levelMax = LevelPoints.getFilesGenerator().mythicMobsConfig.getConfig().getInt(mob + ".Level.Max");
-        exp = LevelPoints.getFilesGenerator().mythicMobsConfig.getConfig().getDouble(mob + ".EXP");
+        levelMin = LevelPoints.getInstance().getFilesGenerator().mythicMobsConfig.getConfig().getInt(mob + ".Level.Min");
+        levelMax = LevelPoints.getInstance().getFilesGenerator().mythicMobsConfig.getConfig().getInt(mob + ".Level.Max");
+        exp = LevelPoints.getInstance().getFilesGenerator().mythicMobsConfig.getConfig().getDouble(mob + ".EXP");
     }
 
 

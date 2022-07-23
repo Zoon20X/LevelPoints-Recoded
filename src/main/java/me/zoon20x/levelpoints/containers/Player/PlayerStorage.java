@@ -14,14 +14,14 @@ public class PlayerStorage {
 
     public PlayerData getLoadedData(UUID uuid){
         if(!hasLoadedData(uuid)){
-            LevelPoints.getPlayerGenerator().loadPlayerFile(new File(LevelPoints.getUserFolder(),uuid + ".yml"));
+            LevelPoints.getInstance().getPlayerGenerator().loadPlayerFile(new File(LevelPoints.getInstance().getUserFolder(),uuid + ".yml"));
         }
         return loadedData.get(uuid);
     }
 
 
     public boolean hasPlayerFile(UUID uuid){
-        File dir = new File(LevelPoints.getUserFolder(), uuid + ".yml");
+        File dir = new File(LevelPoints.getInstance().getUserFolder(), uuid + ".yml");
         return dir.exists();
     }
 
