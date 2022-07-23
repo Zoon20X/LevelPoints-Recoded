@@ -48,7 +48,7 @@ public class lpsTabComplete implements TabCompleter {
             if(args[0].equalsIgnoreCase("booster")){
                 if(args[1].equalsIgnoreCase("use")){
                     boosters.clear();
-                    PlayerData playerData = LevelPoints.getPlayerStorage().getLoadedData(player.getUniqueId());
+                    PlayerData playerData = LevelPoints.getInstance().getPlayerStorage().getLoadedData(player.getUniqueId());
                     playerData.getAllBoosters().forEach(boosterString ->{
                         boosters.add(boosterString);
                     });

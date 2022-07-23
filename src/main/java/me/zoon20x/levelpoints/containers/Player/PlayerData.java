@@ -68,7 +68,6 @@ public class PlayerData implements LpsPlayer{
     }
     @Override
     public void addLevel(int value, boolean removeEXP) {
-        LevelPoints.getDebug(DebugSeverity.SEVER, requiredExp);
         if (LevelPoints.getInstance().getLevelSettings().getMaxLevel() == getLevel()) {
             exp = requiredExp;
             return;

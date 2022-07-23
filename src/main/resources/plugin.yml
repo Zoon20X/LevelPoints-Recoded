@@ -2,7 +2,7 @@ name: LevelPoints
 version: 3.0.0
 main: me.zoon20x.levelpoints.LevelPoints
 api-version: 1.17
-authors: [ Zoon20X ]
+authors: [ Zoon20X, rgnter]
 description: Leveling plugin with custom features
 softdepend:
   - WorldGuard

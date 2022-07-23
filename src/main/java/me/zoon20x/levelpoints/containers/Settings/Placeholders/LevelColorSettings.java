@@ -20,7 +20,6 @@ public class LevelColorSettings {
         generateColorData();
         long endTime = System.nanoTime();
         long duration = ((endTime - startTime) / 1000000);
-        LevelPoints.getDebug(DebugSeverity.NORMAL, "LevelColor took "+ duration + "ms, to load " + colorData.size() + " color groups");
 
     }
 
@@ -29,9 +28,6 @@ public class LevelColorSettings {
     }
 
     public void addColorData(LevelColorData data){
-        LevelPoints.getDebug(DebugSeverity.WARNING, data.getId());
-        LevelPoints.getDebug(DebugSeverity.WARNING, data.getColor() + "color");
-        LevelPoints.getDebug(DebugSeverity.WARNING, data.getLevels());
         colorData.put(data.getId(), data);
     }
 

@@ -113,13 +113,11 @@ public class PlayerEvents implements Listener {
         }
 
         if(!LevelPoints.getInstance().getPlayerStorage().hasLoadedData(uuid)){
-            LevelPoints.getDebug(DebugSeverity.NORMAL, "loading " + uuid);
             LevelPoints.getInstance().getPlayerGenerator().loadPlayerFile(new File(LevelPoints.getInstance().getUserFolder(), uuid + ".yml"));
         }
 
         if(LevelPoints.getInstance().isRunningSQL()){
             if(!LevelPoints.getInstance().getSQL().playerExists(uuid)){
-                LevelPoints.getDebug(DebugSeverity.WARNING, "player not found");
                 LevelPoints.getInstance().getSQL().createPlayer(uuid);
                 LevelPoints.getInstance().getPlayerStorage().getLoadedData(uuid).setUpdateSQL(true);
                 return;

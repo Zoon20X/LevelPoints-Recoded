@@ -29,7 +29,6 @@ public class PvpSettings {
 
         if(pvpBracketsEnabled){
             generatePvpBrackets();
-            LevelPoints.getDebug(DebugSeverity.NORMAL, "Generated " + data.size() + " pvp brackets");
         }
     }
 

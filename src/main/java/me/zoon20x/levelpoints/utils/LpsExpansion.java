@@ -58,11 +58,11 @@ public class LpsExpansion extends PlaceholderExpansion {
         }
 
         UUID uuid = player.getUniqueId();
-        if (!LevelPoints.getPlayerStorage().hasPlayerFile(uuid)) {
+        if (!LevelPoints.getInstance().getPlayerStorage().hasPlayerFile(uuid)) {
             return "";
         }
 
-        PlayerData data = LevelPoints.getPlayerStorage().getLoadedData(uuid);
+        PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(uuid);
         if (identifier.equals("player_level")) {
             return MessageUtils.getLevelColor(uuid);
         }
@@ -118,7 +118,6 @@ public class LpsExpansion extends PlaceholderExpansion {
             if (!BlockUtils.hasBlockData(Material.getMaterial(dat.get(0)))) {
                 return "0";
             }
-            LevelPoints.getDebug(DebugSeverity.SEVER, dat.size());
             if (dat.size() == 2) {
                 return String.valueOf(BlockUtils.getBlockData(Material.getMaterial(dat.get(0)), Byte.valueOf(dat.get(1))).getBreakRequired());
 

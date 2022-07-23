@@ -146,7 +146,6 @@ public class LevelsSettings {
 
                     requiredLeveledEXP.put(i, getCustomLevel(i));
                 } else {
-                    LevelPoints.getDebug(DebugSeverity.SEVER, "Failed to load required experience for level " + i + "; exit code:" + ErrorCodes.CustomExperience);
                 }
             } else {
                 String form;
@@ -154,7 +153,6 @@ public class LevelsSettings {
                     form = MessageUtils.format(getBasicFormula(), formatter);
                 } else {
                     if (getAdvancedFormula(i) == null) {
-                        LevelPoints.getDebug(DebugSeverity.SEVER, "Failed to load required experience for level " + i + "; exit code:" + ErrorCodes.AdvancedFormulaError);
                         this.maxLevel = i - 1;
                         return;
                     }
@@ -167,11 +165,6 @@ public class LevelsSettings {
                     Expression expression = new ExpressionBuilder(form).build();
                     requiredEXP = expression.evaluate();
                 } catch (Exception e) {
-                    if (getFormulaType() == FormulaType.BASIC) {
-                        LevelPoints.getDebug(DebugSeverity.SEVER, "Failed to load required experience for level " + i + "; exit code:" + ErrorCodes.BasicFormulaError);
-                    } else {
-                        LevelPoints.getDebug(DebugSeverity.SEVER, "Failed to load required experience for level " + i + "; exit code:" + ErrorCodes.AdvancedFormulaError);
-                    }
 
                 }
                 //LevelPoints.getDebug(DebugSeverity.NORMAL, requiredEXP);
@@ -181,7 +174,6 @@ public class LevelsSettings {
 
         long endTime = System.nanoTime();
         long duration = ((endTime - startTime) / 1000000);
-        LevelPoints.getDebug(DebugSeverity.NORMAL, "Required Exp generator took " + duration + "ms, to load " + requiredLeveledEXP.size() + " levels");
     }
     public FormulaType getFormulaType() {
         return formulaType;

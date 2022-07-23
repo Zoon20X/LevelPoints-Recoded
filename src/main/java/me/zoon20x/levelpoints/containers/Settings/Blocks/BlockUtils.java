@@ -18,7 +18,6 @@ public class BlockUtils {
     }
 
     public static void addBlock(Material mat, BlockData data){
-        LevelPoints.getDebug(DebugSeverity.WARNING, data.getMaterial());
         if(!blocks.containsKey(mat)) {
             blocks.put(mat, new HashMap<>());
         }

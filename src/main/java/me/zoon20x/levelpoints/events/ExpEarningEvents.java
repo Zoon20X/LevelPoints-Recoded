@@ -97,7 +97,6 @@ public class ExpEarningEvents implements Listener {
             return;
 
 
-        LevelPoints.getDebug(DebugSeverity.NORMAL, LevelPoints.getInstance().getExpSettings().expType(entityType.name()));
         if(!player.hasPermission(PermissionUtils.getPlayerPermission().expMobs()))
             return;
 
@@ -198,7 +197,6 @@ public class ExpEarningEvents implements Listener {
         Player player = event.getPlayer();
         PlayerData data = LevelPoints.getInstance().getPlayerStorage().getLoadedData(player.getUniqueId());
         if(data.getBracketData() != null){
-            LevelPoints.getDebug(DebugSeverity.SEVER, data.getBracketData().getId());
         }
         Block block = event.getBlock();
 

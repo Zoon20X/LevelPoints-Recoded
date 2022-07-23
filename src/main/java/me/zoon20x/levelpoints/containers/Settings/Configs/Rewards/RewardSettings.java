@@ -19,7 +19,7 @@ public class RewardSettings {
         generateRewards();
         long endTime = System.nanoTime();
         long duration = ((endTime - startTime) / 1000000);
-        LevelPoints.getDebug(DebugSeverity.NORMAL, "Rewards took "+ duration + "ms, to load " + rewards.size() + " rewards");
+        LevelPoints.out(DebugSeverity.NORMAL, "Rewards took "+ duration + "ms, to load " + rewards.size() + " rewards");
     }
 
     public void addReward(RewardData data){

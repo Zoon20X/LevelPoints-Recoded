@@ -46,7 +46,6 @@ public class AntiAbuseSettings {
             regions.put(name, data);
         }
 
-        LevelPoints.getDebug(DebugSeverity.NORMAL, "Loaded " + regions.size() + " regions");
 
     }
 

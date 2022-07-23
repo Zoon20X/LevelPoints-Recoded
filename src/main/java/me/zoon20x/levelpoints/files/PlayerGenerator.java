@@ -29,7 +29,6 @@ public class PlayerGenerator {
             savePlayerData(data);
         }
 
-        LevelPoints.getDebug(DebugSeverity.NORMAL, "Saved all data");
     }
 
     public void savePlayerData(PlayerData data){
@@ -68,7 +67,6 @@ public class PlayerGenerator {
         if(LevelPoints.getInstance().getConfigSettings().isPlaceholderColorLevelEnabled()){
             levelColor = LevelPoints.getInstance().getLevelColorSettings().getLevelColor(level);
         }
-        LevelPoints.getDebug(DebugSeverity.SEVER, levelColor);
 
 
         PlayerData data = new PlayerData(uuid, name, level, exp, requiredExp, prestige, 0, new ActiveBooster(id, date, multiplier), levelColor);
@@ -106,9 +104,7 @@ public class PlayerGenerator {
         if (!userFile.exists()) {
             try {
                 userFile.createNewFile();
-                LevelPoints.getDebug(DebugSeverity.NORMAL, "Created " + uuid + " player file");
             } catch (IOException ex) {
-                LevelPoints.getDebug(DebugSeverity.SEVER, "Can't create " + uuid + " user file");
             }
         }
         return userFile;

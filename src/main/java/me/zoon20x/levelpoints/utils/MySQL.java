@@ -38,7 +38,7 @@ public class MySQL {
         if (!isConnected()) {
             try {
                 con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true&useSSL=" + ssl, username, password);
-                LevelPoints.getDebug(DebugSeverity.NORMAL, "MySQL Connected");
+                LevelPoints.out(DebugSeverity.NORMAL, "MySQL Connected");
                 createTable();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -74,7 +74,7 @@ public class MySQL {
                     " BOOSTEROFF varchar(200)," +
                     " BOOSTERS TEXT(60000))");
             statement.executeUpdate();
-            LevelPoints.getDebug(DebugSeverity.NORMAL, table + " table created");
+            LevelPoints.out(DebugSeverity.NORMAL, table + " table created");
         }catch (SQLException e){
             e.printStackTrace();
         }

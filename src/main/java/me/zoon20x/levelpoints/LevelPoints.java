@@ -105,7 +105,7 @@ public final class LevelPoints
         mythicMobsEnabled = false;
         isRunningSQL = false;
         generateFolders();
-        getDebug(DebugSeverity.NORMAL, "Initializing Data, this will take a second");
+        out(DebugSeverity.NORMAL, "Initializing Data, this will take a second");
         Bukkit.getWorlds().get(0).getBlockAt(0, 0, 0).getData();
         generator = new FilesGenerator();
         getFilesGenerator().generateFiles();
@@ -119,7 +119,6 @@ public final class LevelPoints
         getExpSettings().generateCrafting();
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new LpsExpansion().register();
-            getDebug(DebugSeverity.NORMAL, "Loaded Placeholder expansion");
         }
 
         if(getConfig().getBoolean("MySQL.Enabled")) {
@@ -157,10 +156,10 @@ public final class LevelPoints
 
 
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "=============================");
-        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "LevelPoints Plugin - LITE");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "LevelPoints Plugin");
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Developer: Zoon20X and rgnter");
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Version: " + this.getDescription().getVersion());
-        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "MC-Compatible: 1.8-1.17*");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "MC-Compatible: 1.8-1.19*");
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "Enabled");
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "=============================");
         sendLoadedData();
@@ -200,20 +199,20 @@ public final class LevelPoints
 
 
     public void sendLoadedData(){
-        getDebug(DebugSeverity.WARNING, "Starting-Level:" + getLevelSettings().getStartingLevel());
-        getDebug(DebugSeverity.WARNING, "Starting-Experience:" + getLevelSettings().getStartingLevel());
-        getDebug(DebugSeverity.WARNING, "Starting-Prestige:" + getLevelSettings().getMaxPrestige());
-        getDebug(DebugSeverity.WARNING, "Max-Level:" + getLevelSettings().getMaxLevel());
-        getDebug(DebugSeverity.WARNING, "Max-Prestige:" + getLevelSettings().getMaxPrestige());
-        getDebug(DebugSeverity.WARNING, "Formula-Basic:" + getLevelSettings().getBasicFormula());
-        getDebug(DebugSeverity.WARNING, "Formula-Advanced:" + getLevelSettings().getAdvancedFormula(1));
-        getDebug(DebugSeverity.WARNING, "LevelUp-Type:" + getLevelSettings().getLevelUpType());
-        getDebug(DebugSeverity.WARNING, "Formula-Type:" + getLevelSettings().getFormulaType());
-        getDebug(DebugSeverity.WARNING, "LoadedLevels:" + Arrays.asList(getLevelSettings().getLoadedLevels()));
-        getDebug(DebugSeverity.WARNING, "RegionLocked:" + getAntiAbuseSettings().isRegionLocked());
-        getDebug(DebugSeverity.WARNING, "OnEXPEnabled:" + getConfigSettings().isOnExpEnabled());
-        getDebug(DebugSeverity.WARNING, "OnEXPMessage:" + getConfigSettings().getOnExpMessage());
-        getDebug(DebugSeverity.WARNING, "LoadedPlayersAmount: " + getPlayerStorage().getAmountLoaded());
+        out(DebugSeverity.WARNING, "Starting-Level:" + getLevelSettings().getStartingLevel());
+        out(DebugSeverity.WARNING, "Starting-Experience:" + getLevelSettings().getStartingLevel());
+        out(DebugSeverity.WARNING, "Starting-Prestige:" + getLevelSettings().getMaxPrestige());
+        out(DebugSeverity.WARNING, "Max-Level:" + getLevelSettings().getMaxLevel());
+        out(DebugSeverity.WARNING, "Max-Prestige:" + getLevelSettings().getMaxPrestige());
+        out(DebugSeverity.WARNING, "Formula-Basic:" + getLevelSettings().getBasicFormula());
+        out(DebugSeverity.WARNING, "Formula-Advanced:" + getLevelSettings().getAdvancedFormula(1));
+        out(DebugSeverity.WARNING, "LevelUp-Type:" + getLevelSettings().getLevelUpType());
+        out(DebugSeverity.WARNING, "Formula-Type:" + getLevelSettings().getFormulaType());
+        out(DebugSeverity.WARNING, "LoadedLevels:" + Arrays.asList(getLevelSettings().getLoadedLevels()));
+        out(DebugSeverity.WARNING, "RegionLocked:" + getAntiAbuseSettings().isRegionLocked());
+        out(DebugSeverity.WARNING, "OnEXPEnabled:" + getConfigSettings().isOnExpEnabled());
+        out(DebugSeverity.WARNING, "OnEXPMessage:" + getConfigSettings().getOnExpMessage());
+        out(DebugSeverity.WARNING, "LoadedPlayersAmount: " + getPlayerStorage().getAmountLoaded());
     }
 
 
@@ -238,8 +237,8 @@ public final class LevelPoints
         }
     }
 
-    public static void getDebug(DebugSeverity value, Object x){
-
+    public static void out(DebugSeverity value, Object x){
+        System.out.println(MessageUtils.getColor(value+ "" + x));
     }
 
 

@@ -17,7 +17,6 @@ public class MobUtils {
         return mobData.values();
     }
     public static void addMob(MobData data){
-        LevelPoints.getDebug(DebugSeverity.WARNING, data.getMob().name());
         mobData.put(data.getMob(), data);
     }
     public static MobData getMobData(EntityType type){

@@ -22,7 +22,6 @@ public class CraftingUtils {
         return craftingData.values();
     }
     public static void addItem(CraftingData data){
-        LevelPoints.getDebug(DebugSeverity.WARNING, data.getMaterial().name());
         craftingData.put(data.getMaterial(), data);
     }
     public static CraftingData getCraftingData(Material type){

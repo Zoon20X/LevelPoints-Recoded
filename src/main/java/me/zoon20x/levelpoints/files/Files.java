@@ -35,7 +35,6 @@ public class Files {
         }
 
         if (!file.exists()) {
-            LevelPoints.getDebug(DebugSeverity.NORMAL, "Creating file " + name);
             LevelPoints.getInstance().saveResource(location + "" + name, false);
         }
         fileConfiguration = YamlConfiguration.loadConfiguration(file);

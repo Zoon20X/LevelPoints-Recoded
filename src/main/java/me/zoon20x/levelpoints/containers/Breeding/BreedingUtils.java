@@ -19,7 +19,6 @@ public class BreedingUtils {
         return breedData.values();
     }
     public static void addBreed(BreedingData data){
-        LevelPoints.getDebug(DebugSeverity.WARNING, data.getMob().name());
         breedData.put(data.getMob(), data);
     }
     public static BreedingData getBreedData(EntityType type){
