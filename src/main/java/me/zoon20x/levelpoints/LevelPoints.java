@@ -1,7 +1,10 @@
 package me.zoon20x.levelpoints;
 
+import me.zoon20x.levelpoints.events.CustomEvents.EventUtils;
+import me.zoon20x.levelpoints.events.EXPEarnEvents;
 import me.zoon20x.levelpoints.utils.files.ConfigUtils;
 import org.apache.commons.jexl3.*;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -9,16 +12,21 @@ import java.util.HashMap;
 public final class LevelPoints extends JavaPlugin {
     private static LevelPoints instance;
 
-    private static ConfigUtils configUtils;
+    private ConfigUtils configUtils;
+    private EventUtils eventUtils;
 
 
     private HashMap<Integer, Double> levels = new HashMap<>();
+
+
 
     @Override
     public void onEnable() {
         // Plugin startup logic
         instance = this;
         configUtils = new ConfigUtils();
+        eventUtils = new EventUtils();
+        loadEvents();
 
 
 //        long startTime = System.nanoTime();
@@ -37,15 +45,27 @@ public final class LevelPoints extends JavaPlugin {
 
     }
 
+    private void loadEvents(){
+        Bukkit.getPluginManager().registerEvents(new EXPEarnEvents(this), this);
+    }
+
+
+
     @Override
     public void onDisable() {
         // Plugin shutdown logic
     }
 
 
+
     public static LevelPoints getInstance(){
         return instance;
     }
 
-
+    public ConfigUtils getConfigUtils() {
+        return configUtils;
+    }
+    public EventUtils getEventUtils() {
+        return eventUtils;
+    }
 }
