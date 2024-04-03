@@ -1,4 +1,9 @@
 package me.zoon20x.levelpoints.events;
 
-public class EXPEarnEvents {
+import org.bukkit.event.Listener;
+
+public class EXPEarnEvents implements Listener {
+
+
+
 }
