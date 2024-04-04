@@ -1,5 +1,6 @@
 package me.zoon20x.devTools.spigot;
 
+import me.zoon20x.devTools.spigot.stats.BlockLoader;
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.devTools.spigot.events.DevEvents;
 import me.zoon20x.devTools.spigot.stats.BlockStat;
@@ -8,12 +9,15 @@ import org.bukkit.Bukkit;
 public class DevInstance {
 
     private DevConfig devConfig;
-    private BlockStat blockStat;
+
+    private BlockLoader blockLoader;
+
 
     public DevInstance(){
         devConfig = new DevConfig();
-        blockStat = new BlockStat("", 1.0, 2);
+        blockLoader = new BlockLoader(devConfig.dev1);
         loadEvents();
+
     }
 
 
@@ -25,7 +29,7 @@ public class DevInstance {
         return devConfig;
     }
 
-    public BlockStat getBlockStat() {
-        return blockStat;
+    public BlockLoader getBlockLoader() {
+        return blockLoader;
     }
 }

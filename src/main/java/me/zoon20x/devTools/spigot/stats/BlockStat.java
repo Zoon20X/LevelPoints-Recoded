@@ -4,12 +4,15 @@ public class BlockStat {
 
     private String material;
     private double exp;
-    private int levelRequired;
+    private int breakRequired;
+    private int placeRequired;
 
-    public BlockStat(String material, double exp, int levelRequired) {
+    public BlockStat(String material, double exp, int breakRequired, int placeRequired) {
         this.material = material;
         this.exp = exp;
-        this.levelRequired = levelRequired;
+
+        this.breakRequired = breakRequired;
+        this.placeRequired = placeRequired;
     }
 
 
@@ -21,7 +24,11 @@ public class BlockStat {
         return exp;
     }
 
-    public int getLevelRequired() {
-        return levelRequired;
+    public int getBreakRequired() {
+        return breakRequired;
+    }
+
+    public int getPlaceRequired() {
+        return placeRequired;
     }
 }

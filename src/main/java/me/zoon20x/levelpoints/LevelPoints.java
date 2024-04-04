@@ -38,6 +38,7 @@ public final class LevelPoints extends JavaPlugin {
         configUtils = new ConfigUtils();
         eventUtils = new EventUtils();
         loadEvents();
+
         if (getDescription().getVersion().contains("DEV")) {
             loadDev();
             return;
@@ -49,7 +50,7 @@ public final class LevelPoints extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "=============================");
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "LevelPoints Plugin");
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Lead Developer: Zoon20X");
-        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Supported Devs: rgnter, dejvokep(BoostedYAML)");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Supported Developers: rgnter, dejvokep(BoostedYAML)");
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Version: " + this.getDescription().getVersion());
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "MC-Compatible: 1.16.5-1.20*");
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "Enabled");
@@ -70,6 +71,8 @@ public final class LevelPoints extends JavaPlugin {
         devInstance = new DevInstance();
         devMode = true;
         loadMetrics();
+        String expressionString2 = "50 * level + 15";
+        expression = new ExpressionBuilder(expressionString2).variables("level").build();
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_PURPLE + "=============================");
         Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "LevelPoints DEV Instance");
         Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "Version: " + this.getDescription().getVersion());

@@ -1,8 +1,9 @@
-file-version: '1'
-
+file-version: '2'
 Blocks:
-  DIRT:
-    RequiredLevel:
-      Enabled: true
-      Level: 2
-    EXP: 1.0
+  Enabled: true
+  Settings:
+    DIRT:
+      Exp: 1.0
+      RequiredLevel:
+        Break: 2
+        Place: 3
