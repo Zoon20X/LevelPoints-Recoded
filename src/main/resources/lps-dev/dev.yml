@@ -1,4 +1,8 @@
 file-version: '1'
 
-Block:
-  level: 1
+Blocks:
+  DIRT:
+    RequiredLevel:
+      Enabled: true
+      Level: 2
+    EXP: 1.0
