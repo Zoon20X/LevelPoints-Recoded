@@ -1,4 +1,4 @@
-package me.zoon20x.levelpoints.devTools.stats;
+package me.zoon20x.devTools.spigot.stats;
 
 public class BlockStat {
 

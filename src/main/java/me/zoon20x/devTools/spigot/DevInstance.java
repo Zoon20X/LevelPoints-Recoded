@@ -1,8 +1,8 @@
-package me.zoon20x.levelpoints.devTools;
+package me.zoon20x.devTools.spigot;
 
 import me.zoon20x.levelpoints.LevelPoints;
-import me.zoon20x.levelpoints.devTools.events.DevEvents;
-import me.zoon20x.levelpoints.devTools.stats.BlockStat;
+import me.zoon20x.devTools.spigot.events.DevEvents;
+import me.zoon20x.devTools.spigot.stats.BlockStat;
 import org.bukkit.Bukkit;
 
 public class DevInstance {

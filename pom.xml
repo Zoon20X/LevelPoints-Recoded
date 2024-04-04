@@ -30,14 +30,20 @@
                             <artifact>*:*</artifact>
                             <excludes>
                                 <exclude>META-INF/*.MF</exclude>
-                                <exlude>org/**/*</exlude>
+                                <exlude>org/apache/commons/logging/**/*</exlude>
+                                <exlude>org/intellij/**/*</exlude>
+                                <exlude>org/jetbrains/**/*</exlude>
                             </excludes>
                         </filter>
                     </filters>
                     <relocations>
                         <relocation>
                             <pattern>dev.dejvokep.boostedyaml</pattern>
-                            <shadedPattern>me.zoon20x.libs</shadedPattern>
+                            <shadedPattern>me.zoon20x.libs.yaml</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.apache.commons.jexl3</pattern>
+                            <shadedPattern>me.zoon20x.libs.jexl3</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
