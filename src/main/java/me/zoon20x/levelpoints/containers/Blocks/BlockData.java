@@ -12,7 +12,7 @@ public class BlockData {
     public BlockData(Material material){
         this.material = material;
     }
-    public BlockData(Material material, double exp, int placeRequired, int breakRequired){
+    public BlockData(Material material, double exp, int breakRequired, int placeRequired){
         this.material = material;
         this.exp = exp;
         this.placeRequired = placeRequired;
