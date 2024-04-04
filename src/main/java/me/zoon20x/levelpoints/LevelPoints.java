@@ -1,6 +1,7 @@
 package me.zoon20x.levelpoints;
 
 import gnu.trove.impl.hash.TPrimitiveHash;
+import me.zoon20x.devTools.spigot.player.PlayerStorage;
 import me.zoon20x.levelpoints.API.LevelPointsAPI;
 import me.zoon20x.levelpoints.containers.Blocks.BlockSettings;
 import me.zoon20x.levelpoints.containers.PlayerData;
@@ -77,6 +78,7 @@ public final class LevelPoints extends JavaPlugin {
 
     private void loadDev(){
         devInstance = new DevInstance();
+
         devMode = true;
         loadMetrics();
         String expressionString2 = "50 * level + 15";
@@ -101,6 +103,9 @@ public final class LevelPoints extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        if(devMode) {
+            devInstance.onDisable();
+        }
     }
 
 

@@ -1,5 +1,6 @@
 package me.zoon20x.devTools.spigot.events;
 
+import me.zoon20x.devTools.spigot.player.PlayerStorage;
 import me.zoon20x.devTools.spigot.stats.BlockLoader;
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.containers.PlayerData;
@@ -12,57 +13,42 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class DevEvents implements Listener {
 
-
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBlockBreak(BlockBreakEvent event){
+    @EventHandler
+    public void onAsyncJoin(AsyncPlayerPreLoginEvent event){
+        if(event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED){
+            return;
+        }
         DevInstance instance = LevelPoints.getDevInstance();
-        Player player = event.getPlayer();
-        Block block = event.getBlock();
-        if(event.isCancelled()){
-            return;
-        }
-        BlockLoader blockLoader = instance.getBlockLoader();
-        if(!blockLoader.hasBlock(block.getType())){
-            return;
-        }
-
-        BlockStat stat = blockLoader.getBlock(block.getType());
-        PlayerData playerData = LevelPoints.getInstance().getPlayerData();
-
-        if(playerData.getLevel() < stat.getBreakRequired()){
-            event.setCancelled(true);
-        }
-        playerData.addEXP(stat.getExp());
-        player.sendMessage(playerData.getExp() + "/" + playerData.getRequiredEXP());
-
+        instance.getPlayerStorage().createPlayer(event.getUniqueId());
     }
 
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBlockPlace(BlockPlaceEvent event){
-        DevInstance instance = LevelPoints.getDevInstance();
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event){
         Player player = event.getPlayer();
-        Block block = event.getBlockPlaced();
-        if(event.isCancelled()){
+        DevInstance instance = LevelPoints.getDevInstance();
+        PlayerStorage storage = instance.getPlayerStorage();
+        if(!storage.hasPlayer(player.getUniqueId())){
             return;
         }
-        BlockLoader blockLoader = instance.getBlockLoader();
-        if(!blockLoader.hasBlock(block.getType())){
-            return;
-        }
-        BlockStat stat = blockLoader.getBlock(block.getType());
-        PlayerData playerData = LevelPoints.getInstance().getPlayerData();
-        if(playerData.getLevel() < stat.getPlaceRequired()){
-            event.setCancelled(true);
-            return;
-        }
-
+        storage.savePlayerInfo(player.getUniqueId());
     }
 
+    @EventHandler
+    public void onBreak(BlockBreakEvent event){
+        Player player = event.getPlayer();
+        DevInstance instance = LevelPoints.getDevInstance();
+        PlayerStorage storage = instance.getPlayerStorage();
+        if(!storage.hasPlayer(player.getUniqueId())){
+            return;
+        }
+        player.sendMessage(String.valueOf(storage.getPlayerInfo(player.getUniqueId()).getExp()));
+        storage.getPlayerInfo(player.getUniqueId()).addExp(1.0);
+    }
 
 
 }
