@@ -1,6 +1,7 @@
 package me.zoon20x.devTools.spigot;
 
 import me.zoon20x.devTools.spigot.stats.BlockLoader;
+import me.zoon20x.levelpoints.API.LevelPointsAPI;
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.devTools.spigot.events.DevEvents;
 import me.zoon20x.devTools.spigot.stats.BlockStat;
@@ -17,6 +18,7 @@ public class DevInstance {
         devConfig = new DevConfig();
         blockLoader = new BlockLoader(devConfig.dev1);
         loadEvents();
+
 
     }
 

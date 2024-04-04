@@ -1,5 +1,8 @@
 package me.zoon20x.levelpoints;
 
+import gnu.trove.impl.hash.TPrimitiveHash;
+import me.zoon20x.levelpoints.API.LevelPointsAPI;
+import me.zoon20x.levelpoints.containers.Blocks.BlockSettings;
 import me.zoon20x.levelpoints.containers.PlayerData;
 import me.zoon20x.devTools.spigot.DevInstance;
 import me.zoon20x.levelpoints.events.CustomEvents.EventUtils;
@@ -17,9 +20,15 @@ import java.util.HashMap;
 public final class LevelPoints extends JavaPlugin {
     private static LevelPoints instance;
     private static DevInstance devInstance;
+    private static LevelPointsAPI levelPointsAPI;
     private PlayerData playerData;
 
+
+
     private ConfigUtils configUtils;
+    private BlockSettings blockSettings;
+
+
     private EventUtils eventUtils;
     private boolean devMode;
     private Expression expression;
@@ -28,16 +37,15 @@ public final class LevelPoints extends JavaPlugin {
 
     private HashMap<Integer, Double> levels = new HashMap<>();
 
-
-
-
     @Override
     public void onEnable() {
         // Plugin startup logic
         instance = this;
         configUtils = new ConfigUtils();
         eventUtils = new EventUtils();
+        loadSettings();
         loadEvents();
+
 
         if (getDescription().getVersion().contains("DEV")) {
             loadDev();
@@ -46,7 +54,7 @@ public final class LevelPoints extends JavaPlugin {
         devMode = false;
         loadMetrics();
 
-
+        levelPointsAPI = new LevelPointsAPI();
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "=============================");
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "LevelPoints Plugin");
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Lead Developer: Zoon20X");
@@ -84,12 +92,21 @@ public final class LevelPoints extends JavaPlugin {
     private void loadEvents(){
         Bukkit.getPluginManager().registerEvents(new EXPEarnEvents(this), this);
     }
+    public void loadSettings(){
+        blockSettings = new BlockSettings(this.configUtils.getBlockSettingsConfig().getBoolean("Blocks.Enabled"));
+    }
 
 
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+    }
+
+
+
+    public static LevelPointsAPI getAPI(){
+        return levelPointsAPI;
     }
 
     public static DevInstance getDevInstance() {
