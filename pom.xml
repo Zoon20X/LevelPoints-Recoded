@@ -30,9 +30,7 @@
                             <artifact>*:*</artifact>
                             <excludes>
                                 <exclude>META-INF/*.MF</exclude>
-                                <exlude>org/apache/commons/logging/**/*</exlude>
-                                <exlude>org/intellij/**/*</exlude>
-                                <exlude>org/jetbrains/**/*</exlude>
+                                <exlude>org/**/*</exlude>
                             </excludes>
                         </filter>
                     </filters>
@@ -42,8 +40,8 @@
                             <shadedPattern>me.zoon20x.libs.yaml</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>org.apache.commons.jexl3</pattern>
-                            <shadedPattern>me.zoon20x.libs.jexl3</shadedPattern>
+                            <pattern>net.objecthunter.exp4j</pattern>
+                            <shadedPattern>me.zoon20x.libs.exp4j</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -95,9 +93,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-jexl3</artifactId>
-            <version>3.3</version>
+            <groupId>net.objecthunter</groupId>
+            <artifactId>exp4j</artifactId>
+            <version>0.4.8</version>
         </dependency>
         <dependency>
             <groupId>dev.dejvokep</groupId>

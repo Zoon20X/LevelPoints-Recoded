@@ -5,11 +5,13 @@ import me.zoon20x.devTools.spigot.DevInstance;
 import me.zoon20x.levelpoints.events.CustomEvents.EventUtils;
 import me.zoon20x.levelpoints.events.EXPEarnEvents;
 import me.zoon20x.levelpoints.utils.files.ConfigUtils;
-import org.apache.commons.jexl3.*;
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.swing.*;
 import java.util.HashMap;
 
 public final class LevelPoints extends JavaPlugin {
@@ -20,7 +22,7 @@ public final class LevelPoints extends JavaPlugin {
     private ConfigUtils configUtils;
     private EventUtils eventUtils;
     private boolean devMode;
-    private JexlExpression expression;
+    private Expression expression;
 
 
 
@@ -68,18 +70,11 @@ public final class LevelPoints extends JavaPlugin {
         devInstance = new DevInstance();
         devMode = true;
         loadMetrics();
-        long startTime = System.nanoTime();
-        String expressionString = "50*level+15D";
-        expression = new JexlBuilder().safe(true).create().createExpression(expressionString);
-        long endTime = System.nanoTime();
-        long duration = ((endTime - startTime) / 1000000);
-        Bukkit.getConsoleSender().sendMessage(duration + " ms");
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_PURPLE + "=============================");
         Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "LevelPoints DEV Instance");
         Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "Version: " + this.getDescription().getVersion());
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_PURPLE + "Enabled");
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_PURPLE + "=============================");
-
     }
 
 
@@ -117,7 +112,7 @@ public final class LevelPoints extends JavaPlugin {
         this.playerData = playerData;
     }
 
-    public JexlExpression getExpression() {
+    public Expression getExpression() {
         return expression;
     }
 }

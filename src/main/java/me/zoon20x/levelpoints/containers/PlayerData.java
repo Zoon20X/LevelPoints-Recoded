@@ -2,8 +2,6 @@ package me.zoon20x.levelpoints.containers;
 
 import me.zoon20x.levelpoints.API.PlayerAPI;
 import me.zoon20x.levelpoints.LevelPoints;
-import org.apache.commons.jexl3.JexlContext;
-import org.apache.commons.jexl3.MapContext;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -46,9 +44,7 @@ public class PlayerData implements PlayerAPI {
     }
 
     private double calculateRequiredEXP(int level){
-        JexlContext context = new MapContext();
-        context.set("level", level);
-        this.requiredEXP = (double) LevelPoints.getInstance().getExpression().evaluate(context);
+        this.requiredEXP = LevelPoints.getInstance().getExpression().setVariable("level", level).evaluate();
         return this.requiredEXP;
     }
 
