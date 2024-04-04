@@ -135,4 +135,8 @@ public final class LevelPoints extends JavaPlugin {
     public Expression getExpression() {
         return expression;
     }
+
+    public BlockSettings getBlockSettings() {
+        return blockSettings;
+    }
 }
