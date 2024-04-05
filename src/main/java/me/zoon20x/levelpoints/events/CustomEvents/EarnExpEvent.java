@@ -1,6 +1,6 @@
 package me.zoon20x.levelpoints.events.CustomEvents;
 
-import me.zoon20x.levelpoints.containers.PlayerData;
+import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

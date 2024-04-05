@@ -1,12 +1,9 @@
 package me.zoon20x.levelpoints.events;
 
-import me.zoon20x.devTools.spigot.DevInstance;
-import me.zoon20x.devTools.spigot.stats.BlockLoader;
-import me.zoon20x.devTools.spigot.stats.BlockStat;
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.containers.Blocks.BlockData;
 import me.zoon20x.levelpoints.containers.Blocks.BlockSettings;
-import me.zoon20x.levelpoints.containers.PlayerData;
+import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,7 +12,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 public class EXPEarnEvents implements Listener {
 
@@ -24,11 +20,6 @@ public class EXPEarnEvents implements Listener {
 
     public EXPEarnEvents(LevelPoints levelPoints){
         this.levelPoints = levelPoints;
-    }
-
-    @EventHandler
-    public void onJoin(AsyncPlayerPreLoginEvent event){
-        LevelPoints.getInstance().setPlayerData(new PlayerData(event.getUniqueId()));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -49,17 +40,17 @@ public class EXPEarnEvents implements Listener {
         }
 
         BlockData blockData = blockSettings.getBlockData(block.getType());
-        PlayerData playerData = LevelPoints.getInstance().getPlayerData();
+        if(!LevelPoints.getInstance().getPlayerStorage().hasPlayer(player.getUniqueId())){
+            return;
+        }
+        PlayerData playerData = LevelPoints.getInstance().getPlayerStorage().getPlayerInfo(player.getUniqueId());
 
         if(playerData.getLevel() < blockData.getBreakLevelRequired()){
             event.setCancelled(true);
-
             return;
         }
+        LevelPoints.getInstance().getEventUtils().triggerEXPEarn(player, playerData, blockData.getExp(), event);
 
-
-        playerData.addEXP(blockData.getExp());
-        player.sendMessage(playerData.getExp() + "/" + playerData.getRequiredEXP());
 
     }
 
@@ -82,7 +73,10 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         BlockData blockData = blockSettings.getBlockData(block.getType());
-        PlayerData playerData = LevelPoints.getInstance().getPlayerData();
+        if(!LevelPoints.getInstance().getPlayerStorage().hasPlayer(player.getUniqueId())){
+            return;
+        }
+        PlayerData playerData = LevelPoints.getInstance().getPlayerStorage().getPlayerInfo(player.getUniqueId());
         if(playerData.getLevel() < blockData.getPlaceLevelRequired()){
             event.setCancelled(true);
             return;

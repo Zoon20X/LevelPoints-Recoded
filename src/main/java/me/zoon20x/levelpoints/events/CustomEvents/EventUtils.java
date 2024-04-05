@@ -1,6 +1,6 @@
 package me.zoon20x.levelpoints.events.CustomEvents;
 
-import me.zoon20x.levelpoints.containers.PlayerData;
+import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -14,8 +14,8 @@ public class EventUtils{
         if(earnExpEvent.isCancelled()){
             return;
         }
-        data.addEXP(exp);
-
+        data.addExp(exp);
+        player.sendMessage(data.getExp() + "/" + data.getRequiredEXP());
     }
 
 

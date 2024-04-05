@@ -1,12 +1,9 @@
 package me.zoon20x.devTools.spigot;
 
-import me.zoon20x.devTools.spigot.player.PlayerInfo;
-import me.zoon20x.devTools.spigot.player.PlayerStorage;
 import me.zoon20x.devTools.spigot.stats.BlockLoader;
-import me.zoon20x.levelpoints.API.LevelPointsAPI;
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.devTools.spigot.events.DevEvents;
-import me.zoon20x.devTools.spigot.stats.BlockStat;
+import me.zoon20x.levelpoints.containers.Player.PlayerStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -28,7 +25,7 @@ public class DevInstance {
         defaultEXP = 0.0;
         defaultPrestige = 2.0;
         blockLoader = new BlockLoader(devConfig.dev1);
-        playerStorage = new PlayerStorage(this);
+        playerStorage = new PlayerStorage();
         loadEvents();
     }
 

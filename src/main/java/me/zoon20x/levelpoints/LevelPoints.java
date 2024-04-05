@@ -1,13 +1,13 @@
 package me.zoon20x.levelpoints;
 
-import gnu.trove.impl.hash.TPrimitiveHash;
-import me.zoon20x.devTools.spigot.player.PlayerStorage;
 import me.zoon20x.levelpoints.API.LevelPointsAPI;
 import me.zoon20x.levelpoints.containers.Blocks.BlockSettings;
-import me.zoon20x.levelpoints.containers.PlayerData;
+import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import me.zoon20x.devTools.spigot.DevInstance;
+import me.zoon20x.levelpoints.containers.Player.PlayerStorage;
 import me.zoon20x.levelpoints.events.CustomEvents.EventUtils;
 import me.zoon20x.levelpoints.events.EXPEarnEvents;
+import me.zoon20x.levelpoints.events.PlayerStorageEvents;
 import me.zoon20x.levelpoints.utils.files.ConfigUtils;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -15,28 +15,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.swing.*;
 import java.util.HashMap;
 
 public final class LevelPoints extends JavaPlugin {
     private static LevelPoints instance;
     private static DevInstance devInstance;
     private static LevelPointsAPI levelPointsAPI;
-    private PlayerData playerData;
-
-
 
     private ConfigUtils configUtils;
     private BlockSettings blockSettings;
 
+    private PlayerStorage playerStorage;
 
     private EventUtils eventUtils;
     private boolean devMode;
     private Expression expression;
-
-
-
-    private HashMap<Integer, Double> levels = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -44,6 +37,7 @@ public final class LevelPoints extends JavaPlugin {
         instance = this;
         configUtils = new ConfigUtils();
         eventUtils = new EventUtils();
+        playerStorage = new PlayerStorage();
         loadSettings();
         loadEvents();
 
@@ -93,6 +87,7 @@ public final class LevelPoints extends JavaPlugin {
 
     private void loadEvents(){
         Bukkit.getPluginManager().registerEvents(new EXPEarnEvents(this), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerStorageEvents(), this);
     }
     public void loadSettings(){
         blockSettings = new BlockSettings(this.configUtils.getBlockSettingsConfig().getBoolean("Blocks.Enabled"));
@@ -129,19 +124,15 @@ public final class LevelPoints extends JavaPlugin {
         return eventUtils;
     }
 
-    public PlayerData getPlayerData() {
-        return playerData;
-    }
-
-    public void setPlayerData(PlayerData playerData) {
-        this.playerData = playerData;
-    }
-
     public Expression getExpression() {
         return expression;
     }
 
     public BlockSettings getBlockSettings() {
         return blockSettings;
+    }
+
+    public PlayerStorage getPlayerStorage() {
+        return playerStorage;
     }
 }
