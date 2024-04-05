@@ -38,6 +38,7 @@ public class PlayerStorage {
             YamlDocument config = YamlDocument.create(new File(LevelPoints.getInstance().getDataFolder() +"/.." + location, uuid + ".yml"),
                     getClass().getResourceAsStream( location + "template.yml"),
                     GeneralSettings.DEFAULT,
+
                     LoaderSettings.builder().setAutoUpdate(true).build(),
                     DumperSettings.DEFAULT,
                     UpdaterSettings.builder().setVersioning(new BasicVersioning("file-version")).setOptionSorting(UpdaterSettings.OptionSorting.SORT_BY_DEFAULTS).build());
