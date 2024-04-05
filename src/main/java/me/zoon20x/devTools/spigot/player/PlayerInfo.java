@@ -21,6 +21,7 @@ public class PlayerInfo implements PlayerAPI {
     public PlayerInfo(UUID uuid){
         this.uuid = uuid;
         this.level = 1;
+        this.prestige = 0;
         this.exp = 0.0;
         this.requiredEXP = calculateRequiredEXP(this.level);
     }
@@ -61,6 +62,7 @@ public class PlayerInfo implements PlayerAPI {
     public void save(YamlDocument config) throws IOException {
         config.set("Level", this.level);
         config.set("Exp", this.exp);
+        config.set("Prestige", this.prestige);
         config.save();
     }
 
@@ -77,5 +79,13 @@ public class PlayerInfo implements PlayerAPI {
     }
     public double getRequiredEXP(){
         return requiredEXP;
+    }
+
+    public int getPrestige() {
+        return prestige;
+    }
+
+    public void setPrestige(int prestige) {
+        this.prestige = prestige;
     }
 }

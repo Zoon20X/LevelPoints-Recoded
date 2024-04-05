@@ -1,6 +1,5 @@
-file-version: '2'
-
-UUID: d5c675d1-dae7-440d-992d-c4c8f1e7ab3a
-Level: 1
-Exp: 0.0
-Multiplier: 2.0
+file-version: '3'
+Name: template
+Exp:
+  Amount: 0.0
+Prestige: 0

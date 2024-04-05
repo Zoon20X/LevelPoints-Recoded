@@ -23,14 +23,15 @@ public class PlayerStorage {
         this.instance = instance;
         //createPlayer(UUID.fromString("d9bef46e-660c-4537-b5d7-db1d535ac300"));
     }
-    public void createPlayer(UUID uuid){
-        YamlDocument config = createConfig(uuid, "/lps-dev/players/");
+    public void createPlayer(UUID uuid, String name){
+        YamlDocument config = createConfig(uuid,name, "/lps-dev/players/");
         PlayerInfo info = new PlayerInfo(uuid);
         info.setExp(config.getDouble("Exp"));
+        info.setPrestige(config.getInt("Prestige"));
         info.setLevel(config.getInt("Level"));
         playerInfoMap.put(uuid, info);
     }
-    private YamlDocument createConfig(UUID uuid, String location){
+    private YamlDocument createConfig(UUID uuid, String name, String location){
         boolean newPlayer = new File(LevelPoints.getInstance().getDataFolder() +"/.." + location, uuid + ".yml").exists();
         Bukkit.getConsoleSender().sendMessage(String.valueOf(newPlayer));
         try {
@@ -42,11 +43,11 @@ public class PlayerStorage {
                     UpdaterSettings.builder().setVersioning(new BasicVersioning("file-version")).setOptionSorting(UpdaterSettings.OptionSorting.SORT_BY_DEFAULTS).build());
             config.update();
             if(!newPlayer) {
-                config.set("UUID", uuid.toString());
                 config.set("Level", instance.getDefaultLevel());
-                config.set("Exp", instance.getDefaultEXP());
-                config.set("Multiplier", instance.getDefaultMultiplier());
+                config.set("Exp.Amount", instance.getDefaultEXP());
+                config.set("Prestige", instance.getDefaultPrestige());
             }
+            config.set("Name", name);
             config.save();
             return config;
         } catch (IOException e) {
@@ -64,7 +65,7 @@ public class PlayerStorage {
     public void savePlayerInfo(UUID uuid){
         try {
             PlayerInfo info = playerInfoMap.get(uuid);
-            YamlDocument config = createConfig(uuid, "/lps-dev/players/");
+            YamlDocument config = createConfig(uuid, Bukkit.getOfflinePlayer(uuid).getName(),"/lps-dev/players/");
             info.save(config);
             playerInfoMap.remove(uuid);
         } catch (IOException e) {

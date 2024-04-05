@@ -24,7 +24,7 @@ public class DevEvents implements Listener {
             return;
         }
         DevInstance instance = LevelPoints.getDevInstance();
-        instance.getPlayerStorage().createPlayer(event.getUniqueId());
+        instance.getPlayerStorage().createPlayer(event.getUniqueId(), event.getName());
     }
 
     @EventHandler

@@ -18,7 +18,7 @@ public class DevInstance {
     private PlayerStorage playerStorage;
     private int defaultLevel;
     private double defaultEXP;
-    private double defaultMultiplier;
+    private double defaultPrestige;
 
 
 
@@ -26,7 +26,7 @@ public class DevInstance {
         devConfig = new DevConfig();
         defaultLevel = 1;
         defaultEXP = 0.0;
-        defaultMultiplier = 2.0;
+        defaultPrestige = 2.0;
         blockLoader = new BlockLoader(devConfig.dev1);
         playerStorage = new PlayerStorage(this);
         loadEvents();
@@ -65,7 +65,7 @@ public class DevInstance {
         return defaultEXP;
     }
 
-    public double getDefaultMultiplier() {
-        return defaultMultiplier;
+    public double getDefaultPrestige() {
+        return defaultPrestige;
     }
 }
