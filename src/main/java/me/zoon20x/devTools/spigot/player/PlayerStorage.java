@@ -39,6 +39,7 @@ public class PlayerStorage {
                     getClass().getResourceAsStream( location + "template.yml"),
                     GeneralSettings.DEFAULT,
 
+
                     LoaderSettings.builder().setAutoUpdate(true).build(),
                     DumperSettings.DEFAULT,
                     UpdaterSettings.builder().setVersioning(new BasicVersioning("file-version")).setOptionSorting(UpdaterSettings.OptionSorting.SORT_BY_DEFAULTS).build());
