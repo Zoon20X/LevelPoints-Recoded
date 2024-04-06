@@ -13,6 +13,7 @@ import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -98,8 +99,13 @@ public final class LevelPoints extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        if(devMode) {
+        if (devMode) {
             devInstance.onDisable();
+        }
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (playerStorage.hasPlayer(player.getUniqueId())) {
+                playerStorage.savePlayerInfo(player.getUniqueId());
+            }
         }
     }
 

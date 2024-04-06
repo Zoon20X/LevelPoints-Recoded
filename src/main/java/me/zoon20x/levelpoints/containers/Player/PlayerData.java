@@ -41,8 +41,11 @@ public class PlayerData implements PlayerAPI {
     public void addExp(double exp){
         this.exp+=exp;
         if(this.exp >= this.requiredEXP){
-            this.exp-=this.requiredEXP;
+            double remain = this.exp-this.requiredEXP;
+
+            System.out.println(remain);
             addLevel();
+            addExp(remain);
         }
     }
     public void addLevel(){
@@ -50,6 +53,7 @@ public class PlayerData implements PlayerAPI {
     }
     public void addLevel(int level){
         this.level +=level;
+        this.exp = 0;
         this.requiredEXP = calculateRequiredEXP(this.level);
         if(Bukkit.getPlayer(uuid) == null){
             return;
