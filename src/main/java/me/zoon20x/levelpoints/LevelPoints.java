@@ -9,6 +9,7 @@ import me.zoon20x.levelpoints.events.CustomEvents.EventUtils;
 import me.zoon20x.levelpoints.events.EXPEarnEvents;
 import me.zoon20x.levelpoints.events.PlayerStorageEvents;
 import me.zoon20x.levelpoints.utils.files.ConfigUtils;
+import me.zoon20x.levelpoints.utils.messages.MessagesUtil;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.bukkit.Bukkit;
@@ -31,11 +32,13 @@ public final class LevelPoints extends JavaPlugin {
     private EventUtils eventUtils;
     private boolean devMode;
     private Expression expression;
+    private MessagesUtil messagesUtil;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
         instance = this;
+        messagesUtil = new MessagesUtil();
         configUtils = new ConfigUtils();
         eventUtils = new EventUtils();
         playerStorage = new PlayerStorage();
@@ -140,5 +143,9 @@ public final class LevelPoints extends JavaPlugin {
 
     public PlayerStorage getPlayerStorage() {
         return playerStorage;
+    }
+
+    public MessagesUtil getMessagesUtil() {
+        return messagesUtil;
     }
 }
