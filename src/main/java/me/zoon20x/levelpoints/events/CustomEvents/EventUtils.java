@@ -17,6 +17,9 @@ public class EventUtils{
         data.addExp(exp);
         player.sendMessage(data.getExp() + "/" + data.getRequiredEXP());
     }
-
+    public void triggerLevelUpEvent(Player player, PlayerData data){
+        LevelUpEvent levelUpEvent = new LevelUpEvent(player, data);
+        Bukkit.getPluginManager().callEvent(levelUpEvent);
+    }
 
 }

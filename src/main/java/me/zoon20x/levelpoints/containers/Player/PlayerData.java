@@ -3,6 +3,7 @@ package me.zoon20x.levelpoints.containers.Player;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import me.zoon20x.levelpoints.API.PlayerAPI;
 import me.zoon20x.levelpoints.LevelPoints;
+import me.zoon20x.levelpoints.events.CustomEvents.EventUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -59,6 +60,7 @@ public class PlayerData implements PlayerAPI {
             return;
         }
         Player player = Bukkit.getPlayer(uuid);
+        LevelPoints.getInstance().getEventUtils().triggerLevelUpEvent(player, this);
         player.sendMessage(String.valueOf(this.level));
     }
 
