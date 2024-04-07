@@ -15,9 +15,11 @@ import java.io.IOException;
 public class ConfigUtils implements ConfigAPI {
 
     private YamlDocument blockSettings;
+    private YamlDocument mobSettings;
 
     public ConfigUtils(){
         blockSettings = createConfig("BlockSettings.yml", "/Settings/");
+        mobSettings = createConfig("MobSettings.yml", "/Settings/");
     }
 
 
@@ -45,4 +47,8 @@ public class ConfigUtils implements ConfigAPI {
     }
 
 
+    @Override
+    public YamlDocument getMobSettings() {
+        return mobSettings;
+    }
 }

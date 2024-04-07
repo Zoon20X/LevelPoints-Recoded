@@ -7,5 +7,5 @@ public interface ConfigAPI {
     YamlDocument getBlockSettingsConfig();
 
 
-
+    YamlDocument getMobSettings();
 }

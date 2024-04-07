@@ -1,10 +1,9 @@
 file-version: '1'
 
-Blocks:
+Mobs:
   Enabled: true
   Settings:
-    DIRT:
+    ZOMBIE:
       Exp: 1.0
       RequiredLevel:
-        Break: 2
-        Place: 3
+        Attack: 0
