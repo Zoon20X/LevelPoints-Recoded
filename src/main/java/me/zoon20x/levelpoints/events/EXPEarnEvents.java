@@ -132,6 +132,9 @@ public class EXPEarnEvents implements Listener {
         }
 
         LivingEntity entity = event.getEntity();
+        if(entity.getKiller() == null){
+            return;
+        }
         Player player = entity.getKiller();
         MobSettings mobSettings = LevelPoints.getInstance().getLpsSettings().getMobSettings();
         if(!mobSettings.isEnabled()){
