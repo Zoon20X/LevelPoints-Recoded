@@ -20,7 +20,7 @@ public class MobSettings implements MobSettingsAPI {
     }
 
     private void load(){
-        YamlDocument config = LevelPoints.getInstance().getConfigUtils().getMobSettings();
+        YamlDocument config = LevelPoints.getInstance().getConfigUtils().getMobSettingsConfig();
         mobDataMap.clear();
         config.getSection("Mobs.Settings").getRoutesAsStrings(false).forEach(entity ->{
             EntityType entityType = EntityType.valueOf(entity);

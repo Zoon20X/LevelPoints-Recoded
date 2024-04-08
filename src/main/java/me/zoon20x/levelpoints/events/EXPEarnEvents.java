@@ -8,7 +8,6 @@ import me.zoon20x.levelpoints.containers.Mobs.MobSettings;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,13 +17,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.inventory.meta.SpawnEggMeta;
-import org.bukkit.material.SpawnEgg;
 
 public class EXPEarnEvents implements Listener {
 
-    private LevelPoints levelPoints;
+    private final LevelPoints levelPoints;
 
 
     public EXPEarnEvents(LevelPoints levelPoints){
@@ -39,7 +35,7 @@ public class EXPEarnEvents implements Listener {
 
         Player player = event.getPlayer();
         Block block = event.getBlock();
-        BlockSettings blockSettings = LevelPoints.getInstance().getLpsSettings().getBlockSettings();
+        BlockSettings blockSettings = levelPoints.getLpsSettings().getBlockSettings();
         if(!blockSettings.isEnabled()){
             return;
         }
@@ -49,16 +45,16 @@ public class EXPEarnEvents implements Listener {
         }
 
         BlockData blockData = blockSettings.getBlockData(block.getType());
-        if(!LevelPoints.getInstance().getPlayerStorage().hasPlayer(player.getUniqueId())){
+        if(!levelPoints.getPlayerStorage().hasPlayer(player.getUniqueId())){
             return;
         }
-        PlayerData playerData = LevelPoints.getInstance().getPlayerStorage().getPlayerInfo(player.getUniqueId());
+        PlayerData playerData = levelPoints.getPlayerStorage().getPlayerInfo(player.getUniqueId());
 
         if(playerData.getLevel() < blockData.getBreakLevelRequired()){
             event.setCancelled(true);
             return;
         }
-        LevelPoints.getInstance().getEventUtils().triggerEXPEarn(player, playerData, blockData.getExp(), event);
+        levelPoints.getEventUtils().triggerEXPEarn(player, playerData, blockData.getExp(), event);
 
 
     }
@@ -69,7 +65,7 @@ public class EXPEarnEvents implements Listener {
         if(event.isCancelled()){
             return;
         }
-        BlockSettings blockSettings = LevelPoints.getInstance().getLpsSettings().getBlockSettings();
+        BlockSettings blockSettings = levelPoints.getLpsSettings().getBlockSettings();
         if(!blockSettings.isEnabled()){
             return;
         }
@@ -82,10 +78,10 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         BlockData blockData = blockSettings.getBlockData(block.getType());
-        if(!LevelPoints.getInstance().getPlayerStorage().hasPlayer(player.getUniqueId())){
+        if(!levelPoints.getPlayerStorage().hasPlayer(player.getUniqueId())){
             return;
         }
-        PlayerData playerData = LevelPoints.getInstance().getPlayerStorage().getPlayerInfo(player.getUniqueId());
+        PlayerData playerData = levelPoints.getPlayerStorage().getPlayerInfo(player.getUniqueId());
         if(playerData.getLevel() < blockData.getPlaceLevelRequired()){
             event.setCancelled(true);
             return;
@@ -107,7 +103,7 @@ public class EXPEarnEvents implements Listener {
         }
         Player player = (Player) event.getDamager();
         Entity entity = event.getEntity();
-        MobSettings mobSettings = LevelPoints.getInstance().getLpsSettings().getMobSettings();
+        MobSettings mobSettings = levelPoints.getLpsSettings().getMobSettings();
         if(!mobSettings.isEnabled()){
             return;
         }
@@ -115,10 +111,10 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         MobData mobData = mobSettings.getMobData(entity.getType());
-        if(!LevelPoints.getInstance().getPlayerStorage().hasPlayer(player.getUniqueId())){
+        if(!levelPoints.getPlayerStorage().hasPlayer(player.getUniqueId())){
             return;
         }
-        PlayerData playerData = LevelPoints.getInstance().getPlayerStorage().getPlayerInfo(player.getUniqueId());
+        PlayerData playerData = levelPoints.getPlayerStorage().getPlayerInfo(player.getUniqueId());
         if(playerData.getLevel() < mobData.getAttackRequired()){
             event.setCancelled(true);
             return;
@@ -136,7 +132,7 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         Player player = entity.getKiller();
-        MobSettings mobSettings = LevelPoints.getInstance().getLpsSettings().getMobSettings();
+        MobSettings mobSettings = levelPoints.getLpsSettings().getMobSettings();
         if(!mobSettings.isEnabled()){
             return;
         }
@@ -144,11 +140,11 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         MobData mobData = mobSettings.getMobData(entity.getType());
-        if(!LevelPoints.getInstance().getPlayerStorage().hasPlayer(player.getUniqueId())){
+        if(!levelPoints.getPlayerStorage().hasPlayer(player.getUniqueId())){
             return;
         }
-        PlayerData playerData = LevelPoints.getInstance().getPlayerStorage().getPlayerInfo(player.getUniqueId());
-        LevelPoints.getInstance().getEventUtils().triggerEXPEarn(player, playerData, mobData.getExp(), event);
+        PlayerData playerData = levelPoints.getPlayerStorage().getPlayerInfo(player.getUniqueId());
+        levelPoints.getEventUtils().triggerEXPEarn(player, playerData, mobData.getExp(), event);
     }
 
 }

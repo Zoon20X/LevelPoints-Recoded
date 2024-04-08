@@ -5,10 +5,15 @@ import me.zoon20x.levelpoints.LevelPoints;
 public class LevelPointsAPI {
 
 
-    private ConfigAPI configAPI;
+    private final ConfigAPI configAPI;
+    private final BlockSettingsAPI blockSettingsAPI;
+    private final MobSettingsAPI mobSettingsAPI;
 
     public LevelPointsAPI(){
         configAPI = LevelPoints.getInstance().getConfigUtils();
+        blockSettingsAPI = LevelPoints.getInstance().getLpsSettings().getBlockSettings();
+        mobSettingsAPI = LevelPoints.getInstance().getLpsSettings().getMobSettings();
+
     }
 
 
@@ -17,5 +22,11 @@ public class LevelPointsAPI {
     }
 
 
+    public BlockSettingsAPI getBlockSettingsAPI() {
+        return blockSettingsAPI;
+    }
 
+    public MobSettingsAPI getMobSettingsAPI() {
+        return mobSettingsAPI;
+    }
 }

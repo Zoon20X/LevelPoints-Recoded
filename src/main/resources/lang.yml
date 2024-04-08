@@ -1,0 +1,8 @@
+file-version: '3'
+Lang:
+  Help:
+    Enabled: true
+    Message:
+      - '&3&l&n_____LevelPoints____'
+      - '&b/lps &f-Displays this message'
+      - '&b/lps info (player) &f-Displays player info'

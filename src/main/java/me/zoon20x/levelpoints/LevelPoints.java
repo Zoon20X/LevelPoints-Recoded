@@ -1,8 +1,6 @@
 package me.zoon20x.levelpoints;
 
 import me.zoon20x.levelpoints.API.LevelPointsAPI;
-import me.zoon20x.levelpoints.containers.Blocks.BlockSettings;
-import me.zoon20x.levelpoints.containers.Player.PlayerData;
 import me.zoon20x.devTools.spigot.DevInstance;
 import me.zoon20x.levelpoints.containers.Player.PlayerStorage;
 import me.zoon20x.levelpoints.events.CustomEvents.EventUtils;
@@ -10,6 +8,7 @@ import me.zoon20x.levelpoints.events.EXPEarnEvents;
 import me.zoon20x.levelpoints.events.PlayerStorageEvents;
 import me.zoon20x.levelpoints.utils.LpsSettings;
 import me.zoon20x.levelpoints.utils.files.ConfigUtils;
+import me.zoon20x.levelpoints.utils.messages.LangSettings;
 import me.zoon20x.levelpoints.utils.messages.MessagesUtil;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -27,6 +26,7 @@ public final class LevelPoints extends JavaPlugin {
 
     private ConfigUtils configUtils;
     private LpsSettings lpsSettings;
+    private LangSettings langSettings;
 
     private PlayerStorage playerStorage;
 
@@ -41,8 +41,10 @@ public final class LevelPoints extends JavaPlugin {
         instance = this;
         messagesUtil = new MessagesUtil();
         configUtils = new ConfigUtils();
+
         eventUtils = new EventUtils();
         playerStorage = new PlayerStorage();
+        langSettings = new LangSettings();
         lpsSettings = new LpsSettings(this);
         loadEvents();
 
@@ -145,5 +147,9 @@ public final class LevelPoints extends JavaPlugin {
 
     public LpsSettings getLpsSettings() {
         return lpsSettings;
+    }
+
+    public LangSettings getLangSettings() {
+        return langSettings;
     }
 }
