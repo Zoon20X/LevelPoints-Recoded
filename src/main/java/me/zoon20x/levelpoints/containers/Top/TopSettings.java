@@ -54,7 +54,11 @@ public class TopSettings {
     private void sort(){
         Collections.sort(topDataList, Comparator.comparingInt(TopData::getLevel).reversed());
         List<TopData> newList = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
+        int max = 30;
+        if(topDataList.size() < 30){
+            max = topDataList.size();
+        }
+        for (int i = 0; i < max; i++) {
             TopData topData = topDataList.get(i);
             newList.add(topData);
         }

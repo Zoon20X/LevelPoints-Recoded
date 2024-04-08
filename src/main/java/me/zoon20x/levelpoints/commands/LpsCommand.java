@@ -55,31 +55,51 @@ public class LpsCommand implements CommandExecutor {
                 return true;
             }
             if(args[0].equalsIgnoreCase("top")){
-                TopSettings topSettings = LevelPoints.getInstance().getTopSettings();
-                for (int i = 0; i < 10 ; i++) {
-                    TopData topData = topSettings.getTopDataList().get(i);
-                    LevelPoints.getInstance().log(DebugSeverity.NORMAL, (i + 1) + ". " +  topData.getName() + " - Level " + topData.getLevel());
-                }
+                sendTop(sender, 1);
             }
         }
         if(args.length == 2){
             if(args[0].equalsIgnoreCase("top")){
-                TopSettings topSettings = LevelPoints.getInstance().getTopSettings();
                 int val = Integer.parseInt(args[1]);
-                if(topSettings.getTopDataList().size() < val*10){
-                    return true;
-                }
-                int add = 0;
-                if(val>1){
-                    add = 10*(val - 1);
-                }
-                for (int i = add; i < 10*val ; i++) {
-                    TopData topData = topSettings.getTopDataList().get(i);
-                    LevelPoints.getInstance().log(DebugSeverity.NORMAL, (i + 1) + ". " +  topData.getName() + " - Level " + topData.getLevel());
-                }
+                sendTop(sender, val);
             }
         }
         return true;
+    }
+
+    private void sendTop(CommandSender sender, int val){
+        TopSettings topSettings = LevelPoints.getInstance().getTopSettings();
+        LangData langData = LevelPoints.getInstance().getLang().getLangData("Top");
+        if(!langData.isEnabled()){
+            return;
+        }
+
+        for(String message : langData.getMessage()){
+            if(!message.contains("{lps_top_position}")){
+                sender.sendMessage(LocalPlaceholders.parse(message, 0,"", 0, val));
+                continue;
+            }
+            if(topSettings.getTopDataList().size() <10){
+                for (int i = 0; i < topSettings.getTopDataList().size() ; i++) {
+                    TopData topData = topSettings.getTopDataList().get(i);
+                    sender.sendMessage(LocalPlaceholders.parse(message, topData.getLevel(), topData.getName(), (i + 1), val));
+                }
+                return;
+            }
+            int add = 0;
+            if(val>1){
+                add = 10*(val - 1);
+            }
+            for (int i = add; i < 10*val ; i++) {
+                if (i >= topSettings.getTopDataList().size()) {
+                    sender.sendMessage(LocalPlaceholders.parse(message, 0, "", (i + 1), val));
+                } else {
+                    TopData topData = topSettings.getTopDataList().get(i);
+
+                    sender.sendMessage(LocalPlaceholders.parse(message, topData.getLevel(), topData.getName(), (i + 1), val));
+                }
+            }
+        }
     }
 
     private void sendInfo(CommandSender sender, PlayerData playerData){

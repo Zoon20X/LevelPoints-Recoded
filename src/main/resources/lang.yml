@@ -1,4 +1,4 @@
-file-version: '6'
+file-version: '7'
 Lang:
   Help:
     Enabled: true
@@ -20,3 +20,12 @@ Lang:
       - '&bIs Maxed: {lps_max}'
       - ''
       - '&3________________'
+  Top:
+    Enabled: true
+    CenterText: true
+    Message:
+      - '&3&l&m----&3Top Players&m----'
+      - '&3{lps_top_position}.&b{player} &3- &b{lps_level}'
+      - ''
+      - '&b{lps_top_page}/{lps_top_page_max}'
+      - '&3&l&m------------------------'
