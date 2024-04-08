@@ -36,33 +36,6 @@ public class DevEvents implements Listener {
 
 
         }
-
-
-
-        if (event.getMessage().contains("/lps info")) {
-            event.setCancelled(true);
-            if (!LevelPoints.getInstance().getLang().hasLangData("Info")) {
-                LevelPoints.getInstance().log(DebugSeverity.WARNING,"does not contain INFO");
-                return;
-            }
-            LangData langData = LevelPoints.getInstance().getLang().getLangData("Info");
-            if (!langData.isEnabled()) {
-                LevelPoints.getInstance().log(DebugSeverity.WARNING,"Info Not enabled");
-                return;
-            }
-            if (!LevelPoints.getInstance().getPlayerStorage().hasPlayer(player.getUniqueId())) {
-                LevelPoints.getInstance().log(DebugSeverity.WARNING,"player not loaded");
-                return;
-            }
-
-            PlayerData playerData = LevelPoints.getInstance().getPlayerStorage().getPlayerData(player.getUniqueId());
-            langData.getMessage().forEach(m -> {
-                if (langData.isCenteredText()) {
-                    m = LevelPoints.getInstance().getMessagesUtil().centreText(m);
-                }
-                player.sendMessage(LocalPlaceholders.parse(m, playerData));
-            });
-        }
     }
 
     @EventHandler

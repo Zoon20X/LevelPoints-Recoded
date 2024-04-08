@@ -4,3 +4,11 @@ main: me.zoon20x.levelpoints.LevelPoints
 api-version: '1.20'
 authors: [Zoon20X]
 description: A full leveling system built from the ground up
+
+
+commands:
+  lps:
+    usage: /<command>
+    description: "the main lps command"
+    aliases:
+      - levelpoints

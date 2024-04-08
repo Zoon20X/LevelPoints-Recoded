@@ -2,6 +2,7 @@ package me.zoon20x.levelpoints;
 
 import me.zoon20x.levelpoints.API.LevelPointsAPI;
 import me.zoon20x.devTools.spigot.DevInstance;
+import me.zoon20x.levelpoints.commands.LpsCommand;
 import me.zoon20x.levelpoints.containers.Player.PlayerStorage;
 import me.zoon20x.levelpoints.events.CustomEvents.EventUtils;
 import me.zoon20x.levelpoints.events.EXPEarnEvents;
@@ -50,6 +51,7 @@ public final class LevelPoints extends JavaPlugin {
         lang = new LangSettings();
         lpsSettings = new LpsSettings(this);
         loadEvents();
+        loadCommands();
 
 
         if (getDescription().getVersion().contains("DEV")) {
@@ -98,6 +100,9 @@ public final class LevelPoints extends JavaPlugin {
     private void loadEvents(){
         Bukkit.getPluginManager().registerEvents(new EXPEarnEvents(this), this);
         Bukkit.getPluginManager().registerEvents(new PlayerStorageEvents(), this);
+    }
+    private void loadCommands(){
+      LpsCommand lpsCommand = new LpsCommand(this);
     }
 
     public void reload() throws IOException {
