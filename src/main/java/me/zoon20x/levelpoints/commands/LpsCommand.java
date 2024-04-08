@@ -79,13 +79,6 @@ public class LpsCommand implements CommandExecutor {
                 sender.sendMessage(LocalPlaceholders.parse(message, 0,"", 0, val));
                 continue;
             }
-            if(topSettings.getTopDataList().size() <10){
-                for (int i = 0; i < topSettings.getTopDataList().size() ; i++) {
-                    TopData topData = topSettings.getTopDataList().get(i);
-                    sender.sendMessage(LocalPlaceholders.parse(message, topData.getLevel(), topData.getName(), (i + 1), val));
-                }
-                return;
-            }
             int add = 0;
             if(val>1){
                 add = 10*(val - 1);
