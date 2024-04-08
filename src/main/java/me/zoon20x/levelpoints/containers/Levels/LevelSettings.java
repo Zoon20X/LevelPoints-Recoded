@@ -16,7 +16,7 @@ public class LevelSettings {
         load();
     }
     public void reload() throws IOException {
-        YamlDocument config = LevelPoints.getInstance().getConfigUtils().getBlockSettingsConfig();
+        YamlDocument config = LevelPoints.getInstance().getConfigUtils().getLevelSettings();
         config.reload();
         load();
     }

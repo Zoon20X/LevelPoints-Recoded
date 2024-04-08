@@ -58,12 +58,11 @@ public class PlayerData implements PlayerAPI {
         int temp = this.level +level;
         LevelSettings levelSettings = LevelPoints.getInstance().getLpsSettings().getLevelSettings();
         if(temp >= levelSettings.getMaxData().getLevel()){
-            if(!levelSettings.getMaxData().usePrestige()){
-                this.exp = 0;
-                return;
+            if(levelSettings.getMaxData().usePrestige()){
+                addPrestige();
             }
+            this.exp = 0;
             this.level = LevelPoints.getInstance().getLpsSettings().getLevelSettings().getMaxData().getLevel();
-            addPrestige();
             return;
         }
         this.level = temp;
@@ -87,7 +86,6 @@ public class PlayerData implements PlayerAPI {
         int temp = this.prestige + prestige;
         if(temp >= LevelPoints.getInstance().getLpsSettings().getLevelSettings().getMaxData().getPrestige()){
             this.prestige = LevelPoints.getInstance().getLpsSettings().getLevelSettings().getMaxData().getPrestige();
-            this.exp = 0;
             return;
         }
         this.prestige = temp;
