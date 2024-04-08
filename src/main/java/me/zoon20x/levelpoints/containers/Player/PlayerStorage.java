@@ -19,10 +19,21 @@ public class PlayerStorage {
     public void loadPlayer(UUID uuid, String name){
         YamlDocument config = createPlayerConfig(uuid,name, "/Players/");
         PlayerData data = new PlayerData(uuid, config);
-        data.setExp(config.getDouble("Exp.Amount"));
-        data.setPrestige(config.getInt("Prestige"));
-        data.setLevel(config.getInt("Level"));
+        load(data);
         playerDataMap.put(uuid, data);
+    }
+
+    public void reloadPlayer(UUID uuid) throws IOException {
+        PlayerData data = playerDataMap.get(uuid);
+        data.save();
+        data.getConfig().reload();
+        load(data);
+
+    }
+    private void load(PlayerData data){
+        data.setExp(data.getConfig().getDouble("Exp.Amount"));
+        data.setPrestige(data.getConfig().getInt("Prestige"));
+        data.setLevel(data.getConfig().getInt("Level"));
     }
     private YamlDocument createPlayerConfig(UUID uuid, String name, String location){
         boolean newPlayer = !new File(LevelPoints.getInstance().getDataFolder() + location, uuid + ".yml").exists();
@@ -55,8 +66,7 @@ public class PlayerStorage {
     public void savePlayerData(UUID uuid){
         try {
             PlayerData data = playerDataMap.get(uuid);
-            YamlDocument config = data.getConfig();
-            data.save(config);
+            data.save();
             playerDataMap.remove(uuid);
         } catch (IOException e) {
             throw new RuntimeException(e);

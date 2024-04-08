@@ -101,7 +101,7 @@ public class PlayerData implements PlayerAPI {
     }
 
 
-    public void save(YamlDocument config) throws IOException {
+    public void save() throws IOException {
         config.set("Level", this.level);
         config.set("Prestige", this.prestige);
         config.set("Exp.Amount", this.exp);

@@ -103,10 +103,13 @@ public final class LevelPoints extends JavaPlugin {
     }
 
     public void reload() throws IOException {
+        getLpsSettings().getLevelSettings().reload();
         getLpsSettings().getBlockSettings().reload();
         getLpsSettings().getMobSettings().reload();
         getLang().reload();
-
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            playerStorage.reloadPlayer(player.getUniqueId());
+        }
     }
 
 
