@@ -56,15 +56,28 @@ public class LpsCommand implements CommandExecutor {
             }
             if(args[0].equalsIgnoreCase("top")){
                 TopSettings topSettings = LevelPoints.getInstance().getTopSettings();
-                // Display the sorted list
-                for (int i = 0; i < topSettings.getTopDataList().size(); i++) {
+                for (int i = 0; i < 10 ; i++) {
                     TopData topData = topSettings.getTopDataList().get(i);
-                    LevelPoints.getInstance().log(DebugSeverity.NORMAL, (i + 1) + ". " +  topData.getUUID() + " - Level " + topData.getLevel());
+                    LevelPoints.getInstance().log(DebugSeverity.NORMAL, (i + 1) + ". " +  topData.getName() + " - Level " + topData.getLevel());
                 }
-
-
             }
-
+        }
+        if(args.length == 2){
+            if(args[0].equalsIgnoreCase("top")){
+                TopSettings topSettings = LevelPoints.getInstance().getTopSettings();
+                int val = Integer.parseInt(args[1]);
+                if(topSettings.getTopDataList().size() < val*10){
+                    return true;
+                }
+                int add = 0;
+                if(val>1){
+                    add = 10*(val - 1);
+                }
+                for (int i = add; i < 10*val ; i++) {
+                    TopData topData = topSettings.getTopDataList().get(i);
+                    LevelPoints.getInstance().log(DebugSeverity.NORMAL, (i + 1) + ". " +  topData.getName() + " - Level " + topData.getLevel());
+                }
+            }
         }
         return true;
     }

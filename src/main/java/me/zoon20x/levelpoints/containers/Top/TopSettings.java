@@ -37,7 +37,7 @@ public class TopSettings {
             if (files != null) {
                 for (File file : files) {
                     YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
-                    topDataList.add(new TopData(UUID.fromString(file.getName().replace(".yml", "")), config.getInt("Level")));
+                    topDataList.add(new TopData(config.getString("Name"), UUID.fromString(file.getName().replace(".yml", "")), config.getInt("Level")));
                 }
             }
         }
@@ -54,8 +54,7 @@ public class TopSettings {
     private void sort(){
         Collections.sort(topDataList, Comparator.comparingInt(TopData::getLevel).reversed());
         List<TopData> newList = new ArrayList<>();
-        // Display the sorted list
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 30; i++) {
             TopData topData = topDataList.get(i);
             newList.add(topData);
         }
