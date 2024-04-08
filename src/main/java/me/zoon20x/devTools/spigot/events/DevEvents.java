@@ -25,17 +25,6 @@ public class DevEvents implements Listener {
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
-        if(event.getMessage().contains("/lps reload")){
-            event.setCancelled(true);
-            try {
-                LevelPoints.getInstance().reload();
-                LevelPoints.getInstance().log(DebugSeverity.NORMAL, "Reload Complete");
-            } catch (IOException e) {
-                LevelPoints.getInstance().log(DebugSeverity.SEVER, "Reload FAILED!");
-            }
-
-
-        }
     }
 
     @EventHandler
