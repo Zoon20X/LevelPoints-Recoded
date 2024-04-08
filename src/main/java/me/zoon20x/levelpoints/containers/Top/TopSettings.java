@@ -3,22 +3,30 @@ package me.zoon20x.levelpoints.containers.Top;
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.utils.messages.DebugSeverity;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class TopSettings {
 
     private List<TopData> topDataList = new ArrayList<>();
 
 
-    public TopSettings(){
-        scan();
+    public TopSettings() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                scan();
+            }
+        }.runTaskAsynchronously(LevelPoints.getInstance());
     }
 
+
     private void scan() {
+        if(!topDataList.isEmpty()){
+            topDataList.clear();
+        }
         long startTime = System.nanoTime();
         File folder = new File(LevelPoints.getInstance().getDataFolder() + "/Players/");
 
@@ -36,11 +44,26 @@ public class TopSettings {
         long endTime = System.nanoTime();
         long duration = ((endTime - startTime) / 1000000);
         LevelPoints.getInstance().log(DebugSeverity.SEVER, "Top Took - " + duration + "ms");
+        sort();
+
     }
 
     public List<TopData> getTopDataList(){
         return topDataList;
     }
-
+    private void sort(){
+        Collections.sort(topDataList, Comparator.comparingInt(TopData::getLevel).reversed());
+        List<TopData> newList = new ArrayList<>();
+        // Display the sorted list
+        for (int i = 0; i < 10; i++) {
+            TopData topData = topDataList.get(i);
+            newList.add(topData);
+        }
+        this.topDataList.clear();
+        setTopDataList(newList);
+    }
+    public void setTopDataList(List<TopData> topDataList){
+        this.topDataList = topDataList;
+    }
 
 }

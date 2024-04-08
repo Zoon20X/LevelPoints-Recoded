@@ -56,8 +56,6 @@ public class LpsCommand implements CommandExecutor {
             }
             if(args[0].equalsIgnoreCase("top")){
                 TopSettings topSettings = LevelPoints.getInstance().getTopSettings();
-                Collections.sort(topSettings.getTopDataList(), Comparator.comparingInt(TopData::getLevel).reversed());
-
                 // Display the sorted list
                 for (int i = 0; i < topSettings.getTopDataList().size(); i++) {
                     TopData topData = topSettings.getTopDataList().get(i);
