@@ -49,10 +49,10 @@ public class PlayerStorage {
     public boolean hasPlayer(UUID uuid){
         return playerDataMap.containsKey(uuid);
     }
-    public PlayerData getPlayerInfo(UUID uuid){
+    public PlayerData getPlayerData(UUID uuid){
         return playerDataMap.get(uuid);
     }
-    public void savePlayerInfo(UUID uuid){
+    public void savePlayerData(UUID uuid){
         try {
             PlayerData data = playerDataMap.get(uuid);
             YamlDocument config = data.getConfig();

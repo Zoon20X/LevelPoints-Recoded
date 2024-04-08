@@ -15,10 +15,11 @@ public class LangSettings {
         for(String key : config.getSection("Lang").getRoutesAsStrings(false)){
             LangData langData;
             boolean isEnabled = config.getBoolean("Lang." + key + ".Enabled");
+            boolean centerText = config.getBoolean("Lang." + key + ".CenterText");
             if(!config.isString("Lang." + key + ".Message")){
-                langData = new LangData(isEnabled, config.getStringList("Lang." + key + ".Message"));
+                langData = new LangData(isEnabled,centerText, config.getStringList("Lang." + key + ".Message"));
             }else {
-                langData = new LangData(isEnabled, config.getString("Lang." + key + ".Message"));
+                langData = new LangData(isEnabled, centerText, config.getString("Lang." + key + ".Message"));
             }
             addLangData(key, langData);
         }

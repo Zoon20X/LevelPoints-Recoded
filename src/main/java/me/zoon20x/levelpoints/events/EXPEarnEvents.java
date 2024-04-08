@@ -48,7 +48,7 @@ public class EXPEarnEvents implements Listener {
         if(!levelPoints.getPlayerStorage().hasPlayer(player.getUniqueId())){
             return;
         }
-        PlayerData playerData = levelPoints.getPlayerStorage().getPlayerInfo(player.getUniqueId());
+        PlayerData playerData = levelPoints.getPlayerStorage().getPlayerData(player.getUniqueId());
 
         if(playerData.getLevel() < blockData.getBreakLevelRequired()){
             event.setCancelled(true);
@@ -81,7 +81,7 @@ public class EXPEarnEvents implements Listener {
         if(!levelPoints.getPlayerStorage().hasPlayer(player.getUniqueId())){
             return;
         }
-        PlayerData playerData = levelPoints.getPlayerStorage().getPlayerInfo(player.getUniqueId());
+        PlayerData playerData = levelPoints.getPlayerStorage().getPlayerData(player.getUniqueId());
         if(playerData.getLevel() < blockData.getPlaceLevelRequired()){
             event.setCancelled(true);
             return;
@@ -114,7 +114,7 @@ public class EXPEarnEvents implements Listener {
         if(!levelPoints.getPlayerStorage().hasPlayer(player.getUniqueId())){
             return;
         }
-        PlayerData playerData = levelPoints.getPlayerStorage().getPlayerInfo(player.getUniqueId());
+        PlayerData playerData = levelPoints.getPlayerStorage().getPlayerData(player.getUniqueId());
         if(playerData.getLevel() < mobData.getAttackRequired()){
             event.setCancelled(true);
             return;
@@ -143,7 +143,7 @@ public class EXPEarnEvents implements Listener {
         if(!levelPoints.getPlayerStorage().hasPlayer(player.getUniqueId())){
             return;
         }
-        PlayerData playerData = levelPoints.getPlayerStorage().getPlayerInfo(player.getUniqueId());
+        PlayerData playerData = levelPoints.getPlayerStorage().getPlayerData(player.getUniqueId());
         levelPoints.getEventUtils().triggerEXPEarn(player, playerData, mobData.getExp(), event);
     }
 

@@ -9,15 +9,18 @@ import java.util.List;
 public class LangData {
 
     private boolean isEnabled;
+    private boolean centerText;
     private List<String> message = new ArrayList<>();
 
-    public LangData(boolean isEnabled, String message){
+    public LangData(boolean isEnabled, boolean centerText, String message){
         this.isEnabled = isEnabled;
+        this.centerText = centerText;
         this.message.add(message);
         colorize();
     }
-    public LangData(boolean isEnabled, List<String> message){
+    public LangData(boolean isEnabled, boolean centerText, List<String> message){
         this.isEnabled = isEnabled;
+        this.centerText = centerText;
         this.message = message;
         colorize();
     }
@@ -36,5 +39,9 @@ public class LangData {
 
     public List<String> getMessage() {
         return message;
+    }
+
+    public boolean isCenteredText() {
+        return centerText;
     }
 }

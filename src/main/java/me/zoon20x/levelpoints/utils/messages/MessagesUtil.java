@@ -15,23 +15,6 @@ import java.util.regex.Pattern;
 
 public class MessagesUtil {
     private static final Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
-
-
-    public String getServerVersion(){
-        String reformat = Bukkit.getBukkitVersion().replace("-R0.1-SNAPSHOT", "");
-        reformat = reformat.replace("-R0.2-SNAPSHOT", "");
-        return reformat;
-    }
-    public String formatServerVersion(){
-        String fsrv = getServerVersion();
-        String result = Optional.ofNullable(fsrv)
-                .filter(str -> str.length() != 0)
-                .map(str -> str.substring(0, str.length() - 2))
-                .orElse(fsrv);
-        return result;
-    }
-
-
     public String getColor(String msg){
         return formatRGB(msg);
     }
@@ -44,9 +27,6 @@ public class MessagesUtil {
         }
         return net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', msg);
     }
-
-
-
     public void sendActionBar(Player player, String msg){
         new BukkitRunnable() {
             @Override

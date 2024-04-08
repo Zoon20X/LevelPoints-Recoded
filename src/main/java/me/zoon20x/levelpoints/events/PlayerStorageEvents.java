@@ -25,7 +25,7 @@ public class PlayerStorageEvents implements Listener {
         if(!storage.hasPlayer(player.getUniqueId())){
             return;
         }
-        storage.savePlayerInfo(player.getUniqueId());
+        storage.savePlayerData(player.getUniqueId());
     }
 
 }

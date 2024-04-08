@@ -1,8 +1,20 @@
-file-version: '3'
+file-version: '4'
 Lang:
   Help:
     Enabled: true
+    CenterText: false;
     Message:
       - '&3&l&n_____LevelPoints____'
+      - ''
       - '&b/lps &f-Displays this message'
       - '&b/lps info (player) &f-Displays player info'
+  Info:
+    Enabled: true
+    CenterText: true;
+    Message:
+      - '&3&l&n_____Player Info____'
+      - ''
+      - '&bLevel: {lps_level}'
+      - '&bExp: {lps_exp}/{lps_required_exp}'
+      - ''
+      - '&3________________'
