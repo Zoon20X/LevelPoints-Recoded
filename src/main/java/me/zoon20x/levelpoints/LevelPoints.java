@@ -4,6 +4,8 @@ import me.zoon20x.levelpoints.API.LevelPointsAPI;
 import me.zoon20x.devTools.spigot.DevInstance;
 import me.zoon20x.levelpoints.commands.LpsCommand;
 import me.zoon20x.levelpoints.containers.Player.PlayerStorage;
+import me.zoon20x.levelpoints.containers.Top.TopData;
+import me.zoon20x.levelpoints.containers.Top.TopSettings;
 import me.zoon20x.levelpoints.events.CustomEvents.EventUtils;
 import me.zoon20x.levelpoints.events.EXPEarnEvents;
 import me.zoon20x.levelpoints.events.PlayerStorageEvents;
@@ -31,6 +33,7 @@ public final class LevelPoints extends JavaPlugin {
     private ConfigUtils configUtils;
     private LpsSettings lpsSettings;
     private LangSettings lang;
+    private TopSettings topSettings;
 
     private PlayerStorage playerStorage;
 
@@ -83,7 +86,7 @@ public final class LevelPoints extends JavaPlugin {
 
     private void loadDev(){
         devInstance = new DevInstance();
-
+        topSettings = new TopSettings();
         devMode = true;
         loadMetrics();
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_PURPLE + "=============================");
@@ -167,5 +170,9 @@ public final class LevelPoints extends JavaPlugin {
         Arrays.asList(messages).forEach(m->{
             Bukkit.getConsoleSender().sendMessage(severity + "" + m);
         });
+    }
+
+    public TopSettings getTopSettings() {
+        return topSettings;
     }
 }

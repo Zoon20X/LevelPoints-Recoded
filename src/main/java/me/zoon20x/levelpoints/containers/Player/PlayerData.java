@@ -42,11 +42,13 @@ public class PlayerData implements PlayerAPI {
     @Override
     public void addExp(double exp){
         this.exp+=exp;
-        if(this.exp >= this.requiredEXP){
-            double remain = this.exp-this.requiredEXP;
+        if(this.exp >= this.requiredEXP) {
+            double remain = this.exp - this.requiredEXP;
 
             addLevel();
-            addExp(remain);
+            if (!isMax()) {
+                addExp(remain);
+            }
         }
     }
     @Override

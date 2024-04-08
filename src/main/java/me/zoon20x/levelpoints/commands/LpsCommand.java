@@ -3,9 +3,12 @@ package me.zoon20x.levelpoints.commands;
 import me.zoon20x.levelpoints.LevelPoints;
 import me.zoon20x.levelpoints.commands.TabComplete.LpsTabComplete;
 import me.zoon20x.levelpoints.containers.Player.PlayerData;
+import me.zoon20x.levelpoints.containers.Top.TopData;
+import me.zoon20x.levelpoints.containers.Top.TopSettings;
 import me.zoon20x.levelpoints.utils.messages.DebugSeverity;
 import me.zoon20x.levelpoints.utils.messages.LangData;
 import me.zoon20x.levelpoints.utils.placeholders.LocalPlaceholders;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,7 +16,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 public class LpsCommand implements CommandExecutor {
 
@@ -50,6 +53,18 @@ public class LpsCommand implements CommandExecutor {
                     LevelPoints.getInstance().log(DebugSeverity.SEVER, "Reload FAILED!");
                 }
                 return true;
+            }
+            if(args[0].equalsIgnoreCase("top")){
+                TopSettings topSettings = LevelPoints.getInstance().getTopSettings();
+                Collections.sort(topSettings.getTopDataList(), Comparator.comparingInt(TopData::getLevel).reversed());
+
+                // Display the sorted list
+                for (int i = 0; i < topSettings.getTopDataList().size(); i++) {
+                    TopData topData = topSettings.getTopDataList().get(i);
+                    LevelPoints.getInstance().log(DebugSeverity.NORMAL, (i + 1) + ". " +  topData.getUUID() + " - Level " + topData.getLevel());
+                }
+
+
             }
 
         }
