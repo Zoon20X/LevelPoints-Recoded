@@ -15,6 +15,7 @@ public class LocalPlaceholders {
         return message
                 .replace("{lps_level}", String.valueOf(data.getLevel()))
                 .replace("{lps_exp}", String.valueOf(data.getExp()))
+                .replace("{lps_prestige}", String.valueOf(data.getPrestige()))
                 .replace("{lps_required_exp}", String.valueOf(data.getRequiredEXP()))
                 .replace("{lps_required_level}", String.valueOf(requiredLevel));
     }

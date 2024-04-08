@@ -1,4 +1,4 @@
-file-version: '4'
+file-version: '5'
 Lang:
   Help:
     Enabled: true
@@ -15,6 +15,7 @@ Lang:
       - '&3&l&n_____Player Info____'
       - ''
       - '&bLevel: {lps_level}'
+      - '&bPrestige: {lps_prestige}'
       - '&bExp: {lps_exp}/{lps_required_exp}'
       - ''
       - '&3________________'
