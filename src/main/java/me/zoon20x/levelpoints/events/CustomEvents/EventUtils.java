@@ -17,7 +17,7 @@ public class EventUtils{
             return;
         }
         LevelSettings levelSettings = LevelPoints.getInstance().getLpsSettings().getLevelSettings();
-        if(data.getLevel() >= levelSettings.getMaxData().getLevel() && data.getPrestige() >= levelSettings.getMaxData().getPrestige()){
+        if(data.isMax()){
             return;
         }
         data.addExp(exp);

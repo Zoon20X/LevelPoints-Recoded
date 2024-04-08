@@ -1,4 +1,4 @@
-file-version: '5'
+file-version: '6'
 Lang:
   Help:
     Enabled: true
@@ -17,5 +17,6 @@ Lang:
       - '&bLevel: {lps_level}'
       - '&bPrestige: {lps_prestige}'
       - '&bExp: {lps_exp}/{lps_required_exp}'
+      - '&bIs Maxed: {lps_max}'
       - ''
       - '&3________________'

@@ -17,6 +17,7 @@ public class LocalPlaceholders {
                 .replace("{lps_exp}", String.valueOf(data.getExp()))
                 .replace("{lps_prestige}", String.valueOf(data.getPrestige()))
                 .replace("{lps_required_exp}", String.valueOf(data.getRequiredEXP()))
+                .replace("{lps_max}", String.valueOf(data.isMax()))
                 .replace("{lps_required_level}", String.valueOf(requiredLevel));
     }
 

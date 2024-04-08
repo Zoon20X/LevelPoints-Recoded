@@ -13,13 +13,12 @@ import java.util.UUID;
 public class PlayerData implements PlayerAPI {
     private YamlDocument config;
 
-
     private UUID uuid;
     private int level;
     private int prestige;
     private double requiredEXP;
     private double exp;
-
+    private boolean isMax;
 
     public PlayerData(UUID uuid, YamlDocument config){
         this.config = config;
@@ -28,6 +27,7 @@ public class PlayerData implements PlayerAPI {
         this.prestige = 0;
         this.exp = 0.0;
         this.requiredEXP = calculateRequiredEXP(this.level);
+        this.isMax = false;
     }
 
 
@@ -140,6 +140,10 @@ public class PlayerData implements PlayerAPI {
     }
 
 
-
-
+    @Override
+    public boolean isMax() {
+        LevelSettings levelSettings = LevelPoints.getInstance().getLpsSettings().getLevelSettings();
+        isMax = this.level >= levelSettings.getMaxData().getLevel() && this.prestige >= levelSettings.getMaxData().getPrestige();
+        return isMax;
+    }
 }

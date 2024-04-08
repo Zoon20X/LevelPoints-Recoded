@@ -10,6 +10,9 @@ public class MaxData {
         this.level = level;
         this.prestige = prestige;
         this.usePrestige = usePrestige;
+        if(!usePrestige){
+            this.prestige = 0;
+        }
     }
 
 

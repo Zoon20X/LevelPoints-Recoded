@@ -22,4 +22,6 @@ public interface PlayerAPI {
     int getPrestige();
 
     void setPrestige(int prestige);
+
+    boolean isMax();
 }
