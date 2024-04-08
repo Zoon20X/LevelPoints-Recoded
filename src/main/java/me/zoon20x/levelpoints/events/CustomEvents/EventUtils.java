@@ -20,6 +20,7 @@ public class EventUtils{
     public void triggerLevelUpEvent(Player player, PlayerData data){
         LevelUpEvent levelUpEvent = new LevelUpEvent(player, data);
         Bukkit.getPluginManager().callEvent(levelUpEvent);
+
     }
 
 }

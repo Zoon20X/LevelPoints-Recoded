@@ -36,7 +36,6 @@ public final class LevelPoints extends JavaPlugin {
 
     private EventUtils eventUtils;
     private boolean devMode;
-    private Expression expression;
     private MessagesUtil messagesUtil;
 
     @Override
@@ -87,8 +86,6 @@ public final class LevelPoints extends JavaPlugin {
 
         devMode = true;
         loadMetrics();
-        String expressionString2 = "50 * level + 15";
-        expression = new ExpressionBuilder(expressionString2).variables("level").build();
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_PURPLE + "=============================");
         Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "LevelPoints DEV Instance");
         Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "Version: " + this.getDescription().getVersion());
@@ -146,10 +143,6 @@ public final class LevelPoints extends JavaPlugin {
     }
     public EventUtils getEventUtils() {
         return eventUtils;
-    }
-
-    public Expression getExpression() {
-        return expression;
     }
 
     public PlayerStorage getPlayerStorage() {

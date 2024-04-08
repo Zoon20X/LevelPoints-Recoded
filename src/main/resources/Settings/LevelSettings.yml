@@ -1,0 +1,14 @@
+file-version: '1'
+
+Starting:
+  Level: 1
+  Experience: 0
+  Prestige: 0
+Max:
+  Level: 4
+  Prestige:
+    Enabled: true
+    Value: 10
+
+Experience:
+  Formula: '50* {lps_level}'

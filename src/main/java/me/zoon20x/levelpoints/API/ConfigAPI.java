@@ -10,4 +10,6 @@ public interface ConfigAPI {
     YamlDocument getMobSettingsConfig();
 
     YamlDocument getLangSettings();
+
+    YamlDocument getLevelSettings();
 }

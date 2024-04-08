@@ -35,9 +35,9 @@ public class PlayerStorage {
                     UpdaterSettings.builder().setVersioning(new BasicVersioning("file-version")).setOptionSorting(UpdaterSettings.OptionSorting.SORT_BY_DEFAULTS).build());
             config.update();
             if(newPlayer) {
-                config.set("Level", 1);
-                config.set("Exp.Amount", 0.0);
-                config.set("Prestige", 0);
+                config.set("Level", LevelPoints.getInstance().getLpsSettings().getLevelSettings().getStartingData().getLevel());
+                config.set("Exp.Amount", LevelPoints.getInstance().getLpsSettings().getLevelSettings().getStartingData().getExp());
+                config.set("Prestige", LevelPoints.getInstance().getLpsSettings().getLevelSettings().getStartingData().getPrestige());
             }
             config.set("Name", name);
             config.save();

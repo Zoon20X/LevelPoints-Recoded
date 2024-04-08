@@ -31,11 +31,6 @@ public class DevEvents implements Listener {
     public void onBreak(BlockBreakEvent event){
         Block block = event.getBlock();
         Player player = event.getPlayer();
-        String key = "Help";
-        List<String> message = LevelPoints.getInstance().getLang().getLangData(key).getMessage();
-        message.forEach(m ->{
-            player.sendMessage(m);
-        });
 
 
     }
