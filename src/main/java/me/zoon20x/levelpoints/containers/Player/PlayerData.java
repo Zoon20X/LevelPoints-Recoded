@@ -37,7 +37,6 @@ public class PlayerData implements PlayerAPI {
     @Override
     public void setLevel(int level){
         this.level = level;
-        this.exp = LevelPoints.getInstance().getLpsSettings().getLevelSettings().getStartingData().getExp();
         calculateRequiredEXP(level);
     }
     @Override
@@ -46,7 +45,6 @@ public class PlayerData implements PlayerAPI {
         if(this.exp >= this.requiredEXP){
             double remain = this.exp-this.requiredEXP;
 
-            System.out.println(remain);
             addLevel();
             addExp(remain);
         }
@@ -61,8 +59,10 @@ public class PlayerData implements PlayerAPI {
         LevelSettings levelSettings = LevelPoints.getInstance().getLpsSettings().getLevelSettings();
         if(temp >= levelSettings.getMaxData().getLevel()){
             if(!levelSettings.getMaxData().usePrestige()){
+                this.exp = 0;
                 return;
             }
+            this.level = LevelPoints.getInstance().getLpsSettings().getLevelSettings().getMaxData().getLevel();
             addPrestige();
             return;
         }
@@ -86,10 +86,13 @@ public class PlayerData implements PlayerAPI {
     public void addPrestige(int prestige){
         int temp = this.prestige + prestige;
         if(temp >= LevelPoints.getInstance().getLpsSettings().getLevelSettings().getMaxData().getPrestige()){
+            this.prestige = LevelPoints.getInstance().getLpsSettings().getLevelSettings().getMaxData().getPrestige();
+            this.exp = 0;
             return;
         }
         this.prestige = temp;
         setLevel(LevelPoints.getInstance().getLpsSettings().getLevelSettings().getStartingData().getLevel());
+        this.exp = LevelPoints.getInstance().getLpsSettings().getLevelSettings().getStartingData().getExp();
     }
 
     private double calculateRequiredEXP(int level){
