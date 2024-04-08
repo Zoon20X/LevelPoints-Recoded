@@ -78,22 +78,4 @@ public class MessagesUtil {
 
         return sb + msg;
     }
-    public void log(String... messages) {
-        Arrays.asList(messages).forEach(m->{
-            LevelPoints.getInstance().getLogger().info(getColor(m));
-        });
-
-
-    }
-    public void log(Player player,boolean centre ,String... messages) {
-        if(centre) {
-            Arrays.asList(messages).forEach(m -> {
-                player.sendMessage(getColor(centreText(m)));
-            });
-            return;
-        }
-        Arrays.asList(messages).forEach(m -> {
-            player.sendMessage(getColor(m));
-        });
-    }
 }

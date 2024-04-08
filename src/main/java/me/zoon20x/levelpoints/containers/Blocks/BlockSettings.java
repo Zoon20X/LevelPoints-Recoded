@@ -6,6 +6,7 @@ import me.zoon20x.levelpoints.API.BlockSettingsAPI;
 import me.zoon20x.levelpoints.LevelPoints;
 import org.bukkit.Material;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class BlockSettings implements BlockSettingsAPI {
@@ -18,9 +19,15 @@ public class BlockSettings implements BlockSettingsAPI {
 
     }
 
+    public void reload() throws IOException {
+        blockDataMap.clear();
+        YamlDocument config = LevelPoints.getInstance().getConfigUtils().getBlockSettingsConfig();
+        config.reload();
+        load();
+    }
+
     private void load(){
         YamlDocument config = LevelPoints.getInstance().getConfigUtils().getBlockSettingsConfig();
-        blockDataMap.clear();
         config.getSection("Blocks.Settings").getRoutesAsStrings(false).forEach(block ->{
             Material material = Material.getMaterial(block);
             int breakRequired = config.getInt("Blocks.Settings." + block + ".RequiredLevel.Break");

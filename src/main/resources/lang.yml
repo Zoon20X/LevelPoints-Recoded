@@ -2,7 +2,7 @@ file-version: '4'
 Lang:
   Help:
     Enabled: true
-    CenterText: false;
+    CenterText: false
     Message:
       - '&3&l&n_____LevelPoints____'
       - ''
@@ -10,7 +10,7 @@ Lang:
       - '&b/lps info (player) &f-Displays player info'
   Info:
     Enabled: true
-    CenterText: true;
+    CenterText: true
     Message:
       - '&3&l&n_____Player Info____'
       - ''

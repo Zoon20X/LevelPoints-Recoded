@@ -8,6 +8,7 @@ import me.zoon20x.levelpoints.events.EXPEarnEvents;
 import me.zoon20x.levelpoints.events.PlayerStorageEvents;
 import me.zoon20x.levelpoints.utils.LpsSettings;
 import me.zoon20x.levelpoints.utils.files.ConfigUtils;
+import me.zoon20x.levelpoints.utils.messages.DebugSeverity;
 import me.zoon20x.levelpoints.utils.messages.LangSettings;
 import me.zoon20x.levelpoints.utils.messages.MessagesUtil;
 import net.objecthunter.exp4j.Expression;
@@ -17,6 +18,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public final class LevelPoints extends JavaPlugin {
@@ -26,7 +29,7 @@ public final class LevelPoints extends JavaPlugin {
 
     private ConfigUtils configUtils;
     private LpsSettings lpsSettings;
-    private LangSettings langSettings;
+    private LangSettings lang;
 
     private PlayerStorage playerStorage;
 
@@ -44,7 +47,7 @@ public final class LevelPoints extends JavaPlugin {
 
         eventUtils = new EventUtils();
         playerStorage = new PlayerStorage();
-        langSettings = new LangSettings();
+        lang = new LangSettings();
         lpsSettings = new LpsSettings(this);
         loadEvents();
 
@@ -95,6 +98,13 @@ public final class LevelPoints extends JavaPlugin {
     private void loadEvents(){
         Bukkit.getPluginManager().registerEvents(new EXPEarnEvents(this), this);
         Bukkit.getPluginManager().registerEvents(new PlayerStorageEvents(), this);
+    }
+
+    public void reload() throws IOException {
+        getLpsSettings().getBlockSettings().reload();
+        getLpsSettings().getMobSettings().reload();
+        getLang().reload();
+
     }
 
 
@@ -149,7 +159,12 @@ public final class LevelPoints extends JavaPlugin {
         return lpsSettings;
     }
 
-    public LangSettings getLangSettings() {
-        return langSettings;
+    public LangSettings getLang() {
+        return lang;
+    }
+    public void log(DebugSeverity severity, String... messages) {
+        Arrays.asList(messages).forEach(m->{
+            Bukkit.getConsoleSender().sendMessage(severity + "" + m);
+        });
     }
 }

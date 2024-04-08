@@ -7,6 +7,7 @@ import me.zoon20x.levelpoints.containers.Blocks.BlockData;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class MobSettings implements MobSettingsAPI {
@@ -19,9 +20,15 @@ public class MobSettings implements MobSettingsAPI {
 
     }
 
+    public void reload() throws IOException {
+        mobDataMap.clear();
+        YamlDocument config = LevelPoints.getInstance().getConfigUtils().getMobSettingsConfig();
+        config.reload();
+        load();
+    }
+
     private void load(){
         YamlDocument config = LevelPoints.getInstance().getConfigUtils().getMobSettingsConfig();
-        mobDataMap.clear();
         config.getSection("Mobs.Settings").getRoutesAsStrings(false).forEach(entity ->{
             EntityType entityType = EntityType.valueOf(entity);
             int attackRequired = config.getInt("Mobs.Settings." + entity + ".RequiredLevel.Attack");
