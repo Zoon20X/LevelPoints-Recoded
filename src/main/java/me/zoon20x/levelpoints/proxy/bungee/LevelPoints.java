@@ -7,7 +7,9 @@ import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import me.zoon20x.levelpoints.CrossNetworkStorage.NetworkSocketUtils;
+import me.zoon20x.levelpoints.CrossNetworkStorage.Objects.NetPlayerStorage;
 import me.zoon20x.levelpoints.proxy.bungee.NetworkUtils.Network;
+import me.zoon20x.levelpoints.proxy.bungee.events.BungeeEvents;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.io.File;
@@ -18,6 +20,7 @@ public class LevelPoints extends Plugin {
     private static LevelPoints instance;
     private Network network;
     private NetworkSocketUtils networkSocketUtils;
+    private NetPlayerStorage netPlayerStorage;
 
     private YamlDocument config;
 
@@ -29,6 +32,9 @@ public class LevelPoints extends Plugin {
 
         this.networkSocketUtils = new NetworkSocketUtils(networkPort);
         this.network = new Network();
+        this.netPlayerStorage = new NetPlayerStorage();
+        getProxy().getPluginManager().registerListener(this, new BungeeEvents());
+
 
     }
     private void createConfig(String fileName){
@@ -51,6 +57,8 @@ public class LevelPoints extends Plugin {
 
     @Override
     public void onDisable(){
+        network.getTask().cancel();
+        networkSocketUtils.close();
 
     }
 
@@ -65,5 +73,9 @@ public class LevelPoints extends Plugin {
 
     public NetworkSocketUtils getNetworkSocketUtils() {
         return networkSocketUtils;
+    }
+
+    public NetPlayerStorage getNetPlayerStorage() {
+        return netPlayerStorage;
     }
 }
