@@ -134,9 +134,11 @@ public class PlayerData implements PlayerAPI {
         return prestige;
     }
     @Override
-    public void setPrestige(int prestige) {
+    public void setPrestige(int prestige, boolean resetLevel) {
         this.prestige = prestige;
-        setLevel(LevelPoints.getInstance().getLpsSettings().getLevelSettings().getStartingData().getLevel());
+        if (resetLevel) {
+            setLevel(LevelPoints.getInstance().getLpsSettings().getLevelSettings().getStartingData().getLevel());
+        }
     }
 
 

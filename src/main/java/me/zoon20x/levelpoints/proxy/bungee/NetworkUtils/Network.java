@@ -1,6 +1,7 @@
 package me.zoon20x.levelpoints.proxy.bungee.NetworkUtils;
 
 import me.zoon20x.levelpoints.CrossNetworkStorage.Objects.DataCollection;
+import me.zoon20x.levelpoints.CrossNetworkStorage.Objects.NetworkPlayer;
 import me.zoon20x.levelpoints.CrossNetworkStorage.Objects.NetworkResponse;
 import me.zoon20x.levelpoints.CrossNetworkStorage.Objects.Response;
 import me.zoon20x.levelpoints.CrossNetworkStorage.SerializeData;
@@ -16,7 +17,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
-public class Network {
+public class Network{
 
     private ServerSocket serverSocket;
     private ScheduledTask task;
@@ -50,6 +51,11 @@ public class Network {
                         sendResponse(new Response(NetworkResponse.Success, LevelPoints.getInstance().getNetPlayerStorage().getPlayer(dataCollection.getUUID())), outputStream);
                         return;
                     }
+                    if(data instanceof NetworkPlayer){
+                        NetworkPlayer networkPlayer = (NetworkPlayer) data;
+                        LevelPoints.getInstance().getNetPlayerStorage().addPlayer(networkPlayer.getUUID(), networkPlayer);
+                        sendResponse(new Response(NetworkResponse.Updated), outputStream);
+                    }
                     System.out.println(c);
 
 
@@ -67,8 +73,6 @@ public class Network {
     }
 
     public void sendResponse(Serializable o, DataOutputStream outputStream) {
-
-
         try {
             outputStream.writeUTF(SerializeData.toString(o));
             outputStream.close();

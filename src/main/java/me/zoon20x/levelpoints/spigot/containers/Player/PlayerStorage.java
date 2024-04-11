@@ -6,6 +6,7 @@ import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
 import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
+import me.zoon20x.levelpoints.CrossNetworkStorage.Objects.NetworkPlayer;
 import me.zoon20x.levelpoints.spigot.LevelPoints;
 
 import java.io.File;
@@ -22,7 +23,14 @@ public class PlayerStorage {
         load(data);
         playerDataMap.put(uuid, data);
     }
-
+    public void loadPlayer(UUID uuid, String name, NetworkPlayer networkPlayer){
+        YamlDocument config = createPlayerConfig(uuid,name, "/Players/");
+        PlayerData data = new PlayerData(uuid, config);
+        data.setLevel(networkPlayer.getLevel());
+        data.setPrestige(networkPlayer.getPrestige(), false);
+        data.setExp(networkPlayer.getExp());
+        playerDataMap.put(uuid, data);
+    }
     public void reloadPlayer(UUID uuid) throws IOException {
         PlayerData data = playerDataMap.get(uuid);
         data.save();
@@ -32,7 +40,7 @@ public class PlayerStorage {
     }
     private void load(PlayerData data){
         data.setExp(data.getConfig().getDouble("Exp.Amount"));
-        data.setPrestige(data.getConfig().getInt("Prestige"));
+        data.setPrestige(data.getConfig().getInt("Prestige"), false);
         data.setLevel(data.getConfig().getInt("Level"));
     }
     private YamlDocument createPlayerConfig(UUID uuid, String name, String location){

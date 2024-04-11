@@ -21,7 +21,7 @@ public interface PlayerAPI {
 
     int getPrestige();
 
-    void setPrestige(int prestige);
+    void setPrestige(int prestige, boolean resetLevel);
 
     boolean isMax();
 }

@@ -41,7 +41,7 @@ public class TopSettings {
             if (files != null) {
                 for (File file : files) {
                     //YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
-                    YamlDocument config = createPlayerConfig(UUID.fromString(file.getName().replace(".yml","")), "tt", "/Players/");
+                    YamlDocument config = createPlayerConfig(UUID.fromString(file.getName().replace(".yml","")), "/Players/");
                     topDataList.add(new TopData(config.getString("Name"), UUID.fromString(file.getName().replace(".yml", "")), config.getInt("Level")));
                 }
             }
@@ -73,8 +73,7 @@ public class TopSettings {
     public void setTopDataList(List<TopData> topDataList){
         this.topDataList = topDataList;
     }
-    private YamlDocument createPlayerConfig(UUID uuid, String name, String location){
-        boolean newPlayer = !new File(LevelPoints.getInstance().getDataFolder() + location, uuid + ".yml").exists();
+    private YamlDocument createPlayerConfig(UUID uuid, String location){
         try {
             YamlDocument config = YamlDocument.create(new File(LevelPoints.getInstance().getDataFolder() + location, uuid + ".yml"),
                     getClass().getResourceAsStream( location + "template.yml"),
@@ -82,14 +81,6 @@ public class TopSettings {
                     LoaderSettings.builder().setAutoUpdate(true).build(),
                     DumperSettings.DEFAULT,
                     UpdaterSettings.builder().setVersioning(new BasicVersioning("file-version")).setOptionSorting(UpdaterSettings.OptionSorting.SORT_BY_DEFAULTS).build());
-            config.update();
-            if(newPlayer) {
-                config.set("Level", LevelPoints.getInstance().getLpsSettings().getLevelSettings().getStartingData().getLevel());
-                config.set("Exp.Amount", LevelPoints.getInstance().getLpsSettings().getLevelSettings().getStartingData().getExp());
-                config.set("Prestige", LevelPoints.getInstance().getLpsSettings().getLevelSettings().getStartingData().getPrestige());
-            }
-            config.set("Name", name);
-            config.save();
             return config;
         } catch (IOException e) {
             throw new RuntimeException(e);
