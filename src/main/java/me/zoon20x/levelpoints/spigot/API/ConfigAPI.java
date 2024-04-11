@@ -12,4 +12,6 @@ public interface ConfigAPI {
     YamlDocument getLangSettings();
 
     YamlDocument getLevelSettings();
+
+    YamlDocument getConfig();
 }

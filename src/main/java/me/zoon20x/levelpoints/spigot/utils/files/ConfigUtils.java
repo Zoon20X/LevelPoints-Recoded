@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class ConfigUtils implements ConfigAPI {
+    private final YamlDocument config;
+
     private final YamlDocument levelSettings;
 
     private final YamlDocument blockSettings;
@@ -20,6 +22,7 @@ public class ConfigUtils implements ConfigAPI {
     private final YamlDocument langSettings;
 
     public ConfigUtils(){
+        config = createConfig("config.yml", "/");
         levelSettings = createConfig("LevelSettings.yml", "/Settings/");
         blockSettings = createConfig("BlockSettings.yml", "/Settings/");
         mobSettings = createConfig("MobSettings.yml", "/Settings/");
@@ -64,5 +67,10 @@ public class ConfigUtils implements ConfigAPI {
     @Override
     public YamlDocument getLevelSettings() {
         return levelSettings;
+    }
+
+    @Override
+    public YamlDocument getConfig() {
+        return config;
     }
 }

@@ -1,0 +1,4 @@
+name: LevelPoints
+version: '1.0'
+main: me.zoon20x.levelpoints.proxy.bungee.LevelPoints
+author: Zoon20X

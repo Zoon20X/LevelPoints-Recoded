@@ -1,0 +1,7 @@
+file-version: '1'
+
+NetworkShare:
+  CrossNetworkStorage:
+    Enabled: false
+    Address: 127.0.0.1
+    Port: 3000

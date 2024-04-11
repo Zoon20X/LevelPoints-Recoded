@@ -1,6 +1,8 @@
 package me.zoon20x.levelpoints.spigot;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import me.zoon20x.levelpoints.spigot.API.LevelPointsAPI;
+import me.zoon20x.levelpoints.spigot.NetworkUtils.Network;
 import me.zoon20x.levelpoints.spigot.events.CustomEvents.EventUtils;
 import me.zoon20x.levelpoints.spigot.utils.files.ConfigUtils;
 import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
@@ -17,6 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.checkerframework.checker.units.qual.N;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -37,6 +40,8 @@ public final class LevelPoints extends JavaPlugin {
     private boolean devMode;
     private MessagesUtil messagesUtil;
 
+    private Network network;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -50,7 +55,6 @@ public final class LevelPoints extends JavaPlugin {
         lpsSettings = new LpsSettings(this);
         loadEvents();
         loadCommands();
-
 
         if (getDescription().getVersion().contains("DEV")) {
             loadDev();
@@ -72,6 +76,7 @@ public final class LevelPoints extends JavaPlugin {
 
 
     }
+
     private void loadMetrics(){
         int pluginId = 6480; // <-- Replace with the id of your plugin!
         Metrics metrics = new Metrics(this, pluginId);
@@ -84,6 +89,15 @@ public final class LevelPoints extends JavaPlugin {
         devInstance = new DevInstance();
         topSettings = new TopSettings();
         devMode = true;
+        YamlDocument config = getConfigUtils().getConfig();
+        boolean cnsSupport = config.getBoolean("NetworkShare.CrossNetworkStorage.Enabled");
+        if(cnsSupport){
+            String address = config.getString("NetworkShare.CrossNetworkStorage.Address");
+            int port = config.getInt("NetworkShare.CrossNetworkStorage.Port");
+            this.network = new Network(address, port);
+            getNetwork().sendToProxy("");
+        }
+
         loadMetrics();
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_PURPLE + "=============================");
         Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "LevelPoints DEV Instance");
@@ -170,5 +184,9 @@ public final class LevelPoints extends JavaPlugin {
 
     public TopSettings getTopSettings() {
         return topSettings;
+    }
+
+    public Network getNetwork() {
+        return network;
     }
 }
