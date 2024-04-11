@@ -23,6 +23,7 @@ import org.checkerframework.checker.units.qual.N;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.UUID;
 
 public final class LevelPoints extends JavaPlugin {
     private static LevelPoints instance;
@@ -95,7 +96,7 @@ public final class LevelPoints extends JavaPlugin {
             String address = config.getString("NetworkShare.CrossNetworkStorage.Address");
             int port = config.getInt("NetworkShare.CrossNetworkStorage.Port");
             this.network = new Network(address, port);
-            getNetwork().sendToProxy("");
+            getNetwork().retrieveInfo(UUID.randomUUID());
         }
 
         loadMetrics();

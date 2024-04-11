@@ -1,5 +1,9 @@
 package me.zoon20x.levelpoints.proxy.bungee.NetworkUtils;
 
+import me.zoon20x.levelpoints.CrossNetworkStorage.Objects.DataCollection;
+import me.zoon20x.levelpoints.CrossNetworkStorage.Objects.NetworkResponse;
+import me.zoon20x.levelpoints.CrossNetworkStorage.Objects.Response;
+import me.zoon20x.levelpoints.CrossNetworkStorage.SerializeData;
 import me.zoon20x.levelpoints.proxy.bungee.LevelPoints;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
@@ -7,6 +11,7 @@ import net.md_5.bungee.api.scheduler.ScheduledTask;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
@@ -34,16 +39,24 @@ public class Network {
 
                     DataInputStream a = new DataInputStream(clientSocket.getInputStream());
                     DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
-
                     String c = a.readUTF();
-                    //Object data = SerializeData.setData(c);
+                    Object data = SerializeData.setData(c);
+                    if(data instanceof DataCollection){
+                        DataCollection dataCollection = (DataCollection) data;
+                        if(!LevelPoints.getInstance().getNetPlayerStorage().hasPlayer(dataCollection.getUUID())){
+                            sendResponse(new Response(NetworkResponse.NoPlayer), outputStream);
+                            return;
+                        }
+                        sendResponse(new Response(NetworkResponse.Success, LevelPoints.getInstance().getNetPlayerStorage().getPlayer(dataCollection.getUUID())), outputStream);
+                        return;
+                    }
                     System.out.println(c);
 
-                    sendResponse(c, outputStream);
+
                     //NetworkEvent.triggerNetworkReceiveEvent(data);
 
                     clientSocket.close();
-                } catch (IOException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     if (serverSocket.isClosed()) {
                         return;
                     }
@@ -53,12 +66,11 @@ public class Network {
         }, 0, 100, TimeUnit.MILLISECONDS);
     }
 
-    public void sendResponse(Object o, DataOutputStream outputStream) {
-        String utf = "CHECK";
+    public void sendResponse(Serializable o, DataOutputStream outputStream) {
 
 
         try {
-            outputStream.writeUTF(utf);
+            outputStream.writeUTF(SerializeData.toString(o));
             outputStream.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
