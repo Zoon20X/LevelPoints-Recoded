@@ -2,11 +2,11 @@ package me.zoon20x.devTools.spigot.events;
 
 
 import me.zoon20x.devTools.spigot.gui.LpsGUI;
-import me.zoon20x.levelpoints.LevelPoints;
-import me.zoon20x.levelpoints.containers.Player.PlayerData;
-import me.zoon20x.levelpoints.utils.messages.DebugSeverity;
-import me.zoon20x.levelpoints.utils.messages.LangData;
-import me.zoon20x.levelpoints.utils.placeholders.LocalPlaceholders;
+import me.zoon20x.spigot.levelpoints.LevelPoints;
+import me.zoon20x.spigot.levelpoints.containers.Player.PlayerData;
+import me.zoon20x.spigot.levelpoints.utils.messages.DebugSeverity;
+import me.zoon20x.spigot.levelpoints.utils.messages.LangData;
+import me.zoon20x.spigot.levelpoints.utils.placeholders.LocalPlaceholders;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

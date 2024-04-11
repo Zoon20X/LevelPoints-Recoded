@@ -1,7 +1,7 @@
 package me.zoon20x.devTools.spigot;
 
 import me.zoon20x.devTools.spigot.player.PlayerStorage;
-import me.zoon20x.levelpoints.LevelPoints;
+import me.zoon20x.spigot.levelpoints.LevelPoints;
 import me.zoon20x.devTools.spigot.events.DevEvents;
 import org.bukkit.Bukkit;
 

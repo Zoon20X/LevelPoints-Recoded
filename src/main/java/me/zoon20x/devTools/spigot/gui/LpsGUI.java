@@ -1,6 +1,6 @@
 package me.zoon20x.devTools.spigot.gui;
 
-import me.zoon20x.levelpoints.LevelPoints;
+import me.zoon20x.spigot.levelpoints.LevelPoints;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
