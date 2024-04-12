@@ -10,9 +10,9 @@ public class NetworkPlayer implements Serializable {
     private final int prestige;
     private final double exp;
 
-    private final String lastKnownServer;
+    private final UUID lastKnownServer;
 
-    public NetworkPlayer(UUID uuid, int level, int prestige, double exp, String lastKnownServer) {
+    public NetworkPlayer(UUID uuid, int level, int prestige, double exp, UUID lastKnownServer) {
         this.uuid = uuid;
         this.level = level;
         this.prestige = prestige;
@@ -37,7 +37,7 @@ public class NetworkPlayer implements Serializable {
         return exp;
     }
 
-    public String getLastKnownServer() {
+    public UUID getLastKnownServer() {
         return lastKnownServer;
     }
 }

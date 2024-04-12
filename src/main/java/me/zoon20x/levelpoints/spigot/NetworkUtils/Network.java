@@ -33,7 +33,7 @@ public class Network {
             Socket socket = new Socket(proxyAddress, proxyPort);
             DataOutputStream o = new DataOutputStream(socket.getOutputStream());
 
-            NetworkPlayer networkPlayer = new NetworkPlayer(data.getUUID(), data.getLevel(), data.getPrestige(), data.getExp(), "test");
+            NetworkPlayer networkPlayer = new NetworkPlayer(data.getUUID(), data.getLevel(), data.getPrestige(), data.getExp(), LevelPoints.getInstance().getCnsSettings().getServerID());
             String send = SerializeData.toString(networkPlayer);
 
             o.writeUTF(send);

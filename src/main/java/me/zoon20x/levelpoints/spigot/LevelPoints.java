@@ -3,6 +3,7 @@ package me.zoon20x.levelpoints.spigot;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import me.zoon20x.levelpoints.spigot.API.LevelPointsAPI;
 import me.zoon20x.levelpoints.spigot.NetworkUtils.Network;
+import me.zoon20x.levelpoints.spigot.containers.CnsSettings;
 import me.zoon20x.levelpoints.spigot.events.CustomEvents.EventUtils;
 import me.zoon20x.levelpoints.spigot.utils.files.ConfigUtils;
 import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
@@ -42,6 +43,9 @@ public final class LevelPoints extends JavaPlugin {
     private MessagesUtil messagesUtil;
 
     private Network network;
+
+    private CnsSettings cnsSettings;
+
 
     @Override
     public void onEnable() {
@@ -96,7 +100,11 @@ public final class LevelPoints extends JavaPlugin {
             String address = config.getString("NetworkShare.CrossNetworkStorage.Address");
             int port = config.getInt("NetworkShare.CrossNetworkStorage.Port");
             this.network = new Network(address, port);
-            getNetwork().retrieveInfo(UUID.randomUUID());
+            if (config.getString("NetworkShare.CrossNetworkStorage.ServerID").equalsIgnoreCase("")) {
+                cnsSettings = new CnsSettings(address, port);
+            }else{
+                cnsSettings = new CnsSettings(address, port, config.getString("NetworkShare.CrossNetworkStorage.ServerID"));
+            }
         }
 
         loadMetrics();
@@ -133,6 +141,13 @@ public final class LevelPoints extends JavaPlugin {
         // Plugin shutdown logic
         if (devMode) {
             devInstance.onDisable();
+        }
+
+        try {
+            getConfigUtils().getConfig().set("NetworkShare.CrossNetworkStorage.ServerID", cnsSettings.getServerID().toString());
+            getConfigUtils().getConfig().save();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (playerStorage.hasPlayer(player.getUniqueId())) {
@@ -189,5 +204,9 @@ public final class LevelPoints extends JavaPlugin {
 
     public Network getNetwork() {
         return network;
+    }
+
+    public CnsSettings getCnsSettings() {
+        return cnsSettings;
     }
 }

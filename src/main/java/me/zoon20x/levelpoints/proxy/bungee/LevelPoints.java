@@ -26,11 +26,14 @@ public class LevelPoints extends Plugin {
     private NetPlayerStorage netPlayerStorage;
 
     private YamlDocument config;
+    private YamlDocument cachedPlayers;
+
 
     @Override
     public void onEnable(){
         instance = this;
-        createConfig("network.yml");
+        config = createConfig("network.yml");
+        cachedPlayers = createConfig("CachedPlayers.yml");
         int networkPort = config.getInt("NetworkPort");
 
         this.networkSocketUtils = new NetworkSocketUtils(networkPort);
@@ -40,10 +43,10 @@ public class LevelPoints extends Plugin {
 
 
     }
-    private void createConfig(String fileName){
+    private YamlDocument createConfig(String fileName){
         try {
 
-            config = YamlDocument.create(new File(getDataFolder(), fileName),
+            YamlDocument config = YamlDocument.create(new File(getDataFolder(), fileName),
                     getClass().getResourceAsStream("/"+fileName),
                     GeneralSettings.DEFAULT,
                     LoaderSettings.builder().setAutoUpdate(true).build(),
@@ -51,6 +54,7 @@ public class LevelPoints extends Plugin {
                     UpdaterSettings.builder().setVersioning(new BasicVersioning("file-version")).setOptionSorting(UpdaterSettings.OptionSorting.SORT_BY_DEFAULTS).build());
             config.update();
             config.save();
+            return config;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -69,6 +73,9 @@ public class LevelPoints extends Plugin {
         return instance;
     }
 
+    public YamlDocument getConfig(){
+        return config;
+    }
 
     public Network getNetwork() {
         return network;
@@ -80,5 +87,9 @@ public class LevelPoints extends Plugin {
 
     public NetPlayerStorage getNetPlayerStorage() {
         return netPlayerStorage;
+    }
+
+    public YamlDocument getCachedPlayers() {
+        return cachedPlayers;
     }
 }
