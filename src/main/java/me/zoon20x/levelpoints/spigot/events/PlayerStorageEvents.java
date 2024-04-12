@@ -5,6 +5,7 @@ import me.zoon20x.levelpoints.CrossNetworkStorage.Objects.NetworkPlayer;
 import me.zoon20x.levelpoints.CrossNetworkStorage.Objects.NetworkResponse;
 import me.zoon20x.levelpoints.CrossNetworkStorage.Objects.Response;
 import me.zoon20x.levelpoints.spigot.LevelPoints;
+import me.zoon20x.levelpoints.spigot.containers.CnsSettings;
 import me.zoon20x.levelpoints.spigot.containers.Player.PlayerStorage;
 import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
 import org.bukkit.entity.Player;
@@ -23,28 +24,28 @@ public class PlayerStorageEvents implements Listener {
         if(event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED){
             return;
         }
-        YamlDocument config = LevelPoints.getInstance().getConfigUtils().getConfig();
-        boolean cnsSupport = config.getBoolean("NetworkShare.CrossNetworkStorage.Enabled");
-        if(cnsSupport){
+
+        if(LevelPoints.getInstance().getCnsSettings().isEnabled()){
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     loadDelay(event.getUniqueId(), event.getName(), 1);
                 }
             }.runTaskLater(LevelPoints.getInstance(), 10);
-
             return;
         }
+
+
         LevelPoints.getInstance().getPlayerStorage().loadPlayer(event.getUniqueId(), event.getName());
     }
 
     private void loadDelay(UUID uuid, String name, int iteration) {
         Response response = LevelPoints.getInstance().getNetwork().retrieveInfo(uuid);
+
         if (response.getNetworkResponse() == NetworkResponse.Success) {
             NetworkPlayer networkPlayer = response.getNetworkPlayer();
             if (LevelPoints.getInstance().getCnsSettings().getServerID().equals(networkPlayer.getLastKnownServer())) {
-                System.out.println(LevelPoints.getInstance().getCnsSettings().getServerID().equals(networkPlayer.getLastKnownServer()));
-                System.out.println(iteration);
+
                 if (iteration < 3) {
                     new BukkitRunnable() {
                         @Override
@@ -56,6 +57,7 @@ public class PlayerStorageEvents implements Listener {
                     return;
                 }
             }
+
             LevelPoints.getInstance().getPlayerStorage().loadPlayer(uuid, name, response.getNetworkPlayer());
             LevelPoints.getInstance().log(DebugSeverity.NORMAL, "loaded network player");
         }else{
@@ -70,9 +72,8 @@ public class PlayerStorageEvents implements Listener {
         if(!storage.hasPlayer(player.getUniqueId())){
             return;
         }
-        YamlDocument config = LevelPoints.getInstance().getConfigUtils().getConfig();
-        boolean cnsSupport = config.getBoolean("NetworkShare.CrossNetworkStorage.Enabled");
-        if(cnsSupport){
+
+        if(LevelPoints.getInstance().getCnsSettings().isEnabled()){
          LevelPoints.getInstance().getNetwork().sendToProxy(storage.getPlayerData(player.getUniqueId()));
         }
         storage.savePlayerData(player.getUniqueId());

@@ -58,8 +58,10 @@ public final class LevelPoints extends JavaPlugin {
         playerStorage = new PlayerStorage();
         lang = new LangSettings();
         lpsSettings = new LpsSettings(this);
+        topSettings = new TopSettings();
         loadEvents();
         loadCommands();
+        loadCNSSupport();
 
         if (getDescription().getVersion().contains("DEV")) {
             loadDev();
@@ -81,6 +83,20 @@ public final class LevelPoints extends JavaPlugin {
 
 
     }
+    private void loadCNSSupport(){
+        YamlDocument config = getConfigUtils().getConfig();
+        boolean cnsSupport = config.getBoolean("NetworkShare.CrossNetworkStorage.Enabled");
+        if(cnsSupport){
+            String address = config.getString("NetworkShare.CrossNetworkStorage.Address");
+            int port = config.getInt("NetworkShare.CrossNetworkStorage.Port");
+            this.network = new Network(address, port);
+            if (config.getString("NetworkShare.CrossNetworkStorage.ServerID").equalsIgnoreCase("")) {
+                cnsSettings = new CnsSettings(cnsSupport, address, port);
+            }else{
+                cnsSettings = new CnsSettings(address, port, config.getString("NetworkShare.CrossNetworkStorage.ServerID"));
+            }
+        }
+    }
 
     private void loadMetrics(){
         int pluginId = 6480; // <-- Replace with the id of your plugin!
@@ -92,21 +108,7 @@ public final class LevelPoints extends JavaPlugin {
 
     private void loadDev(){
         devInstance = new DevInstance();
-        topSettings = new TopSettings();
         devMode = true;
-        YamlDocument config = getConfigUtils().getConfig();
-        boolean cnsSupport = config.getBoolean("NetworkShare.CrossNetworkStorage.Enabled");
-        if(cnsSupport){
-            String address = config.getString("NetworkShare.CrossNetworkStorage.Address");
-            int port = config.getInt("NetworkShare.CrossNetworkStorage.Port");
-            this.network = new Network(address, port);
-            if (config.getString("NetworkShare.CrossNetworkStorage.ServerID").equalsIgnoreCase("")) {
-                cnsSettings = new CnsSettings(address, port);
-            }else{
-                cnsSettings = new CnsSettings(address, port, config.getString("NetworkShare.CrossNetworkStorage.ServerID"));
-            }
-        }
-
         loadMetrics();
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_PURPLE + "=============================");
         Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "LevelPoints DEV Instance");
@@ -141,13 +143,6 @@ public final class LevelPoints extends JavaPlugin {
         // Plugin shutdown logic
         if (devMode) {
             devInstance.onDisable();
-        }
-
-        try {
-            getConfigUtils().getConfig().set("NetworkShare.CrossNetworkStorage.ServerID", cnsSettings.getServerID().toString());
-            getConfigUtils().getConfig().save();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (playerStorage.hasPlayer(player.getUniqueId())) {

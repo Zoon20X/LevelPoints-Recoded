@@ -18,9 +18,15 @@ import java.util.*;
 public class TopSettings {
 
     private List<TopData> topDataList = new ArrayList<>();
-
+    private int maxSlots;
+    private int maxPages;
 
     public TopSettings() {
+        YamlDocument config = LevelPoints.getInstance().getConfigUtils().getTopSettings();
+        maxSlots = config.getInt("MaxSlotsPerPage");
+        maxPages = config.getInt("MaxPages");
+
+
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -59,8 +65,8 @@ public class TopSettings {
     private void sort(){
         Collections.sort(topDataList, Comparator.comparingInt(TopData::getLevel).reversed());
         List<TopData> newList = new ArrayList<>();
-        int max = 30;
-        if(topDataList.size() < 30){
+        int max = maxPages * maxSlots;
+        if(topDataList.size() < max){
             max = topDataList.size();
         }
         for (int i = 0; i < max; i++) {
@@ -85,5 +91,13 @@ public class TopSettings {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public int getMaxSlots() {
+        return maxSlots;
+    }
+
+    public int getMaxPages() {
+        return maxPages;
     }
 }

@@ -14,4 +14,6 @@ public interface ConfigAPI {
     YamlDocument getLevelSettings();
 
     YamlDocument getConfig();
+
+    YamlDocument getTopSettings();
 }

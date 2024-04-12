@@ -42,6 +42,8 @@ public class Network{
                     DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
                     String c = a.readUTF();
                     Object data = SerializeData.setData(c);
+
+
                     if(data instanceof DataCollection){
                         DataCollection dataCollection = (DataCollection) data;
                         if(!LevelPoints.getInstance().getNetPlayerStorage().hasPlayer(dataCollection.getUUID())){
@@ -51,15 +53,12 @@ public class Network{
                         sendResponse(new Response(NetworkResponse.Success, LevelPoints.getInstance().getNetPlayerStorage().getPlayer(dataCollection.getUUID())), outputStream);
                         return;
                     }
+
                     if(data instanceof NetworkPlayer){
                         NetworkPlayer networkPlayer = (NetworkPlayer) data;
                         LevelPoints.getInstance().getNetPlayerStorage().addPlayer(networkPlayer.getUUID(), networkPlayer);
                         sendResponse(new Response(NetworkResponse.Updated), outputStream);
                     }
-                    System.out.println(c);
-
-
-                    //NetworkEvent.triggerNetworkReceiveEvent(data);
 
                     clientSocket.close();
                 } catch (IOException | ClassNotFoundException e) {

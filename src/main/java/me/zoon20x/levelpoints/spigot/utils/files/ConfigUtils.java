@@ -20,12 +20,14 @@ public class ConfigUtils implements ConfigAPI {
     private final YamlDocument blockSettings;
     private final YamlDocument mobSettings;
     private final YamlDocument langSettings;
+    private final YamlDocument topSettings;
 
     public ConfigUtils(){
         config = createConfig("config.yml", "/");
         levelSettings = createConfig("LevelSettings.yml", "/Settings/");
         blockSettings = createConfig("BlockSettings.yml", "/Settings/");
         mobSettings = createConfig("MobSettings.yml", "/Settings/");
+        topSettings = createConfig("TopSettings.yml", "/Settings/");
         langSettings = createConfig("lang.yml", "/");
     }
 
@@ -72,5 +74,10 @@ public class ConfigUtils implements ConfigAPI {
     @Override
     public YamlDocument getConfig() {
         return config;
+    }
+
+    @Override
+    public YamlDocument getTopSettings() {
+        return topSettings;
     }
 }

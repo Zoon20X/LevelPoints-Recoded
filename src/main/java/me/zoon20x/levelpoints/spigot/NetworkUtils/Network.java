@@ -31,15 +31,13 @@ public class Network {
     public void sendToProxy(PlayerData data) {
         try {
             Socket socket = new Socket(proxyAddress, proxyPort);
-            DataOutputStream o = new DataOutputStream(socket.getOutputStream());
+            DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
 
             NetworkPlayer networkPlayer = new NetworkPlayer(data.getUUID(), data.getLevel(), data.getPrestige(), data.getExp(), LevelPoints.getInstance().getCnsSettings().getServerID());
             String send = SerializeData.toString(networkPlayer);
 
-            o.writeUTF(send);
-            String i = String.valueOf(listenResponse(socket));
-            LevelPoints.getInstance().log(DebugSeverity.SEVER, i);
-            o.close();
+            outputStream.writeUTF(send);
+            outputStream.close();
             socket.close();
 
         } catch (IOException e) {
@@ -51,15 +49,14 @@ public class Network {
         try {
             Socket socket = new Socket(proxyAddress, proxyPort);
 
-            DataOutputStream o = new DataOutputStream(socket.getOutputStream());
+            DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
             String send = SerializeData.toString(new DataCollection(uuid));
 
-            o.writeUTF(send);
+            outputStream.writeUTF(send);
             Object object = listenResponse(socket);
 
-            o.close();
+            outputStream.close();
             socket.close();
-
             if(object instanceof Response){
                 Response response = (Response) object;
                 return response;
@@ -75,6 +72,7 @@ public class Network {
             socket.setSoTimeout(5000);
             DataInputStream inputStream = new DataInputStream(socket.getInputStream());
             String a = inputStream.readUTF();
+            inputStream.close();
             return SerializeData.setData(a);
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);

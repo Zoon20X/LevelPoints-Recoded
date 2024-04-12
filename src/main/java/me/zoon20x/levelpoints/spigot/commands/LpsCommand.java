@@ -71,7 +71,7 @@ public class LpsCommand implements CommandExecutor {
         if(!langData.isEnabled()){
             return;
         }
-
+        int maxSlots = LevelPoints.getInstance().getTopSettings().getMaxSlots();
         for(String message : langData.getMessage()){
             if(!message.contains("{lps_top_position}")){
                 sender.sendMessage(LocalPlaceholders.parse(message, 0,"", 0, val));
@@ -79,9 +79,9 @@ public class LpsCommand implements CommandExecutor {
             }
             int add = 0;
             if(val>1){
-                add = 10*(val - 1);
+                add = maxSlots*(val - 1);
             }
-            for (int i = add; i < 10*val ; i++) {
+            for (int i = add; i < maxSlots*val ; i++) {
                 if (i >= topSettings.getTopDataList().size()) {
                     sender.sendMessage(LocalPlaceholders.parse(message, 0, "", (i + 1), val));
                 } else {
