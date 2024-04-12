@@ -14,11 +14,6 @@ import java.io.Serializable;
 import java.util.UUID;
 
 public class BungeeEvents implements Listener {
-
-    @EventHandler
-    public void onSwitch(ServerSwitchEvent event){
-    }
-
     @EventHandler
     public void onProxyJoin(PostLoginEvent event){
         ProxiedPlayer proxiedPlayer = event.getPlayer();
@@ -38,7 +33,7 @@ public class BungeeEvents implements Listener {
 
     @EventHandler
     public void onLeave(PlayerDisconnectEvent event){
-        ProxiedPlayer player =event.getPlayer();
+        ProxiedPlayer player = event.getPlayer();
         try {
             LevelPoints.getInstance().getCachedPlayers().set(player.getUniqueId().toString(), SerializeData.toString(LevelPoints.getInstance().getNetPlayerStorage().getPlayer(player.getUniqueId())));
             LevelPoints.getInstance().getCachedPlayers().save();

@@ -8,6 +8,7 @@ import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import me.zoon20x.levelpoints.CrossNetworkStorage.NetworkSocketUtils;
 import me.zoon20x.levelpoints.CrossNetworkStorage.Objects.NetPlayerStorage;
+import me.zoon20x.levelpoints.CrossNetworkStorage.SerializeData;
 import me.zoon20x.levelpoints.proxy.bungee.NetworkUtils.Network;
 import me.zoon20x.levelpoints.proxy.bungee.events.BungeeEvents;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -63,10 +64,19 @@ public class LevelPoints extends Plugin {
 
 
     @Override
-    public void onDisable(){
+    public void onDisable() {
+        getNetPlayerStorage().getNetworkPlayerHashMap().keySet().forEach(uuid -> {
+            try {
+                getCachedPlayers().set(uuid.toString(), SerializeData.toString(getNetPlayerStorage().getPlayer(uuid)));
+                getCachedPlayers().save();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
+
         network.getTask().cancel();
         networkSocketUtils.close();
-
     }
 
     public static LevelPoints getInstance() {

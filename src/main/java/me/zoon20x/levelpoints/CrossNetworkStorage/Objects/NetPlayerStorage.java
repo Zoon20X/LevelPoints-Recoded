@@ -20,5 +20,7 @@ public class NetPlayerStorage {
         networkPlayerHashMap.remove(uuid);
     }
 
-
+    public HashMap<UUID, NetworkPlayer> getNetworkPlayerHashMap() {
+        return networkPlayerHashMap;
+    }
 }

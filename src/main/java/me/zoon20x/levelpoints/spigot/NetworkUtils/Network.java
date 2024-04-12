@@ -37,6 +37,8 @@ public class Network {
             String send = SerializeData.toString(networkPlayer);
 
             outputStream.writeUTF(send);
+            Response response = (Response) listenResponse(socket);
+            LevelPoints.getInstance().log(DebugSeverity.SEVER, String.valueOf(response.getNetworkResponse()));
             outputStream.close();
             socket.close();
 

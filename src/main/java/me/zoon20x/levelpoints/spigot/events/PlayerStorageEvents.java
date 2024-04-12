@@ -41,7 +41,7 @@ public class PlayerStorageEvents implements Listener {
 
     private void loadDelay(UUID uuid, String name, int iteration) {
         Response response = LevelPoints.getInstance().getNetwork().retrieveInfo(uuid);
-
+        LevelPoints.getInstance().log(DebugSeverity.SEVER, String.valueOf(response.getNetworkResponse()));
         if (response.getNetworkResponse() == NetworkResponse.Success) {
             NetworkPlayer networkPlayer = response.getNetworkPlayer();
             if (LevelPoints.getInstance().getCnsSettings().getServerID().equals(networkPlayer.getLastKnownServer())) {
