@@ -1,5 +1,9 @@
-file-version: '7'
+file-version: '8'
 Lang:
+  Reload:
+    Enabled: true
+    CenterText: false
+    Message: '&3LevelPoints>> &bReload Complete'
   Help:
     Enabled: true
     CenterText: false
@@ -8,6 +12,17 @@ Lang:
       - ''
       - '&b/lps &f-Displays this message'
       - '&b/lps info (player) &f-Displays player info'
+      - '&b/lps top (page) &f-Displays top players'
+      - ''
+      - '&b() optional, <> required'
+  HelpAdmin:
+    Enabled: true
+    CenterText: false
+    Message:
+      - '&3&l&n_____LevelPoints-Admin____'
+      - ''
+      - '&b/adminlps &f-Displays this message'
+      - '&b/adminlps info (player) &f-Displays player info'
       - '&b/lps top (page) &f-Displays top players'
       - ''
       - '&b() optional, <> required'

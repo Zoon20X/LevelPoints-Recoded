@@ -18,6 +18,7 @@ import java.util.UUID;
 
 public class PlayerStorage {
     private final HashMap<UUID, PlayerData> playerDataMap = new HashMap<>();
+    private final HashMap<UUID, PlayerData> offlinePlayerDataMap = new HashMap<>();
 
 
     public void loadPlayer(UUID uuid, String name){
@@ -88,4 +89,28 @@ public class PlayerStorage {
             throw new RuntimeException(e);
         }
     }
+
+    public PlayerData loadOfflinePlayer(UUID uuid, String name){
+        YamlDocument config = createPlayerConfig(uuid,name, "/Players/");
+        PlayerData data = new PlayerData(uuid, config);
+        load(data);
+        offlinePlayerDataMap.put(uuid, data);
+        autoFlush(uuid);
+        return data;
+    }
+    private void autoFlush(UUID uuid){
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    PlayerData data = offlinePlayerDataMap.get(uuid);
+                    data.save();
+                    offlinePlayerDataMap.remove(uuid);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.runTaskLater(LevelPoints.getInstance(), 5*20);
+    }
+
 }

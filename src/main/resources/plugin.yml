@@ -12,3 +12,45 @@ commands:
     description: "the main lps command"
     aliases:
       - levelpoints
+  adminlps:
+    usage: /<command>
+    description: "the main adminlps command"
+    aliases:
+      - admin-levelpoints
+
+permissions:
+  lps.*:
+    default: false
+    description: all permissions in lps
+    children:
+      lps.admin:
+        default: false
+        description: all admin commands
+        children:
+          lps.admin.reload:
+            default: false
+            description: gives access to the reload command
+          lps.admin.exp:
+            default: false
+            description: gives access to all the exp based commands
+            children:
+              lps.admin.exp.add:
+                default: false
+                description: gives access to adding exp
+              lps.admin.exp.remove:
+                default: false
+              lps.admin.exp.set:
+                default: false
+          lps.admin.level:
+            default: false
+      lps.player:
+        default: true
+        children:
+          lps.player.info:
+            default: true
+          lps.player.top:
+            default: true
+          lps.player.booster:
+            default: true
+          lps.player.rewards:
+            default: true

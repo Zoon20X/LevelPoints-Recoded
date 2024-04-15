@@ -3,6 +3,7 @@ package me.zoon20x.levelpoints.spigot;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import me.zoon20x.levelpoints.spigot.API.LevelPointsAPI;
 import me.zoon20x.levelpoints.spigot.NetworkUtils.Network;
+import me.zoon20x.levelpoints.spigot.commands.AdminLps;
 import me.zoon20x.levelpoints.spigot.containers.CnsSettings;
 import me.zoon20x.levelpoints.spigot.events.CustomEvents.EventUtils;
 import me.zoon20x.levelpoints.spigot.utils.files.ConfigUtils;
@@ -122,6 +123,7 @@ public final class LevelPoints extends JavaPlugin {
     }
     private void loadCommands(){
       LpsCommand lpsCommand = new LpsCommand(this);
+      AdminLps adminLps = new AdminLps(this);
     }
 
     public void reload() throws IOException {
