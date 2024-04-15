@@ -83,18 +83,16 @@ public final class LevelPoints extends JavaPlugin {
 
 
     }
-    private void loadCNSSupport(){
+    private void loadCNSSupport() {
         YamlDocument config = getConfigUtils().getConfig();
         boolean cnsSupport = config.getBoolean("NetworkShare.CrossNetworkStorage.Enabled");
-        if(cnsSupport){
-            String address = config.getString("NetworkShare.CrossNetworkStorage.Address");
-            int port = config.getInt("NetworkShare.CrossNetworkStorage.Port");
-            this.network = new Network(address, port);
-            if (config.getString("NetworkShare.CrossNetworkStorage.ServerID").equalsIgnoreCase("")) {
-                cnsSettings = new CnsSettings(cnsSupport, address, port);
-            }else{
-                cnsSettings = new CnsSettings(cnsSupport, address, port, config.getString("NetworkShare.CrossNetworkStorage.ServerID"));
-            }
+        String address = config.getString("NetworkShare.CrossNetworkStorage.Address");
+        int port = config.getInt("NetworkShare.CrossNetworkStorage.Port");
+        this.network = new Network(address, port);
+        if (config.getString("NetworkShare.CrossNetworkStorage.ServerID").equalsIgnoreCase("")) {
+            cnsSettings = new CnsSettings(cnsSupport, address, port);
+        } else {
+            cnsSettings = new CnsSettings(cnsSupport, address, port, config.getString("NetworkShare.CrossNetworkStorage.ServerID"));
         }
     }
 

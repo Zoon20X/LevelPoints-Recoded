@@ -68,6 +68,11 @@ public class PlayerStorage {
             throw new RuntimeException(e);
         }
     }
+
+    public HashMap<UUID, PlayerData> getPlayerDataMap() {
+        return playerDataMap;
+    }
+
     public boolean hasPlayer(UUID uuid){
         return playerDataMap.containsKey(uuid);
     }

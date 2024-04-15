@@ -7,9 +7,12 @@ import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import me.zoon20x.levelpoints.spigot.LevelPoints;
+import me.zoon20x.levelpoints.spigot.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,37 +20,48 @@ import java.util.*;
 
 public class TopSettings {
 
+    private boolean enabled;
     private List<TopData> topDataList = new ArrayList<>();
     private int maxSlots;
     private int maxPages;
+
+    private int updateIteration;
+
+    public BukkitTask updateTask;
 
     public TopSettings() {
         YamlDocument config = LevelPoints.getInstance().getConfigUtils().getTopSettings();
         maxSlots = config.getInt("MaxSlotsPerPage");
         maxPages = config.getInt("MaxPages");
-
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                scan();
-            }
-        }.runTaskAsynchronously(LevelPoints.getInstance());
+        enabled = config.getBoolean("Enabled");
+        updateIteration = config.getInt("UpdateIteration");
+        startUpdate();
     }
 
 
     private void scan() {
         if(!topDataList.isEmpty()){
             topDataList.clear();
+            LevelPoints.getInstance().log(DebugSeverity.SEVER, "Top Cleared");
         }
         long startTime = System.nanoTime();
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            PlayerData data = LevelPoints.getInstance().getPlayerStorage().getPlayerData(player.getUniqueId());
+            topDataList.add(new TopData(player.getName(), player.getUniqueId(), data.getLevel()));
+        });
+
+
         File folder = new File(LevelPoints.getInstance().getDataFolder() + "/Players/");
         if (folder.isDirectory()) {
             File[] files = folder.listFiles();
             if (files != null) {
                 for (File file : files) {
                     //YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
-                    YamlDocument config = createPlayerConfig(UUID.fromString(file.getName().replace(".yml","")), "/Players/");
+                    String uuid = file.getName().replace(".yml", "");
+                    if(LevelPoints.getInstance().getPlayerStorage().hasPlayer(UUID.fromString(uuid))){
+                        continue;
+                    }
+                    YamlDocument config = createPlayerConfig(UUID.fromString(uuid), "/Players/");
                     topDataList.add(new TopData(config.getString("Name"), UUID.fromString(file.getName().replace(".yml", "")), config.getInt("Level")));
                 }
             }
@@ -58,6 +72,16 @@ public class TopSettings {
         sort();
 
     }
+
+    private void startUpdate(){
+        updateTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                scan();
+            }
+        }.runTaskTimerAsynchronously(LevelPoints.getInstance(), 0, updateIteration * 20);
+    }
+
 
     public List<TopData> getTopDataList(){
         return topDataList;
@@ -99,5 +123,9 @@ public class TopSettings {
 
     public int getMaxPages() {
         return maxPages;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 }

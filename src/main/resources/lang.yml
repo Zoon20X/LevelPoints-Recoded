@@ -8,6 +8,9 @@ Lang:
       - ''
       - '&b/lps &f-Displays this message'
       - '&b/lps info (player) &f-Displays player info'
+      - '&b/lps top (page) &f-Displays top players'
+      - ''
+      - '&b() optional, <> required'
   Info:
     Enabled: true
     CenterText: true

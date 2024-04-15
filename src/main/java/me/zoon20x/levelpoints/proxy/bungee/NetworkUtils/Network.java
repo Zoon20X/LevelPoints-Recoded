@@ -38,9 +38,9 @@ public class Network{
                     }
                     Socket clientSocket = serverSocket.accept();
 
-                    DataInputStream a = new DataInputStream(clientSocket.getInputStream());
+                    DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
                     DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
-                    String c = a.readUTF();
+                    String c = inputStream.readUTF();
                     Object data = SerializeData.setData(c);
 
 

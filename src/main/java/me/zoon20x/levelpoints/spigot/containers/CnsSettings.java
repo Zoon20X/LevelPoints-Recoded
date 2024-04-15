@@ -27,6 +27,7 @@ public class CnsSettings {
             throw new RuntimeException(e);
         }
     }
+
     public CnsSettings(boolean enabled,String address, int port, String serverID){
         this.enabled = enabled;
         this.address = address;

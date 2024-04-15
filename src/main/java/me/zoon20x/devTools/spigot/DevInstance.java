@@ -14,7 +14,7 @@ public class DevInstance {
     public DevInstance(){
         devConfig = new DevConfig();
         PlayerStorage playerStorage = new PlayerStorage();
-        //playerStorage.loadTestPlayers(50);
+        playerStorage.loadTestPlayers(50);
         loadEvents();
     }
 

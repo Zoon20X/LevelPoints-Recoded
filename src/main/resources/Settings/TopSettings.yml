@@ -1,4 +1,5 @@
-file-version: '1'
-
+file-version: '2'
+Enabled: true
 MaxPages: 3
 MaxSlotsPerPage: 10
+UpdateIteration: 60
