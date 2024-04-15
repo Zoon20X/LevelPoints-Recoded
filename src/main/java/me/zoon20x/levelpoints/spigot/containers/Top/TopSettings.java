@@ -27,7 +27,7 @@ public class TopSettings {
 
     private int updateIteration;
 
-    public BukkitTask updateTask;
+    private BukkitTask updateTask;
 
     public TopSettings() {
         YamlDocument config = LevelPoints.getInstance().getConfigUtils().getTopSettings();
@@ -35,6 +35,7 @@ public class TopSettings {
         maxPages = config.getInt("MaxPages");
         enabled = config.getBoolean("Enabled");
         updateIteration = config.getInt("UpdateIteration");
+        scan();
         startUpdate();
     }
 
@@ -127,5 +128,9 @@ public class TopSettings {
 
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public BukkitTask getUpdateTask() {
+        return updateTask;
     }
 }
