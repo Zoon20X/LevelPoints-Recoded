@@ -2,6 +2,9 @@ package me.zoon20x.levelpoints.spigot.commands;
 
 import me.zoon20x.levelpoints.spigot.LevelPoints;
 import me.zoon20x.levelpoints.spigot.containers.Player.PlayerData;
+import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
+import me.zoon20x.levelpoints.spigot.utils.messages.LangData;
+import me.zoon20x.levelpoints.spigot.utils.placeholders.LocalPlaceholders;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
@@ -19,6 +22,20 @@ public class AdminLpsCommandUtils {
 
     }
 
+    private void sendUpdateMessage(CommandSender sender, PlayerData data, String updateMessage){
+        LangData langData = LevelPoints.getInstance().getLang().getLangData(updateMessage);
+        System.out.println(langData.isEnabled());
+        if (!langData.isEnabled()) {
+            return;
+        }
+        langData.getMessage().forEach(m -> {
+            if (langData.isCenteredText()) {
+                m = LevelPoints.getInstance().getMessagesUtil().centreText(m);
+            }
+            sender.sendMessage(LocalPlaceholders.parse(m, data));
+        });
+    }
+
     protected void sendLevelUpdate(CommandSender sender, String name, int value, UpdateType type){
         PlayerData data = loadDataFromString(name);
         if(data ==  null){
@@ -32,6 +49,7 @@ public class AdminLpsCommandUtils {
                     return;
                 }
                 data.addLevel(value);
+                sendUpdateMessage(sender, data, "Level");
                 break;
             case REMOVE:
                 if (!sender.hasPermission("lps.admin.level.remove")) {
@@ -43,6 +61,7 @@ public class AdminLpsCommandUtils {
                     sender.sendMessage(LevelPoints.getInstance().getMessagesUtil().getColor("&4LevelPoints>> &cSorry but the player is too low of a level to remove that amount"));
                     break;
                 }
+                sendUpdateMessage(sender, data, "Level");
                 break;
             case SET:
                 if (!sender.hasPermission("lps.admin.level.set")) {
@@ -50,6 +69,7 @@ public class AdminLpsCommandUtils {
                     return;
                 }
                 data.setLevel(value);
+                sendUpdateMessage(sender, data, "Level");
                 break;
         }
     }
@@ -67,6 +87,7 @@ public class AdminLpsCommandUtils {
                     return;
                 }
                 data.addExp(value);
+                sendUpdateMessage(sender, data, "Exp");
                 break;
             case REMOVE:
                 if (!sender.hasPermission("lps.admin.exp.remove")) {
@@ -78,6 +99,7 @@ public class AdminLpsCommandUtils {
                     sender.sendMessage(LevelPoints.getInstance().getMessagesUtil().getColor("&4LevelPoints>> &cSorry but the player does not have enough exp to remove that amount"));
                     break;
                 }
+                sendUpdateMessage(sender, data, "Exp");
                 break;
             case SET:
                 if (!sender.hasPermission("lps.admin.exp.set")) {
@@ -85,6 +107,7 @@ public class AdminLpsCommandUtils {
                     return;
                 }
                 data.setExp(value);
+                sendUpdateMessage(sender, data, "Exp");
                 break;
         }
     }
@@ -101,6 +124,7 @@ public class AdminLpsCommandUtils {
                     return;
                 }
                 data.addPrestige(value);
+                sendUpdateMessage(sender, data, "Prestige");
                 break;
             case REMOVE:
                 if (!sender.hasPermission("lps.admin.prestige.remove")) {
@@ -112,6 +136,7 @@ public class AdminLpsCommandUtils {
                     sender.sendMessage(LevelPoints.getInstance().getMessagesUtil().getColor("&4LevelPoints>> &cSorry but the player is too low of a prestige to remove that amount"));
                     break;
                 }
+                sendUpdateMessage(sender, data, "Prestige");
                 break;
             case SET:
                 if (!sender.hasPermission("lps.admin.prestige.set")) {
@@ -119,6 +144,7 @@ public class AdminLpsCommandUtils {
                     return;
                 }
                 data.setPrestige(value, true);
+                sendUpdateMessage(sender, data, "Prestige");
                 break;
         }
     }

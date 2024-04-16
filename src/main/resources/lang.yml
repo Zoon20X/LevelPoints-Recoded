@@ -1,4 +1,4 @@
-file-version: '9'
+file-version: '10'
 Lang:
   Reload:
     Enabled: true
@@ -40,10 +40,11 @@ Lang:
     Message:
       - '&3&l&n_____Player Info____'
       - ''
-      - '&bLevel: {lps_level}'
-      - '&bPrestige: {lps_prestige}'
-      - '&bExp: {lps_exp}/{lps_required_exp}'
-      - '&bIs Maxed: {lps_max}'
+      - '&bName: &f{player}'
+      - '&bLevel: &f{lps_level}'
+      - '&bPrestige: &f{lps_prestige}'
+      - '&bExp: &f{lps_exp}&b/&f{lps_required_exp}'
+      - '&bIs Maxed: &f{lps_max}'
       - ''
       - '&3________________'
   Top:
@@ -56,3 +57,18 @@ Lang:
       - ''
       - '&b{lps_top_page}/{lps_top_page_max}'
       - '&3&l&m------------------------'
+  Exp:
+    Enabled: true
+    CenterText: false
+    NoPermission: '&4LevelPoints>> &cSorry but you do not have permission'
+    Message: '&3LevelPoints>> &bUpdated player data for {player}'
+  Level:
+    Enabled: true
+    CenterText: false
+    NoPermission: '&4LevelPoints>> &cSorry but you do not have permission'
+    Message: '&3LevelPoints>> &bUpdated player data for {player}'
+  Prestige:
+    Enabled: true
+    CenterText: false
+    NoPermission: '&4LevelPoints>> &cSorry but you do not have permission'
+    Message: '&3LevelPoints>> &bUpdated player data for &f{player}'
