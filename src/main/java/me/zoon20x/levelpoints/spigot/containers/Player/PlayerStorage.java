@@ -91,6 +91,9 @@ public class PlayerStorage {
     }
 
     public PlayerData loadOfflinePlayer(UUID uuid, String name){
+        if(offlinePlayerDataMap.containsKey(uuid)){
+            return offlinePlayerDataMap.get(uuid);
+        }
         YamlDocument config = createPlayerConfig(uuid,name, "/Players/");
         PlayerData data = new PlayerData(uuid,name, config);
         load(data);
