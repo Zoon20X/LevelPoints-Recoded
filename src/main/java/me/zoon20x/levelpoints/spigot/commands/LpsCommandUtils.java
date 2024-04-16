@@ -7,12 +7,30 @@ import me.zoon20x.levelpoints.spigot.containers.Top.TopSettings;
 import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
 import me.zoon20x.levelpoints.spigot.utils.messages.LangData;
 import me.zoon20x.levelpoints.spigot.utils.placeholders.LocalPlaceholders;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-public class lpsCommandUtils {
+public class LpsCommandUtils {
 
 
-    protected void sendInfo(CommandSender sender, PlayerData playerData){
+    private PlayerData loadDataFromString(String name){
+        PlayerData data = null;
+        if (Bukkit.getPlayer(name) == null) {
+            data = LevelPoints.getInstance().getPlayerStorage().loadOfflinePlayer(Bukkit.getOfflinePlayer(name).getUniqueId(), name);
+        } else {
+            data = LevelPoints.getInstance().getPlayerStorage().getPlayerData(Bukkit.getPlayer(name).getUniqueId());
+        }
+        return data;
+
+    }
+
+    protected void sendInfo(CommandSender sender, String name){
+        PlayerData data = loadDataFromString(name);
+        if(data ==  null){
+            sender.sendMessage(LevelPoints.getInstance().getMessagesUtil().getColor("&4LevelPoints>> &cSorry but that player does not exist"));
+            return;
+        }
+
         if (!LevelPoints.getInstance().getLang().hasLangData("Info")) {
             LevelPoints.getInstance().log(DebugSeverity.WARNING,"does not contain INFO");
             return;
@@ -22,18 +40,25 @@ public class lpsCommandUtils {
             LevelPoints.getInstance().log(DebugSeverity.WARNING,"Info Not enabled");
             return;
         }
-
+        if(!sender.hasPermission("lps.player.info")){
+            sender.sendMessage(langData.getNoPermission());
+            return;
+        }
         langData.getMessage().forEach(m -> {
             if (langData.isCenteredText()) {
                 m = LevelPoints.getInstance().getMessagesUtil().centreText(m);
             }
-            sender.sendMessage(LocalPlaceholders.parse(m, playerData));
+            sender.sendMessage(LocalPlaceholders.parse(m, data));
         });
     }
     protected void sendTop(CommandSender sender, int val){
         TopSettings topSettings = LevelPoints.getInstance().getTopSettings();
         LangData langData = LevelPoints.getInstance().getLang().getLangData("Top");
         if(!langData.isEnabled()){
+            return;
+        }
+        if(!sender.hasPermission("lps.player.top")){
+            sender.sendMessage(langData.getNoPermission());
             return;
         }
         int maxSlots = LevelPoints.getInstance().getTopSettings().getMaxSlots();

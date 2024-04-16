@@ -2,27 +2,21 @@ package me.zoon20x.levelpoints.spigot.commands;
 
 import me.zoon20x.levelpoints.spigot.LevelPoints;
 import me.zoon20x.levelpoints.spigot.commands.TabComplete.LpsTabComplete;
-import me.zoon20x.levelpoints.spigot.containers.Player.PlayerData;
-import me.zoon20x.levelpoints.spigot.containers.Top.TopData;
-import me.zoon20x.levelpoints.spigot.containers.Top.TopSettings;
 import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
-import me.zoon20x.levelpoints.spigot.utils.messages.LangData;
-import me.zoon20x.levelpoints.spigot.utils.placeholders.LocalPlaceholders;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.io.IOException;
 import java.util.*;
 
 public class LpsCommand implements CommandExecutor {
-    private lpsCommandUtils lpsCommandUtils;
+    private LpsCommandUtils lpsCommandUtils;
 
     public LpsCommand(LevelPoints levelPoints){
         levelPoints.getCommand("lps").setExecutor(this);
         levelPoints.getCommand("lps").setTabCompleter(new LpsTabComplete());
-        this.lpsCommandUtils = new lpsCommandUtils();
+        this.lpsCommandUtils = new LpsCommandUtils();
     }
 
 
@@ -32,14 +26,20 @@ public class LpsCommand implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
+
         if(args.length == 0){
             String key = "Help";
+            if(!player.hasPermission("lps.player")){
+                player.sendMessage(LevelPoints.getInstance().getLang().getLangData(key).getNoPermission());
+                return true;
+            }
             List<String> message = LevelPoints.getInstance().getLang().getLangData(key).getMessage();
             message.forEach(m ->{
                 sender.sendMessage(m);
             });
             return true;
         }
+
         if(args.length == 1){
             args1(sender, args);
         }
@@ -57,7 +57,7 @@ public class LpsCommand implements CommandExecutor {
         }
         Player player = (Player) sender;
         if(args[0].equalsIgnoreCase("info")){
-            lpsCommandUtils.sendInfo(sender, LevelPoints.getInstance().getPlayerStorage().getPlayerData(player.getUniqueId()));
+            lpsCommandUtils.sendInfo(sender, player.getName());
         }
         if(args[0].equalsIgnoreCase("top")){
             lpsCommandUtils.sendTop(sender, 1);
@@ -79,8 +79,10 @@ public class LpsCommand implements CommandExecutor {
             }catch (Exception e){
                 sender.sendMessage(LevelPoints.getInstance().getMessagesUtil().getColor("&4LevelPoints>> &cSorry but this requires a number input!"));
             }
-
-
+        }
+        if(args[0].equalsIgnoreCase("info")){
+            String name = args[1];
+            lpsCommandUtils.sendInfo(sender, name);
         }
     }
 

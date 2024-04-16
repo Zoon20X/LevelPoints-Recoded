@@ -27,9 +27,9 @@ public class LangSettings {
             boolean isEnabled = config.getBoolean("Lang." + key + ".Enabled");
             boolean centerText = config.getBoolean("Lang." + key + ".CenterText");
             if (!config.isString("Lang." + key + ".Message")) {
-                langData = new LangData(isEnabled, centerText, config.getStringList("Lang." + key + ".Message"));
+                langData = new LangData(isEnabled, centerText, config.getStringList("Lang." + key + ".Message"), config.getString("Lang." + key + ".NoPermission"));
             } else {
-                langData = new LangData(isEnabled, centerText, config.getString("Lang." + key + ".Message"));
+                langData = new LangData(isEnabled, centerText, config.getString("Lang." + key + ".Message"), config.getString("Lang." + key + ".NoPermission"));
             }
             addLangData(key, langData);
         }

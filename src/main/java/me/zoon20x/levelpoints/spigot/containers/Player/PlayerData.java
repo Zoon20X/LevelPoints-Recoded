@@ -51,6 +51,14 @@ public class PlayerData implements PlayerAPI {
             }
         }
     }
+
+    public boolean removeExp(double exp){
+        if(this.exp <= exp){
+            return false;
+        }
+        this.exp -= exp;
+        return true;
+    }
     @Override
     public void addLevel(){
         addLevel(1);
@@ -77,11 +85,25 @@ public class PlayerData implements PlayerAPI {
         LevelPoints.getInstance().getEventUtils().triggerLevelUpEvent(player, this);
         player.sendMessage(String.valueOf(this.level));
     }
+    public boolean removeLevel(int level){
+        if(this.level <= level){
+            return false;
+        }
+        this.level -= level;
+        return true;
+    }
 
     @Override
     public void addPrestige(){
         addPrestige(1);
 
+    }
+    public boolean removePrestige(int prestige){
+        if(this.prestige < prestige){
+            return false;
+        }
+        this.prestige -= prestige;
+        return true;
     }
     @Override
     public void addPrestige(int prestige){

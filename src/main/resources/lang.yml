@@ -1,12 +1,14 @@
-file-version: '8'
+file-version: '9'
 Lang:
   Reload:
     Enabled: true
     CenterText: false
+    NoPermission: '&4LevelPoints>> &cSorry but you do not have permission'
     Message: '&3LevelPoints>> &bReload Complete'
   Help:
     Enabled: true
     CenterText: false
+    NoPermission: '&4LevelPoints>> &cSorry but you do not have permission'
     Message:
       - '&3&l&n_____LevelPoints____'
       - ''
@@ -15,20 +17,26 @@ Lang:
       - '&b/lps top (page) &f-Displays top players'
       - ''
       - '&b() optional, <> required'
+      - '&3--------------------------------'
   HelpAdmin:
     Enabled: true
     CenterText: false
+    NoPermission: '&4LevelPoints>> &cSorry but you do not have permission'
     Message:
       - '&3&l&n_____LevelPoints-Admin____'
       - ''
       - '&b/adminlps &f-Displays this message'
-      - '&b/adminlps info (player) &f-Displays player info'
-      - '&b/lps top (page) &f-Displays top players'
+      - '&b/adminlps reload &f-Reloads the plugin'
+      - '&b/adminlps exp (add,remove,set) <player> <exp> &f-Modify a players exp'
+      - '&b/adminlps level (add,remove,set) <player> <level> &f-Modify a players level'
+      - '&b/adminlps prestige (add,remove,set) <player> <prestige> &f-Modify a players prestige'
       - ''
       - '&b() optional, <> required'
+      - '&3--------------------------------'
   Info:
     Enabled: true
-    CenterText: true
+    CenterText: false
+    NoPermission: '&4LevelPoints>> &cSorry but you do not have permission'
     Message:
       - '&3&l&n_____Player Info____'
       - ''
@@ -40,10 +48,11 @@ Lang:
       - '&3________________'
   Top:
     Enabled: true
-    CenterText: true
+    CenterText: false
+    NoPermission: '&4LevelPoints>> &cSorry but you do not have permission'
     Message:
       - '&3&l&m----&3Top Players&m----'
-      - '&3{lps_top_position}.&b{player} &3- &b{lps_level}'
+      - '&3{lps_top_position}. &b{player} &3- &b{lps_level}'
       - ''
       - '&b{lps_top_page}/{lps_top_page_max}'
       - '&3&l&m------------------------'

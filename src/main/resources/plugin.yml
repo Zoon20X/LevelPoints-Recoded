@@ -20,37 +20,44 @@ commands:
 
 permissions:
   lps.*:
-    default: false
+    default: op
     description: all permissions in lps
     children:
       lps.admin:
-        default: false
+        default: op
         description: all admin commands
         children:
           lps.admin.reload:
-            default: false
+            default: op
             description: gives access to the reload command
           lps.admin.exp:
-            default: false
+            default: op
             description: gives access to all the exp based commands
             children:
               lps.admin.exp.add:
-                default: false
+                default: op
                 description: gives access to adding exp
               lps.admin.exp.remove:
-                default: false
+                default: op
               lps.admin.exp.set:
-                default: false
+                default: op
           lps.admin.level:
-            default: false
+            default: op
+            children:
+              lps.admin.level.add:
+                default: op
+              lps.admin.level.remove:
+                default: op
+              lps.admin.level.set:
+                default: op
       lps.player:
-        default: true
+        default: not op
         children:
           lps.player.info:
-            default: true
+            default: not op
           lps.player.top:
-            default: true
+            default: not op
           lps.player.booster:
-            default: true
+            default: not op
           lps.player.rewards:
-            default: true
+            default: not op
