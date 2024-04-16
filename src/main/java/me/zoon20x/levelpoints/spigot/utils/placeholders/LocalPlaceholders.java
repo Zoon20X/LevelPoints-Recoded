@@ -31,7 +31,7 @@ public class LocalPlaceholders {
                 .replace("{lps_top_position}", String.valueOf(topPosition))
                 .replace("{lps_top_page}", String.valueOf(topPage))
                 .replace("{lps_top_page_max}", String.valueOf(LevelPoints.getInstance().getTopSettings().getMaxPages()))
-                .replace("{player}", Bukkit.getPlayer(data.getUUID()).getName());
+                .replace("{player}", data.getName());
     }
     private static String replaceText(String message, int level, String name, int topPosition, int topPage){
             return message

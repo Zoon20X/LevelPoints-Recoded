@@ -13,6 +13,7 @@ import java.util.UUID;
 public class PlayerData implements PlayerAPI {
     private YamlDocument config;
 
+    private String name;
     private UUID uuid;
     private int level;
     private int prestige;
@@ -20,8 +21,9 @@ public class PlayerData implements PlayerAPI {
     private double exp;
     private boolean isMax;
 
-    public PlayerData(UUID uuid, YamlDocument config){
+    public PlayerData(UUID uuid,String name, YamlDocument config){
         this.config = config;
+        this.name = name;
         this.uuid = uuid;
         this.level = 1;
         this.prestige = 0;
@@ -169,5 +171,9 @@ public class PlayerData implements PlayerAPI {
         LevelSettings levelSettings = LevelPoints.getInstance().getLpsSettings().getLevelSettings();
         isMax = this.level >= levelSettings.getMaxData().getLevel() && this.prestige >= levelSettings.getMaxData().getPrestige();
         return isMax;
+    }
+
+    public String getName() {
+        return name;
     }
 }

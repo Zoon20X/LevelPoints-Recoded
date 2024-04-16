@@ -23,13 +23,13 @@ public class PlayerStorage {
 
     public void loadPlayer(UUID uuid, String name){
         YamlDocument config = createPlayerConfig(uuid,name, "/Players/");
-        PlayerData data = new PlayerData(uuid, config);
+        PlayerData data = new PlayerData(uuid,name, config);
         load(data);
         playerDataMap.put(uuid, data);
     }
     public void loadPlayer(UUID uuid, String name, NetworkPlayer networkPlayer){
         YamlDocument config = createPlayerConfig(uuid,name, "/Players/");
-        PlayerData data = new PlayerData(uuid, config);
+        PlayerData data = new PlayerData(uuid,name, config);
         data.setLevel(networkPlayer.getLevel());
         data.setPrestige(networkPlayer.getPrestige(), false);
         data.setExp(networkPlayer.getExp());
@@ -92,7 +92,7 @@ public class PlayerStorage {
 
     public PlayerData loadOfflinePlayer(UUID uuid, String name){
         YamlDocument config = createPlayerConfig(uuid,name, "/Players/");
-        PlayerData data = new PlayerData(uuid, config);
+        PlayerData data = new PlayerData(uuid,name, config);
         load(data);
         offlinePlayerDataMap.put(uuid, data);
         autoFlush(uuid);
