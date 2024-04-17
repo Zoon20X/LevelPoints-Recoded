@@ -30,8 +30,16 @@ public class AdminLps implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if(args.length == 0){
             String key = "HelpAdmin";
+            LangData langData = LevelPoints.getInstance().getLang().getLangData(key);
+            if(!langData.isEnabled()){
+                return true;
+            }
             if(!sender.hasPermission("lps.admin")){
-                sender.sendMessage(LevelPoints.getInstance().getLang().getLangData(key).getNoPermission());
+                LangChildData langChildData = langData.getChildData("NoPermission");
+                if(!langChildData.isEnabled()){
+                    return true;
+                }
+                sender.sendMessage(langChildData.getMessage());
                 return true;
             }
             List<String> message = LevelPoints.getInstance().getLang().getLangData(key).getMessage();
@@ -52,14 +60,20 @@ public class AdminLps implements CommandExecutor {
 
     private void args1(CommandSender sender, String[] args){
         if(args[0].equalsIgnoreCase("reload")){
+            LangData langData = LevelPoints.getInstance().getLang().getLangData("Reload");
+            if(!langData.isEnabled()){
+                return;
+            }
             if(!sender.hasPermission("lps.admin.reload")){
-                LangChildData langChildData = LevelPoints.getInstance().getLang().getLangData("Reload").getChildData("NoPermission");
+                LangChildData langChildData = langData.getChildData("NoPermission");
+                if(!langChildData.isEnabled()){
+                    return;
+                }
                 sender.sendMessage(langChildData.getMessage());
                 return;
             }
             try {
                 LevelPoints.getInstance().reload();
-                LangData langData = LevelPoints.getInstance().getLang().getLangData("Reload");
                 langData.getMessage().forEach(m -> {
                     if (langData.isCenteredText()) {
                         m = LevelPoints.getInstance().getMessagesUtil().centreText(m);

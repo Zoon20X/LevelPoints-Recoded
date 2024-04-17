@@ -47,6 +47,9 @@ public class AdminLpsCommandUtils {
         switch (type){
             case ADD:
                 if (!sender.hasPermission("lps.admin.level.add")) {
+                    if(!langChildData.isEnabled()){
+                        return;
+                    }
                     sender.sendMessage(langChildData.getMessage());
                     return;
                 }
@@ -55,6 +58,9 @@ public class AdminLpsCommandUtils {
                 break;
             case REMOVE:
                 if (!sender.hasPermission("lps.admin.level.remove")) {
+                    if(!langChildData.isEnabled()){
+                        return;
+                    }
                     sender.sendMessage(langChildData.getMessage());
                     return;
                 }
@@ -67,6 +73,9 @@ public class AdminLpsCommandUtils {
                 break;
             case SET:
                 if (!sender.hasPermission("lps.admin.level.set")) {
+                    if(!langChildData.isEnabled()){
+                        return;
+                    }
                     sender.sendMessage(langChildData.getMessage());
                     return;
                 }
@@ -86,6 +95,9 @@ public class AdminLpsCommandUtils {
         switch (type){
             case ADD:
                 if (!sender.hasPermission("lps.admin.exp.add")) {
+                    if(!langChildData.isEnabled()){
+                        return;
+                    }
                     sender.sendMessage(langChildData.getMessage());
                     return;
                 }
@@ -94,6 +106,9 @@ public class AdminLpsCommandUtils {
                 break;
             case REMOVE:
                 if (!sender.hasPermission("lps.admin.exp.remove")) {
+                    if(!langChildData.isEnabled()){
+                        return;
+                    }
                     sender.sendMessage(langChildData.getMessage());
                     return;
                 }
@@ -106,6 +121,9 @@ public class AdminLpsCommandUtils {
                 break;
             case SET:
                 if (!sender.hasPermission("lps.admin.exp.set")) {
+                    if(!langChildData.isEnabled()){
+                        return;
+                    }
                     sender.sendMessage(langChildData.getMessage());
                     return;
                 }
@@ -124,6 +142,9 @@ public class AdminLpsCommandUtils {
         switch (type){
             case ADD:
                 if (!sender.hasPermission("lps.admin.prestige.add")) {
+                    if(!langChildData.isEnabled()){
+                        return;
+                    }
                     sender.sendMessage(langChildData.getMessage());
                     return;
                 }
@@ -132,6 +153,9 @@ public class AdminLpsCommandUtils {
                 break;
             case REMOVE:
                 if (!sender.hasPermission("lps.admin.prestige.remove")) {
+                    if(!langChildData.isEnabled()){
+                        return;
+                    }
                     sender.sendMessage(langChildData.getMessage());
                     return;
                 }
@@ -144,6 +168,9 @@ public class AdminLpsCommandUtils {
                 break;
             case SET:
                 if (!sender.hasPermission("lps.admin.prestige.set")) {
+                    if(!langChildData.isEnabled()){
+                        return;
+                    }
                     sender.sendMessage(langChildData.getMessage());
                     return;
                 }
