@@ -4,6 +4,7 @@ import me.zoon20x.levelpoints.spigot.LevelPoints;
 import me.zoon20x.levelpoints.spigot.commands.TabComplete.AdminLpsTabComplete;
 import me.zoon20x.levelpoints.spigot.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
+import me.zoon20x.levelpoints.spigot.utils.messages.LangChildData;
 import me.zoon20x.levelpoints.spigot.utils.messages.LangData;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -52,7 +53,8 @@ public class AdminLps implements CommandExecutor {
     private void args1(CommandSender sender, String[] args){
         if(args[0].equalsIgnoreCase("reload")){
             if(!sender.hasPermission("lps.admin.reload")){
-                sender.sendMessage(LevelPoints.getInstance().getLang().getLangData("Reload").getNoPermission());
+                LangChildData langChildData = LevelPoints.getInstance().getLang().getLangData("Reload").getChildData("NoPermission");
+                sender.sendMessage(langChildData.getMessage());
                 return;
             }
             try {

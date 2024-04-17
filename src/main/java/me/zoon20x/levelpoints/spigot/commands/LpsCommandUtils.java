@@ -5,6 +5,7 @@ import me.zoon20x.levelpoints.spigot.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.spigot.containers.Top.TopData;
 import me.zoon20x.levelpoints.spigot.containers.Top.TopSettings;
 import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
+import me.zoon20x.levelpoints.spigot.utils.messages.LangChildData;
 import me.zoon20x.levelpoints.spigot.utils.messages.LangData;
 import me.zoon20x.levelpoints.spigot.utils.placeholders.LocalPlaceholders;
 import org.bukkit.Bukkit;
@@ -41,7 +42,11 @@ public class LpsCommandUtils {
             return;
         }
         if(!sender.hasPermission("lps.player.info")){
-            sender.sendMessage(langData.getNoPermission());
+            LangChildData langChildData = langData.getChildData("NoPermission");
+            if(!langChildData.isEnabled()){
+                return;
+            }
+            sender.sendMessage(langChildData.getMessage());
             return;
         }
         langData.getMessage().forEach(m -> {
@@ -58,7 +63,11 @@ public class LpsCommandUtils {
             return;
         }
         if(!sender.hasPermission("lps.player.top")){
-            sender.sendMessage(langData.getNoPermission());
+            LangChildData langChildData = langData.getChildData("NoPermission");
+            if(!langChildData.isEnabled()){
+                return;
+            }
+            sender.sendMessage(langChildData.getMessage());
             return;
         }
         int maxSlots = LevelPoints.getInstance().getTopSettings().getMaxSlots();

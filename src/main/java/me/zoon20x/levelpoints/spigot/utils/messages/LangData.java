@@ -3,6 +3,7 @@ package me.zoon20x.levelpoints.spigot.utils.messages;
 import me.zoon20x.levelpoints.spigot.LevelPoints;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class LangData {
@@ -10,20 +11,18 @@ public class LangData {
     private boolean isEnabled;
     private boolean centerText;
     private List<String> message = new ArrayList<>();
-    private String noPermission;
+    private HashMap<String, LangChildData> childDataMap = new HashMap<>();
 
-    public LangData(boolean isEnabled, boolean centerText, String message, String noPermission){
+    public LangData(boolean isEnabled, boolean centerText, String message){
         this.isEnabled = isEnabled;
         this.centerText = centerText;
         this.message.add(message);
-        this.noPermission = noPermission;
         colorize();
     }
-    public LangData(boolean isEnabled, boolean centerText, List<String> message, String noPermission){
+    public LangData(boolean isEnabled, boolean centerText, List<String> message){
         this.isEnabled = isEnabled;
         this.centerText = centerText;
         this.message = message;
-        this.noPermission = noPermission;
         colorize();
     }
     private void colorize(){
@@ -32,9 +31,15 @@ public class LangData {
             temp.add(LevelPoints.getInstance().getMessagesUtil().getColor(s));
         });
         message = temp;
-        this.noPermission = LevelPoints.getInstance().getMessagesUtil().getColor(this.noPermission);
     }
 
+    public void addChildData(String key, LangChildData data){
+        childDataMap.put(key, data);
+    }
+
+    public LangChildData getChildData(String key){
+        return childDataMap.get(key);
+    }
 
     public boolean isEnabled() {
         return isEnabled;
@@ -46,9 +51,5 @@ public class LangData {
 
     public boolean isCenteredText() {
         return centerText;
-    }
-
-    public String getNoPermission() {
-        return noPermission;
     }
 }

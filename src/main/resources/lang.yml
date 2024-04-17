@@ -3,12 +3,14 @@ Lang:
   Reload:
     Enabled: true
     CenterText: false
-    NoPermission: '&4LevelPoints>> &cSorry but you do not have permission'
     Message: '&3LevelPoints>> &bReload Complete'
+    Children:
+      NoPermission:
+        Enabled: true
+        Message: '&4LevelPoints>> &cSorry but you do not have permission'
   Help:
     Enabled: true
     CenterText: false
-    NoPermission: '&4LevelPoints>> &cSorry but you do not have permission'
     Message:
       - '&3&l&n_____LevelPoints____'
       - ''
@@ -18,10 +20,13 @@ Lang:
       - ''
       - '&b() optional, <> required'
       - '&3--------------------------------'
+    Children:
+      NoPermission:
+        Enabled: true
+        Message: '&4LevelPoints>> &cSorry but you do not have permission'
   HelpAdmin:
     Enabled: true
     CenterText: false
-    NoPermission: '&4LevelPoints>> &cSorry but you do not have permission'
     Message:
       - '&3&l&n_____LevelPoints-Admin____'
       - ''
@@ -33,10 +38,13 @@ Lang:
       - ''
       - '&b() optional, <> required'
       - '&3--------------------------------'
+    Children:
+      NoPermission:
+        Enabled: true
+        Message: '&4LevelPoints>> &cSorry but you do not have permission'
   Info:
     Enabled: true
     CenterText: false
-    NoPermission: '&4LevelPoints>> &cSorry but you do not have permission'
     Message:
       - '&3&l&n_____Player Info____'
       - ''
@@ -47,28 +55,44 @@ Lang:
       - '&bIs Maxed: &f{lps_max}'
       - ''
       - '&3________________'
+    Children:
+      NoPermission:
+        Enabled: true
+        Message: '&4LevelPoints>> &cSorry but you do not have permission'
   Top:
     Enabled: true
     CenterText: false
-    NoPermission: '&4LevelPoints>> &cSorry but you do not have permission'
     Message:
       - '&3&l&m----&3Top Players&m----'
       - '&3{lps_top_position}. &b{player} &3- &b{lps_level}'
       - ''
       - '&b{lps_top_page}/{lps_top_page_max}'
       - '&3&l&m------------------------'
+    Children:
+      NoPermission:
+        Enabled: true
+        Message: '&4LevelPoints>> &cSorry but you do not have permission'
   Exp:
     Enabled: true
     CenterText: false
-    NoPermission: '&4LevelPoints>> &cSorry but you do not have permission'
     Message: '&3LevelPoints>> &bUpdated player data for {player}'
+    Children:
+      NoPermission:
+        Enabled: true
+        Message: '&4LevelPoints>> &cSorry but you do not have permission'
   Level:
     Enabled: true
     CenterText: false
-    NoPermission: '&4LevelPoints>> &cSorry but you do not have permission'
     Message: '&3LevelPoints>> &bUpdated player data for {player}'
+    Children:
+      NoPermission:
+        Enabled: true
+        Message: '&4LevelPoints>> &cSorry but you do not have permission'
   Prestige:
     Enabled: true
     CenterText: false
-    NoPermission: '&4LevelPoints>> &cSorry but you do not have permission'
     Message: '&3LevelPoints>> &bUpdated player data for &f{player}'
+    Children:
+      NoPermission:
+        Enabled: true
+        Message: '&4LevelPoints>> &cSorry but you do not have permission'

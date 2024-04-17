@@ -3,6 +3,7 @@ package me.zoon20x.levelpoints.spigot.commands;
 import me.zoon20x.levelpoints.spigot.LevelPoints;
 import me.zoon20x.levelpoints.spigot.commands.TabComplete.LpsTabComplete;
 import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
+import me.zoon20x.levelpoints.spigot.utils.messages.LangChildData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,7 +31,11 @@ public class LpsCommand implements CommandExecutor {
         if(args.length == 0){
             String key = "Help";
             if(!player.hasPermission("lps.player")){
-                player.sendMessage(LevelPoints.getInstance().getLang().getLangData(key).getNoPermission());
+                LangChildData langChildData = LevelPoints.getInstance().getLang().getLangData(key).getChildData("NoPermission");
+                if(!langChildData.isEnabled()){
+                    return true;
+                }
+                sender.sendMessage(langChildData.getMessage());
                 return true;
             }
             List<String> message = LevelPoints.getInstance().getLang().getLangData(key).getMessage();

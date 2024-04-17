@@ -27,9 +27,15 @@ public class LangSettings {
             boolean isEnabled = config.getBoolean("Lang." + key + ".Enabled");
             boolean centerText = config.getBoolean("Lang." + key + ".CenterText");
             if (!config.isString("Lang." + key + ".Message")) {
-                langData = new LangData(isEnabled, centerText, config.getStringList("Lang." + key + ".Message"), config.getString("Lang." + key + ".NoPermission"));
+                langData = new LangData(isEnabled, centerText, config.getStringList("Lang." + key + ".Message"));
             } else {
-                langData = new LangData(isEnabled, centerText, config.getString("Lang." + key + ".Message"), config.getString("Lang." + key + ".NoPermission"));
+                langData = new LangData(isEnabled, centerText, config.getString("Lang." + key + ".Message"));
+            }
+
+            for (String keys : config.getSection("Lang." + key + ".Children").getRoutesAsStrings(false)) {
+                boolean cIsEnabled = config.getBoolean("Lang." + key + ".Children." + keys + ".Enabled");
+                String cMessage = config.getString("Lang." + key + ".Children." + keys + ".Enabled");
+                langData.addChildData(keys, new LangChildData(cIsEnabled, cMessage));
             }
             addLangData(key, langData);
         }

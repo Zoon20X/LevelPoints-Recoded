@@ -3,6 +3,7 @@ package me.zoon20x.levelpoints.spigot.commands;
 import me.zoon20x.levelpoints.spigot.LevelPoints;
 import me.zoon20x.levelpoints.spigot.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
+import me.zoon20x.levelpoints.spigot.utils.messages.LangChildData;
 import me.zoon20x.levelpoints.spigot.utils.messages.LangData;
 import me.zoon20x.levelpoints.spigot.utils.placeholders.LocalPlaceholders;
 import org.bukkit.Bukkit;
@@ -42,10 +43,11 @@ public class AdminLpsCommandUtils {
             sender.sendMessage(LevelPoints.getInstance().getMessagesUtil().getColor("&4LevelPoints>> &cSorry but that player does not exist"));
             return;
         }
+        LangChildData langChildData = LevelPoints.getInstance().getLang().getLangData("Level").getChildData("NoPermission");
         switch (type){
             case ADD:
                 if (!sender.hasPermission("lps.admin.level.add")) {
-                    sender.sendMessage(LevelPoints.getInstance().getLang().getLangData("Level").getNoPermission());
+                    sender.sendMessage(langChildData.getMessage());
                     return;
                 }
                 data.addLevel(value);
@@ -53,7 +55,7 @@ public class AdminLpsCommandUtils {
                 break;
             case REMOVE:
                 if (!sender.hasPermission("lps.admin.level.remove")) {
-                    sender.sendMessage(LevelPoints.getInstance().getLang().getLangData("Level").getNoPermission());
+                    sender.sendMessage(langChildData.getMessage());
                     return;
                 }
                 boolean remove = data.removeLevel(value);
@@ -65,7 +67,7 @@ public class AdminLpsCommandUtils {
                 break;
             case SET:
                 if (!sender.hasPermission("lps.admin.level.set")) {
-                    sender.sendMessage(LevelPoints.getInstance().getLang().getLangData("Level").getNoPermission());
+                    sender.sendMessage(langChildData.getMessage());
                     return;
                 }
                 data.setLevel(value);
@@ -80,10 +82,11 @@ public class AdminLpsCommandUtils {
             sender.sendMessage(LevelPoints.getInstance().getMessagesUtil().getColor("&4LevelPoints>> &cSorry but that player does not exist"));
             return;
         }
+        LangChildData langChildData = LevelPoints.getInstance().getLang().getLangData("Exp").getChildData("NoPermission");
         switch (type){
             case ADD:
                 if (!sender.hasPermission("lps.admin.exp.add")) {
-                    sender.sendMessage(LevelPoints.getInstance().getLang().getLangData("Exp").getNoPermission());
+                    sender.sendMessage(langChildData.getMessage());
                     return;
                 }
                 data.addExp(value);
@@ -91,7 +94,7 @@ public class AdminLpsCommandUtils {
                 break;
             case REMOVE:
                 if (!sender.hasPermission("lps.admin.exp.remove")) {
-                    sender.sendMessage(LevelPoints.getInstance().getLang().getLangData("Exp").getNoPermission());
+                    sender.sendMessage(langChildData.getMessage());
                     return;
                 }
                 boolean remove = data.removeExp(value);
@@ -103,7 +106,7 @@ public class AdminLpsCommandUtils {
                 break;
             case SET:
                 if (!sender.hasPermission("lps.admin.exp.set")) {
-                    sender.sendMessage(LevelPoints.getInstance().getLang().getLangData("Exp").getNoPermission());
+                    sender.sendMessage(langChildData.getMessage());
                     return;
                 }
                 data.setExp(value);
@@ -117,10 +120,11 @@ public class AdminLpsCommandUtils {
             sender.sendMessage(LevelPoints.getInstance().getMessagesUtil().getColor("&4LevelPoints>> &cSorry but that player does not exist"));
             return;
         }
+        LangChildData langChildData = LevelPoints.getInstance().getLang().getLangData("Prestige").getChildData("NoPermission");
         switch (type){
             case ADD:
                 if (!sender.hasPermission("lps.admin.prestige.add")) {
-                    sender.sendMessage(LevelPoints.getInstance().getLang().getLangData("Prestige").getNoPermission());
+                    sender.sendMessage(langChildData.getMessage());
                     return;
                 }
                 data.addPrestige(value);
@@ -128,7 +132,7 @@ public class AdminLpsCommandUtils {
                 break;
             case REMOVE:
                 if (!sender.hasPermission("lps.admin.prestige.remove")) {
-                    sender.sendMessage(LevelPoints.getInstance().getLang().getLangData("Prestige").getNoPermission());
+                    sender.sendMessage(langChildData.getMessage());
                     return;
                 }
                 boolean remove = data.removePrestige(value);
@@ -140,7 +144,7 @@ public class AdminLpsCommandUtils {
                 break;
             case SET:
                 if (!sender.hasPermission("lps.admin.prestige.set")) {
-                    sender.sendMessage(LevelPoints.getInstance().getLang().getLangData("Prestige").getNoPermission());
+                    sender.sendMessage(langChildData.getMessage());
                     return;
                 }
                 data.setPrestige(value, true);
