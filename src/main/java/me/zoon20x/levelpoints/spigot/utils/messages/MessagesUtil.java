@@ -31,14 +31,17 @@ public class MessagesUtil {
             }
         }.runTaskAsynchronously(LevelPoints.getInstance());
     }
-    public void sendTitle(Player player, String Title, String Subtitle) {
+    public void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
         new BukkitRunnable() {
             @Override
             public void run() {
-                    player.sendTitle(Title, Subtitle, 10, 30, 10);
+                    player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
 
             }
         }.runTaskAsynchronously(LevelPoints.getInstance());
+    }
+    public void sendTitle(Player player, String title, String subtitle) {
+        sendTitle(player, title, subtitle, 10, 30, 10);
     }
 
     public String centreText(String msg){
