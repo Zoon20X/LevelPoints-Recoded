@@ -10,15 +10,19 @@ import java.util.HashMap;
 public class LangSettings {
 
     private HashMap<String, LangData> langDataMap = new HashMap<>();
+    private HashMap<String, LangEventsData> langEventsDataMap = new HashMap<>();
 
     public LangSettings(){
         load();
+        loadEventsLang("OnExp");
     }
     public void reload() throws IOException {
         langDataMap.clear();
+        langEventsDataMap.clear();
         YamlDocument config = LevelPoints.getInstance().getConfigUtils().getLangSettings();
         config.reload();
         load();
+        loadEventsLang("OnExp");
     }
     private void load(){
         YamlDocument config = LevelPoints.getInstance().getConfigUtils().getLangSettings();
@@ -39,6 +43,18 @@ public class LangSettings {
             }
             addLangData(key, langData);
         }
+    }
+    private void loadEventsLang(String event){
+        YamlDocument config = LevelPoints.getInstance().getConfigUtils().getLangSettings();
+        boolean isEnabled = config.getBoolean("MessageEvents." + event + ".Enabled");
+        MessageType messageType = MessageType.valueOf(config.getString("MessageEvents." + event + ".Type"));
+        String message = config.getString("MessageEvents." + event + ".Message");
+
+        langEventsDataMap.put(event, new LangEventsData(isEnabled, messageType, message));
+    }
+
+    public LangEventsData getLangEventsData(String name){
+        return langEventsDataMap.get(name);
     }
 
     public void addLangData(String name, LangData data){

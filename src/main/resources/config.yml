@@ -6,3 +6,13 @@ NetworkShare:
     Address: 127.0.0.1
     Port: 3000
     ServerID:
+
+
+
+
+Progressbar:
+  MinStep: 1
+  MaxStep: 5
+  VisualBorder: "&8┃"
+  VisualCompletedStep: "&a░"
+  VisualUncompletedStep: "&7░"

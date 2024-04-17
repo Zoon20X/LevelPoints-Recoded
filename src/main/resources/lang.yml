@@ -1,4 +1,4 @@
-file-version: '11'
+file-version: '12'
 Lang:
   Reload:
     Enabled: true
@@ -108,3 +108,8 @@ Lang:
       RequiredNumber:
         Enabled: true
         Message: '&4LevelPoints>> &cSorry but this requires a number input!'
+MessageEvents:
+  OnExp:
+    Enabled: true
+    Type: ACTIONBAR
+    Message: '&3Level: &b{lps_level} &3|&b {lps_exp}/{lps_required_exp}'
