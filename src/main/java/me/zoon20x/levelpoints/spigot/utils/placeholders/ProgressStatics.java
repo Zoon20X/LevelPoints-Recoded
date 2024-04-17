@@ -1,5 +1,6 @@
 package me.zoon20x.levelpoints.spigot.utils.placeholders;
 
+import me.zoon20x.levelpoints.spigot.LevelPoints;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,6 +24,6 @@ public class ProgressStatics {
         }
         bar.append(settings.getVisualBorder());
 
-        return bar.toString();
+        return LevelPoints.getInstance().getMessagesUtil().getColor(bar.toString());
     }
 }
