@@ -34,7 +34,7 @@ public class LangSettings {
 
             for (String keys : config.getSection("Lang." + key + ".Children").getRoutesAsStrings(false)) {
                 boolean cIsEnabled = config.getBoolean("Lang." + key + ".Children." + keys + ".Enabled");
-                String cMessage = config.getString("Lang." + key + ".Children." + keys + ".Enabled");
+                String cMessage = config.getString("Lang." + key + ".Children." + keys + ".Message");
                 langData.addChildData(keys, new LangChildData(cIsEnabled, cMessage));
             }
             addLangData(key, langData);
