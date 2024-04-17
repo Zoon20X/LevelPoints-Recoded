@@ -72,6 +72,9 @@ Lang:
       NoPermission:
         Enabled: true
         Message: '&4LevelPoints>> &cSorry but you do not have permission'
+      RequiredNumber:
+        Enabled: true
+        Message: '&4LevelPoints>> &cSorry but this requires a number input!'
   Exp:
     Enabled: true
     CenterText: false
@@ -80,6 +83,9 @@ Lang:
       NoPermission:
         Enabled: true
         Message: '&4LevelPoints>> &cSorry but you do not have permission'
+    RequiredNumber:
+      Enabled: true
+      Message: '&4LevelPoints>> &cSorry but this requires a number input!'
   Level:
     Enabled: true
     CenterText: false
@@ -88,6 +94,9 @@ Lang:
       NoPermission:
         Enabled: true
         Message: '&4LevelPoints>> &cSorry but you do not have permission'
+      RequiredNumber:
+        Enabled: true
+        Message: '&4LevelPoints>> &cSorry but this requires a number input!'
   Prestige:
     Enabled: true
     CenterText: false
@@ -96,3 +105,6 @@ Lang:
       NoPermission:
         Enabled: true
         Message: '&4LevelPoints>> &cSorry but you do not have permission'
+      RequiredNumber:
+        Enabled: true
+        Message: '&4LevelPoints>> &cSorry but this requires a number input!'

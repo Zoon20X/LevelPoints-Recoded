@@ -4,6 +4,7 @@ import me.zoon20x.levelpoints.spigot.LevelPoints;
 import me.zoon20x.levelpoints.spigot.commands.TabComplete.LpsTabComplete;
 import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
 import me.zoon20x.levelpoints.spigot.utils.messages.LangChildData;
+import me.zoon20x.levelpoints.spigot.utils.messages.LangData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -82,7 +83,15 @@ public class LpsCommand implements CommandExecutor {
                     lpsCommandUtils.sendTop(sender, LevelPoints.getInstance().getTopSettings().getMaxPages());
                 }
             }catch (Exception e){
-                sender.sendMessage(LevelPoints.getInstance().getMessagesUtil().getColor("&4LevelPoints>> &cSorry but this requires a number input!"));
+                LangData langData = LevelPoints.getInstance().getLang().getLangData("Top");
+                if(!langData.isEnabled()){
+                    return;
+                }
+                LangChildData langChildData = langData.getChildData("RequiredNumber");
+                if(!langChildData.isEnabled()){
+                    return;
+                }
+                sender.sendMessage(langChildData.getMessage());
             }
         }
         if(args[0].equalsIgnoreCase("info")){

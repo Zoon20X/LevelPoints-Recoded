@@ -88,21 +88,59 @@ public class AdminLps implements CommandExecutor {
     }
     private void args4(CommandSender sender, String[] args){
         if(args[0].equalsIgnoreCase("exp")){
-            double val = Double.parseDouble(args[3]);
-            String player = args[2];
-            adminLpsCommandUtils.sendEXPUpdate(sender, player, val, UpdateType.valueOf(args[1].toUpperCase()));
+            try {
+                double val = Double.parseDouble(args[3]);
+                String player = args[2];
+                adminLpsCommandUtils.sendEXPUpdate(sender, player, val, UpdateType.valueOf(args[1].toUpperCase()));
+                return;
+            }catch (Exception e){
+                LangData langData = LevelPoints.getInstance().getLang().getLangData("Level");
+                if(!langData.isEnabled()){
+                    return;
+                }
+                LangChildData langChildData = langData.getChildData("RequiredNumber");
+                if(!langChildData.isEnabled()){
+                    return;
+                }
+                sender.sendMessage(langChildData.getMessage());
+            }
             return;
         }
         if(args[0].equalsIgnoreCase("level")){
-            int val = Integer.parseInt(args[3]);
-            String player = args[2];
-            adminLpsCommandUtils.sendLevelUpdate(sender, player, val, UpdateType.valueOf(args[1].toUpperCase()));
+            try {
+                int val = Integer.parseInt(args[3]);
+                String player = args[2];
+                adminLpsCommandUtils.sendLevelUpdate(sender, player, val, UpdateType.valueOf(args[1].toUpperCase()));
+                return;
+            }catch (Exception e){
+                LangData langData = LevelPoints.getInstance().getLang().getLangData("Level");
+                if(!langData.isEnabled()){
+                    return;
+                }
+                LangChildData langChildData = langData.getChildData("RequiredNumber");
+                if(!langChildData.isEnabled()){
+                    return;
+                }
+                sender.sendMessage(langChildData.getMessage());
+            }
             return;
         }
         if(args[0].equalsIgnoreCase("prestige")){
-            int val = Integer.parseInt(args[3]);
-            String player = args[2];
-            adminLpsCommandUtils.sendPrestigeUpdate(sender, player, val, UpdateType.valueOf(args[1].toUpperCase()));
+            try{
+                int val = Integer.parseInt(args[3]);
+                String player = args[2];
+                adminLpsCommandUtils.sendPrestigeUpdate(sender, player, val, UpdateType.valueOf(args[1].toUpperCase()));
+            }catch (Exception e){
+                LangData langData = LevelPoints.getInstance().getLang().getLangData("Prestige");
+                if(!langData.isEnabled()){
+                    return;
+                }
+                LangChildData langChildData = langData.getChildData("RequiredNumber");
+                if(!langChildData.isEnabled()){
+                    return;
+                }
+                sender.sendMessage(langChildData.getMessage());
+            }
             return;
         }
     }
