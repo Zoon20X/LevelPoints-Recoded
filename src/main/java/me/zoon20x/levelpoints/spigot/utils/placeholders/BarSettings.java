@@ -9,13 +9,13 @@ public class BarSettings {
     private String visualCompletedStep;
     private String visualUncompletedStep;
 
-    public BarSettings() {
-        stepMin = 1;
-        stepMax = 5;
+    public BarSettings(int stepMin, int stepMax, String visualBorder, String visualCompletedStep, String visualUncompletedStep) {
+        this.stepMin = stepMin;
+        this.stepMax = stepMax;
 
-        visualBorder = "&8┃";
-        visualCompletedStep = "&a░";
-        visualUncompletedStep = "&7░";
+        this.visualBorder = visualBorder;
+        this.visualCompletedStep = visualCompletedStep;
+        this.visualUncompletedStep = visualUncompletedStep;
     }
 
     public int getStepMin() {

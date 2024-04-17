@@ -31,7 +31,7 @@ public class LocalPlaceholders {
                 .replace("{lps_top_position}", String.valueOf(topPosition))
                 .replace("{lps_top_page}", String.valueOf(topPage))
                 .replace("{lps_top_page_max}", String.valueOf(LevelPoints.getInstance().getTopSettings().getMaxPages()))
-                .replace("{lps_progress_bar}", ProgressStatics.makeProgressBar(new BarSettings(), data.getExp(), data.getRequiredEXP()))
+                .replace("{lps_progress_bar}", ProgressStatics.makeProgressBar(LevelPoints.getInstance().getLang().getBarSettings(), data.getExp(), data.getRequiredEXP()))
                 .replace("{player}", data.getName());
     }
     private static String replaceText(String message, int level, String name, int topPosition, int topPage){

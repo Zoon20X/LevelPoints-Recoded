@@ -1,4 +1,11 @@
-file-version: '12'
+file-version: '13'
+Progressbar:
+  MinStep: 1
+  MaxStep: 5
+  VisualBorder: "&8┃"
+  VisualCompletedStep: "&a░"
+  VisualUncompletedStep: "&7░"
+
 Lang:
   Reload:
     Enabled: true

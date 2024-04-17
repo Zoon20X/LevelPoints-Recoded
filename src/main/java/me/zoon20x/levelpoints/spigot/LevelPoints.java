@@ -130,6 +130,7 @@ public final class LevelPoints extends JavaPlugin {
         getLpsSettings().getLevelSettings().reload();
         getLpsSettings().getBlockSettings().reload();
         getLpsSettings().getMobSettings().reload();
+        getTopSettings().reload();
         getLang().reload();
         for (Player player : Bukkit.getOnlinePlayers()) {
             playerStorage.reloadPlayer(player.getUniqueId());

@@ -2,6 +2,7 @@ package me.zoon20x.levelpoints.spigot.utils.messages;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
 import me.zoon20x.levelpoints.spigot.LevelPoints;
+import me.zoon20x.levelpoints.spigot.utils.placeholders.BarSettings;
 
 
 import java.io.IOException;
@@ -11,6 +12,8 @@ public class LangSettings {
 
     private HashMap<String, LangData> langDataMap = new HashMap<>();
     private HashMap<String, LangEventsData> langEventsDataMap = new HashMap<>();
+
+    private BarSettings barSettings;
 
     public LangSettings(){
         load();
@@ -26,6 +29,13 @@ public class LangSettings {
     }
     private void load(){
         YamlDocument config = LevelPoints.getInstance().getConfigUtils().getLangSettings();
+        int stepMin = config.getInt("Progressbar.MinStep");
+        int stepMax = config.getInt("Progressbar.MaxStep");
+
+        String visualBorder = config.getString("Progressbar.VisualBorder");
+        String visualCompletedStep = config.getString("Progressbar.VisualCompletedStep");
+        String visualUnCompletedStep = config.getString("Progressbar.VisualUnCompletedStep");
+        this.barSettings = new BarSettings(stepMin, stepMax, visualBorder, visualCompletedStep, visualUnCompletedStep);
         for (String key : config.getSection("Lang").getRoutesAsStrings(false)) {
             LangData langData;
             boolean isEnabled = config.getBoolean("Lang." + key + ".Enabled");
@@ -69,4 +79,7 @@ public class LangSettings {
     }
 
 
+    public BarSettings getBarSettings() {
+        return barSettings;
+    }
 }

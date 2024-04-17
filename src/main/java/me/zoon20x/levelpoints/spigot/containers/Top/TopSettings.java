@@ -30,6 +30,16 @@ public class TopSettings {
     private BukkitTask updateTask;
 
     public TopSettings() {
+        load();
+    }
+
+    public void reload() throws IOException {
+        updateTask.cancel();
+        YamlDocument config = LevelPoints.getInstance().getConfigUtils().getTopSettings();
+        config.reload();
+        load();
+    }
+    private void load(){
         YamlDocument config = LevelPoints.getInstance().getConfigUtils().getTopSettings();
         maxSlots = config.getInt("MaxSlotsPerPage");
         maxPages = config.getInt("MaxPages");
