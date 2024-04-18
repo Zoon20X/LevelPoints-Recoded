@@ -44,9 +44,11 @@ public class TopSettings {
         maxSlots = config.getInt("MaxSlotsPerPage");
         maxPages = config.getInt("MaxPages");
         enabled = config.getBoolean("Enabled");
-        updateIteration = config.getInt("UpdateIteration");
-        scan();
-        startUpdate();
+        if(enabled) {
+            updateIteration = config.getInt("UpdateIteration");
+            scan();
+            startUpdate();
+        }
     }
 
 

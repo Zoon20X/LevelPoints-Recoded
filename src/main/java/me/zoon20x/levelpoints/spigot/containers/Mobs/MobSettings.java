@@ -22,7 +22,7 @@ public class MobSettings implements MobSettingsAPI {
         mobDataMap.clear();
         YamlDocument config = LevelPoints.getInstance().getConfigUtils().getMobSettingsConfig();
         config.reload();
-        load();
+        setEnabled(config.getBoolean("Mobs.Enabled"));
     }
 
     private void load(){
