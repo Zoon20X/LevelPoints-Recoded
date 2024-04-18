@@ -144,6 +144,7 @@ public class EXPEarnEvents implements Listener {
         Player player = entity.getKiller();
         boolean isMythicMob = MythicBukkit.inst().getMobManager().isMythicMob(entity);
         String entityType;
+        System.out.println(isMythicMob);
         if(isMythicMob){
             entityType = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity).getType().getInternalName();
         }else{
@@ -153,6 +154,7 @@ public class EXPEarnEvents implements Listener {
         if(!mobSettings.isEnabled()){
             return;
         }
+        System.out.println(mobSettings.hasMob(entityType));
         if(!mobSettings.hasMob(entityType)){
             return;
         }
