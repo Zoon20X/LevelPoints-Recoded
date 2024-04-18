@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class MobSettings implements MobSettingsAPI {
 
     private boolean enabled;
-    private final HashMap<EntityType, MobData> mobDataMap = new HashMap<>();
+    private final HashMap<String, MobData> mobDataMap = new HashMap<>();
 
     public MobSettings(boolean isEnabled){
         setEnabled(isEnabled);
@@ -25,13 +25,11 @@ public class MobSettings implements MobSettingsAPI {
         setEnabled(config.getBoolean("Mobs.Enabled"));
     }
 
-    private void load(){
-        YamlDocument config = LevelPoints.getInstance().getConfigUtils().getMobSettingsConfig();
+    private void load(YamlDocument config){
         config.getSection("Mobs.Settings").getRoutesAsStrings(false).forEach(entity ->{
-            EntityType entityType = EntityType.valueOf(entity);
             int attackRequired = config.getInt("Mobs.Settings." + entity + ".RequiredLevel.Attack");
             double exp = config.getDouble("Mobs.Settings." + entity + ".Exp");
-            mobDataMap.put(entityType, new MobData(entityType, exp, attackRequired));
+            mobDataMap.put(entity, new MobData(entity, exp, attackRequired));
         });
     }
     private void unLoad(){
@@ -47,20 +45,21 @@ public class MobSettings implements MobSettingsAPI {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         if (enabled) {
-            load();
+            load(LevelPoints.getInstance().getConfigUtils().getMobSettingsConfig());
+            load(LevelPoints.getInstance().getConfigUtils().getMythicMobsSettings());
             return;
         }
         unLoad();
     }
 
 
-    public HashMap<EntityType, MobData> getMobDataMap() {
+    public HashMap<String, MobData> getMobDataMap() {
         return mobDataMap;
     }
-    public boolean hasMob(EntityType entityType){
+    public boolean hasMob(String entityType){
         return mobDataMap.containsKey(entityType);
     }
-    public MobData getMobData(EntityType entityType){
+    public MobData getMobData(String entityType){
         return mobDataMap.get(entityType);
     }
 }

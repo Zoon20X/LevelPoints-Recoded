@@ -25,7 +25,10 @@ import org.checkerframework.checker.units.qual.N;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 public final class LevelPoints extends JavaPlugin {
     private static LevelPoints instance;
@@ -100,8 +103,43 @@ public final class LevelPoints extends JavaPlugin {
     private void loadMetrics(){
         int pluginId = 6480; // <-- Replace with the id of your plugin!
         Metrics metrics = new Metrics(this, pluginId);
-        metrics.addCustomChart(new Metrics.SimplePie("dev-mode", () -> {
-            return String.valueOf(devMode);
+        metrics.addCustomChart(new Metrics.AdvancedPie("features_in_use", new Callable<Map<String, Integer>>() {
+            @Override
+            public Map<String, Integer> call() throws Exception {
+                Map<String, Integer> valueMap = new HashMap<>();
+                valueMap.put("Cross Network Storage", getFeatureInUse("CNS"));
+                valueMap.put("DEV-Mode", getFeatureInUse("DEV"));
+                return valueMap;
+            }
+
+            private int getFeatureInUse(String name) {
+                switch (name){
+                    case "CNS":
+                        if(getCnsSettings().isEnabled()) {
+                            return 1;
+                        }
+                        break;
+                    case "DEV":
+                        if(devMode){
+                            return 1;
+                        }
+                        break;
+                }
+                return 0;
+
+            }
+        }));
+        metrics.addCustomChart(new Metrics.SimpleBarChart("Features", new Callable<Map<String, Integer>>() {
+            @Override
+            public Map<String, Integer> call() throws Exception {
+                Map<String, Integer> map = new HashMap<>();
+                int cnsSupport = 0;
+                if(getCnsSettings().isEnabled()){
+                    cnsSupport +=1;
+                }
+                map.put("Cross Network Storage Support ", cnsSupport);
+                return map;
+            }
         }));
     }
 

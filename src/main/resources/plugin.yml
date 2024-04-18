@@ -4,7 +4,8 @@ main: me.zoon20x.levelpoints.spigot.LevelPoints
 api-version: '1.20'
 authors: [Zoon20X]
 description: A full leveling system built from the ground up
-
+softdepend:
+  - MythicMobs
 
 commands:
   lps:

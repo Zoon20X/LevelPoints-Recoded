@@ -4,15 +4,15 @@ import org.bukkit.entity.EntityType;
 
 public class MobData {
 
-    private EntityType entityType;
+    private String entityType;
     private double exp;
     private int attackRequired;
 
 
-    public MobData(EntityType entityType){
+    public MobData(String entityType){
         this.entityType = entityType;
     }
-    public MobData(EntityType entityType, double exp, int attackRequired){
+    public MobData(String entityType, double exp, int attackRequired){
         this.entityType = entityType;
         this.exp = exp;
         this.attackRequired = attackRequired;
@@ -31,7 +31,7 @@ public class MobData {
     }
 
 
-    public EntityType getEntityType() {
+    public String getEntityType() {
         return entityType;
     }
 

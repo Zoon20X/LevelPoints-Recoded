@@ -1,0 +1,9 @@
+file-version: '1'
+
+Mobs:
+  Enabled: false
+  Settings:
+    SkeletalMinion:
+      Exp: 1.0
+      RequiredLevel:
+        Attack: 2

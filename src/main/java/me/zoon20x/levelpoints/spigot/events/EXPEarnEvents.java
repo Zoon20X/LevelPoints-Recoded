@@ -1,5 +1,6 @@
 package me.zoon20x.levelpoints.spigot.events;
 
+import io.lumine.mythic.bukkit.MythicBukkit;
 import me.zoon20x.levelpoints.spigot.LevelPoints;
 import me.zoon20x.levelpoints.spigot.containers.Blocks.BlockData;
 import me.zoon20x.levelpoints.spigot.containers.Blocks.BlockSettings;
@@ -107,10 +108,19 @@ public class EXPEarnEvents implements Listener {
         if(!mobSettings.isEnabled()){
             return;
         }
-        if(!mobSettings.hasMob(entity.getType())){
+
+
+        boolean isMythicMob = MythicBukkit.inst().getMobManager().isMythicMob(entity);
+        String entityType;
+        if(isMythicMob){
+            entityType = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity).getType().getInternalName();
+        }else{
+            entityType = entity.getType().toString();
+        }
+        if(!mobSettings.hasMob(entityType)){
             return;
         }
-        MobData mobData = mobSettings.getMobData(entity.getType());
+        MobData mobData = mobSettings.getMobData(entityType);
         if(!levelPoints.getPlayerStorage().hasPlayer(player.getUniqueId())){
             return;
         }
@@ -132,14 +142,21 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         Player player = entity.getKiller();
+        boolean isMythicMob = MythicBukkit.inst().getMobManager().isMythicMob(entity);
+        String entityType;
+        if(isMythicMob){
+            entityType = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity).getType().getInternalName();
+        }else{
+            entityType = entity.getType().toString();
+        }
         MobSettings mobSettings = levelPoints.getLpsSettings().getMobSettings();
         if(!mobSettings.isEnabled()){
             return;
         }
-        if(!mobSettings.hasMob(entity.getType())){
+        if(!mobSettings.hasMob(entityType)){
             return;
         }
-        MobData mobData = mobSettings.getMobData(entity.getType());
+        MobData mobData = mobSettings.getMobData(entityType);
         if(!levelPoints.getPlayerStorage().hasPlayer(player.getUniqueId())){
             return;
         }
