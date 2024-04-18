@@ -37,11 +37,13 @@ public class ConfigUtils implements ConfigAPI {
         try {
             YamlDocument config = YamlDocument.create(new File(LevelPoints.getInstance().getDataFolder() + location, fileName),
                     getClass().getResourceAsStream( location + fileName),
-                    GeneralSettings.DEFAULT,
+                    GeneralSettings.builder().setUseDefaults(false).build(),
                     LoaderSettings.builder().setAutoUpdate(true).build(),
                     DumperSettings.DEFAULT,
                     UpdaterSettings.builder().setVersioning(new BasicVersioning("file-version")).setOptionSorting(UpdaterSettings.OptionSorting.SORT_BY_DEFAULTS).build());
+
             config.update();
+
             config.save();
             return config;
         } catch (IOException e) {

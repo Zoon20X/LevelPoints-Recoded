@@ -1,10 +1,10 @@
 file-version: '1'
 
 Blocks:
-  Enabled: true
+  Enabled: false
   Settings:
     DIRT:
       Exp: 1.0
       RequiredLevel:
-        Break: 2
-        Place: 3
+        Break: 0
+        Place: 0

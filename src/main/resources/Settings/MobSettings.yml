@@ -1,7 +1,7 @@
 file-version: '1'
 
 Mobs:
-  Enabled: true
+  Enabled: false
   Settings:
     ZOMBIE:
       Exp: 1.0

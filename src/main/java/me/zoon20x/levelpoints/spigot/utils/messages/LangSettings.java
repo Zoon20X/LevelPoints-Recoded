@@ -34,7 +34,7 @@ public class LangSettings {
 
         String visualBorder = config.getString("Progressbar.VisualBorder");
         String visualCompletedStep = config.getString("Progressbar.VisualCompletedStep");
-        String visualUnCompletedStep = config.getString("Progressbar.VisualUnCompletedStep");
+        String visualUnCompletedStep = config.getString("Progressbar.VisualUncompletedStep");
         this.barSettings = new BarSettings(stepMin, stepMax, visualBorder, visualCompletedStep, visualUnCompletedStep);
         for (String key : config.getSection("Lang").getRoutesAsStrings(false)) {
             LangData langData;

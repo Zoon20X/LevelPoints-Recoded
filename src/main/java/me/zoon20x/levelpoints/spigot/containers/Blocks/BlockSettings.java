@@ -22,7 +22,7 @@ public class BlockSettings implements BlockSettingsAPI {
         blockDataMap.clear();
         YamlDocument config = LevelPoints.getInstance().getConfigUtils().getBlockSettingsConfig();
         config.reload();
-        load();
+        setEnabled(config.getBoolean("Blocks.Enabled"));
     }
 
     private void load(){

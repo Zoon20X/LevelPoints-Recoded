@@ -12,15 +12,16 @@ public class ProgressStatics {
     public static String makeProgressBar(BarSettings settings, double current, double target) {
         int currentStep = 0;
 
-        if(current != 0 || target != 0)
+        if (current != 0 || target != 0)
             currentStep = (int) Math.round(settings.getStepMax() * (current / target));
 
         StringBuilder bar = new StringBuilder(settings.getVisualBorder());
-        for(int step = settings.getStepMin(); step < settings.getStepMax(); step++) {
-            if(step <= currentStep) {
+        for (int step = settings.getStepMin(); step < settings.getStepMax(); step++) {
+            if (step <= currentStep) {
                 bar.append(settings.getVisualCompletedStep());
-            } else
+            } else {
                 bar.append(settings.getVisualUncompletedStep());
+            }
         }
         bar.append(settings.getVisualBorder());
 

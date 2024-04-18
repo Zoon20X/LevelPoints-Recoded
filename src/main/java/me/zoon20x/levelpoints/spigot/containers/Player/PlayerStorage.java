@@ -21,12 +21,14 @@ public class PlayerStorage {
     private final HashMap<UUID, PlayerData> offlinePlayerDataMap = new HashMap<>();
 
 
+
     public void loadPlayer(UUID uuid, String name){
         YamlDocument config = createPlayerConfig(uuid,name, "/Players/");
         PlayerData data = new PlayerData(uuid,name, config);
         load(data);
         playerDataMap.put(uuid, data);
     }
+
     public void loadPlayer(UUID uuid, String name, NetworkPlayer networkPlayer){
         YamlDocument config = createPlayerConfig(uuid,name, "/Players/");
         PlayerData data = new PlayerData(uuid,name, config);
@@ -52,7 +54,6 @@ public class PlayerStorage {
         try {
             YamlDocument config = YamlDocument.create(new File(LevelPoints.getInstance().getDataFolder() + location, uuid + ".yml"),
                     getClass().getResourceAsStream( location + "template.yml"),
-                    GeneralSettings.DEFAULT,
                     LoaderSettings.builder().setAutoUpdate(true).build(),
                     DumperSettings.DEFAULT,
                     UpdaterSettings.builder().setVersioning(new BasicVersioning("file-version")).setOptionSorting(UpdaterSettings.OptionSorting.SORT_BY_DEFAULTS).build());

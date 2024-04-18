@@ -1,4 +1,4 @@
-file-version: '13'
+file-version: '1'
 Progressbar:
   MinStep: 1
   MaxStep: 5
