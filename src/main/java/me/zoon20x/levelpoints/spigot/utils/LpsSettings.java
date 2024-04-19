@@ -11,10 +11,13 @@ public class LpsSettings {
     private final BlockSettings blockSettings;
     private final MobSettings mobSettings;
 
+    private final boolean mythicMobsEnabled;
+
     public LpsSettings(LevelPoints levelPoints){
         levelSettings = new LevelSettings();
         blockSettings = new BlockSettings(levelPoints.getConfigUtils().getBlockSettingsConfig().getBoolean("Blocks.Enabled"));
         mobSettings = new MobSettings(levelPoints.getConfigUtils().getMobSettingsConfig().getBoolean("Mobs.Enabled"));
+        this.mythicMobsEnabled = levelPoints.getConfigUtils().getMythicMobsSettings().getBoolean("Mobs.Enabled");
     }
 
 
@@ -28,5 +31,9 @@ public class LpsSettings {
 
     public LevelSettings getLevelSettings() {
         return levelSettings;
+    }
+
+    public boolean isMythicMobsEnabled(){
+        return mythicMobsEnabled;
     }
 }

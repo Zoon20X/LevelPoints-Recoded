@@ -1,10 +1,25 @@
 package me.zoon20x.levelpoints.spigot;
 
+import com.sk89q.worldedit.util.Location;
+import com.sk89q.worldguard.LocalPlayer;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.flags.Flag;
+import com.sk89q.worldguard.protection.flags.IntegerFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
+import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
+import com.sk89q.worldguard.session.MoveType;
+import com.sk89q.worldguard.session.Session;
+import com.sk89q.worldguard.session.SessionManager;
+import com.sk89q.worldguard.session.handler.FlagValueChangeHandler;
+import com.sk89q.worldguard.session.handler.Handler;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import me.zoon20x.levelpoints.spigot.API.LevelPointsAPI;
 import me.zoon20x.levelpoints.spigot.NetworkUtils.Network;
 import me.zoon20x.levelpoints.spigot.commands.AdminLps;
 import me.zoon20x.levelpoints.spigot.containers.CnsSettings;
+import me.zoon20x.levelpoints.spigot.containers.WorldGuardSettings;
 import me.zoon20x.levelpoints.spigot.events.CustomEvents.EventUtils;
 import me.zoon20x.levelpoints.spigot.utils.files.ConfigUtils;
 import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
@@ -50,6 +65,8 @@ public final class LevelPoints extends JavaPlugin {
 
     private CnsSettings cnsSettings;
 
+    private WorldGuardSettings worldGuardSettings;
+
 
     @Override
     public void onEnable() {
@@ -67,6 +84,10 @@ public final class LevelPoints extends JavaPlugin {
         loadCommands();
         loadCNSSupport();
 
+        if(Bukkit.getPluginManager().isPluginEnabled("WorldGuard")){
+           this.worldGuardSettings.loadHandler();
+        }
+
         if (getDescription().getVersion().contains("DEV")) {
             loadDev();
             return;
@@ -75,6 +96,7 @@ public final class LevelPoints extends JavaPlugin {
         loadMetrics();
 
         levelPointsAPI = new LevelPointsAPI();
+
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA + "=============================");
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "LevelPoints Plugin");
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Lead Developer: Zoon20X");
@@ -147,6 +169,7 @@ public final class LevelPoints extends JavaPlugin {
         devInstance = new DevInstance();
         devMode = true;
         loadMetrics();
+
         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_PURPLE + "=============================");
         Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "LevelPoints DEV Instance");
         Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "Version: " + this.getDescription().getVersion());
@@ -243,5 +266,21 @@ public final class LevelPoints extends JavaPlugin {
 
     public CnsSettings getCnsSettings() {
         return cnsSettings;
+    }
+
+
+    @Override
+    public void onLoad() {
+        try{
+            WorldGuard worldGuard = WorldGuard.getInstance();
+        }catch (NoClassDefFoundError e){
+            return;
+        }
+        this.worldGuardSettings = new WorldGuardSettings();
+
+    }
+
+    public WorldGuardSettings getWorldGuardSettings() {
+        return worldGuardSettings;
     }
 }

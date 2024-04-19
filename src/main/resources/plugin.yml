@@ -6,6 +6,7 @@ authors: [Zoon20X]
 description: A full leveling system built from the ground up
 softdepend:
   - MythicMobs
+  - WorldGuard
 
 commands:
   lps:
