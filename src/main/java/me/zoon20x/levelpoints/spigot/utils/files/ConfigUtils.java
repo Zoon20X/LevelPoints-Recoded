@@ -22,6 +22,8 @@ public class ConfigUtils implements ConfigAPI {
     private final YamlDocument langSettings;
     private final YamlDocument topSettings;
 
+    private final YamlDocument worldSettings;
+
 
     private final YamlDocument mythicMobsSettings;
 
@@ -32,8 +34,9 @@ public class ConfigUtils implements ConfigAPI {
         mobSettings = createConfig("MobSettings.yml", "/Settings/", false);
         topSettings = createConfig("TopSettings.yml", "/Settings/", true);
         langSettings = createConfig("lang.yml", "/", true);
+        worldSettings = createConfig("WorldSettings.yml", "/Settings/", false);
 
-        mythicMobsSettings = createConfig("MythicMobs.yml", "/ExtraSupport/", false);
+        mythicMobsSettings = createConfig("MythicMobs.yml", "/ExtraSupport/", true);
     }
 
 
@@ -107,5 +110,9 @@ public class ConfigUtils implements ConfigAPI {
 
     public YamlDocument getMythicMobsSettings() {
         return mythicMobsSettings;
+    }
+
+    public YamlDocument getWorldSettings() {
+        return worldSettings;
     }
 }

@@ -1,0 +1,5 @@
+file-version: '1'
+World:
+  Enabled: false
+  Disabled-Worlds:
+    - world

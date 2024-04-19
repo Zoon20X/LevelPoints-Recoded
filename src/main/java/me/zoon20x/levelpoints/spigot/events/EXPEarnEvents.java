@@ -1,13 +1,16 @@
 package me.zoon20x.levelpoints.spigot.events;
 
 import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.bukkit.utils.lib.jooq.impl.QOM;
 import me.zoon20x.levelpoints.spigot.LevelPoints;
 import me.zoon20x.levelpoints.spigot.containers.Blocks.BlockData;
 import me.zoon20x.levelpoints.spigot.containers.Blocks.BlockSettings;
 import me.zoon20x.levelpoints.spigot.containers.Mobs.MobData;
 import me.zoon20x.levelpoints.spigot.containers.Mobs.MobSettings;
 import me.zoon20x.levelpoints.spigot.containers.Player.PlayerData;
+import me.zoon20x.levelpoints.spigot.containers.World.WorldSettings;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -18,6 +21,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class EXPEarnEvents implements Listener {
 
@@ -33,8 +38,16 @@ public class EXPEarnEvents implements Listener {
         if(event.isCancelled()){
             return;
         }
-
         Player player = event.getPlayer();
+        if(LevelPoints.getInstance().getLpsSettings().getWorldSettings().isEnabled()){
+            WorldSettings worldSettings = LevelPoints.getInstance().getLpsSettings().getWorldSettings();
+            if(worldSettings.hasWorld(player.getWorld().getName())){
+                return;
+            }
+        }
+
+
+
         Block block = event.getBlock();
         BlockSettings blockSettings = levelPoints.getLpsSettings().getBlockSettings();
         if(!blockSettings.isEnabled()){
@@ -55,6 +68,15 @@ public class EXPEarnEvents implements Listener {
             event.setCancelled(true);
             return;
         }
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if(itemStack.hasItemMeta()){
+            ItemMeta meta = itemStack.getItemMeta();
+            assert meta != null;
+            if(meta.hasEnchant(Enchantment.SILK_TOUCH)){
+                return;
+            }
+        }
+
         levelPoints.getEventUtils().triggerEXPEarn(player, playerData, blockData.getExp(), event);
 
 
@@ -66,12 +88,19 @@ public class EXPEarnEvents implements Listener {
         if(event.isCancelled()){
             return;
         }
+        Player player = event.getPlayer();
+        if(LevelPoints.getInstance().getLpsSettings().getWorldSettings().isEnabled()){
+            WorldSettings worldSettings = LevelPoints.getInstance().getLpsSettings().getWorldSettings();
+            if(worldSettings.hasWorld(player.getWorld().getName())){
+                return;
+            }
+        }
         BlockSettings blockSettings = levelPoints.getLpsSettings().getBlockSettings();
         if(!blockSettings.isEnabled()){
             return;
         }
 
-        Player player = event.getPlayer();
+
         Block block = event.getBlockPlaced();
 
 
@@ -103,6 +132,12 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         Player player = (Player) event.getDamager();
+        if(LevelPoints.getInstance().getLpsSettings().getWorldSettings().isEnabled()){
+            WorldSettings worldSettings = LevelPoints.getInstance().getLpsSettings().getWorldSettings();
+            if(worldSettings.hasWorld(player.getWorld().getName())){
+                return;
+            }
+        }
         Entity entity = event.getEntity();
         MobSettings mobSettings = levelPoints.getLpsSettings().getMobSettings();
         if(!mobSettings.isEnabled()){
@@ -142,6 +177,12 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         Player player = entity.getKiller();
+        if(LevelPoints.getInstance().getLpsSettings().getWorldSettings().isEnabled()){
+            WorldSettings worldSettings = LevelPoints.getInstance().getLpsSettings().getWorldSettings();
+            if(worldSettings.hasWorld(player.getWorld().getName())){
+                return;
+            }
+        }
         String entityType;
         if(LevelPoints.getInstance().getLpsSettings().isMythicMobsEnabled()){
             boolean isMythicMob = MythicBukkit.inst().getMobManager().isMythicMob(entity);

@@ -191,6 +191,7 @@ public final class LevelPoints extends JavaPlugin {
         getLpsSettings().getLevelSettings().reload();
         getLpsSettings().getBlockSettings().reload();
         getLpsSettings().getMobSettings().reload();
+        getLpsSettings().getWorldSettings().reload();
         getTopSettings().reload();
         getLang().reload();
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -212,6 +213,7 @@ public final class LevelPoints extends JavaPlugin {
                 playerStorage.savePlayerData(player.getUniqueId());
             }
         }
+
     }
 
 

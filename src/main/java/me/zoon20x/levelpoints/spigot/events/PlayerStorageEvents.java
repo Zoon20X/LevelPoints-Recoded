@@ -77,6 +77,7 @@ public class PlayerStorageEvents implements Listener {
          LevelPoints.getInstance().getNetwork().sendToProxy(storage.getPlayerData(player.getUniqueId()));
         }
         storage.savePlayerData(player.getUniqueId());
+
     }
 
 }
