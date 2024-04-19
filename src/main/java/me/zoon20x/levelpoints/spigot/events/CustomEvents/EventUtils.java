@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.block.BlockBreakEvent;
 
 public class EventUtils{
 
@@ -43,8 +44,8 @@ public class EventUtils{
         Bukkit.getPluginManager().callEvent(levelUpEvent);
 
     }
-    public void triggerFarmEvent(Block block, Player player){
-        FarmEvent farmEvent = new FarmEvent(block, player);
+    public void triggerFarmEvent(Block block, Player player, BlockBreakEvent event){
+        FarmEvent farmEvent = new FarmEvent(block, player, event);
         Bukkit.getPluginManager().callEvent(farmEvent);
 
     }

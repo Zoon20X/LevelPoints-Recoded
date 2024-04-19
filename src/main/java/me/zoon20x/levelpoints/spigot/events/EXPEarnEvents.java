@@ -235,7 +235,7 @@ public class EXPEarnEvents implements Listener {
         levelPoints.getEventUtils().triggerEXPEarn(player, playerData, mobData.getExp(), event);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onFarmEvent(FarmEvent event){
         Player player = event.getPlayer();
         if(event.isCancelled()){
@@ -255,6 +255,7 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         if(event.isRipe()){
+            System.out.println(data.getFarmRequired());
             if(playerData.getLevel() < data.getFarmRequired()){
                 event.setCancelled(true);
                 return;
@@ -265,7 +266,7 @@ public class EXPEarnEvents implements Listener {
 
 
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void triggerFarmEvent(BlockBreakEvent event) {
         if (event.isCancelled()) {
             return;
@@ -284,7 +285,7 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         Ageable ageable = (Ageable) blockData;
-        LevelPoints.getInstance().getEventUtils().triggerFarmEvent(block, player);
+        LevelPoints.getInstance().getEventUtils().triggerFarmEvent(block, player, event);
     }
 
 }

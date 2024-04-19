@@ -11,7 +11,7 @@ public class FarmData {
     public FarmData(Material material){
         this.material = material;
     }
-    public FarmData(Material material, double exp, int farmRequire){
+    public FarmData(Material material, double exp, int farmRequired){
         this.material = material;
         this.exp = exp;
         this.farmRequired = farmRequired;

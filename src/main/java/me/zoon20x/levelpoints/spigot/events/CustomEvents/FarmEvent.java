@@ -9,23 +9,26 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 
-public class FarmEvent extends BlockBreakEvent implements Cancellable {
+public class FarmEvent extends BlockBreakEvent {
 
-    private Boolean isCancelled;
     private Player player;
     private Ageable crop;
+    private BlockBreakEvent event;
 
 
     private static final HandlerList HANDLERS = new HandlerList();
-    public FarmEvent(Block block, Player player){
+    public FarmEvent(Block block, Player player, BlockBreakEvent event){
         super(block, player);
         this.player = player;
         this.crop = (Ageable) block.getBlockData();
-        this.isCancelled = false;
-
+        this.event = event;
     }
     public static HandlerList getHandlerList() {
         return HANDLERS;
+    }
+
+    public void setCancelled(boolean cancelled){
+        this.event.setCancelled(true);
     }
 
     @Override
@@ -35,17 +38,6 @@ public class FarmEvent extends BlockBreakEvent implements Cancellable {
 
     public Player getPlayer(){
         return this.player;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return this.isCancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.isCancelled = cancel;
-        super.setCancelled(cancel);
     }
 
     public boolean isRipe(){
