@@ -20,7 +20,7 @@ public class FarmEvent extends BlockBreakEvent implements Cancellable {
     public FarmEvent(Block block, Player player){
         super(block, player);
         this.player = player;
-        this.crop = (Ageable) block;
+        this.crop = (Ageable) block.getBlockData();
         this.isCancelled = false;
 
     }
