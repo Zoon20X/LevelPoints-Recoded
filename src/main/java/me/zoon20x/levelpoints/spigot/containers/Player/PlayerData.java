@@ -85,7 +85,6 @@ public class PlayerData implements PlayerAPI {
         }
         Player player = Bukkit.getPlayer(uuid);
         LevelPoints.getInstance().getEventUtils().triggerLevelUpEvent(player, this);
-        player.sendMessage(String.valueOf(this.level));
     }
     public boolean removeLevel(int level){
         if(this.level <= level){

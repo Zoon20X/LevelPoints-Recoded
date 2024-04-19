@@ -23,7 +23,11 @@ import me.zoon20x.levelpoints.spigot.containers.Mobs.MobSettings;
 import me.zoon20x.levelpoints.spigot.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.spigot.containers.World.WorldSettings;
 import me.zoon20x.levelpoints.spigot.containers.WorldGuardSettings;
+import me.zoon20x.levelpoints.spigot.utils.AntiAbuse;
+import org.bukkit.CropState;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -37,6 +41,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.Crops;
+import org.bukkit.material.MaterialData;
 
 public class EXPEarnEvents implements Listener {
 
@@ -82,27 +88,13 @@ public class EXPEarnEvents implements Listener {
             event.setCancelled(true);
             return;
         }
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if(itemStack.hasItemMeta()){
-            ItemMeta meta = itemStack.getItemMeta();
-            assert meta != null;
-            if(meta.hasEnchant(Enchantment.SILK_TOUCH)){
-                return;
-            }
+        if(!AntiAbuse.checkSilkTouch(player)){
+            return;
         }
 
         if(LevelPoints.getInstance().isWorldGuardEnabled()){
-            WorldGuardSettings worldGuardSettings = LevelPoints.getInstance().getWorldGuardSettings();
-            Location location = BukkitAdapter.adapt(block.getLocation());
-            RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-            RegionQuery query = container.createQuery();
-            ApplicableRegionSet set = query.getApplicableRegions(location);
-            for (ProtectedRegion region : set) {
-                if(region.getFlags().containsKey(worldGuardSettings.getLpsDisabled())){
-                   if(region.getFlag(worldGuardSettings.getLpsDisabled()) == StateFlag.State.DENY){
-                       return;
-                   }
-                }
+            if(!AntiAbuse.checkWorldGuard(BukkitAdapter.adapt(block.getLocation()))){
+                return;
             }
         }
 
@@ -110,6 +102,7 @@ public class EXPEarnEvents implements Listener {
 
 
     }
+
 
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -236,6 +229,37 @@ public class EXPEarnEvents implements Listener {
         }
         PlayerData playerData = levelPoints.getPlayerStorage().getPlayerData(player.getUniqueId());
         levelPoints.getEventUtils().triggerEXPEarn(player, playerData, mobData.getExp(), event);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onFarmEvent(BlockBreakEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+        Player player = event.getPlayer();
+        if (LevelPoints.getInstance().getLpsSettings().getWorldSettings().isEnabled()) {
+            WorldSettings worldSettings = LevelPoints.getInstance().getLpsSettings().getWorldSettings();
+            if (worldSettings.hasWorld(player.getWorld().getName())) {
+                return;
+            }
+        }
+        Block block = event.getBlock();
+        MaterialData materialData = block.getState().getData();
+        if(!(materialData instanceof Crops)){
+            return;
+        }
+
+        CropState cropState = ((Crops) materialData).getState();
+
+
+        if(!AntiAbuse.checkWorldGuard(BukkitAdapter.adapt(block.getLocation()))){
+            return;
+        }
+
+        if(cropState == CropState.RIPE){
+            PlayerData playerData = levelPoints.getPlayerStorage().getPlayerData(player.getUniqueId());
+            levelPoints.getEventUtils().triggerEXPEarn(player, playerData, 5, event);
+        }
     }
 
 }

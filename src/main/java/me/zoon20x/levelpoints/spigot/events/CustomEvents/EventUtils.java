@@ -23,7 +23,6 @@ public class EventUtils{
             return;
         }
         data.addExp(exp);
-        player.sendMessage(data.getExp() + "/" + data.getRequiredEXP());
         LangEventsData langEventsData = LevelPoints.getInstance().getLang().getLangEventsData("OnExp");
         if(!langEventsData.isEnabled()){
             return;
