@@ -6,6 +6,7 @@ import me.zoon20x.levelpoints.spigot.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.spigot.utils.messages.LangEventsData;
 import me.zoon20x.levelpoints.spigot.utils.placeholders.LocalPlaceholders;
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -42,5 +43,9 @@ public class EventUtils{
         Bukkit.getPluginManager().callEvent(levelUpEvent);
 
     }
+    public void triggerFarmEvent(Block block, Player player){
+        FarmEvent farmEvent = new FarmEvent(block, player);
+        Bukkit.getPluginManager().callEvent(farmEvent);
 
+    }
 }

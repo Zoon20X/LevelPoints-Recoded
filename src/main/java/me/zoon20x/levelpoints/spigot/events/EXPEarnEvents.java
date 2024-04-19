@@ -18,11 +18,15 @@ import io.lumine.mythic.bukkit.utils.lib.jooq.impl.QOM;
 import me.zoon20x.levelpoints.spigot.LevelPoints;
 import me.zoon20x.levelpoints.spigot.containers.Blocks.BlockData;
 import me.zoon20x.levelpoints.spigot.containers.Blocks.BlockSettings;
+import me.zoon20x.levelpoints.spigot.containers.Farming.FarmData;
+import me.zoon20x.levelpoints.spigot.containers.Farming.FarmSettings;
 import me.zoon20x.levelpoints.spigot.containers.Mobs.MobData;
 import me.zoon20x.levelpoints.spigot.containers.Mobs.MobSettings;
 import me.zoon20x.levelpoints.spigot.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.spigot.containers.World.WorldSettings;
 import me.zoon20x.levelpoints.spigot.containers.WorldGuardSettings;
+import me.zoon20x.levelpoints.spigot.events.CustomEvents.EventUtils;
+import me.zoon20x.levelpoints.spigot.events.CustomEvents.FarmEvent;
 import me.zoon20x.levelpoints.spigot.utils.AntiAbuse;
 import org.bukkit.CropState;
 import org.bukkit.block.Block;
@@ -231,8 +235,38 @@ public class EXPEarnEvents implements Listener {
         levelPoints.getEventUtils().triggerEXPEarn(player, playerData, mobData.getExp(), event);
     }
 
+    @EventHandler
+    public void onFarmEvent(FarmEvent event){
+        Player player = event.getPlayer();
+        if(event.isCancelled()){
+            return;
+        }
+        Ageable crop = event.getCrop();
+        FarmSettings farmSettings = LevelPoints.getInstance().getLpsSettings().getFarmSettings();
+        if(!farmSettings.isEnabled()){
+            return;
+        }
+        PlayerData playerData = levelPoints.getPlayerStorage().getPlayerData(player.getUniqueId());
+        if(!farmSettings.hasFarm(crop.getMaterial())){
+            return;
+        }
+        FarmData data = farmSettings.getFarmData(crop.getMaterial());
+        if(!AntiAbuse.checkWorldGuard(BukkitAdapter.adapt(event.getBlock().getLocation()))){
+            return;
+        }
+        if(event.isRipe()){
+            if(playerData.getLevel() < data.getFarmRequired()){
+                event.setCancelled(true);
+                return;
+            }
+            levelPoints.getEventUtils().triggerEXPEarn(player, playerData, data.getExp(), event);
+        }
+    }
+
+
+
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onFarmEvent(BlockBreakEvent event) {
+    public void triggerFarmEvent(BlockBreakEvent event) {
         if (event.isCancelled()) {
             return;
         }
@@ -244,22 +278,13 @@ public class EXPEarnEvents implements Listener {
             }
         }
         Block block = event.getBlock();
-        MaterialData materialData = block.getState().getData();
-        if(!(materialData instanceof Crops)){
+        org.bukkit.block.data.BlockData blockData = block.getBlockData();
+        if(!(blockData instanceof Ageable)){
+            System.out.println(blockData);
             return;
         }
-
-        CropState cropState = ((Crops) materialData).getState();
-
-
-        if(!AntiAbuse.checkWorldGuard(BukkitAdapter.adapt(block.getLocation()))){
-            return;
-        }
-
-        if(cropState == CropState.RIPE){
-            PlayerData playerData = levelPoints.getPlayerStorage().getPlayerData(player.getUniqueId());
-            levelPoints.getEventUtils().triggerEXPEarn(player, playerData, 5, event);
-        }
+        Ageable ageable = (Ageable) blockData;
+        LevelPoints.getInstance().getEventUtils().triggerFarmEvent(block, player);
     }
 
 }

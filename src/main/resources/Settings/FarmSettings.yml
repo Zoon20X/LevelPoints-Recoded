@@ -1,0 +1,7 @@
+Farming:
+  Enabled: true
+  Settings:
+    WHEAT:
+      Exp: 1.0
+      RequiredLevel:
+        Farm: 0

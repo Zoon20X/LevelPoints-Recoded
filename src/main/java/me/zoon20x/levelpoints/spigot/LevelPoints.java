@@ -193,6 +193,7 @@ public final class LevelPoints extends JavaPlugin {
         getLpsSettings().getLevelSettings().reload();
         getLpsSettings().getBlockSettings().reload();
         getLpsSettings().getMobSettings().reload();
+        getLpsSettings().getFarmSettings().reload();
         getLpsSettings().getWorldSettings().reload();
         getTopSettings().reload();
         getLang().reload();

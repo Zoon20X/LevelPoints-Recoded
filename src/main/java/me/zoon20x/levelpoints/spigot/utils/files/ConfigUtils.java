@@ -19,6 +19,7 @@ public class ConfigUtils implements ConfigAPI {
 
     private final YamlDocument blockSettings;
     private final YamlDocument mobSettings;
+    private final YamlDocument farmSettings;
     private final YamlDocument langSettings;
     private final YamlDocument topSettings;
 
@@ -32,6 +33,7 @@ public class ConfigUtils implements ConfigAPI {
         levelSettings = createConfig("LevelSettings.yml", "/Settings/", true);
         blockSettings = createConfig("BlockSettings.yml", "/Settings/", false);
         mobSettings = createConfig("MobSettings.yml", "/Settings/", false);
+        farmSettings = createConfig("FarmSettings.yml", "/Settings/", false);
         topSettings = createConfig("TopSettings.yml", "/Settings/", true);
         langSettings = createConfig("lang.yml", "/", true);
         worldSettings = createConfig("WorldSettings.yml", "/Settings/", false);
@@ -114,5 +116,9 @@ public class ConfigUtils implements ConfigAPI {
 
     public YamlDocument getWorldSettings() {
         return worldSettings;
+    }
+
+    public YamlDocument getFarmSettings() {
+        return farmSettings;
     }
 }
