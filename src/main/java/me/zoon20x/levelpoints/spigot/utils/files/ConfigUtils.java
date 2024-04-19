@@ -26,33 +26,50 @@ public class ConfigUtils implements ConfigAPI {
     private final YamlDocument mythicMobsSettings;
 
     public ConfigUtils(){
-        config = createConfig("config.yml", "/");
-        levelSettings = createConfig("LevelSettings.yml", "/Settings/");
-        blockSettings = createConfig("BlockSettings.yml", "/Settings/");
-        mobSettings = createConfig("MobSettings.yml", "/Settings/");
-        topSettings = createConfig("TopSettings.yml", "/Settings/");
-        langSettings = createConfig("lang.yml", "/");
+        config = createConfig("config.yml", "/", true);
+        levelSettings = createConfig("LevelSettings.yml", "/Settings/", true);
+        blockSettings = createConfig("BlockSettings.yml", "/Settings/", false);
+        mobSettings = createConfig("MobSettings.yml", "/Settings/", false);
+        topSettings = createConfig("TopSettings.yml", "/Settings/", true);
+        langSettings = createConfig("lang.yml", "/", true);
 
-        mythicMobsSettings = createConfig("MythicMobs.yml", "/ExtraSupport/");
+        mythicMobsSettings = createConfig("MythicMobs.yml", "/ExtraSupport/", false);
     }
 
 
 
-    private YamlDocument createConfig(String fileName, String location){
-        try {
-            YamlDocument config = YamlDocument.create(new File(LevelPoints.getInstance().getDataFolder() + location, fileName),
-                    getClass().getResourceAsStream( location + fileName),
-                    GeneralSettings.builder().setUseDefaults(false).build(),
-                    LoaderSettings.builder().setAutoUpdate(true).build(),
-                    DumperSettings.DEFAULT,
-                    UpdaterSettings.builder().setVersioning(new BasicVersioning("file-version")).setOptionSorting(UpdaterSettings.OptionSorting.SORT_BY_DEFAULTS).build());
+    private YamlDocument createConfig(String fileName, String location, boolean useFileVersion){
+        if(useFileVersion) {
+            try {
+                YamlDocument config = YamlDocument.create(new File(LevelPoints.getInstance().getDataFolder() + location, fileName),
+                        getClass().getResourceAsStream(location + fileName),
+                        GeneralSettings.builder().setUseDefaults(false).build(),
+                        LoaderSettings.builder().setAutoUpdate(true).build(),
+                        DumperSettings.DEFAULT,
+                        UpdaterSettings.builder().setVersioning(new BasicVersioning("file-version")).setOptionSorting(UpdaterSettings.OptionSorting.SORT_BY_DEFAULTS).build());
 
-            config.update();
+                config.update();
 
-            config.save();
-            return config;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+                config.save();
+                return config;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            try {
+                YamlDocument config = YamlDocument.create(new File(LevelPoints.getInstance().getDataFolder() + location, fileName),
+                        getClass().getResourceAsStream(location + fileName),
+                        GeneralSettings.builder().setUseDefaults(false).build(),
+                        DumperSettings.DEFAULT);
+
+                config.update();
+
+                config.save();
+                return config;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
         }
     }
 

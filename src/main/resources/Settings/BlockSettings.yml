@@ -1,7 +1,5 @@
-file-version: '1'
-
 Blocks:
-  Enabled: false
+  Enabled: true
   Settings:
     DIRT:
       Exp: 1.0
