@@ -9,14 +9,16 @@ import com.sk89q.worldguard.session.SessionManager;
 public class WorldGuardSettings {
     private final IntegerFlag levelRequiredFlag;
     private final StringFlag levelRequiredDenyMessage;
+    private final StateFlag lpsDisabled;
 
     public WorldGuardSettings() {
       levelRequiredFlag = new IntegerFlag("level-required-entry");
       levelRequiredDenyMessage = new StringFlag("level-required-deny-message");
+      lpsDisabled = new StateFlag("lps-exp-earn", true);
 
       loadFlag(levelRequiredFlag);
       loadFlag(levelRequiredDenyMessage);
-
+      loadFlag(lpsDisabled);
     }
 
     private void loadFlag(Flag flag) {
@@ -39,5 +41,9 @@ public class WorldGuardSettings {
 
     public StringFlag getLevelRequiredDenyMessage() {
         return levelRequiredDenyMessage;
+    }
+
+    public StateFlag getLpsDisabled() {
+        return lpsDisabled;
     }
 }

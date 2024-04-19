@@ -1,5 +1,18 @@
 package me.zoon20x.levelpoints.spigot.events;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.util.Location;
+import com.sk89q.worldedit.world.World;
+import com.sk89q.worldguard.LocalPlayer;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.internal.platform.WorldGuardPlatform;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import com.sk89q.worldguard.protection.regions.RegionContainer;
+import com.sk89q.worldguard.protection.regions.RegionQuery;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.utils.lib.jooq.impl.QOM;
 import me.zoon20x.levelpoints.spigot.LevelPoints;
@@ -9,6 +22,7 @@ import me.zoon20x.levelpoints.spigot.containers.Mobs.MobData;
 import me.zoon20x.levelpoints.spigot.containers.Mobs.MobSettings;
 import me.zoon20x.levelpoints.spigot.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.spigot.containers.World.WorldSettings;
+import me.zoon20x.levelpoints.spigot.containers.WorldGuardSettings;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -74,6 +88,21 @@ public class EXPEarnEvents implements Listener {
             assert meta != null;
             if(meta.hasEnchant(Enchantment.SILK_TOUCH)){
                 return;
+            }
+        }
+
+        if(LevelPoints.getInstance().isWorldGuardEnabled()){
+            WorldGuardSettings worldGuardSettings = LevelPoints.getInstance().getWorldGuardSettings();
+            Location location = BukkitAdapter.adapt(block.getLocation());
+            RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+            RegionQuery query = container.createQuery();
+            ApplicableRegionSet set = query.getApplicableRegions(location);
+            for (ProtectedRegion region : set) {
+                if(region.getFlags().containsKey(worldGuardSettings.getLpsDisabled())){
+                   if(region.getFlag(worldGuardSettings.getLpsDisabled()) == StateFlag.State.DENY){
+                       return;
+                   }
+                }
             }
         }
 

@@ -66,6 +66,7 @@ public final class LevelPoints extends JavaPlugin {
     private CnsSettings cnsSettings;
 
     private WorldGuardSettings worldGuardSettings;
+    private boolean worldGuardEnabled;
 
 
     @Override
@@ -83,9 +84,10 @@ public final class LevelPoints extends JavaPlugin {
         loadEvents();
         loadCommands();
         loadCNSSupport();
-
+        worldGuardEnabled = false;
         if(Bukkit.getPluginManager().isPluginEnabled("WorldGuard")){
            this.worldGuardSettings.loadHandler();
+           this.worldGuardEnabled = true;
         }
 
         if (getDescription().getVersion().contains("DEV")) {
@@ -284,5 +286,9 @@ public final class LevelPoints extends JavaPlugin {
 
     public WorldGuardSettings getWorldGuardSettings() {
         return worldGuardSettings;
+    }
+
+    public boolean isWorldGuardEnabled() {
+        return worldGuardEnabled;
     }
 }

@@ -55,7 +55,6 @@ public class TopSettings {
     private void scan() {
         if(!topDataList.isEmpty()){
             topDataList.clear();
-            LevelPoints.getInstance().log(DebugSeverity.SEVER, "Top Cleared");
         }
         long startTime = System.nanoTime();
         Bukkit.getOnlinePlayers().forEach(player -> {
@@ -81,7 +80,6 @@ public class TopSettings {
         }
         long endTime = System.nanoTime();
         long duration = ((endTime - startTime) / 1000000);
-        LevelPoints.getInstance().log(DebugSeverity.SEVER, "Top Took - " + duration + "ms");
         sort();
 
     }
