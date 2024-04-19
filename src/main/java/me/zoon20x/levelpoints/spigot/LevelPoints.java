@@ -213,6 +213,9 @@ public final class LevelPoints extends JavaPlugin {
         topSettings.getUpdateTask().cancel();
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (playerStorage.hasPlayer(player.getUniqueId())) {
+                if(getCnsSettings().isEnabled()){
+                    getNetwork().sendToProxy(playerStorage.getPlayerData(player.getUniqueId()));
+                }
                 playerStorage.savePlayerData(player.getUniqueId());
             }
         }
