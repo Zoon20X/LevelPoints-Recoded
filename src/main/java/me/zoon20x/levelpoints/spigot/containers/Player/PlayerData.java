@@ -38,6 +38,7 @@ public class PlayerData implements PlayerAPI {
     }
     @Override
     public void setLevel(int level){
+        this.exp = LevelPoints.getInstance().getLpsSettings().getLevelSettings().getStartingData().getExp();
         this.level = level;
         calculateRequiredEXP(level);
     }

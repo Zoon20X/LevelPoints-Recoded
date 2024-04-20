@@ -54,6 +54,10 @@ public class PlaceholderAPISettings extends PlaceholderExpansion {
         if (params.equalsIgnoreCase("remaining_level")) {
             return String.valueOf(LevelPoints.getInstance().getLpsSettings().getLevelSettings().getMaxData().getLevel() - data.getLevel());
         }
+        if(params.equalsIgnoreCase("isMax")){
+            return String.valueOf(data.isMax());
+        }
+
 
         if (params.contains("required_level_")) {
             String value = params.replace("required_level_", "");
