@@ -5,9 +5,9 @@ Starting:
   Experience: 0
   Prestige: 0
 Max:
-  Level: 4
+  Level: 100
   Prestige:
-    Enabled: true
+    Enabled: false
     Value: 10
 
 Experience:

@@ -1,6 +1,5 @@
 package me.zoon20x.levelpoints.spigot.utils;
 
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.util.Location;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -30,17 +29,6 @@ public class AntiAbuse {
                         return false;
                     }
                 }
-            }
-        }
-        return true;
-    }
-    public static boolean checkSilkTouch(Player player){
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if(itemStack.hasItemMeta()){
-            ItemMeta meta = itemStack.getItemMeta();
-            assert meta != null;
-            if(meta.hasEnchant(Enchantment.SILK_TOUCH)){
-                return false;
             }
         }
         return true;

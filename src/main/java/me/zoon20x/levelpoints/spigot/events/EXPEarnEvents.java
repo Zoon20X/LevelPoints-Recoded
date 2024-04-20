@@ -53,6 +53,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Crops;
 import org.bukkit.material.MaterialData;
+import org.checkerframework.checker.units.qual.A;
 
 public class EXPEarnEvents implements Listener {
 
@@ -110,8 +111,13 @@ public class EXPEarnEvents implements Listener {
             event.setCancelled(true);
             return;
         }
-        if(!AntiAbuse.checkSilkTouch(player)){
-            return;
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if(itemStack.hasItemMeta()){
+            ItemMeta meta = itemStack.getItemMeta();
+            assert meta != null;
+            if(meta.hasEnchant(Enchantment.SILK_TOUCH)){
+                return;
+            }
         }
 
         if(levelPoints.isWorldGuardEnabled()){
@@ -293,9 +299,12 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         FarmData data = farmSettings.getFarmData(crop.getMaterial());
-        if(!AntiAbuse.checkWorldGuard(BukkitAdapter.adapt(event.getBlock().getLocation()))){
-            return;
+        if(LevelPoints.getInstance().isWorldGuardEnabled()){
+            if(!AntiAbuse.checkWorldGuard(BukkitAdapter.adapt(event.getBlock().getLocation()))){
+                return;
+            }
         }
+
         if(event.isRipe()){
             if(playerData.getLevel() < data.getFarmRequired()){
                 LangEventsData langEventsData = levelPoints.getLang().getLangEventsData("FarmLevelRequirement");

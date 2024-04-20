@@ -40,7 +40,6 @@ public class RewardStorage {
         }
     }
     private YamlDocument loadFile(File file){
-        System.out.println(file.getName());
         try {
             YamlDocument config = YamlDocument.create(file,
                     getClass().getResourceAsStream("/Rewards/ExampleLevelUp.yml"),

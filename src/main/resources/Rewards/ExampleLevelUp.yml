@@ -1,4 +1,4 @@
-Enabled: true
+Enabled: false
 TriggerType: LevelUp
 Commands:
   - 'say {player} has received {reward}'

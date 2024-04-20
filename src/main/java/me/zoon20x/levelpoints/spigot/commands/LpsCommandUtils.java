@@ -33,12 +33,10 @@ public class LpsCommandUtils {
         }
 
         if (!LevelPoints.getInstance().getLang().hasLangData("Info")) {
-            LevelPoints.getInstance().log(DebugSeverity.WARNING,"does not contain INFO");
             return;
         }
         LangData langData = LevelPoints.getInstance().getLang().getLangData("Info");
         if (!langData.isEnabled()) {
-            LevelPoints.getInstance().log(DebugSeverity.WARNING,"Info Not enabled");
             return;
         }
         if(!sender.hasPermission("lps.player.info")){
