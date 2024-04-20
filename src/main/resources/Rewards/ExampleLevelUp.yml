@@ -1,12 +1,11 @@
 Enabled: true
-AutoTrigger: false
 TriggerType: LevelUp
 Commands:
   - 'say {player} has received {reward}'
 Messages:
   Enabled: false
   Text:
-    - 'PLAYER:CHAT:&aYou Are Awesome'
+    - '&aYou Are Awesome'
 TriggerValues:
   - 1
   - 2

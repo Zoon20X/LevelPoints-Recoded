@@ -56,6 +56,11 @@ public class EventUtils{
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), LocalPlaceholders.parse(command,key, data));
                 });
             }
+            if(rewardData.getMessageData().isEnabled()){
+                rewardData.getMessageData().getMessages().forEach(message ->{
+                    player.sendMessage(LevelPoints.getInstance().getMessagesUtil().getColor(LocalPlaceholders.parse(message, key, data)));
+                });
+            }
         }
 
     }
@@ -72,6 +77,11 @@ public class EventUtils{
             if(rewardData.getTriggerValues().contains(data.getPrestige())){
                 rewardData.getCommands().forEach(command ->{
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), LocalPlaceholders.parse(command,key, data));
+                });
+            }
+            if(rewardData.getMessageData().isEnabled()){
+                rewardData.getMessageData().getMessages().forEach(message ->{
+                    player.sendMessage(LevelPoints.getInstance().getMessagesUtil().getColor(LocalPlaceholders.parse(message, key, data)));
                 });
             }
         }
