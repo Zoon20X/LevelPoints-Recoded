@@ -205,6 +205,7 @@ public final class LevelPoints extends JavaPlugin {
         getLpsSettings().getFarmSettings().reload();
         getLpsSettings().getWorldSettings().reload();
         getTopSettings().reload();
+        getConfigUtils().getMythicMobsSettings().reload();
         getLang().reload();
         for (Player player : Bukkit.getOnlinePlayers()) {
             playerStorage.reloadPlayer(player.getUniqueId());
