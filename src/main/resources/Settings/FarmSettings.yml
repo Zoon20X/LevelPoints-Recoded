@@ -1,3 +1,5 @@
+file-version: '1'
+
 Farming:
   Enabled: true
   Settings:

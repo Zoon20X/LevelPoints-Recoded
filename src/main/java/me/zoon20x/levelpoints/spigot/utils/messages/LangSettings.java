@@ -17,7 +17,6 @@ public class LangSettings {
 
     public LangSettings(){
         load();
-        loadEventsLang("OnExp");
     }
     public void reload() throws IOException {
         langDataMap.clear();
@@ -25,7 +24,6 @@ public class LangSettings {
         YamlDocument config = LevelPoints.getInstance().getConfigUtils().getLangSettings();
         config.reload();
         load();
-        loadEventsLang("OnExp");
     }
     private void load(){
         YamlDocument config = LevelPoints.getInstance().getConfigUtils().getLangSettings();
@@ -53,6 +51,8 @@ public class LangSettings {
             }
             addLangData(key, langData);
         }
+        loadEventsLang("OnExp");
+        loadEventsLang("BreakLevelRequirement");
     }
     private void loadEventsLang(String event){
         YamlDocument config = LevelPoints.getInstance().getConfigUtils().getLangSettings();

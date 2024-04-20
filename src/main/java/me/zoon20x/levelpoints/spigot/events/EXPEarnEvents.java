@@ -28,6 +28,8 @@ import me.zoon20x.levelpoints.spigot.containers.WorldGuardSettings;
 import me.zoon20x.levelpoints.spigot.events.CustomEvents.EventUtils;
 import me.zoon20x.levelpoints.spigot.events.CustomEvents.FarmEvent;
 import me.zoon20x.levelpoints.spigot.utils.AntiAbuse;
+import me.zoon20x.levelpoints.spigot.utils.messages.LangEventsData;
+import me.zoon20x.levelpoints.spigot.utils.placeholders.LocalPlaceholders;
 import org.bukkit.CropState;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -89,6 +91,18 @@ public class EXPEarnEvents implements Listener {
         PlayerData playerData = levelPoints.getPlayerStorage().getPlayerData(player.getUniqueId());
 
         if(playerData.getLevel() < blockData.getBreakLevelRequired()){
+            LangEventsData langEventsData = LevelPoints.getInstance().getLang().getLangEventsData("BreakLevelRequirement");
+            if(!langEventsData.isEnabled()){
+                return;
+            }
+            switch (langEventsData.getMessageType()){
+                case ACTIONBAR:
+                    LevelPoints.getInstance().getMessagesUtil().sendActionBar(player, LocalPlaceholders.parse(langEventsData.getMessage(),blockData.getBreakLevelRequired(), playerData));
+                    break;
+                case CHAT:
+                    player.sendMessage(LocalPlaceholders.parse(langEventsData.getMessage(), blockData.getBreakLevelRequired(), playerData));
+                    break;
+            }
             event.setCancelled(true);
             return;
         }
@@ -255,7 +269,6 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         if(event.isRipe()){
-            System.out.println(data.getFarmRequired());
             if(playerData.getLevel() < data.getFarmRequired()){
                 event.setCancelled(true);
                 return;
@@ -281,7 +294,6 @@ public class EXPEarnEvents implements Listener {
         Block block = event.getBlock();
         org.bukkit.block.data.BlockData blockData = block.getBlockData();
         if(!(blockData instanceof Ageable)){
-            System.out.println(blockData);
             return;
         }
         Ageable ageable = (Ageable) blockData;

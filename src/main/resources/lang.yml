@@ -1,4 +1,4 @@
-file-version: '1'
+file-version: '2'
 Progressbar:
   MinStep: 1
   MaxStep: 5
@@ -120,3 +120,7 @@ MessageEvents:
     Enabled: true
     Type: ACTIONBAR
     Message: '&3Level: &b{lps_level} &3|&b {lps_exp}/{lps_required_exp}'
+  BreakLevelRequirement:
+    Enabled: true
+    Type: ACTIONBAR
+    Message: '&3Sorry but you must be {lps_required_level}'

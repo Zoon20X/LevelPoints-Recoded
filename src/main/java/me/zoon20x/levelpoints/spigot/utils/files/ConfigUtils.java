@@ -31,12 +31,12 @@ public class ConfigUtils implements ConfigAPI {
     public ConfigUtils(){
         config = createConfig("config.yml", "/", true);
         levelSettings = createConfig("LevelSettings.yml", "/Settings/", true);
-        blockSettings = createConfig("BlockSettings.yml", "/Settings/", false);
-        mobSettings = createConfig("MobSettings.yml", "/Settings/", false);
-        farmSettings = createConfig("FarmSettings.yml", "/Settings/", false);
+        blockSettings = createConfig("BlockSettings.yml", "/Settings/", true);
+        mobSettings = createConfig("MobSettings.yml", "/Settings/", true);
+        farmSettings = createConfig("FarmSettings.yml", "/Settings/", true);
         topSettings = createConfig("TopSettings.yml", "/Settings/", true);
         langSettings = createConfig("lang.yml", "/", true);
-        worldSettings = createConfig("WorldSettings.yml", "/Settings/", false);
+        worldSettings = createConfig("WorldSettings.yml", "/Settings/", true);
 
         mythicMobsSettings = createConfig("MythicMobs.yml", "/ExtraSupport/", true);
     }
@@ -64,11 +64,9 @@ public class ConfigUtils implements ConfigAPI {
             try {
                 YamlDocument config = YamlDocument.create(new File(LevelPoints.getInstance().getDataFolder() + location, fileName),
                         getClass().getResourceAsStream(location + fileName),
-                        GeneralSettings.builder().setUseDefaults(false).build(),
-                        DumperSettings.DEFAULT);
+                        GeneralSettings.builder().setUseDefaults(false).build());
 
                 config.update();
-
                 config.save();
                 return config;
             } catch (IOException e) {
