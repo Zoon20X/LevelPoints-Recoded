@@ -7,10 +7,13 @@ import org.bukkit.Bukkit;
 public class LocalPlaceholders {
 
     public static String parse(String message, PlayerData data){
-        return replaceText(message,0, data, 0, 0);
+        return replaceText(message, data);
+    }
+    public static String parse(String message,String reward ,PlayerData data){
+        return replaceText(message,reward, data);
     }
     public static String parse(String message, int requiredLevel, PlayerData data){
-        return replaceText(message,requiredLevel, data, 0,0);
+        return replaceText(message,requiredLevel, data);
     }
     public static String parse(String message, int level, String name, int topPosition, int topPage){
         return replaceText(message,level, name, topPosition, topPage);
@@ -20,19 +23,23 @@ public class LocalPlaceholders {
         return replaceText(message,blank, name, topPosition, topPage);
     }
 
-    private static String replaceText(String message, int requiredLevel, PlayerData data, int topPosition, int topPage){
+    private static String replaceText(String message, PlayerData data){
         return message
                 .replace("{lps_level}", String.valueOf(data.getLevel()))
                 .replace("{lps_exp}", String.valueOf(data.getExp()))
                 .replace("{lps_prestige}", String.valueOf(data.getPrestige()))
                 .replace("{lps_required_exp}", String.valueOf(data.getRequiredEXP()))
                 .replace("{lps_max}", String.valueOf(data.isMax()))
-                .replace("{lps_required_level}", String.valueOf(requiredLevel))
-                .replace("{lps_top_position}", String.valueOf(topPosition))
-                .replace("{lps_top_page}", String.valueOf(topPage))
-                .replace("{lps_top_page_max}", String.valueOf(LevelPoints.getInstance().getTopSettings().getMaxPages()))
                 .replace("{lps_progress_bar}", ProgressStatics.makeProgressBar(LevelPoints.getInstance().getLang().getBarSettings(), data.getExp(), data.getRequiredEXP()))
                 .replace("{player}", data.getName());
+    }
+    private static String replaceText(String message, String reward, PlayerData data){
+        return replaceText(message, data)
+                .replace("{reward}", reward);
+    }
+    private static String replaceText(String message, int requiredLevel, PlayerData data){
+        return replaceText(message, data)
+                .replace("{lps_required_level}", String.valueOf(requiredLevel));
     }
     private static String replaceText(String message, int level, String name, int topPosition, int topPage){
             return message

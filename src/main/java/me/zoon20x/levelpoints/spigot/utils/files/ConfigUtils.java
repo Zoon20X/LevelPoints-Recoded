@@ -65,7 +65,6 @@ public class ConfigUtils implements ConfigAPI {
                 YamlDocument config = YamlDocument.create(new File(LevelPoints.getInstance().getDataFolder() + location, fileName),
                         getClass().getResourceAsStream(location + fileName),
                         GeneralSettings.builder().setUseDefaults(false).build());
-
                 config.update();
                 config.save();
                 return config;

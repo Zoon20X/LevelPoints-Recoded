@@ -1,0 +1,46 @@
+Rewards:
+  ExampleLevelUp:
+    TriggerType: LEVELUP
+    Commands:
+      - 'say {player} has received {reward} reward'
+    Message:
+      Enabled: false
+      Text:
+        - 'GLOBAL;CHAT;&bPlayer has reward'
+        - 'PLAYER;CHAT;&bPlayer has reward'
+        - 'PLAYER;TITLE;&bPlayer has reward|{reward}'
+    Sound:
+      Enabled: false
+      Type: ENTITY_PLAYER_LEVELUP
+      Volume: 1
+      Pitch: 0
+    TriggerValues:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+    TriggerPrestige:
+      - 0
+      - 1
+  ExamplePrestige:
+    TriggerType: PRESTIGE
+    Commands:
+      - 'say {player} has received {reward} reward'
+    Message:
+      Enabled: false
+      Text:
+        - 'GLOBAL;CHAT;&bPlayer has reward'
+        - 'PLAYER;CHAT;&bPlayer has reward'
+        - 'PLAYER;TITLE;&bPlayer has reward|{reward}'
+    Sound:
+      Enabled: false
+      Type: ENTITY_PLAYER_LEVELUP
+      Volume: 1
+      Pitch: 0
+    TriggerValues:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5

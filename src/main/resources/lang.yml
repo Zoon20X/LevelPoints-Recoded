@@ -85,7 +85,7 @@ Lang:
   Exp:
     Enabled: true
     CenterText: false
-    Message: '&3LevelPoints>> &bUpdated player data for {player}'
+    Message: '&3LevelPoints>> &bUpdated player data for &f{player}'
     Children:
       NoPermission:
         Enabled: true
@@ -96,7 +96,7 @@ Lang:
   Level:
     Enabled: true
     CenterText: false
-    Message: '&3LevelPoints>> &bUpdated player data for {player}'
+    Message: '&3LevelPoints>> &bUpdated player data for &f{player}'
     Children:
       NoPermission:
         Enabled: true

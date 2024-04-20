@@ -4,6 +4,7 @@ import dev.dejvokep.boostedyaml.YamlDocument;
 import me.zoon20x.levelpoints.spigot.API.PlayerAPI;
 import me.zoon20x.levelpoints.spigot.LevelPoints;
 import me.zoon20x.levelpoints.spigot.containers.Levels.LevelSettings;
+import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -75,7 +76,6 @@ public class PlayerData implements PlayerAPI {
                 addPrestige();
             }
             this.exp = 0;
-            this.level = LevelPoints.getInstance().getLpsSettings().getLevelSettings().getMaxData().getLevel();
             return;
         }
         this.level = temp;
@@ -115,8 +115,14 @@ public class PlayerData implements PlayerAPI {
             return;
         }
         this.prestige = temp;
-        setLevel(LevelPoints.getInstance().getLpsSettings().getLevelSettings().getStartingData().getLevel());
+        this.level = LevelPoints.getInstance().getLpsSettings().getLevelSettings().getStartingData().getLevel();
         this.exp = LevelPoints.getInstance().getLpsSettings().getLevelSettings().getStartingData().getExp();
+        if(Bukkit.getPlayer(uuid) == null){
+            return;
+        }
+        Player player = Bukkit.getPlayer(uuid);
+        LevelPoints.getInstance().getEventUtils().triggerPrestigeEvent(player, this);
+
     }
 
     private double calculateRequiredEXP(int level){

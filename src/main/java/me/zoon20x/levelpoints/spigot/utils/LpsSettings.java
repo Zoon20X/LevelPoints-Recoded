@@ -15,6 +15,7 @@ public class LpsSettings {
     private final FarmSettings farmSettings;
     private final WorldSettings worldSettings;
 
+
     private final boolean mythicMobsEnabled;
 
     public LpsSettings(LevelPoints levelPoints){

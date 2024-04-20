@@ -1,13 +1,22 @@
 package me.zoon20x.levelpoints.spigot.events;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
+import io.lumine.mythic.bukkit.utils.lib.jooq.impl.QOM;
 import me.zoon20x.levelpoints.CrossNetworkStorage.Objects.NetworkPlayer;
 import me.zoon20x.levelpoints.CrossNetworkStorage.Objects.NetworkResponse;
 import me.zoon20x.levelpoints.CrossNetworkStorage.Objects.Response;
 import me.zoon20x.levelpoints.spigot.LevelPoints;
 import me.zoon20x.levelpoints.spigot.containers.CnsSettings;
+import me.zoon20x.levelpoints.spigot.containers.Player.PlayerData;
 import me.zoon20x.levelpoints.spigot.containers.Player.PlayerStorage;
+import me.zoon20x.levelpoints.spigot.containers.Rewards.RewardData;
+import me.zoon20x.levelpoints.spigot.containers.Rewards.RewardStorage;
+import me.zoon20x.levelpoints.spigot.containers.Rewards.TriggerType;
+import me.zoon20x.levelpoints.spigot.events.CustomEvents.LevelUpEvent;
 import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
+import me.zoon20x.levelpoints.spigot.utils.placeholders.LocalPlaceholders;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,6 +27,17 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.UUID;
 
 public class PlayerStorageEvents implements Listener {
+
+
+    @EventHandler
+    public void onLevelUp(LevelUpEvent event){
+        Player player = event.getPlayer();
+        PlayerData data = event.getPlayerData();
+
+    }
+
+
+
 
     @EventHandler
     public void onAsyncJoin(AsyncPlayerPreLoginEvent event){

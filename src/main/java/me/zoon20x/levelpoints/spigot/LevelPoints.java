@@ -19,6 +19,7 @@ import me.zoon20x.levelpoints.spigot.API.LevelPointsAPI;
 import me.zoon20x.levelpoints.spigot.NetworkUtils.Network;
 import me.zoon20x.levelpoints.spigot.commands.AdminLps;
 import me.zoon20x.levelpoints.spigot.containers.CnsSettings;
+import me.zoon20x.levelpoints.spigot.containers.Rewards.RewardStorage;
 import me.zoon20x.levelpoints.spigot.containers.WorldGuardSettings;
 import me.zoon20x.levelpoints.spigot.events.CustomEvents.EventUtils;
 import me.zoon20x.levelpoints.spigot.utils.files.ConfigUtils;
@@ -71,6 +72,8 @@ public final class LevelPoints extends JavaPlugin {
     private boolean placeholderAPIEnabled;
     private PlaceholderAPISettings placeholderAPISettings;
 
+    private RewardStorage rewardStorage;
+
 
     @Override
     public void onEnable() {
@@ -98,6 +101,8 @@ public final class LevelPoints extends JavaPlugin {
             placeholderAPISettings.register();
             this.placeholderAPIEnabled = true;
         }
+        rewardStorage = new RewardStorage();
+
 
         if (getDescription().getVersion().contains("DEV")) {
             loadDev();
@@ -312,5 +317,9 @@ public final class LevelPoints extends JavaPlugin {
 
     public PlaceholderAPISettings getPlaceholderAPISettings() {
         return placeholderAPISettings;
+    }
+
+    public RewardStorage getRewardStorage() {
+        return rewardStorage;
     }
 }
