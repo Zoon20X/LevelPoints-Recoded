@@ -7,7 +7,7 @@ description: A full leveling system built from the ground up
 softdepend:
   - MythicMobs
   - WorldGuard
-
+  - PlaceholderAPI
 commands:
   lps:
     usage: /<command>

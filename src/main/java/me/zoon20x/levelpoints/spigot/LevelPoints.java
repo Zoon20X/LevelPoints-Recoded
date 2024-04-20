@@ -32,6 +32,7 @@ import me.zoon20x.levelpoints.spigot.events.EXPEarnEvents;
 import me.zoon20x.levelpoints.spigot.events.PlayerStorageEvents;
 import me.zoon20x.levelpoints.spigot.utils.LpsSettings;
 import me.zoon20x.levelpoints.spigot.utils.messages.LangSettings;
+import me.zoon20x.levelpoints.spigot.utils.placeholders.PlaceholderAPISettings;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -67,6 +68,8 @@ public final class LevelPoints extends JavaPlugin {
 
     private WorldGuardSettings worldGuardSettings;
     private boolean worldGuardEnabled;
+    private boolean placeholderAPIEnabled;
+    private PlaceholderAPISettings placeholderAPISettings;
 
 
     @Override
@@ -85,9 +88,15 @@ public final class LevelPoints extends JavaPlugin {
         loadCommands();
         loadCNSSupport();
         worldGuardEnabled = false;
-        if(Bukkit.getPluginManager().isPluginEnabled("WorldGuard")){
+        placeholderAPIEnabled = false;
+        if(Bukkit.getPluginManager().getPlugin("WorldGuard") != null){
            this.worldGuardSettings.loadHandler();
            this.worldGuardEnabled = true;
+        }
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
+            this.placeholderAPISettings = new PlaceholderAPISettings();
+            placeholderAPISettings.register();
+            this.placeholderAPIEnabled = true;
         }
 
         if (getDescription().getVersion().contains("DEV")) {
@@ -294,5 +303,13 @@ public final class LevelPoints extends JavaPlugin {
 
     public boolean isWorldGuardEnabled() {
         return worldGuardEnabled;
+    }
+
+    public boolean isPlaceholderAPIEnabled() {
+        return placeholderAPIEnabled;
+    }
+
+    public PlaceholderAPISettings getPlaceholderAPISettings() {
+        return placeholderAPISettings;
     }
 }
