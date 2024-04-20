@@ -7,6 +7,7 @@ import me.zoon20x.levelpoints.spigot.containers.Blocks.BlockData;
 import me.zoon20x.levelpoints.spigot.containers.Farming.FarmData;
 import me.zoon20x.levelpoints.spigot.containers.Mobs.MobData;
 import me.zoon20x.levelpoints.spigot.containers.Player.PlayerData;
+import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -56,7 +57,7 @@ public class PlaceholderAPISettings extends PlaceholderExpansion {
 
         if (params.contains("required_level_")) {
             String value = params.replace("required_level_", "");
-            String[] requiredData = params.split("_");
+            String[] requiredData = value.split(":");
             switch (requiredData[0]){
                 case "farm":
                     String farmType = requiredData[1];
