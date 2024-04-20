@@ -53,6 +53,9 @@ public class LangSettings {
         }
         loadEventsLang("OnExp");
         loadEventsLang("BreakLevelRequirement");
+        loadEventsLang("PlaceLevelRequirement");
+        loadEventsLang("FarmLevelRequirement");
+        loadEventsLang("AttackLevelRequirement");
     }
     private void loadEventsLang(String event){
         YamlDocument config = LevelPoints.getInstance().getConfigUtils().getLangSettings();

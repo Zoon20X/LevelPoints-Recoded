@@ -157,6 +157,18 @@ public class EXPEarnEvents implements Listener {
         }
         PlayerData playerData = levelPoints.getPlayerStorage().getPlayerData(player.getUniqueId());
         if(playerData.getLevel() < blockData.getPlaceLevelRequired()){
+            LangEventsData langEventsData = levelPoints.getLang().getLangEventsData("PlaceLevelRequirement");
+            if(!langEventsData.isEnabled()){
+                return;
+            }
+            switch (langEventsData.getMessageType()){
+                case ACTIONBAR:
+                    levelPoints.getMessagesUtil().sendActionBar(player, LocalPlaceholders.parse(langEventsData.getMessage(),blockData.getPlaceLevelRequired(), playerData));
+                    break;
+                case CHAT:
+                    player.sendMessage(LocalPlaceholders.parse(langEventsData.getMessage(), blockData.getPlaceLevelRequired(), playerData));
+                    break;
+            }
             event.setCancelled(true);
             return;
         }
@@ -205,6 +217,18 @@ public class EXPEarnEvents implements Listener {
         }
         PlayerData playerData = levelPoints.getPlayerStorage().getPlayerData(player.getUniqueId());
         if(playerData.getLevel() < mobData.getAttackRequired()){
+            LangEventsData langEventsData = levelPoints.getLang().getLangEventsData("AttackLevelRequirement");
+            if(!langEventsData.isEnabled()){
+                return;
+            }
+            switch (langEventsData.getMessageType()){
+                case ACTIONBAR:
+                    levelPoints.getMessagesUtil().sendActionBar(player, LocalPlaceholders.parse(langEventsData.getMessage(),mobData.getAttackRequired(), playerData));
+                    break;
+                case CHAT:
+                    player.sendMessage(LocalPlaceholders.parse(langEventsData.getMessage(), mobData.getAttackRequired(), playerData));
+                    break;
+            }
             event.setCancelled(true);
             return;
         }
@@ -274,6 +298,18 @@ public class EXPEarnEvents implements Listener {
         }
         if(event.isRipe()){
             if(playerData.getLevel() < data.getFarmRequired()){
+                LangEventsData langEventsData = levelPoints.getLang().getLangEventsData("FarmLevelRequirement");
+                if(!langEventsData.isEnabled()){
+                    return;
+                }
+                switch (langEventsData.getMessageType()){
+                    case ACTIONBAR:
+                        levelPoints.getMessagesUtil().sendActionBar(player, LocalPlaceholders.parse(langEventsData.getMessage(),data.getFarmRequired(), playerData));
+                        break;
+                    case CHAT:
+                        player.sendMessage(LocalPlaceholders.parse(langEventsData.getMessage(), data.getFarmRequired(), playerData));
+                        break;
+                }
                 event.setCancelled(true);
                 return;
             }
