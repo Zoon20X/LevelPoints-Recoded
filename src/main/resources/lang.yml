@@ -123,4 +123,16 @@ MessageEvents:
   BreakLevelRequirement:
     Enabled: true
     Type: ACTIONBAR
-    Message: '&3Sorry but you must be {lps_required_level}'
+    Message: '&cSorry but you must be level &4{lps_required_level} &cto break this block'
+  PlaceLevelRequirement:
+    Enabled: true
+    Type: ACTIONBAR
+    Message: '&cSorry but you must be level &4{lps_required_level} &cto place this block'
+  FarmLevelRequirement:
+    Enabled: true
+    Type: ACTIONBAR
+    Message: '&cSorry but you must be level &4{lps_required_level} &cto farm this block'
+  AttackLevelRequirement:
+    Enabled: true
+    Type: ACTIONBAR
+    Message: '&cSorry but you must be level &4{lps_required_level} &cto attack this mob'

@@ -31,9 +31,11 @@ import me.zoon20x.levelpoints.spigot.utils.AntiAbuse;
 import me.zoon20x.levelpoints.spigot.utils.messages.LangEventsData;
 import me.zoon20x.levelpoints.spigot.utils.placeholders.LocalPlaceholders;
 import org.bukkit.CropState;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Ageable;
+import org.bukkit.block.data.type.Farmland;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -41,10 +43,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Crops;
@@ -65,8 +69,8 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         Player player = event.getPlayer();
-        if(LevelPoints.getInstance().getLpsSettings().getWorldSettings().isEnabled()){
-            WorldSettings worldSettings = LevelPoints.getInstance().getLpsSettings().getWorldSettings();
+        if(levelPoints.getLpsSettings().getWorldSettings().isEnabled()){
+            WorldSettings worldSettings = levelPoints.getLpsSettings().getWorldSettings();
             if(worldSettings.hasWorld(player.getWorld().getName())){
                 return;
             }
@@ -91,13 +95,13 @@ public class EXPEarnEvents implements Listener {
         PlayerData playerData = levelPoints.getPlayerStorage().getPlayerData(player.getUniqueId());
 
         if(playerData.getLevel() < blockData.getBreakLevelRequired()){
-            LangEventsData langEventsData = LevelPoints.getInstance().getLang().getLangEventsData("BreakLevelRequirement");
+            LangEventsData langEventsData = levelPoints.getLang().getLangEventsData("BreakLevelRequirement");
             if(!langEventsData.isEnabled()){
                 return;
             }
             switch (langEventsData.getMessageType()){
                 case ACTIONBAR:
-                    LevelPoints.getInstance().getMessagesUtil().sendActionBar(player, LocalPlaceholders.parse(langEventsData.getMessage(),blockData.getBreakLevelRequired(), playerData));
+                    levelPoints.getMessagesUtil().sendActionBar(player, LocalPlaceholders.parse(langEventsData.getMessage(),blockData.getBreakLevelRequired(), playerData));
                     break;
                 case CHAT:
                     player.sendMessage(LocalPlaceholders.parse(langEventsData.getMessage(), blockData.getBreakLevelRequired(), playerData));
@@ -110,7 +114,7 @@ public class EXPEarnEvents implements Listener {
             return;
         }
 
-        if(LevelPoints.getInstance().isWorldGuardEnabled()){
+        if(levelPoints.isWorldGuardEnabled()){
             if(!AntiAbuse.checkWorldGuard(BukkitAdapter.adapt(block.getLocation()))){
                 return;
             }
@@ -129,8 +133,8 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         Player player = event.getPlayer();
-        if(LevelPoints.getInstance().getLpsSettings().getWorldSettings().isEnabled()){
-            WorldSettings worldSettings = LevelPoints.getInstance().getLpsSettings().getWorldSettings();
+        if(levelPoints.getLpsSettings().getWorldSettings().isEnabled()){
+            WorldSettings worldSettings = levelPoints.getLpsSettings().getWorldSettings();
             if(worldSettings.hasWorld(player.getWorld().getName())){
                 return;
             }
@@ -172,8 +176,8 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         Player player = (Player) event.getDamager();
-        if(LevelPoints.getInstance().getLpsSettings().getWorldSettings().isEnabled()){
-            WorldSettings worldSettings = LevelPoints.getInstance().getLpsSettings().getWorldSettings();
+        if(levelPoints.getLpsSettings().getWorldSettings().isEnabled()){
+            WorldSettings worldSettings = levelPoints.getLpsSettings().getWorldSettings();
             if(worldSettings.hasWorld(player.getWorld().getName())){
                 return;
             }
@@ -217,14 +221,14 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         Player player = entity.getKiller();
-        if(LevelPoints.getInstance().getLpsSettings().getWorldSettings().isEnabled()){
-            WorldSettings worldSettings = LevelPoints.getInstance().getLpsSettings().getWorldSettings();
+        if(levelPoints.getLpsSettings().getWorldSettings().isEnabled()){
+            WorldSettings worldSettings = levelPoints.getLpsSettings().getWorldSettings();
             if(worldSettings.hasWorld(player.getWorld().getName())){
                 return;
             }
         }
         String entityType;
-        if(LevelPoints.getInstance().getLpsSettings().isMythicMobsEnabled()){
+        if(levelPoints.getLpsSettings().isMythicMobsEnabled()){
             boolean isMythicMob = MythicBukkit.inst().getMobManager().isMythicMob(entity);
             if(isMythicMob){
                 entityType = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity).getType().getInternalName();
@@ -256,7 +260,7 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         Ageable crop = event.getCrop();
-        FarmSettings farmSettings = LevelPoints.getInstance().getLpsSettings().getFarmSettings();
+        FarmSettings farmSettings = levelPoints.getLpsSettings().getFarmSettings();
         if(!farmSettings.isEnabled()){
             return;
         }
@@ -278,6 +282,26 @@ public class EXPEarnEvents implements Listener {
     }
 
 
+    @EventHandler
+    public void onTrample(PlayerInteractEvent event){
+        Player player = event.getPlayer();
+        if(!levelPoints.getLpsSettings().getFarmSettings().isEnabled()){
+            return;
+        }
+        if(!levelPoints.getLpsSettings().getFarmSettings().isTrampleDisabled()){
+            return;
+        }
+        if(!event.hasBlock()){
+            return;
+        }
+        if(event.getAction() != Action.PHYSICAL){
+            return;
+        }
+        if(event.getClickedBlock().getType() != Material.FARMLAND){
+            return;
+        }
+        event.setCancelled(true);
+    }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void triggerFarmEvent(BlockBreakEvent event) {
@@ -285,8 +309,8 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         Player player = event.getPlayer();
-        if (LevelPoints.getInstance().getLpsSettings().getWorldSettings().isEnabled()) {
-            WorldSettings worldSettings = LevelPoints.getInstance().getLpsSettings().getWorldSettings();
+        if (levelPoints.getLpsSettings().getWorldSettings().isEnabled()) {
+            WorldSettings worldSettings = levelPoints.getLpsSettings().getWorldSettings();
             if (worldSettings.hasWorld(player.getWorld().getName())) {
                 return;
             }
@@ -297,7 +321,7 @@ public class EXPEarnEvents implements Listener {
             return;
         }
         Ageable ageable = (Ageable) blockData;
-        LevelPoints.getInstance().getEventUtils().triggerFarmEvent(block, player, event);
+        levelPoints.getEventUtils().triggerFarmEvent(block, player, event);
     }
 
 }

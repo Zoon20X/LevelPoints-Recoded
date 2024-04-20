@@ -13,6 +13,7 @@ public class FarmSettings implements FarmSettingsAPI {
 
     private boolean enabled;
     private final HashMap<Material, FarmData> farmDataMap = new HashMap<>();
+    private boolean trampleDisabled;
 
     public FarmSettings(boolean isEnabled){
         setEnabled(isEnabled);
@@ -28,6 +29,7 @@ public class FarmSettings implements FarmSettingsAPI {
 
     private void load(){
         YamlDocument config = LevelPoints.getInstance().getConfigUtils().getFarmSettings();
+        trampleDisabled = config.getBoolean("Farming.Disable-Trample");
         config.getSection("Farming.Settings").getRoutesAsStrings(false).forEach(block ->{
             Material material = Material.getMaterial(block);
             int farmRequired = config.getInt("Farming.Settings." + block + ".RequiredLevel.Farm");
@@ -65,4 +67,7 @@ public class FarmSettings implements FarmSettingsAPI {
         return farmDataMap.get(material);
     }
 
+    public boolean isTrampleDisabled() {
+        return trampleDisabled;
+    }
 }

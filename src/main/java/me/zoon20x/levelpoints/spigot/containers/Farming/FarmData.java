@@ -7,7 +7,6 @@ public class FarmData {
     private double exp;
     private int farmRequired;
 
-
     public FarmData(Material material){
         this.material = material;
     }

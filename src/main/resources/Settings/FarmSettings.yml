@@ -2,6 +2,7 @@ file-version: '1'
 
 Farming:
   Enabled: true
+  Disable-Trample: true
   Settings:
     WHEAT:
       Exp: 1.0
