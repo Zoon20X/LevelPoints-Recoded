@@ -68,35 +68,27 @@ public class LevelPoints {
         this.networkSocketUtils = new NetworkSocketUtils(networkPort);
         this.network = new Network();
         this.netPlayerStorage = new NetPlayerStorage();
-
-
-        server.getScheduler().buildTask(this, ()->{
-            Collection<ScheduledTask> tasks = server.getScheduler().tasksByPlugin(this);
-            for (ScheduledTask task : tasks) {
-                System.out.println(task.status());
-                task.cancel();
-                System.out.println(task.status());
-            }
-        }).delay(10, TimeUnit.SECONDS);
     }
 
     @Subscribe
     public void onProxyShutDown(ProxyShutdownEvent event){
+        getNetPlayerStorage().getNetworkPlayerHashMap().keySet().forEach(uuid -> {
+            try {
+                getCachedPlayers().set(uuid.toString(), SerializeData.toString(getNetPlayerStorage().getPlayer(uuid)));
+                getCachedPlayers().save();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
+        getNetworkSocketUtils().close();
         Collection<ScheduledTask> tasks = server.getScheduler().tasksByPlugin(this);
-        for (ScheduledTask task : tasks) {
+        for (ScheduledTask task : tasks){
             System.out.println(task.status());
             task.cancel();
             System.out.println(task.status());
         }
-//        getNetPlayerStorage().getNetworkPlayerHashMap().keySet().forEach(uuid -> {
-//            try {
-//                getCachedPlayers().set(uuid.toString(), SerializeData.toString(getNetPlayerStorage().getPlayer(uuid)));
-//                getCachedPlayers().save();
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//        });
+
 
     }
 

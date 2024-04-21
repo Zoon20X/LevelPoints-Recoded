@@ -19,21 +19,21 @@ import java.util.concurrent.TimeUnit;
 
 public class Network {
 
-    private ServerSocket serverSocket;
+
     private ScheduledTask task;
 
 
     public Network() {
         startConnectionCheck();
-        this.serverSocket = LevelPoints.getInstance().getNetworkSocketUtils().getServerSocket();
 
     }
     private void startConnectionCheck() {
         task = LevelPoints.getInstance().getInstance().getServer().getScheduler().buildTask(LevelPoints.getInstance(), (self) -> {
-            System.out.println(self.status());
+            ServerSocket serverSocket = LevelPoints.getInstance().getNetworkSocketUtils().getServerSocket();
             if(self.status() == TaskStatus.CANCELLED){
                 return;
             }
+
             if(!serverSocket.isClosed()) {
                 try {
                     Socket clientSocket = serverSocket.accept();
@@ -42,8 +42,6 @@ public class Network {
                     DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
                     String c = inputStream.readUTF();
                     Object data = SerializeData.setData(c);
-
-
                     if (data instanceof DataCollection) {
                         DataCollection dataCollection = (DataCollection) data;
                         if (!LevelPoints.getInstance().getNetPlayerStorage().hasPlayer(dataCollection.getUUID())) {
@@ -61,9 +59,10 @@ public class Network {
                     }
                     clientSocket.close();
                 } catch (IOException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
+                    //eat
                 }
             }
+
         }).repeat( 100L, TimeUnit.MILLISECONDS).schedule();
     }
 
