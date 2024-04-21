@@ -84,9 +84,7 @@ public class LevelPoints {
         getNetworkSocketUtils().close();
         Collection<ScheduledTask> tasks = server.getScheduler().tasksByPlugin(this);
         for (ScheduledTask task : tasks){
-            System.out.println(task.status());
             task.cancel();
-            System.out.println(task.status());
         }
 
 

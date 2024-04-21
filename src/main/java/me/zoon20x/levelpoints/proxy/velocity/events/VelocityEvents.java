@@ -42,7 +42,7 @@ public class VelocityEvents {
         Player player = event.getPlayer();
         LevelPoints.getInstance().getServer().getScheduler().buildTask(LevelPoints.getInstance(), ()->{
             try {
-                LevelPoints.getInstance().getCachedPlayers().set(player.getUniqueId().toString(), SerializeData.toString(me.zoon20x.levelpoints.proxy.bungee.LevelPoints.getInstance().getNetPlayerStorage().getPlayer(player.getUniqueId())));
+                LevelPoints.getInstance().getCachedPlayers().set(player.getUniqueId().toString(), SerializeData.toString(LevelPoints.getInstance().getNetPlayerStorage().getPlayer(player.getUniqueId())));
                 LevelPoints.getInstance().getCachedPlayers().save();
                 LevelPoints.getInstance().getNetPlayerStorage().removePlayer(player.getUniqueId());
             } catch (IOException e) {
