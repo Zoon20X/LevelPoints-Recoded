@@ -16,15 +16,18 @@ import java.util.Random;
 import java.util.UUID;
 
 public class PlayerStorage {
-    private final HashMap<UUID, PlayerData> playerDataMap = new HashMap<>();
+    private final HashMap<UUID, LevelSystem> playerDataMap = new HashMap<>();
 
     public void loadTestPlayers(int max){
         for(int i= 0; i<max; i++) {
-            createPlayerConfig(UUID.randomUUID(), "TEST-" + i, "/Players/");
+            for (int j = 0; j < max; j++) {
+                UUID uuid = UUID.randomUUID();
+                createPlayerConfig(uuid, "TEST-" + i, "/Players/", UUID.randomUUID());
+            }
         }
     }
-    private YamlDocument createPlayerConfig(UUID uuid, String name, String location){
-        boolean newPlayer = !new File(LevelPoints.getInstance().getDataFolder() + location, uuid + ".yml").exists();
+    private YamlDocument createPlayerConfig(UUID uuid, String name, String location, UUID uuida){
+        boolean newPlayer = !new File(LevelPoints.getInstance().getDataFolder() + location + uuid + "/", uuida + ".yml").exists();
         try {
             YamlDocument config = YamlDocument.create(new File(LevelPoints.getInstance().getDataFolder() + location, uuid + ".yml"),
                     getClass().getResourceAsStream( location + "template.yml"),

@@ -2,3 +2,6 @@
 
 >>Change Log<<
 - Added Velocity Support
+
+>>Bug Fixes<<
+- fixed toplist causing warning when player data takes too long to load from CNS
