@@ -58,8 +58,10 @@ public class TopSettings {
         }
         long startTime = System.nanoTime();
         Bukkit.getOnlinePlayers().forEach(player -> {
-            PlayerData data = LevelPoints.getInstance().getPlayerStorage().getPlayerData(player.getUniqueId());
-            topDataList.add(new TopData(player.getName(), player.getUniqueId(), data.getLevel()));
+            if (LevelPoints.getInstance().getPlayerStorage().hasPlayer(player.getUniqueId())) {
+                PlayerData data = LevelPoints.getInstance().getPlayerStorage().getPlayerData(player.getUniqueId());
+                topDataList.add(new TopData(player.getName(), player.getUniqueId(), data.getLevel()));
+            }
         });
 
 
