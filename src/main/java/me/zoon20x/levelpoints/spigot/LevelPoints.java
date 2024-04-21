@@ -131,6 +131,10 @@ public final class LevelPoints extends JavaPlugin {
         String address = config.getString("NetworkShare.CrossNetworkStorage.Address");
         int port = config.getInt("NetworkShare.CrossNetworkStorage.Port");
         this.network = new Network(address, port);
+        if(config.getString("NetworkShare.CrossNetworkStorage.ServerID") == null){
+            cnsSettings = new CnsSettings(cnsSupport, address, port);
+            return;
+        }
         if (config.getString("NetworkShare.CrossNetworkStorage.ServerID").equalsIgnoreCase("")) {
             cnsSettings = new CnsSettings(cnsSupport, address, port);
         } else {

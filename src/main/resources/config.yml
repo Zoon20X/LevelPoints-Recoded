@@ -1,4 +1,4 @@
-file-version: '1'
+file-version: '2'
 
 NetworkShare:
   CrossNetworkStorage:
@@ -6,5 +6,4 @@ NetworkShare:
     RewardServer: false
     Address: 127.0.0.1
     Port: 3000
-    ServerID:
-
+    ServerID: ""

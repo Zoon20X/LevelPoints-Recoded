@@ -20,15 +20,13 @@ public class LpsGUI implements InventoryHolder {
     @Override
     public Inventory getInventory() {
         inventory = Bukkit.createInventory(this, 9*3, LevelPoints.getInstance().getMessagesUtil().getColor("&3&lLevelPoints Settings"));
-
+        setGUI("");
         return inventory;
     }
 
     private void setGUI(String name){
         if(name.equalsIgnoreCase("Exp-Settings")){
             setEmpty();
-
-
             return;
         }
         setEmpty();
