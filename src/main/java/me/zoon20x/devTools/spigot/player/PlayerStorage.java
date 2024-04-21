@@ -20,16 +20,16 @@ public class PlayerStorage {
 
     public void loadTestPlayers(int max){
         for(int i= 0; i<max; i++) {
+            UUID uuid = UUID.randomUUID();
             for (int j = 0; j < max; j++) {
-                UUID uuid = UUID.randomUUID();
-                createPlayerConfig(uuid, "TEST-" + i, "/Players/", UUID.randomUUID());
+                createPlayerConfig(uuid, "TEST-" + i, "/Players/" + uuid + "/", UUID.randomUUID());
             }
         }
     }
     private YamlDocument createPlayerConfig(UUID uuid, String name, String location, UUID uuida){
-        boolean newPlayer = !new File(LevelPoints.getInstance().getDataFolder() + location + uuid + "/", uuida + ".yml").exists();
+        boolean newPlayer = !new File(LevelPoints.getInstance().getDataFolder() + location, uuida + ".yml").exists();
         try {
-            YamlDocument config = YamlDocument.create(new File(LevelPoints.getInstance().getDataFolder() + location, uuid + ".yml"),
+            YamlDocument config = YamlDocument.create(new File(LevelPoints.getInstance().getDataFolder() + location, uuida + ".yml"),
                     getClass().getResourceAsStream( location + "template.yml"),
                     GeneralSettings.DEFAULT,
                     LoaderSettings.builder().setAutoUpdate(true).build(),
