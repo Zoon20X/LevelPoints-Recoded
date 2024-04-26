@@ -1,0 +1,10 @@
+file-version: '1'
+
+Fishing:
+  Enabled: true
+  Settings:
+    DIRT:
+      Exp: 1.0
+      RequiredLevel:
+        Break: 0
+        Place: 0

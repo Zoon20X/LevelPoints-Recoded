@@ -1,0 +1,41 @@
+3.0.3
+--------------------------------
+
+
+--------------------------------
+
+
+
+3.0.2
+--------------------------------
+>>LevelPoints CNS Update<<
+
+>>Change Log<<
+- Added Velocity Support
+
+>>Bug Fixes<<
+- fixed toplist causing warning when player data takes too long to load from CNS
+
+>>Soon to be<<
+- Idea from zarkness for multiple level systems, currently in the works
+--------------------------------
+
+
+3.0.1
+--------------------------------
+>>LevelPoints Quick Fix<<
+
+>>Bugs Fixed<<
+- Fixed the plugin crashing on boot cause of a null error in ServerID
+- config.yml now version 2
+- ServerID now by default has "", but also a null check put in place
+--------------------------------
+
+
+3.0.0
+--------------------------------
+>>LevelPoints Complete Recode<<
+
+·Everything is completely recoded systems are better and more optimized
+·You will require a full reset of all files, no files will work, and data will be broken
+--------------------------------

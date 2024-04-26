@@ -1,6 +1,0 @@
->>LevelPoints Quick Fix<<
-
->>Bugs Fixed<<
-- Fixed the plugin crashing on boot cause of a null error in ServerID
-- config.yml now version 2
-- ServerID now by default has "", but also a null check put in place
