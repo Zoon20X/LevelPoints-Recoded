@@ -22,6 +22,7 @@ import me.zoon20x.levelpoints.spigot.containers.CnsSettings;
 import me.zoon20x.levelpoints.spigot.containers.Rewards.RewardStorage;
 import me.zoon20x.levelpoints.spigot.containers.WorldGuardSettings;
 import me.zoon20x.levelpoints.spigot.events.CustomEvents.EventUtils;
+import me.zoon20x.levelpoints.spigot.guis.GuiSettings;
 import me.zoon20x.levelpoints.spigot.utils.files.ConfigUtils;
 import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
 import me.zoon20x.levelpoints.spigot.utils.messages.MessagesUtil;
@@ -74,6 +75,7 @@ public final class LevelPoints extends JavaPlugin {
 
     private RewardStorage rewardStorage;
 
+    private GuiSettings guiSettings;
 
     @Override
     public void onEnable() {
@@ -106,6 +108,7 @@ public final class LevelPoints extends JavaPlugin {
 
         if (getDescription().getVersion().contains("DEV")) {
             loadDev();
+            guiSettings = new GuiSettings();
             return;
         }
         devMode = false;
@@ -325,5 +328,9 @@ public final class LevelPoints extends JavaPlugin {
 
     public RewardStorage getRewardStorage() {
         return rewardStorage;
+    }
+
+    public GuiSettings getGuiSettings() {
+        return guiSettings;
     }
 }

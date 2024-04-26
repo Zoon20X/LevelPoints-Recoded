@@ -48,6 +48,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -369,4 +370,9 @@ public class EXPEarnEvents implements Listener {
         levelPoints.getEventUtils().triggerFarmEvent(block, player, event);
     }
 
+
+    @EventHandler
+    public void onFishEvent(PlayerFishEvent event){
+
+    }
 }

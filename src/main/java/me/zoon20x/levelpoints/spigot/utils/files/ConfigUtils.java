@@ -25,8 +25,9 @@ public class ConfigUtils implements ConfigAPI {
 
     private final YamlDocument worldSettings;
 
-
     private final YamlDocument mythicMobsSettings;
+
+    private final YamlDocument lpsSettingsGUI;
 
     public ConfigUtils(){
         config = createConfig("config.yml", "/", true);
@@ -39,6 +40,9 @@ public class ConfigUtils implements ConfigAPI {
         worldSettings = createConfig("WorldSettings.yml", "/Settings/", true);
 
         mythicMobsSettings = createConfig("MythicMobs.yml", "/ExtraSupport/", true);
+
+
+        lpsSettingsGUI = createConfig("LpsSettings.yml", "/Guis/", true);
     }
 
 
@@ -117,5 +121,9 @@ public class ConfigUtils implements ConfigAPI {
 
     public YamlDocument getFarmSettings() {
         return farmSettings;
+    }
+
+    public YamlDocument getLpsSettingsGUI() {
+        return lpsSettingsGUI;
     }
 }

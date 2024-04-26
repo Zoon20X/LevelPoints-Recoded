@@ -1,6 +1,7 @@
 package me.zoon20x.devTools.spigot.events;
 
 
+import me.zoon20x.devTools.spigot.gui.ExpGUI;
 import me.zoon20x.devTools.spigot.gui.LpsGUI;
 import me.zoon20x.levelpoints.spigot.LevelPoints;
 import me.zoon20x.levelpoints.spigot.utils.messages.DebugSeverity;
@@ -23,7 +24,7 @@ public class DevEvents implements Listener {
         Player player = event.getPlayer();
         if(event.getMessage().contains("dev-gui")){
             event.setCancelled(true);
-            player.openInventory(new LpsGUI().getInventory());
+            player.openInventory(new LpsGUI(LevelPoints.getInstance().getGuiSettings().getGUIData("LpsSettings")).getInventory());
         }
 
 
@@ -48,10 +49,6 @@ public class DevEvents implements Listener {
             return;
         }
         ItemStack item = event.getCurrentItem();
-        if(item.isSimilar(lpsGUI.getExpSettings())){
-            LevelPoints.getInstance().log(DebugSeverity.NORMAL, "Exp-Settings");
-        }
-
 
     }
 

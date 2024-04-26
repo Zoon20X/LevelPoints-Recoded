@@ -1,0 +1,16 @@
+file-version: '1'
+
+Title: '&a&lLevelPoints &2&lSettings'
+Rows: 3
+BlankSpace:
+    Name: ''
+    Material: BLACK_STAINED_GLASS_PANE
+    Enchanted: false
+    Lore: []
+Items:
+  ExpSettings:
+    Name: ''
+    Material: BLACK_STAINED_GLASS_PANE
+    Enchanted: false
+    Slot: 10
+    Lore: []
