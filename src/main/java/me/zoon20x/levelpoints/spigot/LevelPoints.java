@@ -156,23 +156,6 @@ public final class LevelPoints extends JavaPlugin {
                 valueMap.put("DEV-Mode", getFeatureInUse("DEV"));
                 return valueMap;
             }
-
-            private int getFeatureInUse(String name) {
-                switch (name){
-                    case "CNS":
-                        if(getCnsSettings().isEnabled()) {
-                            return 1;
-                        }
-                        break;
-                    case "DEV":
-                        if(devMode){
-                            return 1;
-                        }
-                        break;
-                }
-                return 0;
-
-            }
         }));
         metrics.addCustomChart(new Metrics.SimpleBarChart("Features", new Callable<Map<String, Integer>>() {
             @Override
@@ -187,6 +170,24 @@ public final class LevelPoints extends JavaPlugin {
             }
         }));
     }
+
+        private int getFeatureInUse(String name) {
+            switch (name){
+                case "CNS":
+                    if(getCnsSettings().isEnabled()) {
+                        return 1;
+                    }
+                    break;
+                case "DEV":
+                    if(devMode){
+                        return 1;
+                    }
+                    break;
+            }
+            return 0;
+
+        }
+
 
     private void loadDev(){
         devInstance = new DevInstance();

@@ -19,11 +19,12 @@ public class GuiSettings {
         String name = config.getFile().getName().replace(".yml", "");
         String title = config.getString("Title");
         int size = config.getInt("Rows") * 9;
-        guiDataMap.put(name, new GUIData(title, size,
+        GUIData guiData = new GUIData(title, size,
                 new ItemBuilder(
                         Material.getMaterial(config.getString("BlankSpace.Material"))).
-                        setName(config.getString("BlankSpace.Name")).build())
-        );
+                        setName(config.getString("BlankSpace.Name")).build());
+        guiData.loadGUIItemList(config);
+        guiDataMap.put(name, guiData);
 
     }
 
